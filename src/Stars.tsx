@@ -17,7 +17,7 @@ function Stars() {
             const style = { 
                 top: x,
                 left: y,
-                opacity: Math.random(),
+                opacity: Math.random() * 10,
             };
             stars.push(
                 <div className="stars {index}" style={style} key={i}>
