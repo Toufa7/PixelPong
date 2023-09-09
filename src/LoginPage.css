@@ -13,14 +13,18 @@ body {
 }
 
 /******************* Start LoginBox  *******************/
-
+ 
 .loginBox {
     width: 500px;
     height: 500px;
 
+    /* overflow: hidden; */
+
     display: flex;
     justify-content: center;
     flex-direction: column;
+
+    left: 20%;
     background: #A473B1;
     color: #FFF;
     position: relative;
@@ -59,10 +63,8 @@ body {
 }
 
 
-
 /******************* End LoginBox  *******************/
 
-/* Retro image container */
 .retroImage {
     position: absolute;
     top: 50%;
@@ -85,7 +87,6 @@ body {
 }
 
 /******************* Start Buttons  *******************/
-
 .nes-btn {
     display: flex !important;
     justify-content: center !important;
@@ -95,13 +96,13 @@ body {
     width: 300px;
     color: #E8B0B0 !important;
     animation: inAndOut 2s infinite;
+    box-shadow: 0 5px black;
 }
 
 .google {
     background: #4285F4 !important;
     top: 20%;
     left: 84px;
-    
 }
 
 .intra {
@@ -110,7 +111,20 @@ body {
     left: 84px;
 }
 
+.intra:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(8px);
+}
+
+.google:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(8px);
+}
+
 /******************* End Buttons  *******************/
+
 
 
 
@@ -134,31 +148,29 @@ body {
 .cloudImg {
     position: absolute;
     right: 20px;
-    top: -170px;
+    top: -160px;
 	animation: flo 2s infinite;	
-    /* top: 1%;
-    left: %; */
-    z-index: 0;
 }
 
 .diamondImg {
-    width: 100px;
-    height: 70px;
-
+    bottom: -100px;
+    right: 0;
     position: absolute;
     transform: rotate(-30deg);
     flex-shrink: 0; 
 	animation: float 2s ease-in-out infinite;	
     z-index: 0;
 }
-/* 
+
 .diamondImg1 {
-    width: 55.184px;
-    height: 42.449px;
-    transform: rotate(-30deg);
+    top: -100px;
+    left: -30x;
+    position: absolute;
+    width: 55px;
+    height: 42px;
     flex-shrink: 0;
     animation: float 1s ease-in-out infinite;	
-} */
+}
 
 /******************* Start Images  *******************/
 

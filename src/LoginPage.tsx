@@ -14,12 +14,11 @@ function LoginPage() {
       </div>
       <div className="loginBox">
         <div className="line"></div>
-        <div className="line"> </div>
-        <div className="line"></div>
         <div className="loginBoxInside">SIGN IN</div>
         <div className="loginBoxOutside">
           <a className="nes-btn google" href="/">Google</a>
           <a className="nes-btn intra" href="/">Intra 42</a>
+        <div className="text-OR">-- OR --</div>
         <div className="cloudImg">
           <img src={cloud} alt="cloudImg" />
         </div>
@@ -29,7 +28,6 @@ function LoginPage() {
         <div className="diamondImg1">
           <img src={diamond1} alt="diamondImg1 " />
         </div>
-        <div className="text-OR">-- OR --</div>
       </div>
       </div>
     </div>
