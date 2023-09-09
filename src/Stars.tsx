@@ -3,7 +3,6 @@
 //     starsPositions.push(Math.random()); 
 // }
 
-
 import star from './assets/star.svg';
 import './Stars.css';
 
@@ -12,8 +11,8 @@ function Stars() {
         const stars = [];
         for (let i = 0; i < 120; i++)
         {
-            const x = Math.random() * 960;
-            const y = Math.random() * 1920;
+            const x = Math.random() * document.documentElement.clientHeight;
+            const y = Math.random() * document.documentElement.clientWidth;
             const style = { 
                 top: x,
                 left: y,

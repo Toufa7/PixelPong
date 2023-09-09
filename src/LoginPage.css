@@ -12,69 +12,55 @@ body {
     background-color: black;
 }
 
+/******************* Start LoginBox  *******************/
+
 .loginBox {
     width: 500px;
     height: 500px;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     background: #A473B1;
     color: #FFF;
-    top: 22%;
-    left: 10%;
-    position: absolute;
+    position: relative;
     border: 8px solid;
-    border-color: #D2B9D8 #000000 #000000 #D2B9D8;
+    border-color: #B19D9D white white #B19D9D;
     /* top, right, bottom, left */
 }
 
-.loginBox:hover{
+.line {
+    position: absolute;
+    width: 100%;
+    border: 8px solid red;
+}
+
+.loginBox:hover {
     animation: floating 1s ease-in-out infinite;	
 }
 
-
 .loginBoxInside {
-    width: 95%;
+    width: 100%;
     height: 10%;
     color: #240C0C;
     background-color: #A584A6;
     font-size: 25px;
-
     display: flex;
     justify-content: center;
-    align-items: center;
     border: 8px solid #643F5E;
-    border-color: transparent transparent #643F5E transparent; /* Border colors: top, right, bottom, left */
+    border-color: red blue #643F5E magenta; /* Border colors: top, right, bottom, left */
 }
 
 .loginBoxOutside {
-    height: 83.7%;
+    position: relative;
+    height: 100% !important;
     border: 8px solid;
     border-color: #D2B9D8 #73517C #73517C;
 }
 
-.box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.box-top {
-    width: 217.471px;
-    height: 38.369px;
-    flex-shrink: 0;
-    /* background-color: black; */
-    position: absolute;
-    left: 130px;
-    top: 130px;
-}
 
-.box-bottom {
-    width: 217.471px;
-    height: 38.369px;
-    flex-shrink: 0;
-    /* background-color: black; */
-    position: absolute;
-    left: 130px; /* Adjust the left position to center the box */
-    top: 320px; /* Adjust the top position to place it above the text */
-}
+/******************* End LoginBox  *******************/
 
 /* Retro image container */
 .retroImage {
@@ -87,26 +73,7 @@ body {
     flex-shrink: 0;
     background: url('./assets/retroImage.png'), lightgray 50% / cover no-repeat;
     background-size: cover;
-    z-index: 0;
 }
-
-.retroImage:hover{
-    animation: floating 6s ease-in-out infinite;	
-}
-
-@keyframes floating {
-	0% {
-		box-shadow: 0 5px 2px 5px rgba(0,0,0,0.6);
-	}
-	50% {
-		box-shadow: 0 2px 2px 0px rgba(0,0,0,0.2);
-	}
-	100% {
-		box-shadow: 0 5px 2px 5px rgba(0,0,0,0.6);
-	}
-}
-  
-
 
 .text-OR {
     position: absolute;
@@ -117,27 +84,41 @@ body {
     color: #240C0C;
 }
 
+/******************* Start Buttons  *******************/
+
 .nes-btn {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    width: 217.471px;
-    height: 38.369px;
     flex-shrink: 0;
+    height: fit-content;
+    width: 300px;
     color: #E8B0B0 !important;
+    animation: inAndOut 2s infinite;
 }
 
 .google {
     background: #4285F4 !important;
-    animation: GoogleAnimation 4s !important;
-    animation-iteration-count: infinite;
+    top: 20%;
+    left: 84px;
+    
 }
 
 .intra {
     background: #0D6A80 !important;
+    top: 60%;
+    left: 84px;
 }
 
-/* GIF container */
+/******************* End Buttons  *******************/
+
+
+
+
+
+/******************* Start Images  *******************/
+
+
 .pingPongGif {
     width: 328px;
     height: 387px;
@@ -151,32 +132,35 @@ body {
 
 
 .cloudImg {
-    position: relative;
-	animation: flo 30s ease-in-out infinite;	
-    top: 110px;
-    left: 300px;
-}
-
-.diamondImg {
-    width: 100.714px;
-    height: 77.472px;
-    transform: rotate(-30deg);
-    flex-shrink: 0; 
-    position: relative;
-    top: 0px;
-    left: 0px;
-	animation: float 2s ease-in-out infinite;	
+    position: absolute;
+    right: 20px;
+    top: -170px;
+	animation: flo 2s infinite;	
+    /* top: 1%;
+    left: %; */
     z-index: 0;
 }
 
+.diamondImg {
+    width: 100px;
+    height: 70px;
+
+    position: absolute;
+    transform: rotate(-30deg);
+    flex-shrink: 0; 
+	animation: float 2s ease-in-out infinite;	
+    z-index: 0;
+}
+/* 
 .diamondImg1 {
     width: 55.184px;
     height: 42.449px;
     transform: rotate(-30deg);
     flex-shrink: 0;
     animation: float 1s ease-in-out infinite;	
+} */
 
-}
+/******************* Start Images  *******************/
 
 
 /******************* Animations  *******************/
@@ -198,21 +182,22 @@ body {
 	}
 }
 
-
-@keyframes GoogleAnimation {
-    0%  {
-        background-color:#4285F4; left:8px; top:8px;
-    }
-    25%   {
-        background-color:#4285F4; left:8px; top:0px;
-    }
-    50%  {
-        background-color:#F4B400; left:8px; top:8px;
-    }
-    75%  {
-        background-color:#DB4437; left:0px; top:8px;
-    }
-    100%  {
-        background-color: #0F9D58; left:0px; top:0px;
-    }
+@keyframes floating {
+	0% {
+		box-shadow: 0 5px 2px 5px rgba(0,0,0,0.6);
+	}
+	50% {
+		box-shadow: 0 2px 2px 0px rgba(0,0,0,0.2);
+	}
+	100% {
+		box-shadow: 0 5px 2px 5px rgba(0,0,0,0.6);
+	}
 }
+
+
+
+@keyframes inAndOut {
+    50% {
+      transform: translate(3px, 1px);
+    }
+  }
