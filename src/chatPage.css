@@ -1,0 +1,217 @@
+.pageContainer
+{
+    height: 100vh;
+    background: linear-gradient(to right ,#4F3997, #6E58B6);
+    display: flex;
+    flex-direction: row;
+}
+
+.NavBar
+{
+    flex: 1;
+    background-color: blueviolet;
+}
+
+.chatNavBar
+{
+    flex: 6;
+    display: flex;
+    background-color: #7259c1;
+    flex-direction: column;
+}
+
+.searchBar
+{
+    flex: 2;
+    border-width: 3px;
+    border-color: black;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.serachBarTxt
+{
+    position: relative;
+    top: 10%;
+    flex: 2;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1vw;
+    font-weight: bold;
+}
+
+.searchBarBox
+{
+    flex: 4;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.chatSearchBox
+{
+    width: 70%;
+    padding: 10px;
+    margin: 14px;
+    background-color: #221b3a;
+    text-decoration-color: aliceblue;
+    border-width: 7px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+
+.onlineMemebersBar
+{
+    flex: 8;
+    background-color: white;
+}
+
+.lowerBar
+{
+    flex: 1;
+    border-width: 3px;
+    border-color: black;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.chatBody
+{
+    flex:16;
+    margin: 10px;
+    /* background-color: greenyellow; */
+    display: flex;
+    flex-direction: column;
+}
+
+.playerProfileSec
+{
+    flex: 2;
+}
+
+.playerProfileBar
+{
+    flex: 8;
+    margin: 7px;
+    padding: 15px;
+    background-color: #d7b3e1;
+    border-width: 3px;
+    border-color: black;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+}
+
+.conversationBody
+{
+    flex: 8;
+}
+
+.sendMessage
+{
+    flex: 1;
+    display: flex;
+    /* background-color: aquamarine; */
+    align-items: center;
+    justify-content: center;
+}
+
+.sendButton
+{
+    margin: 10px;
+    padding: 5px;
+}
+
+.emptyspace
+{
+    flex: 1;
+}
+
+.playerProfileSec
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.playerProfilesRec
+{
+    flex: 1;
+}
+
+.playerProfileRecDiv
+{
+    font-size: 0.7vw;
+    margin: 10px;
+    text-align: center;
+    background-color: #f88d85;
+    height: 50%;
+    width: 17%;
+    min-width: fit-content;
+    border-color: black;
+    border-width: 3px;
+    border-radius: 6px;
+}
+
+.playerProfile
+{
+    flex: 2;
+    background-color: #f7d284;
+    border-radius: 5px;
+    border-color: black;
+    border-width: 3px;
+    margin: 7px;
+    display: flex;
+}
+
+.playerNamePic
+{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.playerPic
+{
+    flex: 1;
+    margin: 7px;
+    background-color: yellow;
+    border-width: 3px;
+    border-radius: 50%;
+    border-color: black;
+    min-width: fit-content;
+    min-height: fit-content;
+    width: 42%;
+    height: 85%;
+    aspect-ratio: 1;
+}
+
+.playerNamediv
+{
+    flex: 10;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.playerName
+{
+    font-size: 2vw;
+}
+
+.messageInputBox
+{
+    padding: 1%;
+    border-top-color: #ebd9f0;
+    border-top-width: 3px;
+    border-right-color: #ebd9f0;
+    border-right-width: 3px;
+    border-bottom-color: #d9d9d9;
+    border-bottom-width: 3px;
+    width: 80%;
+}

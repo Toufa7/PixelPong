@@ -1,0 +1,295 @@
+#pageContainer
+{
+  height: 100vh;
+  background: linear-gradient(to right ,#4F3997, #6E58B6);
+}
+
+#header
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  height: 40%;
+}
+
+#body
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  height: 55%;
+  max-width: 100%;
+}
+
+
+#footer
+{
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  height: 5%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#leftCloud
+{
+  position: relative;
+  transform: translate(-50%, -10%);
+  max-width: 100%;
+  animation: moveCloud 100s linear infinite;
+}
+
+#sunLeftCloud
+{
+  position: relative;
+  transform: translate(-60%, 220%);
+  /* animation: moveCloud 50s linear infinite; */
+}
+
+#sunRightCloud
+{
+  position: relative;
+  transform: translate(60%, -120%);
+  /* animation: moveCloud 50s linear infinite; */
+}
+
+#rightCloud
+{
+  position: relative;
+  bottom: 0%;
+  transform: translate(40%, -40%);
+  max-width: 100%;
+  animation: moveCloud 100s linear infinite;
+}
+
+@keyframes moveCloud {
+  0%, 100% {
+    transform: translateX(100%); /* Start and end the cloud 100% to the right */
+  }
+  50% {
+    transform: translateX(-100%); /* Move the cloud 100% to the left halfway through the animation */
+  }
+  100% {
+    transform: translateX(100%); /* Return the cloud to the right edge at the end of the animation */
+  }
+}
+
+#threeimg
+{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 70%;
+  height: auto;
+  flex-shrink: unset;
+  transform: translate(10%, 5%);
+}
+
+#textContainer
+{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+#pixelPongTxt
+{
+  height: 40%;
+  position: relative;
+  text-align: center;
+  justify-content: center;
+  align-items: first baseline;
+  font-size: 1vw;
+  font-weight: bold;
+  color: #DCC422;
+  transform: translate(0%, 0%);
+}
+
+#threeContainer
+{
+  flex: 1;
+  position: relative;
+  overflow: hidden; 
+}
+
+@keyframes text-anime {
+  0% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+
+}
+
+h1
+{
+  /* transform: translate(0%, -100%); */
+  text-shadow: 0.1em 0.1em #FA005E;
+}
+
+
+
+#bigsprinkle
+{
+  position: relative;
+  top: 65%;
+  left: 92%;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 7%;
+  height: auto;
+}
+
+#upperLeftSprinkle
+{
+  position: relative;
+  top: -22%;
+  left: 17%;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 6%;
+  height: auto;
+}
+
+#upperRightSprinkle
+{
+  position: relative;
+  top: -52%;
+  left: 80%;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 4%;
+  height: auto;
+}
+
+#lowerLeftSprinkle
+{
+  position: absolute;
+  bottom: 25%;
+  left: 20%;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 3%;
+  height: auto;
+}
+
+#lowerMiddleSprinkle
+{
+  position: absolute;
+  bottom: 15%;
+  left: 29%;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 5%;
+  height: auto;
+}
+
+#lowerRightSprinkle
+{
+  position: absolute;
+  bottom: 10%;
+  left: 54%;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 6%;
+  height: auto;
+}
+
+#lowerMovingSparkle
+{
+  position: absolute;
+  bottom: 25%;
+  left: 75%;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 6%;
+  height: auto;
+}
+
+#playButton
+{
+  height: 90%;
+  text-align: center;
+  justify-content: center;
+}
+
+#letsPlayButton
+{
+  background-color: #DCC422;
+  color: #FA005E;
+  font-size: 1vw;
+}
+
+#ClickMe
+{
+  position: relative;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 20%;
+  height: 10;
+  bottom: 17%;
+  left: 50%;
+  /* transform: translate(400%, -20%); */
+}
+
+#chairContainer
+{
+  flex: 1;
+  position: relative;
+  overflow: hidden; 
+}
+
+#chairimg
+{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 50%;
+  height: auto;
+  transform: translate(10%, 0%);
+}
+
+#lightimg
+{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  flex-shrink: unset;
+  transition: all 0.3s ease;
+  width: 30%;
+  height: auto;
+  transform: translate(150%, 0%);
+}
+
+#floorimg
+{
+  width: 100%;
+  height: 70%;
+  object-fit:cover;
+  flex-shrink: unset;
+  height: auto;
+}
+
+
+.retrofont
+{
+  font-family: 'Montserrat', sans-serif;
+  font-family: 'Press Start 2P', cursive;
+  font-family: 'Rubik Iso', cursive;
+}
