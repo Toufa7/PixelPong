@@ -18,6 +18,8 @@ body {
     width: 500px;
     height: 500px;
 
+    opacity: 0.8;
+
     /* overflow: hidden; */
 
     display: flex;
@@ -28,16 +30,17 @@ body {
     background: #A473B1;
     color: #FFF;
     position: relative;
-    border: 8px solid;
-    border-color: #B19D9D white white #B19D9D;
+    /* border: 8px solid; */
+    /* border-color: #B19D9D white white #B19D9D; */
     /* top, right, bottom, left */
+    z-index: 20;
 }
 
-.line {
+/* .line {
     position: absolute;
     width: 100%;
     border: 8px solid red;
-}
+} */
 
 .loginBox:hover {
     animation: floating 1s ease-in-out infinite;	
@@ -60,6 +63,7 @@ body {
     height: 100% !important;
     border: 8px solid;
     border-color: #D2B9D8 #73517C #73517C;
+    z-index: 100;
 }
 
 
@@ -79,7 +83,7 @@ body {
 
 .text-OR {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 25px;
@@ -87,6 +91,7 @@ body {
 }
 
 /******************* Start Buttons  *******************/
+
 .nes-btn {
     display: flex !important;
     justify-content: center !important;
@@ -95,19 +100,19 @@ body {
     height: fit-content;
     width: 300px;
     color: #E8B0B0 !important;
-    animation: inAndOut 2s infinite;
+    animation: inAndOut 1s infinite;
     box-shadow: 0 5px black;
 }
 
 .google {
     background: #4285F4 !important;
-    top: 20%;
+    top: 84px;;
     left: 84px;
 }
 
 .intra {
     background: #0D6A80 !important;
-    top: 60%;
+    top: 200px;
     left: 84px;
 }
 
@@ -147,32 +152,34 @@ body {
 
 .cloudImg {
     position: absolute;
-    right: 20px;
-    top: -160px;
-	animation: flo 2s infinite;	
+    right: 0%;
+    top: -15%;
+	animation: flo 2s infinite;
+    z-index: -1;
 }
 
-.diamondImg {
+.largeDiamond {
     bottom: -100px;
     right: 0;
     position: absolute;
     transform: rotate(-30deg);
     flex-shrink: 0; 
 	animation: float 2s ease-in-out infinite;	
-    z-index: 0;
+    z-index: -10;
 }
 
 .diamondImg1 {
-    top: -100px;
-    left: -30x;
+    top: -5%;
+    left: 0%;
     position: absolute;
     width: 55px;
     height: 42px;
     flex-shrink: 0;
     animation: float 1s ease-in-out infinite;	
+    z-index: -2;
 }
 
-/******************* Start Images  *******************/
+/******************* End Images  *******************/
 
 
 /******************* Animations  *******************/
@@ -212,4 +219,4 @@ body {
     50% {
       transform: translate(3px, 1px);
     }
-  }
+}
