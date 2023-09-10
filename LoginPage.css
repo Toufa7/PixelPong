@@ -1,0 +1,222 @@
+body {
+    background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #5237AC !important;
+}
+
+.hor-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 5px;
+    background-color: black;
+}
+
+/******************* Start LoginBox  *******************/
+ 
+.loginBox {
+    width: 500px;
+    height: 500px;
+
+    opacity: 0.8;
+
+    /* overflow: hidden; */
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    left: 20%;
+    background: #A473B1;
+    color: #FFF;
+    position: relative;
+    /* border: 8px solid; */
+    /* border-color: #B19D9D white white #B19D9D; */
+    /* top, right, bottom, left */
+    z-index: 20;
+}
+
+/* .line {
+    position: absolute;
+    width: 100%;
+    border: 8px solid red;
+} */
+
+.loginBox:hover {
+    animation: floating 1s ease-in-out infinite;	
+}
+
+.loginBoxInside {
+    width: 100%;
+    height: 10%;
+    color: #240C0C;
+    background-color: #A584A6;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    border: 8px solid #643F5E;
+    border-color: red blue #643F5E magenta; /* Border colors: top, right, bottom, left */
+}
+
+.loginBoxOutside {
+    position: relative;
+    height: 100% !important;
+    border: 8px solid;
+    border-color: #D2B9D8 #73517C #73517C;
+    z-index: 100;
+}
+
+
+/******************* End LoginBox  *******************/
+
+.retroImage {
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    width: 473px;
+    height: 845px;
+    flex-shrink: 0;
+    background: url('./assets/retroImage.png'), lightgray 50% / cover no-repeat;
+    background-size: cover;
+}
+
+.text-OR {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 25px;
+    color: #240C0C;
+}
+
+/******************* Start Buttons  *******************/
+
+.nes-btn {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-shrink: 0;
+    height: fit-content;
+    width: 300px;
+    color: #E8B0B0 !important;
+    animation: inAndOut 1s infinite;
+    box-shadow: 0 5px black;
+}
+
+.google {
+    background: #4285F4 !important;
+    top: 84px;;
+    left: 84px;
+}
+
+.intra {
+    background: #0D6A80 !important;
+    top: 200px;
+    left: 84px;
+}
+
+.intra:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(8px);
+}
+
+.google:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(8px);
+}
+
+/******************* End Buttons  *******************/
+
+
+
+
+
+
+/******************* Start Images  *******************/
+
+
+.pingPongGif {
+    width: 328px;
+    height: 387px;
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+
+
+.cloudImg {
+    position: absolute;
+    right: 0%;
+    top: -15%;
+	animation: flo 2s infinite;
+    z-index: -1;
+}
+
+.largeDiamond {
+    bottom: -100px;
+    right: 0;
+    position: absolute;
+    transform: rotate(-30deg);
+    flex-shrink: 0; 
+	animation: float 2s ease-in-out infinite;	
+    z-index: -10;
+}
+
+.diamondImg1 {
+    top: -5%;
+    left: 0%;
+    position: absolute;
+    width: 55px;
+    height: 42px;
+    flex-shrink: 0;
+    animation: float 1s ease-in-out infinite;	
+    z-index: -2;
+}
+
+/******************* End Images  *******************/
+
+
+/******************* Animations  *******************/
+@keyframes flo {
+    50% {
+      transform: translateX(30px);
+    }
+}
+
+@keyframes float {
+	0% {
+		transform: translatey(0px);
+	}
+	50% {
+		transform: translatey(-20px);
+	}
+	100% {
+		transform: translatey(0px);
+	}
+}
+
+@keyframes floating {
+	0% {
+		box-shadow: 0 5px 2px 5px rgba(0,0,0,0.6);
+	}
+	50% {
+		box-shadow: 0 2px 2px 0px rgba(0,0,0,0.2);
+	}
+	100% {
+		box-shadow: 0 5px 2px 5px rgba(0,0,0,0.6);
+	}
+}
+
+
+
+@keyframes inAndOut {
+    50% {
+      transform: translate(3px, 1px);
+    }
+}
