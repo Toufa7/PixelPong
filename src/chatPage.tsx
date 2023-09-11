@@ -1,6 +1,8 @@
-import './Chat.css'
-import Send from './images/send.svg'
-import star from './images/star.svg';
+import './chatPage.css'
+import Send from './assets/images/send.svg'
+import star from './assets/images/star.svg';
+import diamond from './assets/diamond.svg';
+import sparkles from './assets/images/sparkles.gif';
 import './Stars.css';
 
 
@@ -35,7 +37,7 @@ function Stars() {
 function Chat () {
     return (
         <>
-        <Stars/>
+        {/* <Stars/> */}
         <div className="pageContainer">
             <div className='NavBar'></div>
 
@@ -48,7 +50,15 @@ function Chat () {
                         <input type="text" id="inline_field" className="chatSearchBox" placeholder="Search"></input>
                     </div>
                 </div>
-                <div className="onlineMemebersBar"></div>
+                <div className="onlineMemebersBar">
+                    <div className='chatSection'>
+                        <h2 id='chatText'>CHAT</h2>
+                        <div id='dms'></div>
+                    </div>
+                    <div className='groupeSection'>
+                        <h2 id='groupesText'>GROUPES</h2>
+                    </div>
+                </div>
                 <div className="lowerBar"></div>
             </div>
 
@@ -96,7 +106,10 @@ function Chat () {
 
                 </div>
 
-                <div className="emptyspace"></div>
+                <div className="emptyspace">
+                    <img id='esLeftDimond' alt='Left diamond' src={diamond} width={80.55} height={50.19}></img>
+                    <img id='saprkleRight' alt='Right sparkle' src={sparkles} width={50} height={40}></img>
+                </div>
 
             </div>
         </div>

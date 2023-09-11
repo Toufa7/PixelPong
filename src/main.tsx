@@ -4,13 +4,16 @@ import './index.css'
 // import LoginPage from './LoginPage.tsx'
 import Stars from './Stars.tsx'
 import LoginPage from './LoginPage.tsx'
-// import WelcomPage from './welcomPage.tsx';
+import WelcomPage from './welcomPage.tsx';
+import ChatPage from './chatPage.tsx'
 import '../node_modules/nes.css/css/nes.min.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Stars/>
-    <LoginPage/>
+    {/* <Stars/> */}
+    {/* <LoginPage/> */}
     {/* <WelcomPage/> */}
+    {/* <Stars/> */}
+    <ChatPage/>
   </React.StrictMode>,
 )
