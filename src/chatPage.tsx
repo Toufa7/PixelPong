@@ -53,7 +53,12 @@ function Chat () {
                 <div className="onlineMemebersBar">
                     <div className='chatSection'>
                         <h2 id='chatText'>CHAT</h2>
-                        <div id='dms'></div>
+                        <div className='dms'>
+                            <ul>
+                                <li>lol</li>
+                                <li>lol2</li>
+                            </ul>
+                        </div>
                     </div>
                     <div className='groupeSection'>
                         <h2 id='groupesText'>GROUPES</h2>

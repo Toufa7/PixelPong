@@ -40,7 +40,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 0.6vw;
+    font-size: 0.3vw;
     font-weight: bold;
 }
 
@@ -78,13 +78,21 @@
 .chatSection
 {
     flex: 1;
-    background-color: yellow;
 }
 
+.dms
+{
+    background-color: red;
+}
+
+.vertical-menu
+{
+    overflow: auto;
+    height: 100%;
+}
 .groupeSection
 {
     flex: 1;
-    background-color: violet;
 }
 
 #chatText
@@ -213,7 +221,7 @@
     flex: 1;
     margin: 7px;
     border: 1px solid;
-    background-color: yellow;
+    background-color: #f7d284;
     border-width: 3px;
     border-radius: 50%;
     border-color: black;
