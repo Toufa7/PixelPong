@@ -54,14 +54,36 @@ function Chat () {
                     <div className='chatSection'>
                         <h2 id='chatText'>CHAT</h2>
                         <div className='dms'>
-                            <ul>
-                                <li>lol</li>
-                                <li>lol2</li>
-                            </ul>
-                        </div>
+                            <div className="vertical-menu">
+                                <a href="#">Mikel Arteta</a>
+                                <a href="#">Declane Rice</a>
+                                <a href="#">Santi Cazorla</a>
+                                <a href="#">William Saliba</a>
+                                <a href="#">Gabriel</a>
+                                <a href="https://www.espn.com/soccer/player/_/id/238004/takehiro-tomiyasu">Takehiro Tomiyasu</a>
+                                <a href="#">Martin Ødegaard</a>
+                                <a href="#">Mohamed Elneny</a>
+                                <a href="#">Leandro Trossard</a>
+                                <a href="#">ras denjala</a>
+                            </div>
+                    </div>
                     </div>
                     <div className='groupeSection'>
                         <h2 id='groupesText'>GROUPES</h2>
+                        <div className="groupChat">
+                        <div className="vertical-menu">
+                                <a href="#">Arsenal Group</a>
+                                <a href="#">Pl Group</a>
+                                <a href="#">Moroccan Supporters</a>
+                                <a href="#">PL Group</a>
+                                <a href="#">LOL Team</a>
+                                <a href="#">PingPongers</a>
+                                <a href="#">uk team</a>
+                                <a href="#">Lets's play</a>
+                                <a href="#">Chuppa kabra</a>
+                                <a href="#">ras lefta</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="lowerBar"></div>
@@ -94,7 +116,6 @@ function Chat () {
                                 <p>Bro, don't buy online, go nichan</p>
                             </div>
                             </section>
-
                             <section className="message -right">
                             <div className="nes-balloon from-right">
                                 <p>mhtaj 700dh cih vs cash</p>

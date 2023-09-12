@@ -82,9 +82,13 @@
 
 .dms
 {
-    background-color: red;
+    /* background-color: red; */
 }
 
+a
+{
+    font-size: 1.4vh;
+}
 .vertical-menu
 {
     overflow: auto;
@@ -272,4 +276,32 @@
 .esLeftDimond
 {
     flex: 1;
+}
+
+.vertical-menu
+{
+    width: 100%;
+    height: 31vh;
+    overflow-y: auto;
+}
+
+.vertical-menu a
+{
+    background-color: #eee;
+    color: black;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
+
+.vertical-menu a:hover 
+{
+    background-color: #ccc;
+
+}
+
+.vertical-menu a.active
+{
+    background-color: #4CAF50;
+    color: white;
 }
