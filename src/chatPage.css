@@ -161,7 +161,10 @@ a
     flex: 8;
     margin: 7px;
     padding: 10px;
-    background-color: #d7b3e1;
+    /* background-color: #d7b3e1; */
+    background:
+        url('./assets/images/diagonal-ribbons.jpg');
+        opacity: 85%;
     border: 3px solid;
     border-color: black;
     border-radius: 7px;
