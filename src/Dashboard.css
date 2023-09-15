@@ -2,9 +2,12 @@ body {
     background: linear-gradient(to right, #4F3997, #6E58B6);
 }
 
-/* .container {
+.container {
     display: flex;
-} */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
 .head-box {
     margin-top: 20px;
@@ -13,10 +16,35 @@ body {
 }
 
 
+.playRaw {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
+.playWith {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.Friend {
+    background: red;
+}
+.Practice {
+    background: green;
+}
+.Bot {
+    background: orange;
+}
+
+
 .four-container {
     margin-bottom: 10px;
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-evenly;
 }
 
@@ -68,6 +96,7 @@ body {
     width: 550px;
     height: 250px;
     background-color: #151315;
+    color: white;
 }
 
 .top-login {
@@ -100,6 +129,50 @@ body {
 .latest-matches1 {
     color: white;
     background-color: #151315;
+}
+
+.matcheHistory1,
+.matcheHistory2,
+.matcheHistory3 {
+    padding: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.matcheHistory1 {
+    background: green;
+    opacity: 0.8;
+}
+
+.matcheHistory2 {
+    background: orange;
+    opacity: 0.8;
+
+}
+
+.matcheHistory3 {
+    background: red;
+    opacity: 0.8;
+}
+
+
+.rightName {
+    text-align: right;
+}
+
+.leftName {
+    text-align: left;
+}
+
+.score {
+    text-align: center;
+}
+
+.scooore {
+    /* position: absolute; */
+    align-items: center;
+    background: black;
 }
 
 .margins {

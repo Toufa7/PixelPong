@@ -7,6 +7,7 @@ import LoginPage from './LoginPage.tsx'
 import WelcomPage from './welcomPage.tsx';
 import ChatPage from './chatPage.tsx'
 import '../node_modules/nes.css/css/nes.min.css';
+import Dashboard from './Dashboard.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -14,6 +15,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     {/* <LoginPage/> */}
     {/* <WelcomPage/> */}
     {/* <Stars/> */}
-    <ChatPage/>
+    <Dashboard/>
   </React.StrictMode>,
 )

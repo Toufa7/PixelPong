@@ -2,8 +2,6 @@ import './chatPage.css'
 import Send from './assets/images/send.svg'
 import star from './assets/images/star.svg';
 import diamond from './assets/diamond.svg';
-import mamella from './assets/images/mamellal.jpg'
-
 import sparkles from './assets/images/sparkles.gif';
 import './Stars.css';
 
@@ -57,7 +55,7 @@ function Chat () {
                         <h2 id='chatText'>CHAT</h2>
                         <div className='dms'>
                             <div className="vertical-menu">
-                                <a href="#">Mohamed Amellal</a>
+                                <a href="#">Mikel Arteta</a>
                                 <a href="#">Declane Rice</a>
                                 <a href="#">Santi Cazorla</a>
                                 <a href="#">William Saliba</a>
@@ -102,7 +100,9 @@ function Chat () {
                         <div className="playerNamePic">
                             <div className="playerPic"></div>
                             <div className="playerNamediv">
-                                <div className="playerName">MOHAMED AMELLAL</div>
+                                <div className="playerName">
+                                Mikel Arteta
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,24 +110,23 @@ function Chat () {
                 <div className="playerProfileBar">
                     <div className='conversationBody'>
                         <section className="message-list">
-                            <section className="message-left">
-                                <div className="left-interlocutor-pic-div"></div>
-                                <div className="nes-balloon from-left">
-                                    <p>Salam khouya bikhir ?</p>
-                                </div>
+                            <section className="message -left">
+                            <i className="nes-bcrikko"></i>
+                            <div className="nes-balloon from-left">
+                                <p>Bro, don't buy online, go nichan</p>
+                            </div>
                             </section>
-
-                            <section className="message-right">
-                                <div className="nes-balloon from-right">
-                                    <p>Good morning. Thou hast had a good night's sleep, I hope.</p>
-                                </div>
-                                <img className="right-interlocutor-pic" alt='right-interlocutor' src={diamond}></img>
+                            <section className="message -right">
+                            <div className="nes-balloon from-right">
+                                <p>mhtaj 700dh cih vs cash</p>
+                            </div>
+                            <i className="nes-bcrikko">
+                            </i>
                             </section>
-
                         </section>
                     </div>
                     <div className='sendMessage'>
-                        <input className='messageInputBox' placeholder='Type your message here ...'></input>
+                        <input className='messageInputBox' ></input>
                         <button className='sendButton'><img src={Send}></img></button>
                     </div>
 
