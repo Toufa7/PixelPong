@@ -10,36 +10,37 @@ import '../node_modules/nes.css/css/nes.min.css';
 
 /**************************************/
 
-function LoginPage() {
+
+export default function LoginPage() {
   return (
-    <div className="global">
-      <div className="hor-line"></div>
+    <div className="container">
       <div className="retroImage">
         <img className="pingPongGif" src={pingPongGif} alt="pingPongGif" />
       </div>
-      <div className="loginBox">
-        <div className="line"></div>
-        <div className="loginBoxInside">SIGN IN
-        <div className="cloudImg">
-          <img src={cloud} alt="cloudImg" />
-        </div>
 
-        <div className="diamondImg1">
-          <img src={diamond1} alt="diamondImg1 " />
-        </div>
-        
+      <div className="loginBox">
+        <div className="loginBoxInside">
+          Hello
+          <div className="cloudImg">
+            <img src={cloud} alt="cloudImg" />
+          </div>
+          <div className="diamondImg1">
+            <img src={diamond1} alt="diamondImg1" />
+          </div>
         </div>
         <div className="loginBoxOutside">
-          <a className="nes-btn google" href="/">Google</a>
-          <a className="nes-btn intra" href="/">Intra 42</a>
-        <div className="text-OR">-- OR --</div>
-        <div className="largeDiamond">
-          <img src={largeDiamond} alt="largeDiamond " />
+          <a className="nes-btn google" href="http://localhost:3000/auth/google/" target='_blank'>
+            Google
+          </a>
+          <a className="nes-btn intra" href="http://localhost:3000/auth/42/" target='_blank'>
+            Intra 42
+          </a>
+          <div className="text-OR">-- OR --</div>
+          <div className="largeDiamond">
+            <img src={largeDiamond} alt="largeDiamond" />
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
 }
-
-export default LoginPage;
