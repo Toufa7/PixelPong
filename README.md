@@ -1,7 +1,14 @@
-npm create vite@latest
+# To create a new React project:
 
-npm install
+    npm create vite@latest
 
-# Run
+# Install npm packages:
+    npm install
+    npm install nes.css
+    npm install react-cookie
+    npm install -D sass
+    npm install jwt-decode
 
-      npm run dev
+# Run server:
+
+    npm run dev

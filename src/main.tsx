@@ -16,7 +16,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     {/* <LoginPage/> */}
     {/* <WelcomPage/> */}
     {/* <Stars/> */}
-    {/* <Dashboard/> */}
-    <ChatPage/>
+    <LoginPage/>
   </React.StrictMode>,
 )
