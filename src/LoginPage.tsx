@@ -4,7 +4,7 @@ import "./LoginPage.css";
 
 import cloud from './assets/cloud.svg';
 import largeDiamond from './assets/largeDiamond.svg';
-import diamond1 from './assets/diamond1.svg';
+import diamond1 from './assets/diamond.svg';
 import pingPongGif from './assets/pingPongGif.gif';
 import '../node_modules/nes.css/css/nes.min.css';
 
