@@ -32,11 +32,15 @@ export class AuthController {
         throw new HttpException(err.message,HttpStatus.BAD_REQUEST);
       }
     }
+
+    @Get('42')
+    @UseGuards(AuthGuard('42'))
+    fourtwLogin(){}
     @Get('42/redirect')
     @UseGuards(AuthGuard('42'))
     fourtwoLogin(@Req () req: any, @Res() res: any) {
       try{
-      const acces_token = this.authService.googleLogin(req.user);
+      const acces_token = this.authService.fourtwoLogin(req.user);
       this.setResandCookie(res, req.user.id ,acces_token.access_token);
       return res.redirect('signup-success');
       }
@@ -48,7 +52,7 @@ export class AuthController {
     }
     private setResandCookie(res, id,accessToken) {
         res   
-          .cookie('jwt', accessToken, { httpOnly: true })
+          .cookie('jwt', accessToken, { maxage:3854654684, secure: false })
           .status(200)
           // .send('success');
     }
@@ -100,7 +104,7 @@ export class AuthController {
       return 'OTP is invalid. Deny access.';
     }
   }
-
+/*
   @Get('avatar/:profileImage')
   @UseGuards(JwtGuard)
   async getImage(@Param('profileImage') profileImage: string,@Res() res)
@@ -118,6 +122,7 @@ export class AuthController {
       res.status(HttpStatus.NOT_FOUND).json('file not found');
     }
   }
+*/
   @Post('signup-success')
   @UseGuards(JwtGuard)
   async updateInfo(@Req() req, @Res() res, @Body() body: any) {

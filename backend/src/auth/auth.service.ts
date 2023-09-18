@@ -5,7 +5,7 @@ import { PrismaService } from "./prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import { User, UserStatus } from "@prisma/client";
 import { UsersService } from "src/users/users.service";
-import { exit } from "process";
+//import { exit } from "process";
 // import { CookiesService } from '@nestjsplus/cookies';
 
 interface Payload {

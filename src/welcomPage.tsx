@@ -12,9 +12,9 @@ import sparkles from './assets/images/sparkles.gif'
 import '../node_modules/nes.css/css/nes.min.css';
 
 
-function clickMe():any {
-  alert('You clicked the button!');
-}
+// function clickMe():any {
+//   alert('You clicked the button!');
+// }
 
 function welcomPage() {
   return (

@@ -6,16 +6,15 @@ import Stars from './Stars.tsx'
 import LoginPage from './LoginPage.tsx'
 import WelcomPage from './welcomPage.tsx';
 import '../node_modules/nes.css/css/nes.min.css';
-import Dashboard from './Dashboard.tsx'
+import LoginPage from './LoginPage.tsx';
+import Dashboard from './Dashboard.tsx';
+import WelcomPage from './welcomPage.tsx';
 import ChatPage from './Pages/chatPage.tsx'
+
+import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {/* <Stars/> */}
-    {/* <LoginPage/> */}
-    {/* <WelcomPage/> */}
-    {/* <Stars/> */}
-    {/* <LoginPage/> */}
     <ChatPage/>
   </React.StrictMode>,
 )
