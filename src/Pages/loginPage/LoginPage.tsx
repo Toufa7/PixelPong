@@ -1,29 +1,32 @@
 import "./LoginPage.css";
+import "../../../node_modules/nes.css/css/nes.min.css";
 
-/**************************************/
+/******************* Packages  *******************/
+
+// import jwt_decode from "jwt-decode";
+// import { getCookie } from 'typescript-cookie'
+
+/******************* Images  *******************/
 
 import cloud from './assets/cloud.svg';
-import largeDiamond from './assets/largeDiamond.svg';
-import diamond1 from './assets/diamond.svg';
+import purpleDiamond from './assets/purpleDiamond.svg';
+import pinkDiamond from './assets/pinkDiamond.svg';
 import pingPongGif from './assets/pingPongGif.gif';
-import '../node_modules/nes.css/css/nes.min.css';
-import jwt_decode from "jwt-decode";
-import { getCookie } from 'typescript-cookie'
-import { useNavigate } from "react-router-dom";
+
 /**************************************/
 
-const userInfo = () => {
-  const cookie: string = getCookie('jwt');
-  if (cookie)
-  {
-    const decoded = jwt_decode(cookie);
-    console.log(decoded);
-  }
-  else
-    console.log("Cannot extract cookie");  
-}
+// const userInfo = () => {
+//   const cookie: string = getCookie('jwt');
+//   if (cookie)
+//   {
+//     const decoded = jwt_decode(cookie);
+//     console.log(decoded);
+//   }
+//   else
+//     console.log("Cannot extract cookie");  
+// }
 
-userInfo();
+// userInfo();
 
 
 export default function LoginPage() {
@@ -39,8 +42,8 @@ export default function LoginPage() {
           <div className="cloudImg">
             <img src={cloud} alt="cloudImg" />
           </div>
-          <div className="diamondImg1">
-            <img src={diamond1} alt="diamondImg1" />
+          <div className="pinkDiamond">
+            <img src={pinkDiamond} alt="pinkDiamond" />
           </div>
         </div>
         <div className="loginBoxOutside">
@@ -51,8 +54,8 @@ export default function LoginPage() {
             Intra 42
           </a>
           <div className="text-OR">-- OR --</div>
-          <div className="largeDiamond">
-            <img src={largeDiamond} alt="largeDiamond" />
+          <div className="purpleDiamond">
+            <img src={purpleDiamond} alt="purpleDiamond" />
           </div>
         </div>
       </div>

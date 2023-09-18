@@ -1,19 +1,21 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'mport './index.css'i
-// import LoginPage from './LoginPage.tsx'
-import Stars from './Stars.tsx'
-import LoginPage from './LoginPage.tsx'
-import WelcomPage from './welcomPage.tsx';
-import '../node_modules/nes.css/css/nes.min.css';
-import LoginPage from './LoginPage.tsx';
-import Dashboard from './Dashboard.tsx';
-import WelcomPage from './welcomPage.tsx';
-import ChatPage from './Pages/chatPage.tsx'
+import ReactDOM from 'react-dom/client'
 
-import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+/******************* Packages  *******************/
+// import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+
+
+/******************* Includes  *******************/
+import NavBar from './Pages/addons/NavBar';
+import LoginPage from './Pages/loginPage/LoginPage';
+import Stars from './Pages/addons/Stars';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ChatPage/>
+    <LoginPage/>
+    <Stars/>
+    <NavBar/>
   </React.StrictMode>,
 )
