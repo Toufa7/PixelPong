@@ -13,7 +13,7 @@ import { getCookie } from 'typescript-cookie'
 
 const userInfo = () => {
   const cookie = getCookie('jwt');
-  const decoded = jwt_decode(cookie);
+  const decoded:string = jwt_decode(cookie);
   console.log("user -> " ,decoded.username);
 }
 
