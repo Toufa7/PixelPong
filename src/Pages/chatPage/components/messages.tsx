@@ -1,6 +1,7 @@
-import ChatUser from '../chatPageComponents/ChatUser.tsx'
-import MessagingBody from '../chatPageComponents/MessagingBody.tsx'
-import MessageLowerRibbon from '../chatPageComponents/MessageLowerRibbon.tsx'
+import ChatUser from './ChatUser'
+import MessagingBody from './MessagingBody'
+import MessageLowerRibbon from './MessageLowerRibbon'
+
 
 const messages = () => {
   return (

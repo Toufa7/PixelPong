@@ -1,6 +1,6 @@
 import React from 'react'
-import omar from '../../assets/images/otoufah.jpg'
-import Sparkle from '../../assets/images/sparkles.gif'
+import omar from '../assets/images/otoufah.jpg'
+import Sparkle from '../assets/images/sparkles.gif'
 
 const ChatUser = () => {
   return (

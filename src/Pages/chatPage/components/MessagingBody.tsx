@@ -1,6 +1,7 @@
 import React from 'react'
-import Conversation from '../../Componenets/chatPageComponents/conversation.tsx'
-import MessageInput from '../../Componenets/chatPageComponents/messageInput.tsx'
+
+import Conversation from './conversation'
+import MessageInput from './messageInput'
 
 const MessagingBody = () => {
   return (

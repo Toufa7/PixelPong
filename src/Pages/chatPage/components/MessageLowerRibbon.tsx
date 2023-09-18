@@ -1,6 +1,10 @@
 import React from 'react'
-import Diamond from '../../assets/images/diamond.svg'
-import Sparkle from '../../assets/images/sparkles.gif'
+
+import Diamond from '../../../assets/images/diamond.svg'
+import Sparkle from '../../../assets/images/sparkles.gif'
+
+// import Diamond from '../../assets/images/diamond.svg'
+// import Sparkle from '../../assets/images/sparkles.gif'
 
 
 const MessageLowerRibbon = () => {

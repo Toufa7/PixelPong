@@ -1,8 +1,8 @@
 import './chatPage.css'
-import Send from './assets/images/send.svg'
-import star from './assets/images/star.svg';
-import diamond from './assets/diamond.svg';
-import sparkles from './assets/images/sparkles.gif';
+import Send from '../../assets/images/send.svg'
+import star from '../../assets/images/star.svg';
+import diamond from '../../assets/diamond.svg';
+import sparkles from '../../assets/images/sparkles.gif';
 import './Stars.css';
 
 

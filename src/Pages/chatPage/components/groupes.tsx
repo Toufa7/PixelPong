@@ -1,6 +1,6 @@
 import React from 'react'
-import gimg from '../../assets/images/group_img.jpg'
-import afans from '../../assets/images/fans_2.jpg'
+import gimg from '../assets/images/group_img.jpg'
+import afans from '../assets/images/fans_2.jpg'
 
 const groupes = () => {
   return (
