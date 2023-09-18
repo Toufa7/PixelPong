@@ -1,6 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
+import ReactDOM from 'react-dom/client'mport './index.css'i
 // import LoginPage from './LoginPage.tsx'
 import Stars from './Stars.tsx'
 import LoginPage from './LoginPage.tsx'
