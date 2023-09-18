@@ -17,30 +17,19 @@ body {
 .loginBox {
   width: 500px;
   height: 500px;
-
-  opacity: 0.8;
-
-  /* overflow: hidden; */
+  position: relative;
+  transform: translate(-80%, 50%);
 
   display: flex;
   justify-content: center;
   flex-direction: column;
-
-  left: 20%;
   background: #A473B1;
   color: #FFF;
   position: relative;
-  /* border: 8px solid; */
-  /* border-color: #B19D9D white white #B19D9D; */
-  /* top, right, bottom, left */
-  z-index: 20;
+  border: 8px solid;
+  border-color: #B19D9D white white #B19D9D;
+  z-index: 1;
 }
-
-/* .line {
-  position: absolute;
-  width: 100%;
-  border: 8px solid red;
-} */
 
 .loginBox:hover {
   animation: floating 1s ease-in-out infinite;	

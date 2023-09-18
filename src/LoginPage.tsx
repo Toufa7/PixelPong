@@ -9,15 +9,22 @@ import pingPongGif from './assets/pingPongGif.gif';
 import '../node_modules/nes.css/css/nes.min.css';
 import jwt_decode from "jwt-decode";
 import { getCookie } from 'typescript-cookie'
+import { useNavigate } from "react-router-dom";
 /**************************************/
 
 const userInfo = () => {
-  const cookie = getCookie('jwt');
-  console.log("My Cookie" , cookie)
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzBiMzBhNy05ZDE1LTQ2NDYtOTNjZi0wMTg5NDM5ZDQ5OWEiLCJ1c2VybmFtZSI6Im90b3VmYWgiLCJlbWFpbCI6Im90b3VmYWhAc3R1ZGVudC4xMzM3Lm1hIiwiaW1hZ2UiOiJodHRwczovL2Nkbi5pbnRyYS40Mi5mci91c2Vycy80NDJiN2NmODcxMDJkNjNiNzBiODA0NTZmMmRlYzA0NC9vdG91ZmFoLmpwZyIsImlhdCI6MTY5NDk3NDU2OSwiZXhwIjoxNjk1MDYwOTY5fQ.jTkt9H1mrewC_9cJwQ1ltqMock4mhYFQwUtdSOOSK3I";
-  const decoded = jwt_decode(token);
-  console.log(decoded);
+  const cookie: string = getCookie('jwt');
+  if (cookie)
+  {
+    const decoded = jwt_decode(cookie);
+    console.log(decoded);
+  }
+  else
+    console.log("Cannot extract cookie");  
 }
+
+userInfo();
+
 
 export default function LoginPage() {
   return (
@@ -28,7 +35,7 @@ export default function LoginPage() {
 
       <div className="loginBox">
         <div className="loginBoxInside">
-          Hello
+            Sign in
           <div className="cloudImg">
             <img src={cloud} alt="cloudImg" />
           </div>

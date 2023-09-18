@@ -1,13 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
-// import LoginPage from './LoginPage.tsx'
 import '../node_modules/nes.css/css/nes.min.css';
-import UserSettings from './UserSettings.tsx';
 import LoginPage from './LoginPage.tsx';
+import Dashboard from './Dashboard.tsx';
+import WelcomPage from './welcomPage.tsx';
+import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <LoginPage/>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage/>}/>
+        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/" element={<WelcomPage/>}/>
+      </Routes> 
+    </Router>
   </React.StrictMode>,
 )
