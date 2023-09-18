@@ -62,6 +62,7 @@
                     &::placeholder
                     {
                         padding-left: 40px;
+                        // font-size: 1vw;
                     }
                 }
             }
@@ -182,11 +183,15 @@
         .chatUserDiv
         {
             flex: 2;
-            // background-color: palevioletred;
             display: flex;
             flex-direction: column;
-            // margin: 10px;
-            // padding-top: 12px;
+
+            .chatUserDivSparkle
+            {
+                position: relative;
+                left: 50%;
+                bottom: 15%;
+            }
             
             span
             {
@@ -203,7 +208,7 @@
                 border-radius: 13px;
             }
 
-            .palyerPicProfile
+            .playerPicProfile
             {
                 flex: 10;
                 width: 95%;
@@ -244,13 +249,72 @@
         .MessagingBodyDiv
         {
             flex: 10;
-            background-color: paleturquoise;
+            display: flex;
+            flex-direction: column;
+            background-color: #d7b3e1;
+            width: 95%;
+            margin: 5px;
+            padding: 15px;
+            border: 5px solid;
+            border-radius: 10px;
+
+            .conversationDiv
+            {
+                flex: 8;
+            }
+
+            .messageInput
+            {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .messageInputBox
+                {
+                    outline: none;
+                    padding: 1%;
+                    border-top-color: #ebd9f0;
+                    border-top-width: 3px;
+                    border-right-color: #ebd9f0;
+                    border-right-width: 3px;
+                    border-bottom-color: #d9d9d9;
+                    border-bottom-width: 3px;
+                    width: 80%;
+                    color: grey;
+                    background-color: #d9d9d9;
+
+                }
+
+                .sendButton
+                {
+                    background-color: transparent;
+                    outline: none;
+                }
+            }
         }
 
         .MessageLowerRibbonDiv
         {
             flex: 1;
-            background-color: palegoldenrod;
+            display: flex;
+            justify-content: space-between;
+
+            .leftDiamond
+            {
+                position: relative;
+                height: 79px;
+                width: 61px;
+                left: 21%;
+            }
+
+            .rightSparkle
+            {
+                position: relative;
+                width: 86px;
+                height: 76px;
+                right: 4%;
+            }
         }
     }
 }
