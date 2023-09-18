@@ -107,6 +107,7 @@ function Chat () {
                         </div>
                     </div>
                 </div>
+
                 <div className="playerProfileBar">
                     <div className='conversationBody'>
                         <section className="message-list">

@@ -13,12 +13,11 @@ import { getCookie } from 'typescript-cookie'
 
 const userInfo = () => {
   const cookie = getCookie('jwt');
-  const decoded:string = jwt_decode(cookie);
-  console.log("user -> " ,decoded.username);
+  console.log("My Cookie" , cookie)
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzBiMzBhNy05ZDE1LTQ2NDYtOTNjZi0wMTg5NDM5ZDQ5OWEiLCJ1c2VybmFtZSI6Im90b3VmYWgiLCJlbWFpbCI6Im90b3VmYWhAc3R1ZGVudC4xMzM3Lm1hIiwiaW1hZ2UiOiJodHRwczovL2Nkbi5pbnRyYS40Mi5mci91c2Vycy80NDJiN2NmODcxMDJkNjNiNzBiODA0NTZmMmRlYzA0NC9vdG91ZmFoLmpwZyIsImlhdCI6MTY5NDk3NDU2OSwiZXhwIjoxNjk1MDYwOTY5fQ.jTkt9H1mrewC_9cJwQ1ltqMock4mhYFQwUtdSOOSK3I";
+  const decoded = jwt_decode(token);
+  console.log(decoded);
 }
-
-
-userInfo();
 
 export default function LoginPage() {
   return (
