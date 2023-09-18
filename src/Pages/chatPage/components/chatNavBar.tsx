@@ -1,6 +1,6 @@
-import ChatSearch from '../chatPageComponents/chatSearch.tsx'
-import Dms from '../chatPageComponents/dms.tsx'
-import Groupes from '../chatPageComponents/groupes.tsx'
+import ChatSearch from './chatSearch'
+import Dms from './dms'
+import Groupes from './groupes'
 
 const chatNavBar = () => {
   return (

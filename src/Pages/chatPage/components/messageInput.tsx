@@ -1,5 +1,5 @@
 import React from 'react'
-import Send from '../../assets/images/send.svg'
+import Send from '../../../assets/images/send.svg'
 
 const messageInput = () => {
   return (

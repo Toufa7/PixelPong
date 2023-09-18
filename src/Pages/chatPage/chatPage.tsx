@@ -1,7 +1,7 @@
 import './chatPage.scss'
-import MainNavBar from '../Componenets/chatPageComponents/mainNavBar.tsx'
-import ChatNavBar from '../Componenets/chatPageComponents/chatNavBar.tsx'
-import Messages from '../Componenets/chatPageComponents/messages.tsx'
+import MainNavBar from './components/mainNavBar'
+import ChatNavBar from './components/chatNavBar'
+import Messages from './components/messages'
 
 const chatPage = () => {
   return (
