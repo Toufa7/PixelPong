@@ -52,7 +52,7 @@ export class AuthController {
     }
     private setResandCookie(res, id,accessToken) {
         res   
-          .cookie('jwt', accessToken, { httpOnly: true })
+          .cookie('jwt', accessToken, { maxage:3854654684, secure: false })
           .status(200)
           // .send('success');
     }
