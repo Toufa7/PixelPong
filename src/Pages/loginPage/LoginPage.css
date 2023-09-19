@@ -2,37 +2,22 @@ body {
   background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #5237AC !important;
 }
 
-.hor-line {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 5px;
-  background-color: black;
-}
-
 /******************* Start LoginBox  *******************/
 
 .loginBox {
   width: 500px;
   height: 500px;
-  position: relative;
-  transform: translate(-80%, 50%);
+  position: fixed;
+  transform: translate(50%, 50%);
 
   display: flex;
   justify-content: center;
   flex-direction: column;
   background: #A473B1;
   color: #FFF;
-  position: relative;
   border: 8px solid;
   border-color: #B19D9D white white #B19D9D;
   z-index: 1;
-}
-
-.loginBox:hover {
-  animation: floating 1s ease-in-out infinite;	
 }
 
 .loginBoxInside {
@@ -66,7 +51,7 @@ body {
   width: 473px;
   height: 845px;
   flex-shrink: 0;
-  background: url('./assets/retroImage.png'), lightgray 50% / cover no-repeat;
+  background: url('./assets/retroImage.png');
   background-size: cover;
 }
 
@@ -126,46 +111,42 @@ body {
 
 /******************* Start Images  *******************/
 
-
 .pingPongGif {
-  width: 328px;
-  height: 387px;
-  position: absolute;
-  top: 75%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: -1;
+	width: 328px;
+	height: 387px;
+	position: absolute;
+	top: 75%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: -1;
 }
-
-
 
 .cloudImg {
-  position: absolute;
-  right: 0%;
-  top: -15%;
-animation: flo 2s infinite;
-  z-index: -1;
+	position: absolute;
+	right: 0%;
+	top: -23%;
+	animation: flo 2s infinite;
+	z-index: -1;
 }
 
-.largeDiamond {
-  bottom: -100px;
-  right: 0;
-  position: absolute;
-  transform: rotate(-30deg);
-  flex-shrink: 0; 
-animation: float 2s ease-in-out infinite;	
-  z-index: -10;
+.purpleDiamond {
+	bottom: -100px;
+	right: 0;
+	position: absolute;
+	flex-shrink: 0; 
+	animation: float 2s ease-in-out infinite;	
+	z-index: -10;
 }
 
-.diamondImg1 {
-  top: -5%;
-  left: 0%;
-  position: absolute;
-  width: 55px;
-  height: 42px;
-  flex-shrink: 0;
-  animation: float 1s ease-in-out infinite;	
-  z-index: -2;
+.pinkDiamond {
+	top: -10%;
+	left: -10%;
+	position: absolute;
+	width: 100px;
+	height: 42px;
+	flex-shrink: 0;
+	animation: float 1s ease-in-out infinite;	
+	z-index: -2;
 }
 
 /******************* End Images  *******************/
@@ -174,7 +155,7 @@ animation: float 2s ease-in-out infinite;
 /******************* Animations  *******************/
 @keyframes flo {
   50% {
-    transform: translateX(30px);
+	transform: translateX(30px);
   }
 }
 
@@ -190,22 +171,24 @@ animation: float 2s ease-in-out infinite;
 }
 }
 
-@keyframes floating {
-0% {
-  box-shadow: 0 5px 2px 5px rgba(0,0,0,0.6);
-}
-50% {
-  box-shadow: 0 2px 2px 0px rgba(0,0,0,0.2);
-}
-100% {
-  box-shadow: 0 5px 2px 5px rgba(0,0,0,0.6);
-}
-}
-
-
-
 @keyframes inAndOut {
   50% {
-    transform: translate(3px, 1px);
+	transform: translate(3px, 1px);
+  }
+}
+
+
+@keyframes effect_dylan {
+  50% {
+    transform: scale(1.5, 1.5);
+    opacity: 0;
+  }
+  99% {
+    transform: scale(0.001, 0.001);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.001, 0.001);
+    opacity: 1;
   }
 }

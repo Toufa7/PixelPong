@@ -24,7 +24,7 @@ export class RelationService {
         }),
             this.prisma.user.update({
               where: {
-                id: senderId,
+                username: senderId,
               },
               data: {
                 friends: {
@@ -36,7 +36,7 @@ export class RelationService {
             }),
             this.prisma.user.update({
               where: {
-                id: recieverId,
+                username: recieverId,
               },
               data: {
                 friends: {

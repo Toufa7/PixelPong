@@ -1,25 +1,23 @@
-import { Body, Controller, Post, ParseIntPipe, ParseUUIDPipe, ParseArrayPipe, Param, Patch } from "@nestjs/common";
+import { Body, Controller, Post, ParseIntPipe, ParseUUIDPipe, ParseArrayPipe, Param, Patch, Query } from "@nestjs/common";
 import { RelationService } from "./relation.service";
-
+import { UserDto } from 'src/dto/user.dto';
+import { FriendrequestDto } from 'src/dto/relation.dto'
+import { query } from "express";
 
 @Controller('relation')
 export class RelationController {
     constructor(private Relationservice : RelationService) {}
     @Post('sendFriendRequest')
-    async sendFriendRequest(
-        @Body('senderId', ParseUUIDPipe,) senderId: string, 
-        @Body('recieverId', ParseUUIDPipe,) recieverId: string, ) {
-        return await this.Relationservice.sendFriendRequest(senderId, recieverId);
+    async sendFriendRequest(@Query() query : FriendrequestDto) {
+        return await this.Relationservice.sendFriendRequest(query.userId, query.friendId);
     }
     @Patch('acceptFriendRequest/:id')
-    async acceptFriendRequest(@Param('id', ParseIntPipe) id: number,
-    @Body('senderId', ParseUUIDPipe,) senderId: string,
-    @Body('recieverId', ParseUUIDPipe,) recieverId: string,){
-        return await this.Relationservice.acceptFriendRequest(id, senderId, recieverId);
+    async acceptFriendRequest(@Query() query : FriendrequestDto){
+        return await this.Relationservice.acceptFriendRequest(query.id, query.userId, query.friendId);
     }
     @Patch('refuseFriendRequest/:id')
-    async refuseFriendRequest(@Param('id', ParseIntPipe) id: number){
-        return await this.Relationservice.refuseFriendRequest(id);
+    async refuseFriendRequest(@Query() query : FriendrequestDto){
+        return await this.Relationservice.refuseFriendRequest(query.id);
     }
     // @Get('')
 }

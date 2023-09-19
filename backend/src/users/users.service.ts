@@ -12,7 +12,7 @@ export class UsersService {
     async findOne(id: string) {
         const user = await this.prisma.user.findUnique({
             where: {
-                id: id,
+                username: id,
             },
         });
         return user;
@@ -20,7 +20,7 @@ export class UsersService {
     async DeleteOne(id: string) {
         const user = await this.prisma.user.delete({
             where: {
-                id: id,
+                username: id,
             },
         });
         return user;
@@ -31,7 +31,7 @@ export class UsersService {
     async removefriend(userId: string, friendId: string): Promise<void> {
         await this.prisma.user.update({
             where:{
-                id: userId,
+                username: userId,
             },
             data: {
                 friends: {
@@ -43,7 +43,7 @@ export class UsersService {
         }),
         this.prisma.user.update({
             where:{
-                id: friendId,
+                username: friendId,
             },
             data: {
                 friends: {
@@ -59,7 +59,7 @@ export class UsersService {
         await this.prisma.$transaction([
         this.prisma.user.update({
             where:{
-                id: userId,
+                username: userId,
             },
             data: {
                 friends: {
@@ -71,7 +71,7 @@ export class UsersService {
         }),
         this.prisma.user.update({
             where:{
-                id: userId,
+                username: userId,
             },
             data: {
                 blocked: {
@@ -88,7 +88,7 @@ export class UsersService {
          const {username, profileImage} = body;
         const user = await this.prisma.user.update({
             where: {
-                id: id,
+                username: id,
             },
             data: {
                 username,
@@ -120,10 +120,21 @@ export class UsersService {
         });
         return user;
     }
+
+    async search(query: string) {
+        const users = await this.prisma.user.findMany({
+            where: {
+                username: {
+                    contains: query,
+                },
+            },
+        });
+        return users;
+    }
     async unblockfriend(userId: string, unblockedId: string): Promise<void> {
         await this.prisma.user.update({
             where:{
-                id: userId,
+                username: userId,
             },
             data: {
                 friends: {

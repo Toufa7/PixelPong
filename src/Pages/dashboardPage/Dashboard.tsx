@@ -1,62 +1,88 @@
-import "./Dashboard.css";
+import "./Dashboard.scss";
 
-function Dashboard() {
+const TopContainer = () => {
   return (
-    <div className="container">
-      <div className="head-box">
-        <div className="login-box play">
-          <div className="top-login play1">PLAY</div>
-          <div className="margins">
+      <div className="headerBox">
+        <div className="topLoginBox">
+          <div className="loginBoxHeader">PLAY</div>
+          <div className="loginBoxOutside">
             <div className="playRaw">
               <div className="playWith Friend">Friend</div>
-              <div className="playWith Bot">Bot</div>
               <div className="playWith Practice">Practice</div>
             </div>
           </div>
         </div>
       </div>
+  );
+}
 
-      <div className="four-container">
-        <div className="section1">
-          <div className="login-box on-going-matches">
-            <div className="top-login on-going-matches1">ON GOING MATCHES</div>
-            <div className="margins"></div>
-          </div>
-          <div className="login-box achievements">
-            <div className="top-login achievements1">ACHIEVEMENTS</div>
-            <div className="margins"></div>
-          </div>
-        </div>
-        <div className="section2">
-          <div className="login-box states">
-            <div className="top-login states1">STATES</div>
-            <div className="margins"></div>
-          </div>
-          <div className="login-box latest-matches">
-            <div className="top-login latest-matches1">LATEST MATCHES</div>
-            <div className="margins">
-              <div className="matchesHistory">
-                <div className="matcheHistory1">
-                  <span className="leftName">Santi</span>
-                  <span className="score">0 : 1</span>
-                  <span className="rightName">Cazorla</span>
+const TopLeft = () => {
+  return (
+    <div className="loginBox on-going-matches">
+      <div className="loginBoxHeader on-going-matches1">ON GOING MATCHES</div>
+      <div className="loginBoxOutside"></div>
+    </div>
+  );
+}
+
+const TopRight = () => {
+  return (
+    <div className="loginBox states">
+    <div className="loginBoxHeader states1">STATES</div>
+    <div className="loginBoxOutside"></div>
+    </div>
+  );
+}
+
+const BottomLeft = () => {
+  return (
+    <div className="loginBox achievements">
+      <div className="loginBoxHeader achievements1">ACHIEVEMENTS</div>
+      <div className="loginBoxOutside"></div>
+    </div>
+  );
+}
+
+const BottomRight= () => {
+  return (
+    <div className="loginBox latest-matches">
+            <div className="loginBoxHeader latest-matches1">LATEST MATCHES</div>
+            <div className="loginBoxOutside">
+                <div className="matcheHistory">
+                <div className="match1">
+                  <a>S</a>
+                  <a>0:0</a>
+                  <a>L</a>
                 </div>
-                <div className="matcheHistory2">
-                  <span className="leftName">William</span>
-                  <span className="score">1 : 0</span>
-                  <span className="rightName">Saliba</span>
+                <div className="match2">
+                  <span>S</span>
+                  <span>0:0</span>
+                  <span>L</span>
                 </div>
-                <div className="matcheHistory3">
-                  <span className="leftName">Mikel</span>
-                  <span className="score">0 : 0</span>
-                  <span className="rightName">Arteta</span>
+                <div className="match3">
+                  <span>S</span>
+                  <span>0:0</span>
+                  <span>L</span>
                 </div>
-              </div>
+                </div>
             </div>
           </div>
+  );
+}
+
+function Dashboard() {
+  return (
+    <div>
+      <TopContainer/>
+        <div className="top-containers">
+          <TopLeft/>
+          <TopRight/>
+        </div>
+        <div className="bottom-containers">
+          <BottomLeft/>
+          <BottomRight/>
         </div>
       </div>
-    </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import {HttpStatus,HttpException,StreamableFile, Body, Controller, Get,Post,Put,Req,Res, UploadedFile, UseGuards, UseInterceptors, Param, ParseUUIDPipe, Header } from '@nestjs/common';
+import {HttpStatus,HttpException,StreamableFile, Body, Controller, Get,Post,Put,Req,Res, UploadedFile, UseGuards, UseInterceptors, Param, ParseUUIDPipe, Header, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { JwtGuard } from '../guards/jwt.guards';
@@ -13,6 +13,9 @@ import * as qrcode from 'qrcode';
 
 
 import { join } from 'path';
+import { UserDto } from 'src/dto/user.dto';
+import { error } from 'console';
+import { validate } from 'class-validator';
 
 @Controller('auth')
 export class AuthController {
@@ -104,17 +107,17 @@ export class AuthController {
       return 'OTP is invalid. Deny access.';
     }
   }
-/*
+
   @Get('avatar/:profileImage')
   @UseGuards(JwtGuard)
-  async getImage(@Param('profileImage') profileImage: string,@Res() res)
+  async getImage(@Param() Param: UserDto,@Res() res)
   {
     try {
-      const path = join("./uploads/", profileImage);
+      const path = join("./uploads/", Param.profileImage);
       await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
       const fileStream = new StreamableFile(file);
-      const extension = profileImage.split('.')[1];
+      const extension = Param.profileImage.split('.')[1];
       res.setHeader('Content-Type', 'image/'+extension);
       return file.pipe(res);
     } catch (err) {
@@ -122,12 +125,15 @@ export class AuthController {
       res.status(HttpStatus.NOT_FOUND).json('file not found');
     }
   }
-*/
+
   @Post('signup-success')
   @UseGuards(JwtGuard)
-  async updateInfo(@Req() req, @Res() res, @Body() body: any) {
+  async updateInfo(@Req() req, @Res() res, @Body() body: UserDto) {
+    const error = await validate(body);
+    if (error.length > 0) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
     const { username} = body;
-    console.log("body ", body)
     const user = await this.authService.updateinfo(req.user.username , username);
     
     if (user) {
