@@ -32,21 +32,10 @@ export class AuthController {
         throw new HttpException(err.message,HttpStatus.BAD_REQUEST);
       }
     }
-<<<<<<< HEAD
-    @Get('search')
-    async search(@Query('search') search : string) {
-       const user = await this.usersService.search(search);
-        if(!user){
-          throw new HttpException('User not found', HttpStatus.NOT_FOUND);}
-        console.log(user)
-        return user;
-    }
-=======
 
     @Get('42')
     @UseGuards(AuthGuard('42'))
     fourtwLogin(){}
->>>>>>> refs/remotes/origin/master
     @Get('42/redirect')
     @UseGuards(AuthGuard('42'))
     fourtwoLogin(@Req () req: any, @Res() res: any) {
@@ -63,11 +52,7 @@ export class AuthController {
     }
     private setResandCookie(res, id,accessToken) {
         res   
-<<<<<<< HEAD
-          .cookie('jwt', accessToken, { maxage: 46465468468, secure: false })
-=======
           .cookie('jwt', accessToken, { maxage:3854654684, secure: false })
->>>>>>> refs/remotes/origin/master
           .status(200)
           // .send('success');
     }
