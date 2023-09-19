@@ -28,8 +28,8 @@ import { FriendrequestDto } from 'src/dto/relation.dto';
   export class UsersController {
     constructor(private readonly usersService: UsersService) {}
     @Get('all')
-    findAll() {
-        const users = this.usersService.findAll();
+    async findAll() {
+        const users = await this.usersService.findAll();
         if(!users){
           throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
         }
@@ -37,8 +37,9 @@ import { FriendrequestDto } from 'src/dto/relation.dto';
     }
 
     @Get('/:id')
-    findOne(@Param() params: UserDto ) {
-        const user = this.usersService.findOne(params.id);
+    findOne(@Param('id') params: UserDto ) {
+      console.log(params.username)
+        const user = this.usersService.findOne(params.username);
         if(!user){
           throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }

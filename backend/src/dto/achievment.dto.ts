@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsDateString, IsString } from 'class-validator';
 
 export class AchievementsDto {
   @IsString()
@@ -10,7 +10,9 @@ export class AchievementsDto {
   @IsString()
   achievementType: string;
 
+  @IsDateString()
   createdAt: string;
 
+  @IsDateString()
   updatedAt: string;
 }

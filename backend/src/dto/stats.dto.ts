@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsDateString, IsInt, IsString } from 'class-validator';
 
 export class StatsDto {
   @IsInt()
@@ -13,7 +13,9 @@ export class StatsDto {
   @IsInt()
   loses: number;
 
+  @IsDateString()
   createdAt: string;
 
+  @IsDateString()
   updatedAt: string;
 }

@@ -32,9 +32,9 @@ export class UserDto {
   @IsBoolean()
   readonly twofa: boolean | null;
 
-  @IsDateString()
+  // @IsDateString()
   readonly createdAt: string;
 
-  @IsDateString()
+  // @IsDateString()
   readonly updatedAt: string;
 }

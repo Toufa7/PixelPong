@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsDateString, IsInt, IsString } from 'class-validator';
 
 export class MatchHistoryDto {
   @IsInt()
@@ -7,7 +7,9 @@ export class MatchHistoryDto {
   @IsString()
   userId: string;
 
+  @IsDateString()
   createdAt: string;
 
+  @IsDateString()
   updatedAt: string;
 }

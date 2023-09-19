@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsDateString, IsInt, IsString } from 'class-validator';
 
 export class FriendrequestDto {
   @IsInt()
@@ -12,8 +12,10 @@ export class FriendrequestDto {
 
   @IsString()
   status: string;
-
+  
+  @IsDateString()
   createdAt: string;
 
+  @IsDateString()
   updatedAt: string;
 }
