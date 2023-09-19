@@ -15,6 +15,7 @@ import {
     Res,
     HttpException,
     HttpStatus,
+    Query,
   } from '@nestjs/common';
   import { UsersService } from './users.service';
   import { JwtGuard } from  '../guards/jwt.guards';
@@ -89,6 +90,5 @@ import {
     @Get(':UserId/Friends')
     async getFriends(@Param('id', ParseUUIDPipe) id: string,)
     {await this.usersService.getFriends(id)}
-
   }
 

@@ -120,6 +120,17 @@ export class UsersService {
         });
         return user;
     }
+
+    async search(query: string) {
+        const users = await this.prisma.user.findMany({
+            where: {
+                username: {
+                    contains: query,
+                },
+            },
+        });
+        return users;
+    }
     async unblockfriend(userId: string, unblockedId: string): Promise<void> {
         await this.prisma.user.update({
             where:{

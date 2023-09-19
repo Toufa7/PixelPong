@@ -1,4 +1,4 @@
-import {HttpStatus,HttpException,StreamableFile, Body, Controller, Get,Post,Put,Req,Res, UploadedFile, UseGuards, UseInterceptors, Param, ParseUUIDPipe, Header } from '@nestjs/common';
+import {HttpStatus,HttpException,StreamableFile, Body, Controller, Get,Post,Put,Req,Res, UploadedFile, UseGuards, UseInterceptors, Param, ParseUUIDPipe, Header, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { JwtGuard } from '../guards/jwt.guards';
@@ -32,6 +32,14 @@ export class AuthController {
         throw new HttpException(err.message,HttpStatus.BAD_REQUEST);
       }
     }
+    @Get('search')
+    async search(@Query('search') search : string) {
+       const user = await this.usersService.search(search);
+        if(!user){
+          throw new HttpException('User not found', HttpStatus.NOT_FOUND);}
+        console.log(user)
+        return user;
+    }
     @Get('42/redirect')
     @UseGuards(AuthGuard('42'))
     fourtwoLogin(@Req () req: any, @Res() res: any) {
@@ -48,7 +56,7 @@ export class AuthController {
     }
     private setResandCookie(res, id,accessToken) {
         res   
-          .cookie('jwt', accessToken, { httpOnly: true })
+          .cookie('jwt', accessToken, { maxage: 46465468468, secure: false })
           .status(200)
           // .send('success');
     }
