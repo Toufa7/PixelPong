@@ -1,3 +1,4 @@
+import React from 'react'
 import omar from '../assets/images/otoufah.jpg'
 import mamella from '../assets/images/mamella.jpg'
 
