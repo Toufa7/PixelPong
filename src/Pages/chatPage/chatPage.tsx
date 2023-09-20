@@ -1,3 +1,4 @@
+import React from 'react'
 import './chatPage.scss'
 import MainNavBar from './components/mainNavBar'
 import ChatNavBar from './components/chatNavBar'
