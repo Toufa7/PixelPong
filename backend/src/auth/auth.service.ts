@@ -66,7 +66,7 @@ export class AuthService {
     async updateinfo(id, username) {
         const user = await this.prisma.user.update({
             where: {
-                username :id,
+                id :id,
             },
             data: {
                 username: username,

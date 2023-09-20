@@ -7,26 +7,30 @@ import { UsersService } from 'src/users/users.service';
 import {authenticator, totp} from 'otplib';
 import { diskStorage } from 'multer';
 import { Extensions } from '@nestjs/graphql';
-import { User } from '@prisma/client';
+import { Prisma, PrismaClient, User } from '@prisma/client';
 import { createReadStream,promises as fsPromises } from 'fs';
 import * as qrcode from 'qrcode';
-
 
 import { join } from 'path';
 import { UserDto } from 'src/dto/user.dto';
 import { error } from 'console';
 import { validate } from 'class-validator';
+import { PrismaService } from './prisma.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService, 
-    private usersService: UsersService) {}
+    private usersService: UsersService, private Prismaservice:PrismaService) {}
+    @Get('google')
+    @UseGuards(AuthGuard('google'))
+    googlelogin(){}
     @Get('google/redirect')
     @UseGuards(AuthGuard('google'))
     googleLogin(@Req () req: any, @Res() res: any) {
       try{
         const acces_token = this.authService.googleLogin(req.user);
         this.setResandCookie(res, req.user.id ,acces_token.access_token);
+      
         return res.redirect('signup-success');
       }
       catch(err)
@@ -41,10 +45,14 @@ export class AuthController {
     fourtwLogin(){}
     @Get('42/redirect')
     @UseGuards(AuthGuard('42'))
-    fourtwoLogin(@Req () req: any, @Res() res: any) {
+    async fourtwoLogin(@Req () req: any, @Res() res: any) {
       try{
       const acces_token = this.authService.fourtwoLogin(req.user);
       this.setResandCookie(res, req.user.id ,acces_token.access_token);
+      const user = await this.usersService.findOne(req.user.id);
+      console.log("daaaaaaaaaaaaaaaaaaaaaaaaaamnd ",user.firstlogin);
+      if(!user.firstlogin) 
+        return res.redirect('done');
       return res.redirect('signup-success');
       }
       catch(err)
@@ -110,14 +118,14 @@ export class AuthController {
 
   @Get('avatar/:profileImage')
   @UseGuards(JwtGuard)
-  async getImage(@Param() Param: UserDto,@Res() res)
+  async getImage(@Param('profileImage') profileImage: string,@Res() res)
   {
     try {
-      const path = join("./uploads/", Param.profileImage);
+      const path = join("./uploads/", profileImage);
       await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
       const fileStream = new StreamableFile(file);
-      const extension = Param.profileImage.split('.')[1];
+      const extension = profileImage.split('.')[1];
       res.setHeader('Content-Type', 'image/'+extension);
       return file.pipe(res);
     } catch (err) {
@@ -129,12 +137,10 @@ export class AuthController {
   @Post('signup-success')
   @UseGuards(JwtGuard)
   async updateInfo(@Req() req, @Res() res, @Body() body: UserDto) {
-    const error = await validate(body);
-    if (error.length > 0) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
-    }
     const { username} = body;
-    const user = await this.authService.updateinfo(req.user.username , username);
+    console.log("intra 42",req.user.id);
+    
+    const user = await this.authService.updateinfo(req.user.id , username);
     
     if (user) {
       return res.status(200).json({ message: 'User updated' });
