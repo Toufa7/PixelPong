@@ -10,8 +10,6 @@
     npm install jwt-decode
     npm install react-router-dom
 
-    <!-- npm i typescript-cookie -->
-
 # Run server:
 
     npm run dev
