@@ -15,3 +15,10 @@
 # Run server:
 
     npm run dev
+
+
+# Ressource :
+
+- Interface :
+
+https://www.pluralsight.com/guides/use-interface-props-in-functional-components-using-typescript-with-react 

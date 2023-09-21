@@ -8,7 +8,7 @@ import {authenticator, totp} from 'otplib';
 import { diskStorage } from 'multer';
 import { Extensions } from '@nestjs/graphql';
 import { Prisma, PrismaClient, User } from '@prisma/client';
-import { createReadStream,promises as fsPromises } from 'fs';
+import { createReadStream, promises as fsPromises } from 'fs';
 import * as qrcode from 'qrcode';
 
 import { join } from 'path';
@@ -93,13 +93,15 @@ export class AuthController {
       filename: (req, file, cb) => {
         console.log("damnnn : ",__dirname);
         const filename: string = (req.user as User).username;
+        console.log("hhhhh", filename);
       const extension = file.originalname.split('.')[1];
       cb(null,`${filename}.${extension}`);
     },
   }),
 }))
-  UploadFile(@UploadedFile() file, @Req() req) {
-    this.authService.updateimage(file.filename, req.user.username);
+  UploadFile(@UploadedFile() files, @Req() req, @Body() body) {
+    const {file} = body
+    this.authService.updateimage(file.filename, req.user.id);
     return {image: file.filename};
   }
 
@@ -116,29 +118,29 @@ export class AuthController {
     }
   }
 
-  @Get('avatar/:profileImage')
-  @UseGuards(JwtGuard)
-  async getImage(@Param('profileImage') profileImage: string,@Res() res)
-  {
-    try {
-      const path = join("./uploads/", profileImage);
-      await fsPromises.access(path, fsPromises.constants.F_OK);
-      const file = createReadStream(path);
-      const fileStream = new StreamableFile(file);
-      const extension = profileImage.split('.')[1];
-      res.setHeader('Content-Type', 'image/'+extension);
-      return file.pipe(res);
-    } catch (err) {
-      res.setHeader('Content-Type', 'application/json');
-      res.status(HttpStatus.NOT_FOUND).json('file not found');
-    }
-  }
+  // @Get('avatar/:profileImage')
+  // @UseGuards(JwtGuard)
+  // async getImage(@Param('profileImage') profileImage: string,@Res() res)
+  // {
+  //   try {
+  //     const path = join("./uploads/", profileImage);
+  //     await fsPromises.access(path, fsPromises.constants.F_OK);
+  //     const file = createReadStream(path);
+  //     const fileStream = new StreamableFile(file);
+  //     const extension = profileImage.split('.')[1];
+  //     res.setHeader('Content-Type', 'image/'+extension);
+  //     return file.pipe(res);
+  //   } catch (err) {
+  //     res.setHeader('Content-Type', 'application/json');
+  //     res.status(HttpStatus.NOT_FOUND).json('file not found');
+  //   }
+  // }
 
   @Post('signup-success')
   @UseGuards(JwtGuard)
   async updateInfo(@Req() req, @Res() res, @Body() body: UserDto) {
     const { username} = body;
-    console.log("intra 42",req.user.id);
+    console.log("intra 42",username);
     
     const user = await this.authService.updateinfo(req.user.id , username);
     

@@ -103,11 +103,11 @@ export class AuthService {
 
     }
 
-    async updateimage(image: string, username: string){
+    async updateimage(image: string, id: string){
         await this.prisma.user.update({
             where:{
-                username
-            },
+                id:id
+                },
             data:{
                 profileImage: image,
             }
