@@ -28,18 +28,6 @@ const Avatars = () => {
 };
 
 
-
-
-// class testinginteface implements test{
-    
-    //     constructor(){}
-    //     public print() : string{
-        //         console.log("sss");
-        
-        //         return "h";
-        //     }
-        // }
-        
 export default function LoginSettings() {
     
     const retrieveData = () => {
@@ -85,7 +73,10 @@ export default function LoginSettings() {
                         </div>
                             <Avatars />
                         <div className="uploadContainer">
-                            <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
+                            <label className="nes-btn">
+                                <span>Select your file</span>
+                                <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg"/>
+                            </label>
                         </div>
                         <div className="startContainer">
                             <a onClick={retrieveData} className="nes-btn">Start</a>
