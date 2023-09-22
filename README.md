@@ -17,6 +17,10 @@
 
 # Ressource :
 
+# Logos :
+
+https://iconduck.com/sets/pixelarticons-icons-set
+
 ## Interface :
 
 https://www.pluralsight.com/guides/use-interface-props-in-functional-components-using-typescript-with-react 
@@ -36,8 +40,6 @@ https://stackoverflow.com/questions/61385454/how-to-post-multiple-axios-requests
 * Map : 
 
 https://howtodoinjava.com/typescript/maps/
-
-
 
 
     interface UserSettingsProps {

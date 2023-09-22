@@ -7,13 +7,20 @@ import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 import axios from "axios";
 
+// const getUserData = () => {
+//     axios.get('http://localhost:3000/auth/42')
+//     .then((response) => {
+//         console.log(response.data);
+//     })
+// }
+
+// getUserData();
+
 const retrieveSendData = () => {
-    const avatar        =  document.querySelector('[name="avatarUpload"]').files[0];
+    const avatar        = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
         if (nicknameInput.length > 10)
-        {
             alert("Invalid Nickname");
-        }
         if (avatar && nicknameInput)
         {
             const data = new FormData();
@@ -49,7 +56,7 @@ const Avatars = () => {
 
     return (
         <>  
-        <div  className="avatars">
+        <div className="avatars">
             <img onClick={() => handleClick(0)} src={img1}/>
             <img onClick={() => handleClick(1)} src={img2} />
             <img onClick={() => handleClick(2)} src={img3} />
