@@ -44,3 +44,39 @@ const Avatars = () => {
     </>
   );
 };
+
+
+
+
+*****
+
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault(); // Prevent the default form submission behavior
+
+  const selectedFile = e.target.querySelector('[name="avatarUpload"]').files[0];
+  const nicknameInput = e.target.querySelector('[name="nickname"]').value;
+
+  if (selectedFile && nicknameInput) {
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    try {
+      // Upload the file using axios
+      await axios.post('/upload/avatar', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('Avatar uploaded successfully!');
+      // Continue with any other necessary actions
+
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+    }
+  } else {
+    console.log('No Credentials :(');
+  }
+};

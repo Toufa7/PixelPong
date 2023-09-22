@@ -8,11 +8,10 @@ import ReactDOM from 'react-dom/client'
 /******************* Includes  *******************/
 // import NavBar from './Pages/addons/NavBar';
 // import Stars from './Pages/addons/Stars';
-import LoginSettings from './Pages/loginSettings/LoginSettings';
-import LoginPage from './Pages/loginPage/LoginPage';
-import NavBar from './Pages/addons/NavBar';
 // import LoginPage from './Pages/loginPage/LoginPage';
-
+import LoginSettings from './Pages/loginSettings/LoginSettings';
+// import LoginPage from './Pages/loginPage/LoginPage';
+  
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

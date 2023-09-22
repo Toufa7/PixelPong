@@ -9,6 +9,7 @@ import { diskStorage } from 'multer';
 import { Extensions } from '@nestjs/graphql';
 import { Prisma, PrismaClient, User } from '@prisma/client';
 import { createReadStream, promises as fsPromises } from 'fs';
+import * as fs from 'fs'
 import * as qrcode from 'qrcode';
 
 import { join } from 'path';

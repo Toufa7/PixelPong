@@ -1,63 +1,95 @@
-import { useState } from "react";
 import "./LoginSettings.scss"
-import appel from './assets/appel.jpg';
+import img3 from './assets/FarmerBoy.png';
+import img2 from './assets/Detective.png';
+import img1 from './assets/Glasses.png';
+import img4 from './assets/Lady.png';
+import img5 from './assets/old_man.png';
+import img6 from './assets/Girl2.png';
 import axios from "axios";
 
 
+const retrieveSendData = () => {
+
+    const uploadAvatar = () => {
+        const avatar =  document.querySelector('[name="avatarUpload"]').files[0];
+        const data = new FormData();
+        data.append('file', avatar)
+        console.log(" => ",avatar)
+        console.log(data);
+        axios.post('http://localhost:3000/auth/signup-success', data, { withCredentials: true })
+        .then((response) => {
+            console.log("Respo => ", response)
+        })
+
+    }
+    
+    uploadAvatar();
+
+
+
+
+
+    const avatarInput   = document.querySelector('[name="avatarUpload"]');
+    const nicknameInput = document.querySelector('[name="nickname"]');
+    if (nicknameInput && avatarInput != null) 
+    {
+        console.log(nicknameInput.value);
+        console.log( avatarInput.files[0].name);
+
+        // axios.all([
+        //     axios.post('http://localhost:3000/auth/signup-success', {username: nicknameInput.value}, { withCredentials: true }),
+        //     axios.post('http://localhost:3000/auth/uploads', {file: avatarInput.files[0].name}, { withCredentials: true })
+        // ]).then(axios.spread((usernameResponse, avatarResponse) => {
+        //     console.log(usernameResponse, avatarResponse);
+        // }))
+    }
+    else
+        console.log("No Credentials :(")
+}
 
 const Avatars = () => {
-
-    const handleClick = () => {
-        console.log(this);
+    const handleClick = (idx : number) => {
+        const avatars = [
+            {img1}.img1,
+            {img2}.img2,
+            {img3}.img3,
+            {img4}.img4,
+            {img5}.img5,
+            {img6}.img6
+        ];
+        console.log("Avatar Seleted: " , avatars[idx])
     }
 
     return (
-        <>
-        <div onClick={handleClick} className="avatars">
-            <img src={appel}/>
-            <img src={appel} />
-            <img src={appel} />
+        <>  
+        <div  className="avatars">
+            <img onClick={() => handleClick(0)} src={img1}/>
+            <img onClick={() => handleClick(1)} src={img2} />
+            <img onClick={() => handleClick(2)} src={img3} />
         </div>
         <div className="avatars">
-            <img src={appel} />
-            <img src={appel} />
-            <img src={appel} />
+            <img onClick={() => handleClick(3)} src={img4} />
+            <img onClick={() => handleClick(4)} src={img5} />
+            <img onClick={() => handleClick(5)} src={img6} />
         </div>
         </>
     );
 };
 
 
-export default function LoginSettings() {
-    
-    const retrieveData = () => {
-        const avatarInput : string = document.querySelector('[name="avatarUpload"]').value;
-        const nicknameInput : string  = document.querySelector('[name="nickname"]').value;
-        if (nicknameInput && avatarInput) 
-        {
-            console.log("Nickname: ", nicknameInput);
-            console.log("Avatar: ", avatarInput);
-            const payloadName = {
-                username: nicknameInput,
-            };
-            const payloadAva = {
-                file: avatarInput
-            };
-            axios.post('http://localhost:3000/auth/signup-success', payloadName, { withCredentials: true })
-            .then((response) =>
-                console.log(response))
-            .catch((error) =>
-                console.log(error));
 
-            axios.post('http://localhost:3000/auth/uploads', payloadAva, { withCredentials: true })
-            .then((response) =>
-                console.log(response))
-            .catch((error) =>
-                console.log(error));
-        }
-        else
-            console.log("No Credentials :(")
-    }
+
+// class testinginteface implements test{
+    
+    //     constructor(){}
+    //     public print() : string{
+        //         console.log("sss");
+        
+        //         return "h";
+        //     }
+        // }
+        
+export default function LoginSettings() {
 
     return (
         <div className="container">
@@ -73,13 +105,10 @@ export default function LoginSettings() {
                         </div>
                             <Avatars />
                         <div className="uploadContainer">
-                            <label className="nes-btn">
-                                <span>Select your file</span>
-                                <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg"/>
-                            </label>
+                            <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
                         </div>
                         <div className="startContainer">
-                            <a onClick={retrieveData} className="nes-btn">Start</a>
+                            <a onClick={retrieveSendData} className="nes-btn">Start</a>
                         </div>
                     </div>
                 </div>
