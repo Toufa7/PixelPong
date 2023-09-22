@@ -68,7 +68,7 @@ const NavBarFooter = () => {
   );
 }
 
-function NavBar() {
+function  NavBar() {
   return (
     <div className="navbar-container">
       <NavBarHeader/>

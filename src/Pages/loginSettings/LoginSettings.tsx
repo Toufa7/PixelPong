@@ -8,14 +8,11 @@ import img6 from './assets/Girl2.png';
 import axios from "axios";
 
 const retrieveSendData = () => {
-        const avatar        =  document.querySelector('[name="avatarUpload"]').files[0];
-        const nicknameInput = document.querySelector('[name="nickname"]').value;
+    const avatar        =  document.querySelector('[name="avatarUpload"]').files[0];
+    const nicknameInput = document.querySelector('[name="nickname"]').value;
         if (nicknameInput.length > 10)
         {
-            <dialog open>
-                <h1>Greetings, one and all!</h1>
-            </dialog>
-            console.log("Bzzzf");
+            alert("Invalid Nickname");
         }
         if (avatar && nicknameInput)
         {
@@ -67,6 +64,9 @@ const Avatars = () => {
 };
 
 export default function LoginSettings() {
+    const check = () => {
+        console.log("WOWOWO");
+    }
     return (
         <div className="container">
             <div className="settingsBox">
@@ -84,7 +84,7 @@ export default function LoginSettings() {
                             <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
                         </div>
                         <div className="startContainer">
-                            <a onClick={retrieveSendData} className="nes-btn">Start</a>
+                            <a onClick={retrieveSendData} onMouseMove={check} className="nes-btn">Start</a>
                         </div>
                     </div>
                 </div>

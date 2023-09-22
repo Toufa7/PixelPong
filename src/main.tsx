@@ -11,6 +11,7 @@ import ReactDOM from 'react-dom/client'
 // import LoginPage from './Pages/loginPage/LoginPage';
 // import ProfilPage from './Pages/profilPage/profilPage';
 import LoginSettings from './Pages/loginSettings/LoginSettings';
+import NavBar from './Pages/addons/NavBar';
 // import LoginPage from './Pages/loginPage/LoginPage';
 
 
