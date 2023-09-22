@@ -9,6 +9,8 @@
     npm install -D sass
     npm install jwt-decode
     npm install react-router-dom
+    npm install xp.css
+    npm i react-draggable
 
     <!-- npm i typescript-cookie -->
 
