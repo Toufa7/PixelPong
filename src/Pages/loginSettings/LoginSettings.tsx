@@ -16,7 +16,7 @@ const retrieveSendData = () => {
         data.append('file', avatar)
         console.log(" => ",avatar)
         console.log(data);
-        axios.post('http://localhost:3000/auth/signup-success', data, { withCredentials: true })
+        axios.post('http://localhost:3000/auth/signup-success',  {file: data} , { withCredentials: true })
         .then((response) => {
             console.log("Respo => ", response)
         })
