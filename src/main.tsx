@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom/client'
 // import Stars from './Pages/addons/Stars';
 // import LoginPage from './Pages/loginPage/LoginPage';
 import LoginSettings from './Pages/loginSettings/LoginSettings';
+import LoginPage from './Pages/loginPage/LoginPage';
 // import LoginPage from './Pages/loginPage/LoginPage';
   
 

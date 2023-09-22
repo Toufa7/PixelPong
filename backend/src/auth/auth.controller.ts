@@ -91,7 +91,7 @@ export class AuthController {
     storage: diskStorage({
       destination: './uploads',
       filename: (req, file, cb) => {
-        console.log("damnnn : ",__dirname);
+        console.log("File Directory : ",__dirname);
         const filename: string = (req.user as User).id;
         console.log("hhhh", filename);
       const extension = file.originalname.split('.')[1];
@@ -118,29 +118,29 @@ export class AuthController {
     }
   }
 
-  @Get('avatar/:profileImage')
-  @UseGuards(JwtGuard)
-  async getImage(@Param('profileImage') profileImage: string,@Res() res)
-  {
-    try {
-      const path = join("./uploads/", profileImage);
-      await fsPromises.access(path, fsPromises.constants.F_OK);
-      const file = createReadStream(path);
-      const fileStream = new StreamableFile(file);
-      const extension = profileImage.split('.')[1];
-      res.setHeader('Content-Type', 'image/'+extension);
-      return file.pipe(res);
-    } catch (err) {
-      res.setHeader('Content-Type', 'application/json');
-      res.status(HttpStatus.NOT_FOUND).json('file not found');
-    }
-  }
+  // @Get('avatar/:profileImage')
+  // @UseGuards(JwtGuard)
+  // async getImage(@Param('profileImage') profileImage: string,@Res() res)
+  // {
+  //   try {
+  //     const path = join("./uploads/", profileImage);
+  //     await fsPromises.access(path, fsPromises.constants.F_OK);
+  //     const file = createReadStream(path);
+  //     const fileStream = new StreamableFile(file);
+  //     const extension = profileImage.split('.')[1];
+  //     res.setHeader('Content-Type', 'image/'+extension);
+  //     return file.pipe(res);
+  //   } catch (err) {
+  //     res.setHeader('Content-Type', 'application/json');
+  //     res.status(HttpStatus.NOT_FOUND).json('file not found');
+  //   }
+  // }
 
   @Post('signup-success')
   @UseGuards(JwtGuard)
   async updateInfo(@Req() req, @Res() res, @Body() body: UserDto) {
     const { username} = body;
-    console.log("intra 42",username);
+    console.log("Username ",username);
     
     const user = await this.authService.updateinfo(req.user.id , username);
     
@@ -151,4 +151,3 @@ export class AuthController {
     }
   }
 }
-

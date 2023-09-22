@@ -64,11 +64,7 @@ const handleSubmit = async (e) => {
 
     try {
       // Upload the file using axios
-      await axios.post('/upload/avatar', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      await axios.post('/upload/avatar', formData, {headers: {'Content-Type': 'multipart/form-data'}});
 
       console.log('Avatar uploaded successfully!');
       // Continue with any other necessary actions
