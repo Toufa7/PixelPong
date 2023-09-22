@@ -5,15 +5,12 @@
   width: 75px;
   flex-shrink: 0; 
   border-radius: 10px;
+  position: fixed;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   background: #7259C1;
   border: 2px outset black;
   box-shadow: 0px 0px 5.34831px 0px rgba(0, 0, 0, 0.25);
-}
-
-.logo {
-  padding: 20px;
 }
 
 .nav-columns {

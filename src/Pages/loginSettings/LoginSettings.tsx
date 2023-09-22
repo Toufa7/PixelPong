@@ -7,50 +7,34 @@ import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 import axios from "axios";
 
-
 const retrieveSendData = () => {
-
-    const uploadAvatar = () => {
-        const avatar =  document.querySelector('[name="avatarUpload"]').files[0];
+        const avatar        =  document.querySelector('[name="avatarUpload"]').files[0];
         const nicknameInput = document.querySelector('[name="nickname"]').value;
-        console.log("MY Nic -> ", nicknameInput.value)
-        const data = new FormData();
-        data.append('file', avatar)
-        console.log(" => ",avatar)
-        console.log(data);
-        axios.post('http://localhost:3000/auth/signup-success', {username : nicknameInput} , { withCredentials: true })
-        .then((response) => {
-            console.log("Respo => ", response)
-        })
-        axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
-        .then((response) => {
-            console.log("Respo => ", response)
-        })
-
-    }
-    
-    uploadAvatar();
-
-
-
-
-
-    // const avatarInput   = document.querySelector('[name="avatarUpload"]');
-    // const nicknameInput = document.querySelector('[name="nickname"]');
-    // if (nicknameInput && avatarInput != null) 
-    // {
-    //     console.log(nicknameInput.value);
-    //     console.log( avatarInput.files[0].name);
-
-    //     // axios.all([
-    //     //     axios.post('http://localhost:3000/auth/signup-success', {username: nicknameInput.value}, { withCredentials: true }),
-    //     //     axios.post('http://localhost:3000/auth/uploads', {file: avatarInput.files[0].name}, { withCredentials: true })
-    //     // ]).then(axios.spread((usernameResponse, avatarResponse) => {
-    //     //     console.log(usernameResponse, avatarResponse);
-    //     // }))
-    // }
-    // else
-    //     console.log("No Credentials :(")
+        if (nicknameInput.length > 10)
+        {
+            <dialog open>
+                <h1>Greetings, one and all!</h1>
+            </dialog>
+            console.log("Bzzzf");
+        }
+        if (avatar && nicknameInput)
+        {
+            const data = new FormData();
+            data.append('file', avatar)
+            console.log("Nick ->", nicknameInput.value)
+            console.log(" => ",avatar)
+            console.log(data);
+            axios.all([
+                axios.post('http://localhost:3000/auth/signup-success', {username : nicknameInput}, { withCredentials: true }),
+                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
+            ]).then(axios.spread((responseNickname, responseAvatar) => {
+                console.log(responseNickname, responseAvatar)
+            })).catch((error) => {
+                console.log(error);
+            })
+        }
+        else
+            console.log("No Credentials :(")
 }
 
 const Avatars = () => {
@@ -82,21 +66,7 @@ const Avatars = () => {
     );
 };
 
-
-
-
-// class testinginteface implements test{
-    
-    //     constructor(){}
-    //     public print() : string{
-        //         console.log("sss");
-        
-        //         return "h";
-        //     }
-        // }
-        
 export default function LoginSettings() {
-
     return (
         <div className="container">
             <div className="settingsBox">
