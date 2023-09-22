@@ -192,3 +192,44 @@ body {
     opacity: 1;
   }
 }
+
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #E6E6E6, #7C64CE !important;
+  }
+
+/******************* Start LoginBox  *******************/
+
+  .loginBoxOutside {
+    border-color: #583560 #AE8FB6 #AE8FB6;
+  }
+
+
+/******************* End LoginBox  *******************/
+
+  .text-OR {
+    color: #E7B8B8;
+  }
+
+/******************* Start Buttons  *******************/
+
+  .nes-btn {
+    color: #6F2020 !important;
+    box-shadow: 0 5px #E6E6E6;
+  }
+
+/******************* End Buttons  *******************/
+
+
+
+
+
+
+/******************* Start Images  *******************/
+
+/******************* End Images  *******************/
+
+
+/******************* Animations  *******************/
+}

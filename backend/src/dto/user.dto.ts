@@ -2,6 +2,7 @@ import { IsBoolean, IsDateString, IsEmail, IsOptional, IsString } from 'class-va
 
 export class UserDto {
   @IsString()
+  @IsOptional()
   readonly id: string;
 
   @IsOptional()

@@ -43,7 +43,11 @@ const LoginBox = () => {
             </div>
           </div>
             <div className="loginBoxOutside">
-              <Buttons/>
+              <Buttons>
+                <div className="ne">
+                  Hello 
+                </div>
+              </Buttons>
             <div className="text-OR">-- OR --</div>
         </div>
       </div>

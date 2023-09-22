@@ -1,5 +1,8 @@
+/* @import "../../../node_modules/nes.css/css/nes.min.css"; */
+
 body {
-  background-color: orange;
+  background-color: orange !important;
+  font-family: 'Press Start 2P', cursive;
 }
 
 .container {
@@ -12,9 +15,6 @@ body {
   height: 500px;
   width: 500px;
   max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   border: 8px solid;
   border-color: black black #D2B9D8 #D2B9D8;
 }
@@ -80,32 +80,13 @@ text-align: center; */
   margin: 10px;
 }
 
-.startContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+.nes-btn {
+  height: 100px !important;
+  width: fit-content !important;
 }
 
 .nes-btn,
 .is-primary{
   width: 217px !important;
   height: 25px !important; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-@media (max-width: 768px) {
-  .settingsBox {
-    width: 90%;
-    height: auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .nes-input {
-    max-width: 90%;
-  }
 }
