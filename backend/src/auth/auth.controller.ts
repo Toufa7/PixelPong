@@ -13,7 +13,7 @@ import * as qrcode from 'qrcode';
 
 import { join } from 'path';
 import { UserDto } from 'src/dto/user.dto';
-import { error } from 'console';
+import { Console, error } from 'console';
 import { validate } from 'class-validator';
 import { PrismaService } from './prisma.service';
 
@@ -72,8 +72,9 @@ export class AuthController {
   async changetwofa(@Req() req)
   {
     const secret = authenticator.generateSecret();
-    const otpauth = authenticator.keyuri(req.user.username, '2FA', secret);
+    const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
     console.log(otpauth);
+    console.log(secret);
     const qr = await qrcode.toDataURL(otpauth);
     await this.authService.changetwofastatus(req.user.username, secret,otpauth);
     return qr
@@ -91,7 +92,7 @@ export class AuthController {
     storage: diskStorage({
       destination: './uploads',
       filename: (req, file, cb) => {
-        console.log("File Directory : ",__dirname);
+        console.log("damnnn : ",__dirname);
         const filename: string = (req.user as User).id;
         console.log("hhhh", filename);
       const extension = file.originalname.split('.')[1];
@@ -107,10 +108,13 @@ export class AuthController {
 
 
   @Post('2fa/validate')
+  @UseGuards(JwtGuard)
   async validateOTP(@Body('otp') otp: string, @Req() req){
-    const user = await this.usersService.findOne(req.user.username);
+    const user = await this.usersService.findOne(req.user.id);
     console.log(user);
-    const isValid = authenticator.check(otp, user.twofatoken);
+    const isValid = authenticator.check("291795", user.twofatoken);
+    console.log(user.twofatoken);
+    console.log(otp);
     if (isValid) {
       return 'OTP is valid. Allow the user to log in.';
     } else {
@@ -118,29 +122,29 @@ export class AuthController {
     }
   }
 
-  // @Get('avatar/:profileImage')
-  // @UseGuards(JwtGuard)
-  // async getImage(@Param('profileImage') profileImage: string,@Res() res)
-  // {
-  //   try {
-  //     const path = join("./uploads/", profileImage);
-  //     await fsPromises.access(path, fsPromises.constants.F_OK);
-  //     const file = createReadStream(path);
-  //     const fileStream = new StreamableFile(file);
-  //     const extension = profileImage.split('.')[1];
-  //     res.setHeader('Content-Type', 'image/'+extension);
-  //     return file.pipe(res);
-  //   } catch (err) {
-  //     res.setHeader('Content-Type', 'application/json');
-  //     res.status(HttpStatus.NOT_FOUND).json('file not found');
-  //   }
-  // }
+  @Get('avatar/:profileImage')
+  @UseGuards(JwtGuard)
+  async getImage(@Param('profileImage') profileImage: string,@Res() res)
+  {
+    try {
+      const path = join("./uploads/", profileImage);
+      await fsPromises.access(path, fsPromises.constants.F_OK);
+      const file = createReadStream(path);
+      const fileStream = new StreamableFile(file);
+      const extension = profileImage.split('.')[1];
+      res.setHeader('Content-Type', 'image/'+extension);
+      return file.pipe(res);
+    } catch (err) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(HttpStatus.NOT_FOUND).json('file not found');
+    }
+  }
 
   @Post('signup-success')
   @UseGuards(JwtGuard)
   async updateInfo(@Req() req, @Res() res, @Body() body: UserDto) {
     const { username} = body;
-    console.log("Username ",username);
+    console.log("intra 42",username);
     
     const user = await this.authService.updateinfo(req.user.id , username);
     
@@ -151,3 +155,4 @@ export class AuthController {
     }
   }
 }
+
