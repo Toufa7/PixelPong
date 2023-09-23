@@ -75,7 +75,7 @@ export class AuthController {
     const otpauth = authenticator.keyuri(req.user.username, '2FA', secret);
     console.log(otpauth);
     const qr = await qrcode.toDataURL(otpauth);
-    await this.authService.changetwofastatus(req.user.username, secret,otpauth);
+    await this.authService.changetwofastatus(req.user.id, secret,otpauth);
     return qr
   }
   @Post('2fa/disable')
@@ -107,9 +107,10 @@ export class AuthController {
 
 
   @Post('2fa/validate')
-  async validateOTP(@Body('otp') otp: string, @Req() req){
-    const user = await this.usersService.findOne(req.user.username);
-    console.log(user);
+  @UseGuards(JwtGuard)
+  async validateOTP(@Body() otp: any, @Req() req){
+    const user = await this.usersService.findOne(req.user.id);
+    console.log("I Get this => ",user.twofatoken);
     const isValid = authenticator.check(otp, user.twofatoken);
     if (isValid) {
       return 'OTP is valid. Allow the user to log in.';
@@ -126,7 +127,7 @@ export class AuthController {
   //     const path = join("./uploads/", profileImage);
   //     await fsPromises.access(path, fsPromises.constants.F_OK);
   //     const file = createReadStream(path);
-  //     const fileStream = new StreamableFile(file);
+  //     // const fileStream = new StreamableFile(file);
   //     const extension = profileImage.split('.')[1];
   //     res.setHeader('Content-Type', 'image/'+extension);
   //     return file.pipe(res);

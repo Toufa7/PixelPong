@@ -10,7 +10,7 @@ body {
     .stars {
         position: absolute;
         transform: scale(0);
-        animation: blinkAndMove 30s ease infinite;
+        animation: blinkAndMove 10s ease infinite;
         // name, duration, X , iteration (the number of time the animation should repeat)
     }
     
