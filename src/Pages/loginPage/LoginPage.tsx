@@ -30,6 +30,7 @@ const Buttons = () => {
 
 const LoginBox = () => {
   return (
+    <div className="loginBoxContainer">
       <div className="loginBox">
         <div className="loginBoxInside">Sign in
             <div className="cloudImg">
@@ -43,13 +44,10 @@ const LoginBox = () => {
             </div>
           </div>
             <div className="loginBoxOutside">
-              <Buttons>
-                <div className="ne">
-                  Hello 
-                </div>
-              </Buttons>
+              <Buttons/>
             <div className="text-OR">-- OR --</div>
         </div>
+      </div>
       </div>
   );
 };

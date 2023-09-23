@@ -1,0 +1,74 @@
+body {
+    height: 98vh;
+    width: 99vw;
+    background-color: orange;
+    background: url('./assets/windows-xp-bliss.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.window 
+{
+    flex-direction: column;
+    width: fit-content;
+    height: fit-content;
+    
+    .title-bar
+    {
+        display: flex;
+        font-family: "Pixelated MS Sans Serif", Arial;
+        cursor: grab;
+    }
+
+    .title-bar-text
+    {
+        font-family: "Pixelated MS Sans Serif", Arial;
+        font-weight: bold;
+    }
+
+    .window-body
+    {
+        .windowBodyImg
+        {
+            font-family: "Pixelated MS Sans Serif", Arial;
+            font-size: 2vw;
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .ReportProgressBar
+        {
+            font-family: "Pixelated MS Sans Serif", Arial;
+            font-size: 1.1vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            // .progressBar
+            // {
+                
+            // }
+        }
+
+        .directionButtons
+        {
+            flex-shrink: 0;
+            flex-grow: 0;
+            font-family: "Pixelated MS Sans Serif", Arial;
+            margin-top: 20px;
+            display: flex;
+            justify-content: end;
+            
+            .preButton
+            {
+                position: relative;
+                margin-left: 10px;
+                margin-right: 5px;
+            }
+        }
+    }
+}

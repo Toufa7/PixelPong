@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node-fetch": "^2.6.5",
     "axios": "^1.5.0",
     "cookies-next": "^4.0.0",
     "js-cookie": "^3.0.5",
@@ -18,9 +19,11 @@
     "react": "^18.2.0",
     "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.5",
     "react-router-dom": "^6.16.0",
     "rpgui": "^1.0.3",
-    "typescript-cookie": "^1.0.6"
+    "typescript-cookie": "^1.0.6",
+    "xp.css": "^0.2.6"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
