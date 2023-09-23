@@ -111,8 +111,8 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async validateOTP(@Body() otp: any, @Req() req){
     const user = await this.usersService.findOne(req.user.id);
-    console.log("I Get this => ",otp.opt);
-    const isValid = authenticator.check(otp.opt, user.twofasecret);
+    console.log("I Get this => ",otp.otp);
+    const isValid = authenticator.check(otp.otp, user.twofasecret);
     if (isValid) {
       return 'OTP is valid. Allow the user to log in.';
     } else {
