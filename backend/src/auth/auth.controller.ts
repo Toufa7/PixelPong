@@ -16,6 +16,7 @@ import { UserDto } from 'src/dto/user.dto';
 import { Console, error } from 'console';
 import { validate } from 'class-validator';
 import { PrismaService } from './prisma.service';
+import { inputDto } from 'src/dto/input.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -67,17 +68,33 @@ export class AuthController {
           .status(200)
           // .send('success');
     }
-  @Get('2fa/enable')
+  @Get('2fa/set2fa')
   @UseGuards(JwtGuard)
-  async changetwofa(@Req() req)
+  async setTwoFA(@Req() req, user: User)
   {
-    const secret = authenticator.generateSecret();
-    const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
-    console.log(otpauth);
-    console.log(secret);
-    const qr = await qrcode.toDataURL(otpauth);
-    await this.authService.changetwofastatus(req.user.id, secret,otpauth);
-    return qr
+    if(!user.twofa){
+      throw new HttpException("2FA Not Enabled",HttpStatus.FORBIDDEN);
+    }
+    try
+    {
+      const secret = authenticator.generateSecret();
+      const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
+      const qr = await qrcode.toDataURL(otpauth);
+      await this.authService.set2FAsecret(req.user.id, secret,otpauth);
+      return qr
+    }
+    catch(err)
+    {
+      console.log(err);
+      throw new HttpException(err.message,HttpStatus.BAD_REQUEST);  
+    }
+    
+  }
+  @Put('2fa/enabled')
+  @UseGuards(JwtGuard)
+  async change2FAstatus(@Req() req)
+  {
+    await this.authService.changetwofastatus(req.user.id);
   }
   @Post('2fa/disable')
   @UseGuards(JwtGuard)
@@ -109,10 +126,10 @@ export class AuthController {
 
   @Post('2fa/validate')
   @UseGuards(JwtGuard)
-  async validateOTP(@Body() otp: any, @Req() req){
+  async validateOTP(@Body() body: inputDto, @Req() req){
     const user = await this.usersService.findOne(req.user.id);
-    console.log("I Get this => ",otp.opt);
-    const isValid = authenticator.check(otp.opt, user.twofasecret);
+    console.log("I Get this => ",body.otp);
+    const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
       return 'OTP is valid. Allow the user to log in.';
     } else {
