@@ -17,28 +17,36 @@ import axios from "axios";
 // getUserData();
 
 const retrieveSendData = () => {
+    // Needs prevent default ?? 
     const avatar        = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
-        if (nicknameInput.length > 10)
-            alert("Invalid Nickname");
-        if (avatar && nicknameInput)
-        {
-            const data = new FormData();
-            data.append('file', avatar)
-            console.log("Nick ->", nicknameInput.value)
-            console.log(" => ",avatar)
-            console.log(data);
-            axios.all([
-                axios.post('http://localhost:3000/auth/signup-success', {username : nicknameInput}, { withCredentials: true }),
-                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
-            ]).then(axios.spread((responseNickname, responseAvatar) => {
-                console.log(responseNickname, responseAvatar)
-            })).catch((error) => {
-                console.log(error);
-            })
-        }
-        else
-            console.log("No Credentials :(")
+    const messages = [];
+
+    if (nicknameInput.value === '' || nicknameInput.value == null) 
+        messages.push("Null Nickname");
+    if (nicknameInput.length > 10 || nicknameInput.length < 5)
+        messages.push("Short/Too Long Nickname");
+    if (nicknameInput)
+    alert("Invalid Nickname");
+
+    if (avatar && nicknameInput)
+    {
+        const data = new FormData();
+        data.append('file', avatar)
+        console.log("Nick ->", nicknameInput.value)
+        console.log(" => ",avatar)
+        console.log(data);
+        axios.all([
+            axios.post('http://localhost:3000/auth/signup-success', {username : nicknameInput}, { withCredentials: true }),
+            axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
+        ]).then(axios.spread((responseNickname, responseAvatar) => {
+            console.log(responseNickname, responseAvatar)
+        })).catch((error) => {
+            console.log(error);
+        })
+    }
+    else
+        console.log("No Credentials :(")
 }
 
 const Avatars = () => {
@@ -71,17 +79,14 @@ const Avatars = () => {
 };
 
 export default function LoginSettings() {
-    const check = () => {
-        console.log("WOWOWO");
-    }
-    return (
+        return (
         <div className="container">
             <div className="settingsBox">
                 <div className="header">Settings</div>
                 <div className="content">
                     <div>
                         <div className="nes-field">
-                            <input type="text" name="nickname" className="nes-input" placeholder='Choose Nickname'/>
+                            <input type="text" name="nickname" className="nes-input" required placeholder='Choose Nickname'/>
                         </div>
                         <div className="choosingAvatarContainer">
                             <span className="is-primary">Choose Avatar</span>
@@ -91,7 +96,7 @@ export default function LoginSettings() {
                             <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
                         </div>
                         <div className="startContainer">
-                            <a onClick={retrieveSendData} onMouseMove={check} className="nes-btn">Start</a>
+                            <a onClick={retrieveSendData}  className="nes-btn">Start</a>
                         </div>
                     </div>
                 </div>

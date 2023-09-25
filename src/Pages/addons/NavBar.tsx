@@ -10,9 +10,14 @@ import homeLogo from './assets/homeLogo.svg'
 import logoutLogo from './assets/logoutLogo.svg'
 import profilLogo from './assets/profilLogo.svg'
 import randomLogo from './assets/ping-pong-ball.svg'
+import { Cookies } from "react-cookie";
 
 /******************************************/  
   
+const logoutPlease = () => {
+  Cookies.get('jwt');
+}
+
 const NavBarBody = () => {
   return (
     <div className="nav-content">
@@ -63,7 +68,7 @@ const NavBarFooter = () => {
     </div>
     <div className="nav-item">
     <a href="#" title="Logout">
-      <img src={logoutLogo}></img>
+      <img onClick={logoutPlease} src={logoutLogo}></img>
     </a>
       </div>
   </div>

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 /******************* Includes  *******************/
 import './profilPage.scss'
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
 import siif from './assets/siif.svg';
+import axios from 'axios';
 
 const States = () => {
     return (
@@ -36,6 +37,51 @@ const States = () => {
     );
 }
 
+const twoFAClicked = () => {
+    const endpoint = "http://localhost";
+axios
+    axios.put(endpoint, {a : 1} ,{ withCredentials: true }) 
+    .then ((response) => {
+        console.log(response)
+    }).catch((error) => 
+    console.log(error));
+}
+
+const Settings = () => {
+    const [isChecked, set2FAStatus] = useState(false);
+    console.log(isChecked)
+    return (
+        <div className="SettingsBox">
+            <div className="SettingsRectangle">
+                <div style={{textAlign: 'center'}}  className="SettingsBoxHeader">Settings</div>
+                <div className="SettingsBoxContent">
+                <div className="twoFa" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <label style={{ textAlign: 'left' }}>2FA</label>
+                    <label style={{ textAlign: 'right' }}>
+                        <input type="checkbox" className="nes-checkbox" onChange={() => set2FAStatus(!isChecked)}
+                        />
+                        <span>{isChecked ? 'Enabled' : 'Disabled'}</span>
+                    </label>
+                    </div>
+                    <div>
+                </div>
+
+                        {/* <div className="nes-field">
+                            <input type="text" name="nickname" className="nes-input" required placeholder='Choose Nickname'/>
+                        </div>
+                        <div className="uploadContainer">
+                            <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
+                        </div>
+                        <div className="startContainer">
+                            <a  className="nes-btn">Confirm</a>
+                        </div> */}
+                </div>
+                </div>
+            </div>
+    );
+}
+
+
 const Profil = () => {
     return (
         <div className="profilBox">
@@ -53,7 +99,7 @@ const Achivements = () => {
     return (
         <div className="achivementsBox">
             <div className="fullAchivementsBox">
-                <div className="headAchivementsBox">Achivements</div>
+                <div style={{textAlign: 'center'}} className="headAchivementsBox">Achivements</div>
                 <div className="contentAchivementsBox">
                 <div className="icons">
                 </div>
@@ -78,6 +124,7 @@ function ProfilPage() {
         <Profil/>
         <States/>
         <Achivements/>
+        <Settings/>
     </>
   )
 }

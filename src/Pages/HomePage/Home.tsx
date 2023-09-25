@@ -1,4 +1,4 @@
-import "./Dashboard.scss";
+import "./Home.scss";
 
 const TopContainer = () => {
   return (
@@ -70,7 +70,7 @@ const BottomRight= () => {
   );
 }
 
-function Dashboard() {
+function Home() {
   return (
     <div>
       <TopContainer/>
@@ -86,4 +86,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Home;

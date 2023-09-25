@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './twoFA.scss';
 import axios from 'axios';
-import aaa from './../addons/assets/profilLogo.svg'
+import aaa from './assets/ExampleQRCode.png'
 
 function TwoFa() {
-    const [qrCode, updateQr] = useState(aaa);
+    const [qrCode, updateQr] = useState();
 
     useEffect(() => {
         axios.get("http://localhost:3000/auth/2fa/enable", { withCredentials: true })
@@ -49,12 +49,12 @@ function TwoFa() {
                         <p>Please enter the 6 digits code from your authentication
                             <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US' target='_blank'> app</a>
                         </p>
-                        <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>
-                        <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>
-                        <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>
-                        <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>
-                        <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>
-                        <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>
+                        <input type="text" maxLength={1} id="name_field" className="nes-input" placeholder='*'/>
+                        <input type="text" maxLength={1} id="name_field" className="nes-input" placeholder='*'/>
+                        <input type="text" maxLength={1} id="name_field" className="nes-input" placeholder='*'/>
+                        <input type="text" maxLength={1} id="name_field" className="nes-input" placeholder='*'/>
+                        <input type="text" maxLength={1} id="name_field" className="nes-input" placeholder='*'/>
+                        <input type="text" maxLength={1} id="name_field" className="nes-input" placeholder='*'/>
                     </div>
                     <div className="verify">
                         <button onClick={iClick} className="nes-btn">Verify</button>
