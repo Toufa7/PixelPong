@@ -19,6 +19,14 @@ import axios from "axios";
 const retrieveSendData = () => {
     const avatar        = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
+
+    const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
+    if (usernameCheck.test())
+        console.log("Valid");
+    else
+        console.log("Invalid");
+            
+    
         if (nicknameInput.length > 10)
             alert("Invalid Nickname");
         if (avatar && nicknameInput)
