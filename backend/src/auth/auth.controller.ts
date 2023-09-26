@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { JwtGuard } from '../guards/jwt.guards';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from 'src/users/users.service';
+import { TokenBlacklistService } from './token-blacklist.service';
 import {authenticator, totp} from 'otplib';
 import { diskStorage } from 'multer';
 import { Extensions } from '@nestjs/graphql';
@@ -21,7 +22,8 @@ import { inputDto } from 'src/dto/input.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService, 
-    private usersService: UsersService, private Prismaservice:PrismaService) {}
+    private usersService: UsersService, private Prismaservice:PrismaService,
+    private readonly bantoken:TokenBlacklistService) {}
     @Get('google')
     @UseGuards(AuthGuard('google'))
     googlelogin(){}
@@ -168,6 +170,13 @@ export class AuthController {
     } else {
       return res.status(400).json({ message: 'User not updated' });
     }
+  }
+  @Post('logout')
+  @UseGuards(JwtGuard)
+  async logout(@Req() req, @Res() res) {
+    this.bantoken.addtokentoblacklist(req.cookies.jwt)
+    res.clearCookie('jwt');
+    return res.status(200).json({ message: 'User logged out' });
   }
 }
 

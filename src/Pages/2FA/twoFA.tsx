@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './twoFA.scss';
 import axios from 'axios';
-
+import aaa from './../addons/assets/profilLogo.svg'
 
 function TwoFa() {
-    const [qrCode, updateQr] = useState('');
+    const [qrCode, updateQr] = useState(aaa);
 
     useEffect(() => {
         axios.get("http://localhost:3000/auth/2fa/enable", { withCredentials: true })
@@ -25,7 +25,7 @@ function TwoFa() {
         }
         
         const data = {
-            opt : a
+            otp : a
         }
         console.log("Code => ", a);
         
@@ -46,7 +46,9 @@ function TwoFa() {
                     <p>Enter the authentication code</p>
                     <img className="qrcode" src={qrCode} alt="QR Code"/>
                     <div className="nes-field">
-                        <p>Please enter the 6 digits code from your authentication app</p>
+                        <p>Please enter the 6 digits code from your authentication
+                            <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US' target='_blank'> app</a>
+                        </p>
                         <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>
                         <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>
                         <input type="text" min={1} max={1} id="name_field" className="nes-input" placeholder='*'/>

@@ -13,6 +13,7 @@ interface Payload {
     username: string;
     email: string;
     image?: string;
+    token: string;
 }
 @Injectable()
 export class AuthService {
@@ -22,7 +23,8 @@ export class AuthService {
             const payload: Payload = {
                 sub: user.id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                token: user.token,
             }
             if(user.profileImage)
                 payload.image = user.profileImage;
