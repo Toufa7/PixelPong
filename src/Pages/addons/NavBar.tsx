@@ -10,9 +10,11 @@ import homeLogo from './assets/homeLogo.svg'
 import logoutLogo from './assets/logoutLogo.svg'
 import profilLogo from './assets/profilLogo.svg'
 import randomLogo from './assets/ping-pong-ball.svg'
+import Cookies from "universal-cookie";
+import {useNavigate} from "react-router-dom";
 
 /******************************************/  
-  
+
 const NavBarBody = () => {
   return (
     <div className="nav-content">
@@ -54,6 +56,14 @@ const NavBarHeader = () => {
 }
 
 const NavBarFooter = () => {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+  const logout = () => {
+    cookies.remove('jwt');
+    navigate("/login");
+  };
+
+
   return (
     <div className="nav-footer">
     <div className="nav-item">
@@ -63,7 +73,7 @@ const NavBarFooter = () => {
     </div>
     <div className="nav-item">
     <a href="#" title="Logout">
-      <img src={logoutLogo}></img>
+      <img onClick={logout} src={logoutLogo}></img>
     </a>
       </div>
   </div>

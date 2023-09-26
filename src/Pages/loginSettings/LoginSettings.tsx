@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import "./LoginSettings.scss"
 import img3 from './assets/FarmerBoy.png';
 import img2 from './assets/Detective.png';
@@ -6,39 +8,29 @@ import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-// const getUserData = () => {
-//     axios.get('http://localhost:3000/auth/42')
-//     .then((response) => {
-//         console.log(response.data);
-//     })
-// }
-
-// getUserData();
-
-const retrieveSendData = () => {
+const retrieveCheckSendData = () => {
     const avatar        = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
-        if (nicknameInput.length > 10)
-            alert("Invalid Nickname");
-        if (avatar && nicknameInput)
-        {
-            const data = new FormData();
-            data.append('file', avatar)
-            console.log("Nick ->", nicknameInput.value)
-            console.log(" => ",avatar)
-            console.log(data);
-            axios.all([
-                axios.post('http://localhost:3000/auth/signup-success', {username : nicknameInput}, { withCredentials: true }),
-                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
-            ]).then(axios.spread((responseNickname, responseAvatar) => {
-                console.log(responseNickname, responseAvatar)
-            })).catch((error) => {
-                console.log(error);
-            })
-        }
-        else
-            console.log("No Credentials :(")
+    const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
+    const navigate = useNavigate();
+    if (avatar && usernameCheck.test(nicknameInput))
+    {
+        const data = new FormData();
+        data.append('file', avatar)
+        axios.all([
+            axios.post('http://localhost:3000/auth/signup-success', {username : nicknameInput}, { withCredentials: true }),
+            axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
+        ]).then(axios.spread((responseNickname, responseAvatar) => {
+            console.log(responseNickname, responseAvatar)
+            navigate('/home');
+        })).catch((error) => {
+            console.log(error);
+        })
+    }
+    else
+        console.log("No Credentials :( && Ivalid Credentials")
 }
 
 const Avatars = () => {
@@ -71,17 +63,14 @@ const Avatars = () => {
 };
 
 export default function LoginSettings() {
-    const check = () => {
-        console.log("WOWOWO");
-    }
-    return (
+        return (
         <div className="container">
             <div className="settingsBox">
                 <div className="header">Settings</div>
                 <div className="content">
                     <div>
                         <div className="nes-field">
-                            <input type="text" name="nickname" className="nes-input" placeholder='Choose Nickname'/>
+                            <input type="text" name="nickname" className="nes-input" required placeholder='Choose Nickname'/>
                         </div>
                         <div className="choosingAvatarContainer">
                             <span className="is-primary">Choose Avatar</span>
@@ -91,7 +80,7 @@ export default function LoginSettings() {
                             <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
                         </div>
                         <div className="startContainer">
-                            <a onClick={retrieveSendData} onMouseMove={check} className="nes-btn">Start</a>
+                            <a onClick={retrieveCheckSendData} className="nes-btn">Start</a>
                         </div>
                     </div>
                 </div>

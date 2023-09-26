@@ -1,24 +1,23 @@
-import './welcomPage.css';
-import sun from './assets/images/pixelPongSun.svg';
-import bigCloud from './assets/images/bigCloud.svg';
-import smallCloud from './assets/images/smallCloud.svg'
-import floor from './assets/images/floor.svg';
-import three from './assets/images/three.svg'
-import chair from './assets/images/chair.svg'
-import light from './assets/images/light.svg'
-import clickImg from './assets/images/clickMe.gif'
-import sprinkle from './assets/images/sprinkle.svg'
-import sparkles from './assets/images/sparkles.gif'
-import '../node_modules/nes.css/css/nes.min.css';
+import './welcomePage.css';
+import sun from './assets/pixelPongSun.svg';
+import bigCloud from './assets/bigCloud.svg';
+import smallCloud from './assets/smallCloud.svg'
+import floor from './assets/floor.svg';
+import three from './assets/three.svg';
+import chair from './assets/chair.svg';
+import light from './assets/light.svg';
+import clickImg from './assets/clickMe.gif';
+import sprinkle from './assets/sprinkle.svg';
+import sparkles from './assets/sparkles.gif';
+import '../../../node_modules/nes.css/css/nes.min.css';
+import { useNavigate } from 'react-router-dom';
 
 
-// function clickMe():any {
-//   alert('You clicked the button!');
-// }
 
-function welcomPage() {
+function welcomePage() {
+  const navigate = useNavigate('');
   return (
-    <>
+    <div>
       <div id="pageContainer">
         <div id="header">
           <div>
@@ -39,7 +38,6 @@ function welcomPage() {
             <img id="threeimg" src={three} alt="three" width={348} height={369}></img>
           </div>
           <div id='textContainer'>
-            {/* pixelPongTxt */}
             <div id="pixelPongTxt">
               <img id='bigsprinkle'src={sprinkle} alt="sprinkle" width={61} height={73.2}></img>
               <img id='upperLeftSprinkle'src={sprinkle} alt="sprinkle" width={45.96} height={55.4}></img>
@@ -52,7 +50,7 @@ function welcomPage() {
             </div>
 
             <div id="playButton">
-              <button id="letsPlayButton" type="button" className="nes-btn is-warning" onClick={clickMe}>LET'S PLAY</button>
+              <button id="letsPlayButton" type="button" className="nes-btn is-warning" onClick={() => {navigate('/login');}}>LET'S PLAY</button>
               <img id='ClickMe' alt="clickImgGif" src={clickImg} width={94} height={90}></img>
             </div>
 
@@ -68,8 +66,8 @@ function welcomPage() {
         </div>
 
       </div>
-    </>
+      </div>
   );
 }
 
-export default welcomPage;
+export default welcomePage;
