@@ -2,7 +2,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStrategy } from "@nestjs/passport";
 import { config, configDotenv } from 'dotenv';
 
-config();
+configDotenv()
 
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     constructor() {
@@ -11,6 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
             secretOrKey: process.env.JWT_SECRET,
             jwtFromRequest: ExtractJwt.fromExtractors([
                 (req)=>{
+                    console.log( process.env.JWT_SECRET)
                    return  req.cookies['jwt'];
                 }
             ])

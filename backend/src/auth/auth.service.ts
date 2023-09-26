@@ -70,7 +70,6 @@ export class AuthService {
             },
             data: {
                 username: username,
-                profileImage:  username +".jepg",
             },
         });
         return user;
@@ -78,7 +77,7 @@ export class AuthService {
     async changetwofastatus(id: string, secret: string, token: string){
         await this.prisma.user.update({
         where:{
-            username: id
+            id: id
         },
         data:{
             twofa: true,

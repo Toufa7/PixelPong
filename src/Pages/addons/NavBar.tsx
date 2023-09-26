@@ -1,4 +1,4 @@
-import "./NavBar.css";
+import "./NavBar.scss";
 /******************* Includes  *******************/
 /******************* Packages  *******************/
 /******************* Images  *******************/
@@ -8,14 +8,16 @@ import settingsLogo from './assets/settingsLogo.svg'
 import notificationLogo from './assets/notificationLogo.svg'
 import homeLogo from './assets/homeLogo.svg'
 import logoutLogo from './assets/logoutLogo.svg'
-import profilLogo from './assets/profilLogo.png'
-import randomLogo from './assets/randomLogo.png'
+import profilLogo from './assets/profilLogo.svg'
+import randomLogo from './assets/ping-pong-ball.svg'
+import Cookies from "universal-cookie";
+import {useNavigate} from "react-router-dom";
 
 /******************************************/  
-  
+
 const NavBarBody = () => {
   return (
-    <div className="nav-columns">
+    <div className="nav-content">
         <div className="nav-item">
           <a href="#" title="Home">
             <img src={homeLogo}/>
@@ -43,17 +45,27 @@ const NavBarBody = () => {
 
 const NavBarHeader = () => {
   return (
-      <div className="logo">
-      <a href="#" title="Home">
-        <img src={randomLogo}/>
-      </a>
+    <div className="nav-header">
+      <div className="nav-item">
+        <a href="#" title="Home">
+          <img src={randomLogo}/>
+        </a>
+      </div>
     </div>
   );
 }
 
 const NavBarFooter = () => {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+  const logout = () => {
+    cookies.remove('jwt');
+    navigate("/login");
+  };
+
+
   return (
-    <div className="bottom-section">
+    <div className="nav-footer">
     <div className="nav-item">
       <a href="#" title="Profil">
         <img src={profilLogo}></img>
@@ -61,14 +73,14 @@ const NavBarFooter = () => {
     </div>
     <div className="nav-item">
     <a href="#" title="Logout">
-      <img src={logoutLogo}></img>
+      <img onClick={logout} src={logoutLogo}></img>
     </a>
       </div>
   </div>
   );
 }
 
-function NavBar() {
+function  NavBar() {
   return (
     <div className="navbar-container">
       <NavBarHeader/>

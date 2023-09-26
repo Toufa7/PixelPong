@@ -1,0 +1,71 @@
+@import "../../../node_modules/nes.css/css/nes.min.css";
+
+body {
+    background: #5237AC;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.container {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    transform: translate(00%, 25%);
+    .twoFaBox {
+        width: 600px;
+        background-color: #A473B1;
+        border: 6px solid;
+        border-color: #643F5E #643F5E olive olive;      
+        
+        
+        .header {
+            height: 10%;
+            background: palegreen;
+            border-right: 8px solid white;
+            border-bottom: 8px solid white;
+        }
+
+        .content {
+            padding: 10px;
+            border-right: 8px solid white;
+            border-bottom: 8px solid white;
+            height: fit-content;
+            
+            .nes-field {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                .nes-input {
+                    flex-direction: row;
+                    background: rgba(50, 35, 53, 0.5);
+                    width: 60px;
+                    height: fit-content;
+                    margin: 10px;
+                    text-align: left;
+                }
+            }
+            .qrcode {
+                border: 2px solid black;
+            }
+            .verify {
+                .nes-btn {
+                    animation: inAndOut 2s infinite;
+                    &:active {
+                        background-color: #666;
+                        box-shadow: 0 5px #666;
+                        transform: translateY(8px);
+                    }
+                }
+            }
+        
+        }
+    }
+}
+
+
+@keyframes inAndOut {
+    50% {
+      transform: translate(3px, 1px);
+    }
+}
+  

@@ -9,6 +9,8 @@
     npm install -D sass
     npm install jwt-decode
     npm install react-router-dom
+    npm install xp.css
+    npm i react-draggable
 
 # Run server:
 
@@ -16,6 +18,10 @@
 
 
 # Ressource :
+
+# Logos :
+
+https://iconduck.com/sets/pixelarticons-icons-set
 
 ## Interface :
 
@@ -36,8 +42,6 @@ https://stackoverflow.com/questions/61385454/how-to-post-multiple-axios-requests
 * Map : 
 
 https://howtodoinjava.com/typescript/maps/
-
-
 
 
     interface UserSettingsProps {

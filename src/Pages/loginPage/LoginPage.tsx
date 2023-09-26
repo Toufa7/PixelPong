@@ -1,4 +1,4 @@
-import "./LoginPage.css";
+import "./LoginPage.scss";
 import "../../../node_modules/nes.css/css/nes.min.css";
 
 /******************* Packages  *******************/
@@ -21,15 +21,21 @@ import pingPongGif from './assets/pingPongGif.gif';
 
 const Buttons = () => {
  return (
-    <>
-      <a className="nes-btn google" href="http://localhost:3000/auth/google/" target='_blank'>Google</a>
-      <a className="nes-btn intra" href="http://localhost:3000/auth/42/" target='_blank'>Intra 42</a>
+  <>
+    <div className="a">
+      <a className="nes-btn google" href="http://localhost:3000/auth/google/">Google</a>
+    </div>
+    <div className="text-OR">-- OR --</div>
+    <div className="b">
+        <a className="nes-btn intra" href="http://localhost:3000/auth/42/">Intra 42</a>
+    </div>
     </>
  );
 };
 
 const LoginBox = () => {
   return (
+    <div className="loginBoxContainer">
       <div className="loginBox">
         <div className="loginBoxInside">Sign in
             <div className="cloudImg">
@@ -43,13 +49,9 @@ const LoginBox = () => {
             </div>
           </div>
             <div className="loginBoxOutside">
-              <Buttons>
-                <div className="ne">
-                  Hello 
-                </div>
-              </Buttons>
-            <div className="text-OR">-- OR --</div>
-        </div>
+              <Buttons/>
+          </div>
+      </div>
       </div>
   );
 };
@@ -63,11 +65,17 @@ const Images = () => {
 };
 
 
+
+
 export default function LoginPage() {
   return (
-    <div className="container">
-      <Images/>
-      <LoginBox/>
-    </div>
+      <div className="loginPage">
+        <div className="lb">
+          <LoginBox/>
+        </div>
+        <div className="ig">
+          <Images/>
+        </div>
+      </div>
   );
 }

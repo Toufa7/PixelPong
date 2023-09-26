@@ -1,6 +1,7 @@
+@import "../../../node_modules/nes.css/css/nes.min.css";
+
 body {
     background: linear-gradient(to right, #4F3997, #6E58B6);
-    font-family: 'Press Start 2P', cursive;
 }
 
 .StatesBox {
@@ -83,6 +84,7 @@ body {
                 flex-direction: column;
                 width: 40px;
                 height: 58px; 
+                border: 2px solid red;
             }
             
         }
@@ -93,7 +95,7 @@ body {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-
+    
     .profilRectangle {
         width: 655px;
         height: 216px;
@@ -103,4 +105,29 @@ body {
             background-color: red;
         }
     }
+}
+
+.SettingsBox {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start; 
+    .SettingsRectangle {
+        width: 500px;
+        height: 327px;
+        background: yellowgreen;
+        border-bottom: 8px solid #000000;
+        border-left: 8px solid #000000;
+        border-right: 8px solid orange;
+
+        .SettingsBoxHeader {
+            height: 10%;
+            background-color: cadetblue;
+        }
+
+        // .SettingsBoxContent {
+
+        //     // .twoFa {
+        //     // }
+    }
+
 }

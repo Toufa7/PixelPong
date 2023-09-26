@@ -1,16 +1,1 @@
-<svg width="50" height="52" viewBox="0 0 50 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Group">
-<path id="Vector" d="M39.4724 14.7981V22.1971H29.5962V27.1352H39.4724V34.5343H41.9333V32.0733H44.4105V29.6124H46.8714V27.1352H49.3324V22.1971H46.8714V19.7362H44.4105V17.2752H41.9333V14.7981H39.4724Z" fill="white"/>
-<path id="Vector_2" d="M32.0732 34.5343H34.5342V44.4105H32.0732V34.5343Z" fill="white"/>
-<path id="Vector_3" d="M32.0732 2.46094H34.5342V14.7981H32.0732V2.46094Z" fill="white"/>
-<path id="Vector_4" d="M22.197 49.3486V46.8714H32.0732V44.4105H22.197V12.3372H19.7361V49.3486H22.197Z" fill="white"/>
-<path id="Vector_5" d="M12.3372 49.3486H19.7362V51.8095H12.3372V49.3486Z" fill="white"/>
-<path id="Vector_6" d="M14.7981 27.1353H17.259V32.0733H14.7981V27.1353Z" fill="white"/>
-<path id="Vector_7" d="M14.7981 9.87622H19.7362V12.3372H14.7981V9.87622Z" fill="white"/>
-<path id="Vector_8" d="M7.39917 46.8715H12.3373V49.3486H7.39917V46.8715Z" fill="white"/>
-<path id="Vector_9" d="M9.86011 7.39905H14.7982V9.87619H9.86011V7.39905Z" fill="white"/>
-<path id="Vector_10" d="M2.46094 44.4105H7.39903V46.8714H2.46094V44.4105Z" fill="white"/>
-<path id="Vector_11" d="M4.93799 4.93811H9.85989V7.39906H4.93799V4.93811Z" fill="white"/>
-<path id="Vector_12" d="M2.46095 0V2.46095H0V44.4105H2.46095V4.9381H4.9381V2.46095H32.0733V0H2.46095Z" fill="white"/>
-</g>
-</svg>
+<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3h16v4h-2V5H5v14h14v-2h2v4H3V3h2zm16 8h-2V9h-2V7h-2v2h2v2H7v2h10v2h-2v2h2v-2h2v-2h2v-2z" fill="currentColor"/></svg>
