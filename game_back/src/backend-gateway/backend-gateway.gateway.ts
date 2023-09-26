@@ -1,7 +1,7 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, OnGatewayConnection, WebSocketServer, ConnectedSocket, OnGatewayInit, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Controller, OnModuleInit } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { Players_Management } from './players-management.service';
+import { Players_Management } from './entities/players-management.service';
 import { Rooms } from './entities/room.service';
 
 

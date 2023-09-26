@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BackendGatewayGateway } from './backend-gateway.gateway';
-import { BackendGatewayService } from './players-management.service';
+import { BackendGatewayService } from './entities/players-management.service';
 
 describe('BackendGatewayGateway', () => {
   let gateway: BackendGatewayGateway;

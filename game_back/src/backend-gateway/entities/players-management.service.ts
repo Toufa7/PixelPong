@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PlayerDto } from './dto/player_ft.dto';
+import { PlayerDto } from '../dto/player_ft.dto';
 import { isEmpty, retry } from 'rxjs';
-import { RoomDto } from './dto/room.dto';
-import { Rooms } from './entities/room.service';
+import { RoomDto } from '../dto/room.dto';
+import { Rooms } from './room.service';
 
 @Injectable()
 export class Players_Management {

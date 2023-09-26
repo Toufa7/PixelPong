@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PlayerDto } from "../dto/player_ft.dto";
 import { Socket } from "socket.io";
 import { RoomDto } from "../dto/room.dto";
-import { Players_Management } from "../players-management.service";
+import { Players_Management } from "./players-management.service";
 
 @Injectable()
 export class Rooms{

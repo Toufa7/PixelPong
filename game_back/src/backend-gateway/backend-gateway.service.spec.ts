@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BackendGatewayService } from './players-management.service';
+import { BackendGatewayService } from './entities/players-management.service';
 
 describe('BackendGatewayService', () => {
   let service: BackendGatewayService;
