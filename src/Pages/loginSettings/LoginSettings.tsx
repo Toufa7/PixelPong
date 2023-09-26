@@ -10,10 +10,11 @@ import img6 from './assets/Girl2.png';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const retrieveSendData = () => {
+const retrieveCheckSendData = () => {
     const avatar        = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
+    const navigate = useNavigate();
     if (avatar && usernameCheck.test(nicknameInput))
     {
         const data = new FormData();
@@ -23,7 +24,6 @@ const retrieveSendData = () => {
             axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
         ]).then(axios.spread((responseNickname, responseAvatar) => {
             console.log(responseNickname, responseAvatar)
-            const navigate = useNavigate();
             navigate('/home');
         })).catch((error) => {
             console.log(error);
@@ -80,7 +80,7 @@ export default function LoginSettings() {
                             <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
                         </div>
                         <div className="startContainer">
-                            <a onClick={retrieveSendData}  className="nes-btn">Start</a>
+                            <a onClick={retrieveCheckSendData} className="nes-btn">Start</a>
                         </div>
                     </div>
                 </div>
