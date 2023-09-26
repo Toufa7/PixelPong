@@ -40,32 +40,32 @@ export class AuthController {
       }
     }
 
-    @Get('42')
-    @UseGuards(AuthGuard('42'))
-    fourtwLogin(){}
-    @Get('42/redirect')
-    @UseGuards(AuthGuard('42'))
-    async fourtwoLogin(@Req () req: any, @Res() res: any) {
-      try{
+  @Get('42')
+  @UseGuards(AuthGuard('42'))
+  fourtwLogin(){}
+  @Get('42/redirect')
+  @UseGuards(AuthGuard('42'))
+  async fourtwoLogin(@Req () req: any, @Res() res: any) {
+    try {
       const acces_token = this.authService.fourtwoLogin(req.user);
-      this.setResandCookie(res, req.user.id ,acces_token.access_token);
+      this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
-      console.log("daaaaaaaaaaaaaaaaaaaaaaaaaamnd ",user.firstlogin);
+      console.log("1st time loggin -> ",user.firstlogin);
       if(!user.firstlogin) 
-        return res.redirect('done');
-      return res.redirect('signup-success');
-      }
-      catch(err)
-      {
-        console.log(err);
-        throw new HttpException(err.message,HttpStatus.BAD_REQUEST);
-      }
+        return res.redirect('http://localhost:5173/settings');
+      return res.redirect('http://localhost:5173/home');
     }
-    private setResandCookie(res, id,accessToken) {
-        res   
-          .cookie('jwt', accessToken, { maxage:3854654684, secure: false })
-          .status(200)
-          // .send('success');
+    catch(err)
+    {
+      console.log(err);
+      throw new HttpException(err.message,HttpStatus.BAD_REQUEST);
+    }
+  }
+  private setResandCookie(res, id,accessToken) {
+    res   
+      .cookie('jwt', accessToken, { maxage:3854654684, secure: false })
+      .status(200)
+      // .send('success');
     }
   @Get('2fa/enable')
   @UseGuards(JwtGuard)

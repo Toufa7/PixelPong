@@ -23,34 +23,52 @@
     display: flex;
     justify-content: left;
     align-items: center;
+    z-index: 0;
   
     .loginBox {
       width: 500px;
       height: 500px;
-      background: orange;
-      border: 8px solid #B19D9D;
+      background: #A473B1;
       text-align: center;
-  
+      border-top: 8px solid #B19D9D;
+      border-right: 8px solid black;
+      border-bottom: 8px solid black;
+
       .loginBoxInside {
         width: 100%;
         height: 10%;
         color: #240C0C;
         background-color: #A584A6;
-        border: 8px solid #643F5E;
-        border-color: red blue #643F5E magenta;
+        border-right: 8px solid #643F5E;
+        border-bottom: 8px solid #643F5E;
+        border-left: 8px solid #D2B9D8;
+        font-size:larger;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
   
         .cloudImg {
           animation: flo 2s infinite;
+          position: relative;
+          bottom: 140px;
+          z-index: -1;
         }
   
         .pinkDiamond {
           width: 100px;
           height: 42px;
           animation: float 2s ease-in-out infinite;
+          position: relative;
+          bottom: 200px;
+          left: -50px;
+          z-index: -1;
         }
   
         .purpleDiamond {
           animation: float 1s ease-in-out infinite;
+          position: relative;
+          top: 280px;
+          left: 250px;
         }
       }
   
@@ -58,7 +76,8 @@
         display: flex;
         flex-direction: column;
         height: 90%;
-        border: 8px solid #D2B9D8 #73517C #73517C;
+        border: 8px solid;
+        border-color: #D2B9D8 #73517C #73517C;
   
         .a, .b {
           flex: 1;
@@ -69,11 +88,11 @@
             animation: inAndOut 1s infinite;
             box-shadow: 0 5px black;
             text-align: center;
-            position: relative;
-            top: 40%;
   
             &.google {
               background: #4285F4 !important;
+              top: 50%;
+
   
               &:active {
                 background-color: #3e8e41;
@@ -84,6 +103,7 @@
             
             &.intra {
               background: #0D6A80;
+              top: 20%;
   
               &:active {
                 background-color: #3e8e41;
@@ -97,7 +117,6 @@
     }
   
     .text-OR {
-      flex: 1;
       font-size: 25px;
       color: #240C0C;
     }
@@ -108,10 +127,16 @@
     height: 845px;
     background: url('./assets/retroImage.png');
     background-size: cover;
-  
+    flex-shrink: 0;
+    z-index: 0;
+
     .pingPongGif {
-      width: 328px;
-      height: 387px;
+      width: 300px;
+      height: 350px;
+      position: relative;
+      top: 56%;
+      left: 20%;
+      z-index: -1;
     }
   }
   
@@ -147,9 +172,10 @@
   
     .loginBoxContainer {
       flex-direction: column;
-  
+      margin-top: 52px;
+
       .loginBox {
-        // margin-top: 20px;
+        margin-top: 20px;
       }
     }
   }

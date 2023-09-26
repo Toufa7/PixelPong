@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom/client'
 
 
 /******************* Packages  *******************/
-import {BrowserRouter as Router, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 
 /******************* Includes  *******************/
 import NavBar from './Pages/addons/NavBar';
 import Stars from './Pages/addons/Stars';
 import LoginSettings from './Pages/loginSettings/LoginSettings';
 import LoginPage from './Pages/loginPage/LoginPage';
-import welcomPage from './Pages/welcomePage/welcomPage';
+import welcomePage from './Pages/welcomePage/welcomePage';
 import TwoFa from './Pages/2FA/twoFA';
+import Home from './Pages/HomePage/Home';
 
 export const LogingPageComponents = () => {
   return (
@@ -22,7 +23,7 @@ export const LogingPageComponents = () => {
   </>);
 }
 
-export const LoginSettingsComponents = () => {
+const LoginSettingsComponents = () => {
   return (
     <>
         <Stars/>
@@ -31,7 +32,7 @@ export const LoginSettingsComponents = () => {
     </>);
 }
 
-export const twoFACompents = () => {
+const twoFAComponents = () => {
   return (
     <>
       <Stars/>
@@ -41,16 +42,31 @@ export const twoFACompents = () => {
   );
 }
 
+const HomeComponents = () => {
+  return (
+    <>
+      <Stars/>
+      <NavBar/>
+      <Home/>
+    </>
+  );
+}
+
+
+
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Router>
-      {["welcome", "/"].map((idx) => 
-      <Route path={idx} Component={welcomPage}/>)}
-      <Route path="login" Component={LogingPageComponents}>
-        <Route path="settings" Component={LoginSettingsComponents}/>
-        <Route path="two-factor-autentication" Component={twoFACompents}/>
-      </Route>
-    </Router>
-    LogingPage();
-  </React.StrictMode>,
+    <BrowserRouter>
+      <Routes>
+        {["welcome", "/"].map((idx) => 
+          <Route path={idx} Component={welcomePage}/>
+        )}  
+        <Route path="login" Component={LogingPageComponents}/>
+          <Route path="settings" Component={LoginSettingsComponents} />
+          <Route path="two-factor-autentication" Component={twoFAComponents} />
+        <Route path="/home" Component={HomeComponents}/> 
+        </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
 )

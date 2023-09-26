@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import "./LoginSettings.scss"
 import img3 from './assets/FarmerBoy.png';
 import img2 from './assets/Detective.png';
@@ -6,47 +8,29 @@ import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 import axios from "axios";
-
-// const getUserData = () => {
-//     axios.get('http://localhost:3000/auth/42')
-//     .then((response) => {
-//         console.log(response.data);
-//     })
-// }
-
-// getUserData();
+import { useNavigate } from "react-router-dom";
 
 const retrieveSendData = () => {
-    // Needs prevent default ?? 
     const avatar        = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
-    const messages = [];
-
-    if (nicknameInput.value === '' || nicknameInput.value == null) 
-        messages.push("Null Nickname");
-    if (nicknameInput.length > 10 || nicknameInput.length < 5)
-        messages.push("Short/Too Long Nickname");
-    if (nicknameInput)
-    alert("Invalid Nickname");
-
-    if (avatar && nicknameInput)
+    const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
+    if (avatar && usernameCheck.test(nicknameInput))
     {
         const data = new FormData();
         data.append('file', avatar)
-        console.log("Nick ->", nicknameInput.value)
-        console.log(" => ",avatar)
-        console.log(data);
         axios.all([
             axios.post('http://localhost:3000/auth/signup-success', {username : nicknameInput}, { withCredentials: true }),
             axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
         ]).then(axios.spread((responseNickname, responseAvatar) => {
             console.log(responseNickname, responseAvatar)
+            const navigate = useNavigate();
+            navigate('/home');
         })).catch((error) => {
             console.log(error);
         })
     }
     else
-        console.log("No Credentials :(")
+        console.log("No Credentials :( && Ivalid Credentials")
 }
 
 const Avatars = () => {
