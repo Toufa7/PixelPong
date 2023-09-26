@@ -8,13 +8,12 @@ import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const retrieveCheckSendData = () => {
     const avatar        = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     if (avatar && usernameCheck.test(nicknameInput))
     {
         const data = new FormData();
@@ -24,7 +23,7 @@ const retrieveCheckSendData = () => {
             axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
         ]).then(axios.spread((responseNickname, responseAvatar) => {
             console.log(responseNickname, responseAvatar)
-            navigate('/home');
+            // navigate('/home');
         })).catch((error) => {
             console.log(error);
         })

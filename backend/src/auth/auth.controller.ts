@@ -139,23 +139,25 @@ export class AuthController {
     }
   }
 
-  // @Get('avatar/:profileImage')
-  // @UseGuards(JwtGuard)
-  // async getImage(@Param('profileImage') profileImage: string,@Res() res)
-  // {
-  //   try {
-  //     const path = join("./uploads/", profileImage);
-  //     await fsPromises.access(path, fsPromises.constants.F_OK);
-  //     const file = createReadStream(path);
-  //     // const fileStream = new StreamableFile(file);
-  //     const extension = profileImage.split('.')[1];
-  //     res.setHeader('Content-Type', 'image/'+extension);
-  //     return file.pipe(res);
-  //   } catch (err) {
-  //     res.setHeader('Content-Type', 'application/json');
-  //     res.status(HttpStatus.NOT_FOUND).json('file not found');
-  //   }
-  // }
+  @Get('avatar/:id')
+  @UseGuards(JwtGuard)
+  async getImage(@Param('id') id: string,@Res() res)
+  {
+    try {
+      const {profileImage} = await this.usersService.findOne(id);
+      const path = join("./uploads/", (profileImage));
+      await fsPromises.access(path, fsPromises.constants.F_OK);
+      const file = createReadStream(path);
+      console.log("image :", profileImage)
+      // const fileStream = new StreamableFile(file);
+      const extension = profileImage.split('.')[1];
+      res.setHeader('Content-Type', 'image/'+extension);
+      return file.pipe(res);
+    } catch (err) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(HttpStatus.NOT_FOUND).json('file not found');
+    }
+  }
 
   @Post('signup-success')
   @UseGuards(JwtGuard)
