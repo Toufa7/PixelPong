@@ -15,7 +15,7 @@ export const Websocket_render = () =>{
 
     useEffect(() =>{
         socket?.on("connect",() =>{
-            socket?.emit("wantroom",{hello : "hello"});
+            socket?.emit("joinRoom" , {hello : "hello"});
         });
 
     return () => {

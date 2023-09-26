@@ -16,11 +16,9 @@ export let screen_height = 500;
 
 
 export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
-  // let p1_paddle : Paddle;
   const players : any = {};
   
   socket?.on("UpdatePlayerPos",(backend_players)=>{
-    // console.log(backend_players);
     for(const id in backend_players){
       const backendPlayer = backend_players[id];
       if (!players[id]){
@@ -37,8 +35,6 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   
   p5_ob.setup = () => {
     p5_ob.frameRate(60);
-    // p1_paddle = new Paddle(0,20,90,0,p5_ob);
-    // const players = {};
    
       canvas = p5_ob.createCanvas(screen_width , screen_height);
       const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;
@@ -54,8 +50,5 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       const player = players[id];
       player.draw_paddle("#FFFF00");
     }
-    // p1_paddle.draw_paddle();
-    // p1_paddle.update_paddle(canvas);
-    // p1_paddle.generate_coordinates_emit();
   }
 }
