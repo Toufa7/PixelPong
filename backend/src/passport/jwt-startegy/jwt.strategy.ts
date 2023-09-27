@@ -21,8 +21,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     }
     async validate(payload: any) {
         try{
-        if(this.banedtoken.verifybanedtoken(payload.token))
-            throw new Error("token is baned");
+        // if(this.banedtoken.verifybanedtoken(payload.token))
+        //     throw new Error("token is baned");
         console.log("what is going on  : ", payload)
         return { id: payload.sub,
                 username: payload.username,

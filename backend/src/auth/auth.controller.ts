@@ -10,6 +10,9 @@ import { diskStorage } from 'multer';
 import { Extensions } from '@nestjs/graphql';
 import { Prisma, PrismaClient, User } from '@prisma/client';
 import { createReadStream, promises as fsPromises } from 'fs';
+// import {fs} from 'extfs';
+
+
 import * as qrcode from 'qrcode';
 
 import { join } from 'path';
@@ -54,9 +57,10 @@ export class AuthController {
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
       console.log("1st time loggin -> ",user.firstlogin);
-      if(!user.firstlogin) 
-        return res.redirect('http://localhost:5173/settings');
-      return res.redirect('http://localhost:5173/home');
+      // if(!user.firstlogin) 
+      //   return res.redirect('http://localhost:5173/settings');
+      // return res.redirect('http://localhost:5173/home');
+      return res.redirect('signup-success');
     }
     catch(err)
     {
@@ -74,9 +78,9 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async setTwoFA(@Req() req, user: User)
   {
-    if(!user.twofa){
-      throw new HttpException("2FA Not Enabled",HttpStatus.FORBIDDEN);
-    }
+    // if(!user.twofa){
+    //   throw new HttpException("2FA Not Enabled",HttpStatus.FORBIDDEN);
+    // }
     try
     {
       const secret = authenticator.generateSecret();
@@ -128,14 +132,17 @@ export class AuthController {
 
   @Post('2fa/validate')
   @UseGuards(JwtGuard)
-  async validateOTP(@Body() body: inputDto, @Req() req){
+  async validateOTP(@Body() body: inputDto, @Req() req, @Res() res){
     const user = await this.usersService.findOne(req.user.id);
     console.log("I Get this => ",body.otp);
     const isValid = authenticator.check(body.otp, user.twofasecret);
-    if (isValid) {
-      return 'OTP is valid. Allow the user to log in.';
+      if (isValid) {
+      return {
+        
+        message: 'OTP is valid. Allow the user to log in.',
+      };
     } else {
-      return 'OTP is invalid. Deny access.';
+      return  res.status(400).json({ message: 'OTP is invalid. Deny access.' })
     }
   }
 
@@ -146,10 +153,9 @@ export class AuthController {
     try {
       const {profileImage} = await this.usersService.findOne(id);
       const path = join("./uploads/", (profileImage));
-      await fsPromises.access(path, fsPromises.constants.F_OK);
+      const access = await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
       console.log("image :", profileImage)
-      // const fileStream = new StreamableFile(file);
       const extension = profileImage.split('.')[1];
       res.setHeader('Content-Type', 'image/'+extension);
       return file.pipe(res);
