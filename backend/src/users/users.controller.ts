@@ -20,6 +20,7 @@ import {
   import { UsersService } from './users.service';
   import { JwtGuard } from  '../guards/jwt.guards';
   import { AuthGuard } from '@nestjs/passport';
+import { UserDto } from 'src/dto/user.dto';
   
   @Controller('users') 
   @UseGuards(JwtGuard)  
@@ -62,8 +63,9 @@ import {
  
    
     @Put(':id')
-    UpdateOne(@Param ('id', ParseUUIDPipe) id: string, @Body() body: any) {
-        return this.usersService.UpdateforOne(id, body);
+    UpdateOne(@Param ('id', ParseUUIDPipe) id: string, @Body() body: UserDto) {
+      const {username} = body;
+        return this.usersService.UpdateforOne(id, username);
     }
 
     @Patch(':userId/blocked/:blockedId')

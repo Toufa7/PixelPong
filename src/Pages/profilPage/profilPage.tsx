@@ -6,13 +6,13 @@ import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
 import siif from './assets/siif.svg';
 import axios from 'axios';
-
+import otoufah from '../otoufah.jpg'
 const States = () => {
     return (
         <div>
         <div className="StatesBox">
             <div className="headStatesBox">
-                <div className="statesBoxHeader">States</div>
+                <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
                 <div className="statesBoxContent">
                     <div>
                         <span className="key">WIN RATE</span>
@@ -44,7 +44,7 @@ const Settings = () => {
     const disablingEndpoint = "http://localhost:3000/auth/2fa/disable";
     if (isChecked)
     {
-        axios.put(enablingEndpoint, {a : 0} ,{ withCredentials: true }) 
+        axios.put(enablingEndpoint, {twoFaStatus : 0} ,{ withCredentials: true }) 
         .then ((response) => {
             console.log(response)
             console.log("Status " , response.data.status)
@@ -55,7 +55,7 @@ const Settings = () => {
     }
     else
     {
-        axios.put(disablingEndpoint, {a : 1} ,{ withCredentials: true }) 
+        axios.put(disablingEndpoint, {twoFaStatus : 1} ,{ withCredentials: true }) 
         .then ((response) => {
             console.log(response)
             console.log("Status " , response.data.status)
@@ -67,7 +67,7 @@ const Settings = () => {
     return (
         <div className="SettingsBox">
             <div className="SettingsRectangle">
-                <div style={{textAlign: 'center'}}  className="SettingsBoxHeader">Settings</div>
+                <div style={{textAlign: 'center', fontSize: 'x-large'}}  className="SettingsBoxHeader">Settings</div>
                 <div className="SettingsBoxContent">
                 <div className="twoFa" style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <label style={{ textAlign: 'left' }}>2FA</label>
@@ -91,7 +91,10 @@ const Profil = () => {
         <div className="profilBox">
             <div className="profilRectangle">
                 <div className="avatar">
-                    Omar Toufah
+                    <div className="left">
+                        <img src={otoufah} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="player1"/>
+                        <span>Omar Toufah</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -100,24 +103,32 @@ const Profil = () => {
 
 
 const Achivements = () => {
+    // let awards = new Map<string, string>(
+    //     [, ]);
+
     return (
         <div className="achivementsBox">
             <div className="fullAchivementsBox">
-                <div style={{textAlign: 'center'}} className="headAchivementsBox">Achivements</div>
+                <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
                 <div className="contentAchivementsBox">
                 <div className="icons">
-                </div>
-                    <img className='ico' src={medaille} />
-                    <img className='ico' src={savage} />
-                    <img className='ico' src={siif} />
-                    <img className='ico' src={savage} />
-                    <img className='ico' src={medaille} />
-                    <img className='ico' src={siif} />
-                
+                    <div>
+                    <img className='icao' style={{width: '70px', height: '70px', marginTop: '5px',  marginRight: '20px', marginLeft: '5px'}} src={medaille} />
+                        <span>1st victory in a ping pong match</span>
+                    </div>
+                    <div>
+                        <img className='icao' style={{width: '70px', height: '70px',  marginRight: '20px', marginLeft: '5px'}} src={savage} />
+                            <span>Remarkable score against a bot</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img className='icao' style={{width: '70px', height: '70px',  marginRight: '20px', marginLeft: '5px'}} src={siif} />
+                            <span>Awarded for defeating a highly skilled opponent in a challenging ping pong match.</span>
+                        </div>
+                    </div>
                 </div>
 
             </div>
-        </div>
     );
 }   
   

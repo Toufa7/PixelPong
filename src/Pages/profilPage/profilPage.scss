@@ -6,7 +6,7 @@ body {
 
 .StatesBox {
     display: flex;
-    justify-content: right;
+    justify-content: center;
     text-align: center;
 
     .headStatesBox {
@@ -72,7 +72,7 @@ body {
         }
 
         .contentAchivementsBox {
-            height: 69.5%;
+            height: 80%;
             border-top: 8px solid #EBD9F0;
             border-left: 8px solid #EBD9F0;
             border-bottom: 8px solid olive;
@@ -93,7 +93,7 @@ body {
 
 .profilBox {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     
     .profilRectangle {
@@ -103,14 +103,22 @@ body {
 
         .avatar {
             background-color: red;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .left {
+                display: flex;
+                align-items: center;
+            }
         }
     }
 }
 
 .SettingsBox {
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start; 
+    justify-content: center;
+    align-items: flex-end; 
     .SettingsRectangle {
         width: 500px;
         height: 327px;
@@ -120,8 +128,11 @@ body {
         border-right: 8px solid orange;
 
         .SettingsBoxHeader {
-            height: 10%;
+            height: 15%;
             background-color: cadetblue;
+            border-bottom: 8px solid #000000;
+            border-left: 8px solid #000000;
+            border-right: 8px solid blue;
         }
 
         // .SettingsBoxContent {

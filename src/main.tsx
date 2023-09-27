@@ -69,17 +69,16 @@ const HomeComponents = () => {
 }
 
 const Check2FA = () => {
-	const enablingEndpoint  = "http://localhost:3000/auth/2fa/enable";
+	const enablingEndpoint  = "http://localhost:3000/auth/2fa/get2FAstatus";
 	axios.get(enablingEndpoint, { withCredentials: true })
 	.then ((response) => {
 		console.log(response)
-		console.log("Status " , response.data.status)
+		console.log("Status --> " , response)
 	})
 	.catch((error) => {
 		console.log(error);
-		console.log("Status " , error.data.status)
-
-	})
+		console.log("Status --> " , error)
+	});
 } 
 
 Check2FA();

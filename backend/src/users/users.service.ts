@@ -83,9 +83,9 @@ export class UsersService {
         })
     ]);
     }
-    async UpdateforOne(id: string, body: any) {
+    async UpdateforOne(id: string, username: string) {
 
-         const {username, profileImage} = body;
+        
         const user = await this.prisma.user.update({
             where: {
                 id: id,

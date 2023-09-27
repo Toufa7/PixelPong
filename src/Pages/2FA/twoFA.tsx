@@ -25,7 +25,7 @@ function TwoFa() {
     const [qrCode, updateQr] = useState();
 
     useEffect(() => {
-        axios.get("http://localhost:3000/auth/2fa/enable", { withCredentials: true })
+        axios.get("http://localhost:3000/auth/2fa/set2fa", { withCredentials: true })
         .then((response) => {
             console.log("Reponse GET -> ", response);
             updateQr(response.data);
