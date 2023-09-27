@@ -2,6 +2,24 @@ import React, { useEffect, useState } from 'react';
 import './twoFA.scss';
 import axios from 'axios';
 import aaa from './assets/ExampleQRCode.png'
+import { Toaster , toast} from 'react-hot-toast';
+
+
+const Toasts = () => {
+    return (
+        <Toaster
+            reverseOrder={false}
+            position='top-right'
+            toastOptions={{
+                style: {
+                    borderRadius: '8px',
+                    background: '#AC8FB4',
+                    color: '#fff',
+                },
+            }}
+        />
+    );
+}
 
 function TwoFa() {
     const [qrCode, updateQr] = useState();
@@ -32,9 +50,12 @@ function TwoFa() {
         axios.post("http://localhost:3000/auth/2fa/validate", data, { withCredentials: true })
         .then((response) => {
             console.log("Reponse ", response);
+            toast.success("Invalid Code");
+            
         })
         .catch((error) => {
             console.log("Error ", error)
+            toast.error("Invalid Code");
         })
     }
     
@@ -57,6 +78,7 @@ function TwoFa() {
                         <input type="text" maxLength={1} id="name_field" className="nes-input" placeholder='*'/>
                     </div>
                     <div className="verify">
+                        <Toasts/>
                         <button onClick={iClick} className="nes-btn">Verify</button>
                     </div>
             </div>

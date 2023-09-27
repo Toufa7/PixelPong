@@ -87,7 +87,7 @@ export class AuthService {
     })
 
     }
-    async set2FAsecret(id: string, secret: string, token: string){
+    async set2Fasecret(id: string, secret: string, token: string){
         await this.prisma.user.update({
         where:{
             id: id

@@ -11,6 +11,7 @@
     npm install react-router-dom
     npm install xp.css
     npm i react-draggable
+    npm i react-hot-toast
 
 # Run server:
 

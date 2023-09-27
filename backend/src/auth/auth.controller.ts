@@ -78,35 +78,28 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async setTwoFA(@Req() req, user: User)
   {
-    // if(!user.twofa){
-    //   throw new HttpException("2FA Not Enabled",HttpStatus.FORBIDDEN);
-    // }
-    try
-    {
-      const secret = authenticator.generateSecret();
-      const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
-      const qr = await qrcode.toDataURL(otpauth);
-      await this.authService.set2FAsecret(req.user.id, secret,otpauth);
-      return qr
-    }
-    catch(err)
-    {
-      console.log(err);
-      throw new HttpException(err.message,HttpStatus.BAD_REQUEST);  
-    }
-    
+    const secret = authenticator.generateSecret();
+    const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
+    console.log(otpauth);
+    console.log(secret);
+    const qr = await qrcode.toDataURL(otpauth);
+    await this.authService.set2Fasecret(req.user.id, secret,otpauth);
+    return qr
   }
-  @Put('2fa/enabled')
+  @Get('2fa/enable')
   @UseGuards(JwtGuard)
   async change2FAstatus(@Req() req)
   {
+    console.log("im here : : :")
     await this.authService.changetwofastatus(req.user.id);
+    return {status : true}
   }
-  @Post('2fa/disable')
+  @Get('2fa/disable')
   @UseGuards(JwtGuard)
   async disabletwofa(@Req() req)
   {
     await this.authService.disabletwofastatus(req.user.username);
+    return {status : false}
   }
   @Post('uploads')
   @UseGuards(JwtGuard)
@@ -142,7 +135,7 @@ export class AuthController {
         message: 'OTP is valid. Allow the user to log in.',
       };
     } else {
-      return  res.status(400).json({ message: 'OTP is invalid. Deny access.' })
+      return res.status(400).json({message: "OTP is invalid. Deny access."});
     }
   }
 
