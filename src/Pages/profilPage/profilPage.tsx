@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 /******************* Includes  *******************/
 import './profilPage.scss'
@@ -37,19 +37,33 @@ const States = () => {
     );
 }
 
-const twoFAClicked = () => {
-    const endpoint = "http://localhost";
-axios
-    axios.put(endpoint, {a : 1} ,{ withCredentials: true }) 
-    .then ((response) => {
-        console.log(response)
-    }).catch((error) => 
-    console.log(error));
-}
 
 const Settings = () => {
     const [isChecked, set2FAStatus] = useState(false);
-    console.log(isChecked)
+    const enablingEndpoint  = "http://localhost:3000/auth/2fa/enable";
+    const disablingEndpoint = "http://localhost:3000/auth/2fa/disable";
+    if (isChecked)
+    {
+        axios.put(enablingEndpoint, {a : 0} ,{ withCredentials: true }) 
+        .then ((response) => {
+            console.log(response)
+            console.log("Status " , response.data.status)
+        }).catch((error) => 
+        console.log(error));
+        console.log("Enable");
+        console.log("Enable");
+    }
+    else
+    {
+        axios.put(disablingEndpoint, {a : 1} ,{ withCredentials: true }) 
+        .then ((response) => {
+            console.log(response)
+            console.log("Status " , response.data.status)
+
+        }).catch((error) => 
+        console.log(error));
+        console.log("Disable");
+    }
     return (
         <div className="SettingsBox">
             <div className="SettingsRectangle">
@@ -65,16 +79,6 @@ const Settings = () => {
                     </div>
                     <div>
                 </div>
-
-                        {/* <div className="nes-field">
-                            <input type="text" name="nickname" className="nes-input" required placeholder='Choose Nickname'/>
-                        </div>
-                        <div className="uploadContainer">
-                            <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
-                        </div>
-                        <div className="startContainer">
-                            <a  className="nes-btn">Confirm</a>
-                        </div> */}
                 </div>
                 </div>
             </div>

@@ -1,41 +1,46 @@
-// @ts-nocheck
 
+// @ts-nocheck
 import "./LoginSettings.scss"
+
+/******************* Packages  *******************/
+import {Toaster, toast } from 'react-hot-toast';
+import axios from "axios";
+/******************* Includes  *******************/
 import img3 from './assets/FarmerBoy.png';
 import img2 from './assets/Detective.png';
 import img1 from './assets/Glasses.png';
 import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
-import axios from "axios";
-import {Toaster, toast } from 'react-hot-toast';
 
 
 const retrieveCheckSendData = () => {
-    const avatar        = document.querySelector('[name="avatarUpload"]').files[0];
+    const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
-    if (avatar && usernameCheck.test(nicknameInput))
-    {
+
+    if (avatar && usernameCheck.test(nicknameInput)) {
         const data = new FormData();
-        data.append('file', avatar)
+        data.append('file', avatar);
         toast.promise(
-        axios.all([
-            axios.post('http://localhost:3000/auth/signup-success', {username : nicknameInput}, { withCredentials: true }),
-            axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
-        ]).then(axios.spread((responseNickname, responseAvatar) => {            
-            console.log(responseNickname , responseAvatar)            
-        })).catch(() => {}),
-        {
-            loading: 'Loading...',
-            success: 'Success',
-            error: (err) => err.response.data.msg,
-          },
+            axios.all([
+                axios.post('http://localhost:3000/auth/signup-success', { username: nicknameInput }, { withCredentials: true }),
+                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
+            ]).then(axios.spread((responseNickname, responseAvatar) => {
+                console.log(responseNickname, responseAvatar);
+            })),
+            {
+                loading: "Sending data...",
+                success: "Success Settings!",
+                error: "An error occurred",
+            }
         );
+            
     }
-    else
-    {
-        toast.error('Error')        
+    else if (!usernameCheck.test(nicknameInput))
+        toast.error("Invalid Username");
+    else {
+        toast.error('Choose an avatar');
     }
 }
 
@@ -70,18 +75,23 @@ const Toasts = () => {
                 style: {
                     borderRadius: '8px',
                     background: '#AC8FB4',
-                    color: '#fff',
+                    color: '#fff'
                 },
             }}
         />
     );
 }
 
-export default function LoginSettings() {
+export default function LoginSettings() {      
+    const dialogPlease = () => {
+        const dialogElement = document.getElementById('dialog-default');
+        dialogElement.showModal();
+      };
+
         return (
         <div className="container">
             <div className="settingsBox">
-                <div className="header">Settings</div>
+                <div className="header">Complete Profil</div>
                 <div className="content">
                     <div>
                         <div className="nes-field">
@@ -92,14 +102,26 @@ export default function LoginSettings() {
                         </div>
                             <Avatars />
                         <div className="uploadContainer">
-                            <label class="nes-btn">
+                            <label className="nes-btn">
                                 <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
                                 <span>Upload your avatar</span>
                             </label>
                         </div>
                         <div className="startContainer">
                             <Toasts/>
-                            <a onClick={retrieveCheckSendData} className="nes-btn">Start</a>
+                            <section>
+                                <button onClick={dialogPlease} type="button" className="nes-btn">Start</button>
+                                <dialog className="nes-dialog" id="dialog-default">
+                                    <form method="dialog">
+                                        <p className="title">Warning</p>
+                                        <p>Do you wanna go with the default</p>
+                                        <menu className="dialog-menu">
+                                            <button className="nes-btn">Cancel</button>
+                                            <button onClick={retrieveCheckSendData} className="nes-btn is-success">Confirm</button>
+                                        </menu>
+                                    </form>
+                                </dialog>
+                            </section>
                         </div>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ function Stars() {
         animationDelay: `${delay}s`,
       };
       stars.push(
-        <div className="stars" style={style}>
+        <div className="stars" style={style} key={i}>
           <img src={star} alt="Star" />
         </div>
       );

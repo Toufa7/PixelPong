@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+// @ts-nocheck
+import { useEffect, useState } from 'react';
 import './twoFA.scss';
 import axios from 'axios';
-import aaa from './assets/ExampleQRCode.png'
 import { Toaster , toast} from 'react-hot-toast';
 
 
@@ -50,7 +50,11 @@ function TwoFa() {
         axios.post("http://localhost:3000/auth/2fa/validate", data, { withCredentials: true })
         .then((response) => {
             console.log("Reponse ", response);
-            toast.success("Invalid Code");
+            if (response.status != 201)
+                toast.success("Invalid Code");
+            else
+                toast.error("Invalid Code");
+
             
         })
         .catch((error) => {

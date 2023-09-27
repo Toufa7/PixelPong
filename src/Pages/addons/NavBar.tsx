@@ -1,5 +1,7 @@
 import "./NavBar.scss";
 /******************* Includes  *******************/
+import jwt_decode from "jwt-decode";
+
 /******************* Packages  *******************/
 /******************* Images  *******************/
 
@@ -12,6 +14,7 @@ import profilLogo from './assets/profilLogo.svg'
 import randomLogo from './assets/ping-pong-ball.svg'
 import Cookies from "universal-cookie";
 import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
 /******************************************/  
 
 const NavBarBody = () => {
@@ -54,28 +57,46 @@ const NavBarHeader = () => {
 }
 
 const NavBarFooter = () => {
-	const cookies = new Cookies();
+	const coo = new Cookies();
+	let userAvatar = profilLogo;
 	const navigate = useNavigate();
+  
 	const logout = () => {
-		cookies.remove('jwt');
-		navigate("/login");
+		coo.remove('jwt');
+		navigate('/login');
 	};
-
+  
+	if (coo.get('jwt') != null) {
+		const token = jwt_decode(coo.get('jwt')) as { image: string };
+		console.log('JWT', token);
+  
+		const initialToken = coo.get('jwt');
+		if (coo.get('jwt') !== initialToken) {
+			userAvatar = "../../../backend/uploads/" + token.image;
+		}
+		else
+			userAvatar = token.image;
+	}
+  
 	return (
 		<div className="nav-footer">
-			<div className="nav-item">
-				<a href="#" title="Profil">
-					<img src={profilLogo} style={{ height: '70px', width: '70px', borderRadius: '190px', background: 'red' }} alt="Profile"/>
-				</a>
-			</div>
-			<div className="nav-item">
-				<a href="#" title="Logout">
-					<img onClick={logout} src={logoutLogo}></img>
-				</a>
-			</div>
+		<div className="nav-item">
+			<a href="#" title="Profile">
+			<img
+				src={userAvatar}
+				style={{ height: '70px', width: '70px', borderRadius: '50%' }}
+				alt="Profile"
+			/>
+			</a>
 		</div>
-		);
-}
+		<div className="nav-item">
+			<a href="#" title="Logout">
+				<img onClick={logout} src={logoutLogo} alt="Logout" />
+			</a>
+		</div>
+		</div>
+	);
+};
 
 function  NavBar() {
 	return (

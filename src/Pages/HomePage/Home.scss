@@ -1,6 +1,5 @@
 body {
     background: linear-gradient(to right, #4F3997, #6E58B6);
-    font-family: 'Press Start 2P', cursive;
 }
 
 .headerBox {
@@ -13,7 +12,6 @@ body {
 
 
     .topLoginBox {
-
         width: 1200px;
         height: 250px;
         background-color: #C6A86A;
@@ -148,19 +146,32 @@ body {
 .matcheHistory {
     height: calc(100%/3);
     opacity: 0.8;
+    flex-direction: row;
     
     .match1{
         height: 100%;
-        background: red;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .left,
+        .right {
+            display: flex;
+            align-items: center;
+        }
+
+        .left img,
+        .right img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     }
     
-    .match2{
-        height: 100%;
-        background: green;
-    }
-    
-    .match3 {
-        height: 100%;
-        background: orange;
-    }
 }

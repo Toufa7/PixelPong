@@ -67,7 +67,7 @@ export class AuthController {
       .status(200)
       // .send('success');
     }
-  @Get('2fa/enable')
+  @Get('2fa/set2fa')
   @UseGuards(JwtGuard)
   async changetwofa(@Req() req)
   {
@@ -76,14 +76,23 @@ export class AuthController {
     console.log(otpauth);
     console.log(secret);
     const qr = await qrcode.toDataURL(otpauth);
-    await this.authService.changetwofastatus(req.user.id, secret,otpauth);
+    await this.authService.set2Fasecret(req.user.id, secret,otpauth);
     return qr
   }
-  @Post('2fa/disable')
+  @Put('2fa/enable')
+  @UseGuards(JwtGuard)
+  async change2FAstatus(@Req() req)
+  {
+    console.log("im here : : :")
+    await this.authService.changetwofastatus(req.user.id);
+    return {status : true}
+  }
+  @Put('2fa/disable')
   @UseGuards(JwtGuard)
   async disabletwofa(@Req() req)
   {
     await this.authService.disabletwofastatus(req.user.username);
+    return {status : false}
   }
   @Post('uploads')
   @UseGuards(JwtGuard)
@@ -109,14 +118,14 @@ export class AuthController {
 
   @Post('2fa/validate')
   @UseGuards(JwtGuard)
-  async validateOTP(@Body() otp: any, @Req() req){
+  async validateOTP(@Body() otp: any, @Req() req, @Res() res){
     const user = await this.usersService.findOne(req.user.id);
     console.log("I Get this => ",otp.otp);
     const isValid = authenticator.check(otp.otp, user.twofasecret);
     if (isValid) {
       return 'OTP is valid. Allow the user to log in.';
     } else {
-      return 'OTP is invalid. Deny access.';
+      return res.status(400).json({message: "OTP is invalid. Deny access."});
     }
   }
 

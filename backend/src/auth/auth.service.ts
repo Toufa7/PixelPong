@@ -74,22 +74,20 @@ export class AuthService {
         });
         return user;
     }
-    async changetwofastatus(id: string, secret: string, token: string){
+    async changetwofastatus(id: string){
         await this.prisma.user.update({
         where:{
             id: id
         },
         data:{
             twofa: true,
-            twofasecret: secret,
-            twofatoken: token,
         }
     })
 
     }
 
     async disabletwofastatus(username: string){
-        await this.prisma.user.update({
+         await this.prisma.user.update({
         where:{
             username
         },
@@ -102,6 +100,18 @@ export class AuthService {
 
     }
 
+    async set2Fasecret(id, secret,token)
+    {
+        await this.prisma.user.update({
+            where:{
+                id: id
+            },
+            data:{
+                twofasecret: secret,
+                twofatoken:token
+            }
+        })
+    }
     async updateimage(image: string, id: string){
         await this.prisma.user.update({
             where:{

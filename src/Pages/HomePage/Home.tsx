@@ -1,5 +1,7 @@
 import "./Home.scss";
 
+import logo from '../addons/assets/ping-pong-ball.svg';
+
 const TopContainer = () => {
   return (
       <div className="headerBox">
@@ -19,7 +21,7 @@ const TopContainer = () => {
 const TopLeft = () => {
   return (
     <div className="loginBox on-going-matches">
-      <div className="loginBoxHeader on-going-matches1">ON GOING MATCHES</div>
+      <div className="loginBoxHeader on-going-matches1">LEADERBOARD</div>
       <div className="loginBoxOutside"></div>
     </div>
   );
@@ -43,30 +45,41 @@ const BottomLeft = () => {
   );
 }
 
+
+const MatchResult = () => {
+  return (
+    <div className="match1" style={{background: '#C6716A', border: '1px solid black'}}>
+      <div className="left">
+        <img src={logo} style={{width: '40px', height: '40px', marginRight: '10px', marginLeft: '10px'}} className="player1"/>
+        <span>otoufah</span>
+      </div>
+      <div className="result">
+        <span>6 : 0</span>
+      </div>
+      <div className="right">
+        <span>ibnada</span>
+        <img src={logo} style={{width: '40px', height: '40px', marginLeft: '10px'}} className="player2"/>
+      </div>
+    </div>
+  );
+}
+
+const State = () => {
+
+}
+
 const BottomRight= () => {
   return (
     <div className="loginBox latest-matches">
-            <div className="loginBoxHeader latest-matches1">LATEST MATCHES</div>
-            <div className="loginBoxOutside">
-                <div className="matcheHistory">
-                <div className="match1">
-                  <a>S</a>
-                  <a>0:0</a>
-                  <a>L</a>
-                </div>
-                <div className="match2">
-                  <span>S</span>
-                  <span>0:0</span>
-                  <span>L</span>
-                </div>
-                <div className="match3">
-                  <span>S</span>
-                  <span>0:0</span>
-                  <span>L</span>
-                </div>
-                </div>
+        <div className="loginBoxHeader latest-matches1">LATEST MATCHES</div>
+          <div className="loginBoxOutside">
+            <div className="matcheHistory">
+              <MatchResult/>
+              <MatchResult/>
+              <MatchResult/>
             </div>
           </div>
+    </div>
   );
 }
 

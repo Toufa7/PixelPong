@@ -38,6 +38,13 @@ https://jasonwatmore.com/post/2020/07/17/react-axios-http-post-request-examples
 
 https://stackoverflow.com/questions/61385454/how-to-post-multiple-axios-requests-at-the-same-time
 
+
+## Addons :
+
+https://github.com/timolins/react-hot-toast/issues/40
+
+
+
 ## DataStructures : 
 
 * Map : 
