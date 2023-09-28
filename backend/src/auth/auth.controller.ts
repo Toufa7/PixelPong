@@ -58,7 +58,7 @@ export class AuthController {
 	  const user = await this.usersService.findOne(req.user.id);
 	  console.log("1st time loggin -> ",user.firstlogin);
 	  if(!user.firstlogin) 
-		return res.redirect('http://localhost:5173/settings');
+		  return res.redirect('http://localhost:5173/settings');
 	  return res.redirect('http://localhost:5173/home');
 	  // return res.redirect('signup-success');
 	}

@@ -7,15 +7,6 @@ import abensgui from '../assets/images/abensgui.jpg'
 import ibnada from '../assets/images/ibnada.jpg'
 import uknownUser from '../assets/images/nonprofile.png'
 
-
-// import mamella from '../../assets/images/mamellal.jpg'
-// import otoufah from '../../assets/images/otoufah.jpg'
-// import mnaqqad from '../../assets/images/mnaqqad.jpg'
-// import abensgui from '../../assets/images/abensgui.jpg'
-// import ibnada from '../../assets/images/ibnada.jpg'
-// import uknownUser from '../../assets/images/nonprofile.png'
-
-
 const dms = () => {
   return (
     <div className="chatDmDiv">

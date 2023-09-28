@@ -16,6 +16,7 @@ import TwoFa from './Pages/2FA/twoFA';
 import Home from './Pages/HomePage/Home';
 import ProfilPage from './Pages/profilPage/profilPage';
 import axios from 'axios';
+import ChatPage from './Pages/chatPage/chatPage'
 
 
 
@@ -94,7 +95,7 @@ const RedirectToSettings = () => {
 				<Route path="settings" Component={LoginSettingsComponents} />
 				<Route path="two-factor-autentication" Component={twoFAComponents} />
 				<Route path="home" Component={HomeComponents}/> 
-				<Route path="profil" Component={ProfilComponents}/> 
+				<Route path="profil" Component={ProfilComponents}/>
 			</Routes>
 		</BrowserRouter>
 		);
@@ -116,6 +117,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 			<Route path={idx} Component={welcomePage} key={""}/>
 			)}  
 			<Route path="login" Component={LogingPageComponents}/>
+			<Route path="chat" Component={ChatPage}/> 
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>
