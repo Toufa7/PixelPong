@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {HttpStatus,HttpException,StreamableFile, Body, Controller, Get,Post,Put,Req,Res, UploadedFile, UseGuards, UseInterceptors, Param, ParseUUIDPipe, Header, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -24,8 +25,9 @@ import { inputDto } from 'src/dto/input.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService, 
-	private usersService: UsersService, private Prismaservice:PrismaService,
+	constructor(private readonly authService: AuthService, 
+    private usersService: UsersService,
+    private Prismaservice: PrismaService,
 	private readonly bantoken:TokenBlacklistService) {}
 	@Get('google')
 	@UseGuards(AuthGuard('google'))
@@ -57,8 +59,11 @@ export class AuthController {
 	  this.setResandCookie(res, req.user.id, acces_token.access_token);
 	  const user = await this.usersService.findOne(req.user.id);
 	  console.log("1st time loggin -> ",user.firstlogin);
-	  if(!user.firstlogin) 
+	  if(user.firstlogin)
+	  {
+		this.usersService.updatestatus(user)
 		return res.redirect('http://localhost:5173/settings');
+	  }
 	  return res.redirect('http://localhost:5173/home');
 	  // return res.redirect('signup-success');
 	}

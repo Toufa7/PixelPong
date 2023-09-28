@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 
 
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, useNavigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
 
 /******************* Includes  *******************/
@@ -68,31 +68,48 @@ const HomeComponents = () => {
 	);
 }
 
-const Check2FA = () => {
+
+const Redirect2FA = () => {
 	const enablingEndpoint  = "http://localhost:3000/auth/2fa/get2FAstatus";
+	let resp = true;
 	axios.get(enablingEndpoint, { withCredentials: true })
 	.then ((response) => {
-		console.log(response)
-		console.log("Status --> " , response)
+		console.log("2fa Status -> " ,response.data)
+		resp = response.data;
 	})
 	.catch((error) => {
 		console.log(error);
-		console.log("Status --> " , error)
 	});
-} 
+	console.log("Resp => ", resp);
+	if (resp)
+	{
+		console.log("I Enter Because it's true")
+		return (
+			<BrowserRouter>
+			<Routes>
+				<Route path="two-factor-autentication" Component={twoFAComponents} />
+			</Routes>
+			</BrowserRouter>
+		);
+	}
+	else
+	{
+		console.log("I Enter Because it's FALSE")
+		return (
+			<></>
+		);
+	}
+};
 
-Check2FA();
 
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
-	const jwt = cookies.get('jwt');
-	console.log("Value -> " , jwt)
+	const jwt = cookies.get('jwt');	
 	if (jwt != null) {
 		return (
 		<BrowserRouter>
 			<Routes>
 				<Route path="settings" Component={LoginSettingsComponents} />
-				<Route path="two-factor-autentication" Component={twoFAComponents} />
 				<Route path="home" Component={HomeComponents}/> 
 				<Route path="profil" Component={ProfilComponents}/> 
 			</Routes>
@@ -106,10 +123,10 @@ const RedirectToSettings = () => {
 	}
 };
 
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
 	<RedirectToSettings/>
+	<Redirect2FA/>
 	<BrowserRouter>
 		<Routes>
 			{["welcome", "/"].map((idx) => 

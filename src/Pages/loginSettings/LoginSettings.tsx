@@ -5,6 +5,7 @@ import "./LoginSettings.scss"
 /******************* Packages  *******************/
 import {Toaster, toast } from 'react-hot-toast';
 import axios from "axios";
+import { useState } from "react";
 /******************* Includes  *******************/
 import img3 from './assets/FarmerBoy.png';
 import img2 from './assets/Detective.png';
@@ -12,7 +13,7 @@ import img1 from './assets/Glasses.png';
 import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
-
+import NavBar from "../addons/NavBar";
 
 const retrieveCheckSendData = () => {
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
@@ -82,16 +83,29 @@ const Toasts = () => {
     );
 }
 
-export default function LoginSettings() {      
+export default function LoginSettings() {   
+    const [isChecked, set2FAStatus] = useState();
+    console.log("Initial Status -> ",isChecked);
+    const handle2FAChange = () => {
+        set2FAStatus(!isChecked);
+        const endpoint = isChecked ? "http://localhost:3000/auth/2fa/disable" : "http://localhost:3000/auth/2fa/enable";
+        const status = isChecked ? 1 : 0;
+        axios.put(endpoint, status, { withCredentials: true }) 
+        .then ((response) => {
+            console.log("2FA Status " , response.data.status);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }   
     const dialogPlease = () => {
         const dialogElement = document.getElementById('dialog-default');
         dialogElement.showModal();
       };
-
-        return (
-        <div className="container">
+      
+      return (
+          <div className="container">
             <div className="settingsBox">
-                <div className="header">Complete Profil</div>
+                <div className="header">Settings</div>
                 <div className="content">
                     <div>
                         <div className="nes-field">
@@ -107,6 +121,13 @@ export default function LoginSettings() {
                                 <span>Upload your avatar</span>
                             </label>
                         </div>
+                        <div className="twoFa" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <label style={{ textAlign: 'left' }}>2FA</label>
+                        <label style={{ textAlign: 'right' }}>
+                            <input type="checkbox" className="nes-checkbox" checked={isChecked} onChange={handle2FAChange}/>
+                            <span>{isChecked ? '0' : '1'}</span>
+                        </label>
+                     </div>
                         <div className="startContainer">
                             <Toasts/>
                             <section>

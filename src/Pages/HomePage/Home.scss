@@ -9,9 +9,10 @@ body {
     padding-bottom: 20px;
     text-align: center;
     z-index: -1;
-
-
+    
+    
     .topLoginBox {
+        
         width: 1200px;
         height: 250px;
         background-color: #C6A86A;
@@ -29,6 +30,8 @@ body {
             display: flex;
             justify-content: center;
             align-items: center;
+            
+            
         }
         
         .loginBoxOutside {
@@ -36,6 +39,10 @@ body {
             border-top: 8px solid #EBD9F0;
             border-bottom: 8px solid #7C6E6E;
             border-right: 8px solid #7C6E6E;
+            & img {
+                height: 10px !important; 
+                width: 10px;
+            }
           
           .playRaw {
             display: flex;
@@ -47,7 +54,7 @@ body {
             }
 
             .Friend {
-                background: red;
+                // background: ;
             }
             .Practice {
                 background: green;
@@ -136,19 +143,41 @@ body {
     .achievements {
         background-color: #3B7469;
     }    
+    .latest-matches2 {
+        overflow: scroll;
+    }
+    .achievements2 {
+        overflow-x: auto;
+        white-space: pre;
+        display: flex;
+      }
+      
+      .achievements2 img {
+        height: 140px;
+        width: 150px;
+        margin: 5px;
+        border: 2px solid #7C6E6E;
+      }
+
     .latest-matches {
         background-color: #151315;
         color: white;
     }
 }    
+  .statesValues {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+  }
+
 
 
 .matcheHistory {
     height: calc(100%/3);
     opacity: 0.8;
     flex-direction: row;
-    
-    .match1{
+        .match1{
         height: 100%;
         display: flex;
         justify-content: space-between;

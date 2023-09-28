@@ -11,7 +11,6 @@ import { UsersService } from "src/users/users.service";
 interface Payload {
     sub: string;
     username: string;
-    email: string;
     image?: string;
     token: string;
 }
@@ -23,7 +22,6 @@ export class AuthService {
             const payload: Payload = {
                 sub: user.id,
                 username: user.username,
-                email: user.email,
                 token: user.token,
             }
             if(user.profileImage)
@@ -59,9 +57,7 @@ export class AuthService {
             },
         });
     }
-
-    else
-        this.usersService.updatestatus(user)
+        
     return user;
 }
 

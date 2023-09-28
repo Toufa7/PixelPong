@@ -17,12 +17,13 @@
 
     npm run dev
 
-
 # Ressource :
 
 # Logos :
 
 https://iconduck.com/sets/pixelarticons-icons-set
+
+https://www.streamlinehq.com/icons/pixel
 
 ## Interface :
 
@@ -44,6 +45,9 @@ https://stackoverflow.com/questions/61385454/how-to-post-multiple-axios-requests
 https://github.com/timolins/react-hot-toast/issues/40
 
 
+## Color Palettes :
+
+https://mycolor.space
 
 ## DataStructures : 
 
@@ -70,3 +74,8 @@ https://howtodoinjava.com/typescript/maps/
         .catch(error => {
         });
     }
+
+
+## Errors :
+
+https://stackoverflow.com/questions/62185425/why-is-console-log-logging-twice-in-react-js
