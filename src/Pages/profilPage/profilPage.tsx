@@ -1,6 +1,8 @@
 import './profilPage.scss'
 
 /******************* Packages  *******************/
+import jwt_decode from 'jwt-decode';
+import Cookies from 'universal-cookie';
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
@@ -41,12 +43,24 @@ const States = () => {
 }
 
 const Profil = () => {
+    const coo = new Cookies();
+	let userAvatar = otoufah;
+	if (coo.get('jwt') != null) {
+		const token = jwt_decode(coo.get('jwt')) as { image: string };
+		const initialToken = coo.get('jwt');
+		if (coo.get('jwt') !== initialToken) {
+			userAvatar = "../../../backend/uploads/" + token.image;
+		}
+		else
+			userAvatar = token.image;
+	}
+
     return (
         <div className="profilBox">
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img src={otoufah} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img src={userAvatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>Omar Toufah</span>

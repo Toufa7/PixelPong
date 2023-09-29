@@ -85,7 +85,6 @@ const Toasts = () => {
 
 export default function LoginSettings() {   
     const [isChecked, set2FAStatus] = useState();
-    console.log("Initial Status -> ",isChecked);
     const handle2FAChange = () => {
         set2FAStatus(!isChecked);
         const endpoint = isChecked ? "http://localhost:3000/auth/2fa/disable" : "http://localhost:3000/auth/2fa/enable";
@@ -125,7 +124,7 @@ export default function LoginSettings() {
                         <label style={{ textAlign: 'left' }}>2FA</label>
                         <label style={{ textAlign: 'right' }}>
                             <input type="checkbox" className="nes-checkbox" checked={isChecked} onChange={handle2FAChange}/>
-                            <span>{isChecked ? '0' : '1'}</span>
+                            <span>{isChecked ? 'Enabled' : 'Disabled'}</span>
                         </label>
                      </div>
                         <div className="startContainer">

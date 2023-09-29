@@ -80,7 +80,6 @@ const Redirect2FA = () => {
 	.catch((error) => {
 		console.log(error);
 	});
-	console.log("Resp => ", resp);
 	if (resp)
 	{
 		console.log("I Enter Because it's true")

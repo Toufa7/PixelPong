@@ -79,3 +79,9 @@ https://howtodoinjava.com/typescript/maps/
 ## Errors :
 
 https://stackoverflow.com/questions/62185425/why-is-console-log-logging-twice-in-react-js
+
+
+## Typescript :
+
+https://www.youtube.com/@kodebot
+
