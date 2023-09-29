@@ -10,12 +10,6 @@ import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 
-const saveSettings = async (settings) => {
-  // Simulating an asynchronous operation
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  // Perform the actual save operation
-  // ...
-};
 
 const retrieveCheckSendData = async () => {
   const avatar = document.querySelector('[name="avatarUpload"]').files[0];
@@ -60,7 +54,7 @@ const retrieveCheckSendData = async () => {
 };
 
 const Avatars = () => {
-  const handleClick = (idx) => {
+  const handleClick = (idx : number) => {
     const avatars = [img1, img2, img3, img4, img5, img6];
     console.log('Avatar Selected:', avatars[idx]);
   };

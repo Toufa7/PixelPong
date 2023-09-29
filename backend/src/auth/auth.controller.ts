@@ -50,6 +50,7 @@ export class AuthController {
       const acces_token = this.authService.googleLogin(req.user);
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
+      
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
       return res.redirect('http://localhost:5173/home');
