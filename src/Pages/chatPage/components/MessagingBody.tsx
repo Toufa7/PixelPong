@@ -1,15 +1,21 @@
-import React from 'react'
-
+import { useState } from 'react';
 import Conversation from './conversation'
 import MessageInput from './messageInput'
 
 const MessagingBody = () => {
-  return (
-    <div className="MessagingBodyDiv">
-      <Conversation/>
-      <MessageInput/>
-    </div>
-  )
+
+	const [messaging, setMessaging] = useState<string[]>([]);
+
+	const handleNewMessage = (newMessage: string) => {
+	  setMessaging(prevMessaging => [...prevMessaging, newMessage]);
+	};
+
+	return (
+	<div className="MessagingBodyDiv">
+		<Conversation MessageArr={messaging}/>
+		<MessageInput onMessageInput={handleNewMessage}/>
+	</div>
+	)
 }
 
 export default MessagingBody

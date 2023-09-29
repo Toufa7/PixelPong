@@ -2,7 +2,7 @@ import React from 'react'
 import omar from '../assets/images/otoufah.jpg'
 import mamella from '../assets/images/mamella.jpg'
 
-const messageComponenet = () => {
+const messageComponenet = (props: any) => {
   return (
     <div className="messageComponent">
         <div className="messageInfo">
@@ -11,7 +11,7 @@ const messageComponenet = () => {
         </div>
         <div className="messageContent">
             <div className="nes-balloon from-left">
-                <p>Hello NES.css</p>
+                <p>{props.content}</p>
             </div>
         </div>
     </div>
