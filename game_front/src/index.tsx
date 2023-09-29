@@ -11,7 +11,7 @@ function Setup(){
   return (
       <ContextSocket.Provider value={socket}>
       <Websocket_render/>
-    </ContextSocket.Provider> 
+      </ContextSocket.Provider> 
   )
 }
 

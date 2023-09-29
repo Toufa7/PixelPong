@@ -9,9 +9,9 @@ export class Players_Management {
   
   public players  = {};
 
-  public AddPlayer(player_id : string ,x : number , y : number , room_id? : string){
+  public AddPlayer(player_id : string ,x : number , y : number , width : number , height : number, room_id? : string){
     // this.players.push(new PlayerDto(id,x,y));
-    this.players[player_id] = new PlayerDto(player_id,x,y,room_id);
+    this.players[player_id] = new PlayerDto(player_id,x,y,width , height , room_id);
     // console.log("Player added to players object");
   }
   

@@ -6,7 +6,7 @@ import { screen_height , screen_width } from '../game_flow_sketch';
 import { socket } from '../socket_setup/client-connect';
 
 
-type coordinates ={
+type coordinates = {
   x : number;
   y : number;
 }
@@ -30,7 +30,7 @@ export class Paddle {
     public pos : p5Types.Vector;
     
     
-      public constructor(c_x : number , pd_w : number , pd_h : number , c_y : number , p5_ob : p5Types, /*health_sys : player_System*/){
+      public constructor(c_x : number , c_y : number , pd_w : number , pd_h : number , p5_ob : p5Types, color : string/*health_sys : player_System*/){
           this.paddle_obj = p5_ob;
 
           // this.corrd_x = c_x;
@@ -39,6 +39,7 @@ export class Paddle {
           this.paddle_width = pd_w;
           this.paddle_height = pd_h;
           this.pos = this.paddle_obj.createVector(c_x,c_y);
+          this.color = color;
         //   this.palyer_system = health_sys;
       }
 
@@ -79,33 +80,37 @@ export class Paddle {
           bottom : this.pos.y + this.paddle_height / 2
       });
     }
+  
+      public  update_Player_pos(canvas:any){
+        let key_code;
+        let key_pressed;
 
-    public generate_coordinates_emit(){
-      let data : coordinates = {
-        x : this.pos.x,
-        y : this.pos.y
-      }
-      socket?.emit("coordinates",data);
-    }
-  
-      public  update_paddle(canvas:any){
-  
+        let mouse_y;
+
         if (this.paddle_obj.keyIsPressed){
           if (this.paddle_obj.keyCode === (this.paddle_obj.DOWN_ARROW)){
-                this.pos.y += this.dy;
+            key_code = this.paddle_obj.keyCode;
+            key_pressed = this.paddle_obj.DOWN_ARROW;
+            socket.emit("Player_movement",{sig : "DOWN" , Key : key_code , key_check : key_pressed});
+            // this.pos.y += this.dy;
           }
           else if (this.paddle_obj.keyCode === (this.paddle_obj.UP_ARROW)){
-            this.pos.y -= this.dy;
+            key_code = this.paddle_obj.keyCode;
+            key_pressed = this.paddle_obj.UP_ARROW;
+            socket.emit("Player_movement",{sig : "UP" , Key : key_code , key_check : key_pressed});
+            // this.pos.y -= this.dy;
           }
         }
         canvas.mouseMoved((event : any) => {
-          this.ms_y = event.layerY;
-          this.pos.y = this.ms_y;
+          // this.ms_y = event.layerY;
+          // this.pos.y = this.ms_y;
+          mouse_y = event.layerY;
+          socket.emit("Player_movement",{sig:"MOUSE",mouse_coord:mouse_y});
         })
         
         // console.log("[ x : " + this.pos.x + " , " + " y : " + this.pos.y + " ] ");
 
-        this.draw_paddle(this.color);
+        // this.draw_paddle(this.color);
       }
       
   }

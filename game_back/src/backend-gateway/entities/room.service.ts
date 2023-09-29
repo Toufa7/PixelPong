@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PlayerDto } from "../dto/player_ft.dto";
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { RoomDto } from "../dto/room.dto";
 import { Players_Management } from "./players-management.service";
 
@@ -33,16 +33,18 @@ export class Rooms{
     }
 
     SetupRooms(Player : Socket , Players : Players_Management){
-        if (this.is_Rooms_Available() == false){
+        if (!this.is_Rooms_Available()){
             console.log("there is no room available or there are no rooms");
             this.create_room_for_player();
             for(const id in this.rooms){
                 const Room = this.rooms[id];
-                if (Room.client_count == 0){
+                if (Room.client_count == 0 && !Room.Player1){
+                    console.log("Room enterd ["+Room.id+"]")
                     Room.Player1 = Players.players[Player.id];
-                    Room.Player1.room_id = Room.room_id;
+                    Room.Player1.room_id = Room.id;
                     Room.client_count++;
-                    Player.join(Room.room_id);
+                    Player.join(Room.id);
+                    break;
                 }
             }
         }
@@ -50,18 +52,23 @@ export class Rooms{
             console.log("Room Founded");
             for(const id in this.rooms){
                 const Room = this.rooms[id];
-                if (Room.client_count == 1){
-                    console.log("found 1 client");
-                    Room.Player2 = Players.players[Player.id];
-                    Room.Player2.room_id = Room.room_id;
-                    Room.client_count++;
-                    Player.join(Room.room_id);
-                }else if (Room.client_count == 0){
-                    console.log("found 0 client");
-                    Room.Player1 = Players.players[Player.id];
-                    Room.Player1.room_id = Room.room_id;
-                    Room.client_count++;
-                    Player.join(Room.room_id);
+                if (Room.client_count < 2){
+                    if (!Room.Player1){
+                        console.log("Player 1 spot is available in Room["+Room.id+"]");
+                        Room.Player1 = Players.players[Player.id];
+                        Room.Player1.room_id = Room.id;
+                        Room.client_count++;
+                        Player.join(Room.id);
+                        break;
+                    }
+                    else if (!Room.Player2){
+                        console.log("Player 2 spot is available in Room["+Room.id+"]");
+                        Room.Player2 = Players.players[Player.id];
+                        Room.Player2.room_id = Room.id;
+                        Room.client_count++;
+                        Player.join(Room.id);
+                        break;
+                    }
                 }
             }
             
@@ -69,8 +76,35 @@ export class Rooms{
         console.log(this.rooms);
     }
 
-    CleanRoom(Player : Socket , Players : Players_Management){
-
+    CleanRoom(Player : Socket , Players : Players_Management , server : Server){
+        let room_id;
+        console.log("\n--------------DISCONECTION------------------")
+        console.log("Player disconnected " + Player.id);
+        for(const id in this.rooms){
+        const Room = this.rooms[id];
+        if (Player.id == Room.Player1?.id && Room.Player1){
+            console.log("Found the Player (Player1) in room ["+Room.id+"]-->" + Room.Player1.id);
+            room_id = Room.id;
+            Room.client_count--;
+            Player.leave(Room.id);
+            delete Room.Player1;
+                break;
+        }
+        else{
+            if (Player.id == Room.Player2?.id && Room.Player2){
+            console.log("Found the Player (Player2) in room ["+Room.id+"]-->" + Room.Player2.id);
+            Room.client_count--;
+            Player.leave(Room.id);
+            delete Room.Player2;
+            break;
+            }
+        }
+        }
+        delete Players.players[Player.id];
+        // server.to(room_id).emit("UpdatePlayerPos",Players.players);
+        console.log(this.rooms);
+        // console.log(Players.players);
+        console.log("---------------------DDiiiDD-------------------------");
     }
 
     is_Rooms_Available() : boolean{
