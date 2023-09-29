@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 
 
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, useNavigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Cookies from 'universal-cookie';
 
 /******************* Includes  *******************/
@@ -103,6 +103,7 @@ const Redirect2FA = () => {
 
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
+	// const navigate = useNavigate();
 	const jwt = cookies.get('jwt');	
 	if (jwt != null) {
 		return (
@@ -117,6 +118,7 @@ const RedirectToSettings = () => {
 	}
 	else
 	{
+		// navigate("/login");
 		<Route path="login" Component={LogingPageComponents}/>
 		console.log("Naadi nta z3ma")
 	}

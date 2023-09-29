@@ -112,11 +112,7 @@ const NavBarFooter = () => {
 		<div className="nav-footer">
 		<div className="nav-item">
 			<a href="/profil" title="Profile">
-			<img
-				src={userAvatar}
-				style={{ height: '70px', width: '70px', borderRadius: '50%' }}
-				alt="Profile"
-			/>
+			<img src={userAvatar} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</a>
 		</div>
 		<div className="nav-item">
