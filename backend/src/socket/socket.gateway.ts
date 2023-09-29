@@ -1,18 +1,30 @@
 import {
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { AuthService } from '../auth/auth.service';
 
-@WebSocketGateway()
-export class SocketGateway {
+@WebSocketGateway({
+  origin: '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Authorization'],
+  credentials: true,
+  path: '/online',
+})
+export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
+  constructor(private readonly authservice: AuthService) {}
 
   connectedUsers: Map<string, Socket>;
   @SubscribeMessage('connected')
-  handleConnection(client: Socket) {
-    this.connectedUsers.set(client.id, client);
+  async handleConnection(client: Socket) {
+    console.log('im here if you see this');
+    const user = await this.getUser(client);
+    if (user) this.connectedUsers.set(user.id, client);
   }
 
   @SubscribeMessage('disconnect')
@@ -22,5 +34,13 @@ export class SocketGateway {
         this.connectedUsers.delete(key);
       }
     });
+  }
+  getUser(client: Socket) {
+    const session = client.handshake.auth.session;
+
+    if (session && session.user) {
+      // If the user is stored in the session, return it
+      return session.user;
+    }
   }
 }
