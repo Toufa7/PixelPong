@@ -3,5 +3,5 @@ import { io , Socket } from "socket.io-client";
 import { createContext } from "react";
 
 
-export const socket = io("ws://localhost:5000" , { path : '/online'});
+export const socket = io("ws://localhost:5000" , { path : '/online' ,  withCredentials: true});
 export const ContextSocket = createContext<Socket>(socket);

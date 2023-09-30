@@ -110,7 +110,7 @@ export class Paddle {
         
         // console.log("[ x : " + this.pos.x + " , " + " y : " + this.pos.y + " ] ");
 
-        // this.draw_paddle(this.color);
+        this.draw_paddle(this.color);
       }
       
   }

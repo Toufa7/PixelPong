@@ -6,7 +6,7 @@ import { Rooms } from './entities/room.service';
 import { Interval, Timeout } from '@nestjs/schedule';
 
 
-@WebSocketGateway({cors : { origin : 'http://localhost:5173' , credentials: true},pingInterval: 1000,
+@WebSocketGateway({cors : { origin : ['http://localhost:5173' , 'http://10.14.8.4:5173'] , methods: ["GET", "POST"], credentials: true},pingInterval: 1000,
 pingTimeout: 1000, path : '/online'})
 export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
   constructor(private readonly Players: Players_Management,
@@ -17,7 +17,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
   public screen_metrics : {screen_width : number , screen_height : number} = {screen_width : 0, screen_height : 0};
 
-  public Room_dl = "";
+  public Room_dl;
 
   afterInit(server: Server) {
     this.server = server;
@@ -30,7 +30,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           this.screen_metrics.screen_height = screen.s_h;
           console.log("---------------CONNECTION SECTION ------------------")
           console.log("new Player connected " + Player.id);
-          this.Players.AddPlayer(Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,90);
+          this.Players.AddPlayer(Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95);
           this.Rooms.SetupRooms(Player,this.Players);
           console.log("---------------------CCCoooCCC--------------------------------\n")
           // this.server.to(Player.id).emit("UpdatePlayerPos",this.Players.players);
@@ -40,20 +40,24 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   }
 
   handleDisconnect(Player: Socket) {
-    // console.log(Player.id);
     let Player_deleted = Player.id;
-    // let Room_that_effected : any  = "";
     for(const id in this.Rooms.rooms){
       const Room = this.Rooms.rooms[id];
       if (Room.Player1?.id == Player_deleted  || Room.Player2?.id == Player_deleted){
-        this.Room_dl = Room.id;
+        this.Room_dl = this.Rooms.rooms[id];
+        // console.log("Player disconnected in Room [" + this.Room_dl + "]");
+        // console.log(this.Room_dl);
+        // console.log("-----------------SEP-------------");
         break;
       }
     }
     this.Rooms.CleanRoom(Player,this.Players,this.server);
-    if (!this.Rooms.rooms[this.Room_dl]?.Player1 || !this.Rooms.rooms[this.Room_dl]?.Player2)
-      console.log("this room + [" + this.Room_dl + "] is affected ---> Player " + Player.id);
-    // this.server.to(Room_that_effected).emit("PlayersOfRoom",this.Rooms.rooms[Room_that_effected]);
+    // console.log("this room + [" + JSON.stringify(this.Room_dl) + "] is affected ---> Player " + Player.id);
+    if (!this.Room_dl.Player1 || !this.Room_dl.Player2){
+      console.log("ENTERED !!");
+      console.log(this.Room_dl.id);
+      this.server.to(this.Room_dl.id).emit("PlayersOfRoom",this.Room_dl);
+    }
   }
 
   SendToPlayersinRoom(Player : Socket , Rooms){
@@ -78,6 +82,16 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         if ((Player_data.sig === "DOWN") && (Player_data.Key == Player_data.key_check)){
           // console.log("Player will Move Down from id --->" + this.Players.players[Player.id].id);
           this.Players.players[Player.id].y += dy;
+
+          if (this.Players.players[Player.id].y < 0){
+            this.Players.players[Player.id].y = 0;
+          }
+
+          if (this.Players.players[Player.id].y > this.screen_metrics.screen_height - this.Players.players[Player.id].height){
+            this.Players.players[Player.id].y =  this.screen_metrics.screen_height - this.Players.players[Player.id].height;
+            // console.log(this.screen_metrics.screen_width);
+
+          }
           // return;
         }
         else if ((Player_data.sig === "UP") && (Player_data.Key == Player_data.key_check)){
@@ -92,9 +106,14 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         }
         
     }
+
     @Interval(15)
     handleevent(){
-        this.server.emit("UpdatePlayerPos",this.Players.players);
+      for(const id in this.Rooms.rooms){
+        const Room = this.Rooms.rooms[id];
+        this.server.to(Room.id).emit("UpdatePlayerPos",Room);
+      }
+        // this.server.emit("UpdatePlayerPos",this.Players.players);
     }
 }
 

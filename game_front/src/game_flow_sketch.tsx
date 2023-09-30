@@ -21,27 +21,65 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   
   
   socket?.on("PlayersOfRoom",(Backroom : any)=>{
+    console.log("Im -->" + socket.id);
     console.log(Backroom);
-    // if(id_player == Backroom.Player1?.id || id_player == Backroom.Player2?.id){
-    //   const room_id = Backroom.Player1?.room_id;
-    //   if (!Frontroom[room_id]){
-    //     Frontroom[room_id] = {Player1:{Paddle:""},Player2:{Paddle:""}};
-    //     if(Backroom.Player2){
-    //       console.log("Player2 not connected yet!!!");
-    //     }
-    //     if (Backroom.Player1){
-    //       Frontroom[room_id].Player1 = Backroom.Player1;
-    //       Frontroom[room_id].Player1.Paddle = new Paddle(Frontroom[room_id].Player1.x,Frontroom[room_id].Player1.y,Frontroom[room_id].Player1.s_w,Frontroom[room_id].Player1.s_h,p5_ob,"#FFFA37");
-    //     }
-    //     if(Backroom.Player2)
-    //       Frontroom[room_id].Player2 = Backroom.Player2;
-    //       Frontroom[room_id].Player2.Paddle = new Paddle(Frontroom[room_id].Player2.x,Frontroom[room_id].Player2.y,Frontroom[room_id].Player2.s_w,Frontroom[room_id].Player2.s_h,p5_ob,"#FFFA37");
-    //   }
-    // }
-    // for(const id in Frontroom){
-    //   console.log(Frontroom);
-    // }
+    
+    if (!Frontroom[Backroom.id]){
+      console.log("creating room ...!!");
+      Frontroom[Backroom.id] = {Player1:{Paddle:""},Player2:""};
+      if (Backroom.Player1){
+      Frontroom[Backroom.id].Player1 = Backroom.Player1;
+      Frontroom[Backroom.id].Player1.Paddle = new Paddle(Frontroom[Backroom.id].Player1.x,Frontroom[Backroom.id].Player1.y,
+        Frontroom[Backroom.id].Player1.width,Frontroom[Backroom.id].Player1.height,p5_ob,"#FFFA37");
+      }
+      if (Backroom.Player2){
+        Frontroom[Backroom.id].Player2 = Backroom.Player2;
+        Frontroom[Backroom.id].Player2.Paddle = new Paddle(Frontroom[Backroom.id].Player2.x,Frontroom[Backroom.id].Player2.y,
+          Frontroom[Backroom.id].Player2.width,Frontroom[Backroom.id].Player2.height,p5_ob,"#FFFA37");
+      }
+    }
+    else{
+      if (!Frontroom[Backroom.id].Player1 && Backroom.Player1){
+        Frontroom[Backroom.id].Player1 = Backroom.Player1;
+        Frontroom[Backroom.id].Player1.Paddle = new Paddle(Frontroom[Backroom.id].Player1.x,Frontroom[Backroom.id].Player1.y,
+          Frontroom[Backroom.id].Player1.width,Frontroom[Backroom.id].Player1.height,p5_ob,"#FFFA37");
+        }
+        if (!Frontroom[Backroom.id].Player2 && Backroom.Player2){
+          Frontroom[Backroom.id].Player2 = Backroom.Player2;
+          Frontroom[Backroom.id].Player2.Paddle = new Paddle(Frontroom[Backroom.id].Player2.x,Frontroom[Backroom.id].Player2.y,
+            Frontroom[Backroom.id].Player2.width,Frontroom[Backroom.id].Player2.height,p5_ob,"#FFFA37");
+        }
+    }
+
+    for(const id in Frontroom){
+      if (!Backroom?.Player1){
+          console.log("Player 1 disconnected or doesn't exit in room ->" + Backroom?.id);
+          delete Frontroom[id].Player1;
+      }
+      if (!Backroom?.Player2){
+        console.log("Player 2 disconnected or doesn't exist in room ->" + Backroom?.id);
+        delete Frontroom[id].Player2;
+      }
+    }
+  
+  console.log(Frontroom);
+
   });
+      socket?.on("UpdatePlayerPos",(Backroom)=>{
+          // console.log("I got Coords");
+          // console.log(Backroom.Player1?.y);
+          for(const id in Frontroom){
+            if(Frontroom[id].Player1){
+                Frontroom[id].Player1.Paddle.pos.x = Backroom.Player1?.x;
+                Frontroom[id].Player1.Paddle.pos.y = Backroom.Player1?.y;
+            }
+            if (Frontroom[id].Player2){
+              Frontroom[id].Player2.Paddle.pos.x = Backroom.Player2?.x;
+              Frontroom[id].Player2.Paddle.pos.y = Backroom.Player2?.y;
+            }
+          }
+      })
+  // socket?.on("UpdatePlayerPos",)
   // for(const id in backendPlayers) {
   //   const backendplayer = backendPlayers[id];
   //   if(!frontendPlayers[id]){
@@ -51,6 +89,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   //     frontendPlayers[id].pos.y = backendplayer.y;
   //   }
   // }
+
 
   // for(const id in frontendPlayers) {
   //   if(!backendPlayers[id]){
@@ -67,30 +106,6 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   //   // console.log(socket.id);
   //   // console.log(frontendPlayers[socket.id]);
   // })
-  
-  // socket?.on("UpdatePlayerPos",(backend_players)=>{
-    //   console.log("this is you message" + backend_players.msg);
-    //   for(const id in backend_players.Players){
-      //     const backendPlayer = backend_players.Players[id];
-      //     if (socket.id == backendPlayer.id){
-        //       socket?.emit("Player2", {room_id : backendPlayer.room_id});
-        //       console.log("im that player --->" + backendPlayer.id + " in Room [" + backendPlayer.room_id + "]");
-        //       break;
-        //     }
-        //   }
-        //   // for (const id in players){
-          //   //   if (!backend_players[id]){
-            //   //     delete players[id];
-            //   //   }
-            //   // }
-            //   // console.log(players);
-            // })
-            // socket?.on("event-toplayer",(data)=>{
-              //   console.log(data.hello);
-              //   socket?.emit("populate-toserver",{hello:"hello"});
-              // })
-
-
 
       p5_ob.setup = () => {
       p5_ob.frameRate(60);
@@ -102,12 +117,28 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     
     p5_ob.draw = () =>{
     p5_ob.background("#FA9200");
+    // console.log("My Player ID --> "+ id_player);
       // console.log("ID of Player --->" + id_player);
       //   frontendPlayers[id_player]?.update_Player_pos(canvas);
-    // for(const id in Frontroom){
-    //   // const Player = Frontroom[id].Player1;
-    //   console.log(Frontroom[id]);
-    //   // break;
-    // }
+    for(const id in Frontroom){
+      const id_of_player1 = Frontroom[id].Player1?.id;
+      const id_of_player2 = Frontroom[id].Player2?.id;
+      const Player1 = Frontroom[id].Player1?.Paddle;
+      const Player2 = Frontroom[id].Player2?.Paddle;
+      if (id_of_player1 == id_player){
+          Player1?.update_Player_pos(canvas);
+          if (Player2 && id_of_player2 != id_player){
+            Player2.pos.x = screen_width - Player2.paddle_width;
+            Player2?.update_Player_pos(canvas);
+          }
+      }
+      else if (id_of_player2 == id_player){
+          Player2?.update_Player_pos(canvas);
+          if (Player1 && id_of_player1 != id_player){
+            Player1.pos.x = screen_width - Player1.paddle_width;
+            Player1?.update_Player_pos(canvas);
+          }
+      }
+    }
   }
 }

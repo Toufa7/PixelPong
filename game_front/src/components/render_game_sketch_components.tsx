@@ -26,7 +26,7 @@ export const Websocket_render = () =>{
     return () => {
         socket?.off("connect");
         socket?.off("UpdatePlayerPos");
-        socket?.off("event-toplayer");
+        socket?.off("PlayersOfRoom");
     }
 
     },[])

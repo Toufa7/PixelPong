@@ -53,27 +53,58 @@ export class Rooms{
             for(const id in this.rooms){
                 const Room = this.rooms[id];
                 if (Room.client_count < 2){
-                    if (!Room.Player1){
-                        console.log("Player 1 spot is available in Room["+Room.id+"]");
-                        Room.Player1 = Players.players[Player.id];
-                        Room.Player1.room_id = Room.id;
-                        Room.client_count++;
-                        Player.join(Room.id);
-                        break;
-                    }
-                    else if (!Room.Player2){
-                        console.log("Player 2 spot is available in Room["+Room.id+"]");
-                        Room.Player2 = Players.players[Player.id];
-                        Room.Player2.room_id = Room.id;
-                        Room.client_count++;
-                        Player.join(Room.id);
-                        break;
-                    }
+                    if (this.CheckForRooms(Room,Player,Players))
+                        return;
                 }
             }
             
         }
         console.log(this.rooms);
+    }
+
+    CheckForRooms(Room,Player : Socket , Players : Players_Management) : number{
+        if (Room.client_count == 1){
+            if (!Room.Player1){
+                console.log("Player 1 spot is available in Room["+Room.id+"]");
+                Room.Player1 = Players.players[Player.id];
+                Room.Player1.room_id = Room.id;
+                Room.client_count++;
+                Player.join(Room.id);
+                console.log(this.rooms);
+                return (1);
+            }
+            else if (!Room.Player2){
+                console.log("Player 2 spot is available in Room["+Room.id+"]");
+                Room.Player2 = Players.players[Player.id];
+                Room.Player2.room_id = Room.id;
+                Room.client_count++;
+                Player.join(Room.id);
+                console.log(this.rooms);
+                return (1);
+            }
+        }
+        else if (Room.client_count == 0){
+            if (!Room.Player1){
+                console.log("Player 1 spot is available in Room["+Room.id+"]");
+                Room.Player1 = Players.players[Player.id];
+                Room.Player1.room_id = Room.id;
+                Room.client_count++;
+                Player.join(Room.id);
+                console.log(this.rooms);
+                return (1);
+            }
+            else if (!Room.Player2){
+                console.log("Player 2 spot is available in Room["+Room.id+"]");
+                Room.Player2 = Players.players[Player.id];
+                Room.Player2.room_id = Room.id;
+                Room.client_count++;
+                Player.join(Room.id);
+                console.log(this.rooms);
+                return (1);
+            }
+        }
+        console.log(this.rooms);
+        return (0);
     }
 
     CleanRoom(Player : Socket , Players : Players_Management , server : Server){
