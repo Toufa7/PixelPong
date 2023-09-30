@@ -231,7 +231,16 @@ h1
 {
   background-color: #DCC422;
   color: #FA005E;
-  font-size: 1vw;
+  font-size: 1.3vw;
+  height: 60px;
+  width: 300px;
+  transform: translate(20%, 0%);
+}
+
+#letsPlayButton:active
+{
+  box-shadow: 0 5px #666;
+  transform: translateY(8px);
 }
 
 #ClickMe
@@ -240,9 +249,13 @@ h1
   flex-shrink: unset;
   transition: all 0.3s ease;
   width: 20%;
+  top: 50px;
+  right: 40px;
+/* 
   height: 10;
   bottom: 17%;
-  left: 50%;
+  left: 50%; */
+
   /* transform: translate(400%, -20%); */
 }
 

@@ -14,7 +14,7 @@ import profilLogo from './assets/profilLogo.svg'
 import randomLogo from './assets/logo.svg'
 import Cookies from "universal-cookie";
 import {useNavigate} from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 /******************************************/  
 
@@ -82,7 +82,6 @@ const NavBarHeader = () => {
 
 const NavBarFooter = () => {
 	const coo = new Cookies();
-	let userAvatar = profilLogo;
 	const navigate = useNavigate();
   
 	const logout = () => {
@@ -98,21 +97,25 @@ const NavBarFooter = () => {
 		});
 	};
   
-	if (coo.get('jwt') != null) {
-		const token = jwt_decode(coo.get('jwt')) as { image: string };
-		const initialToken = coo.get('jwt');
-		if (coo.get('jwt') !== initialToken) {
-			userAvatar = "../../../backend/uploads/" + token.image;
+	const [userData, setUserData] = useState('my friend');
+	useEffect(() => {
+		async function fetchData () {
+			const cookie = new Cookies();
+			const token = jwt_decode(cookie.get('jwt'));
+			if (token) {
+				const endpoint = "http://localhost:3000/users/" + token.sub;
+				const response = await axios.get(endpoint, { withCredentials: true });
+				setUserData(response.data);
+			}
 		}
-		else
-			userAvatar = token.image;
-	}
-  
+		fetchData();
+	}, []);
+
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<a href="/profil" title="Profile">
-			<img src={userAvatar} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+			<img src={userData.profileImage} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</a>
 		</div>
 		<div className="nav-item">

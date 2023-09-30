@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
 
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, useNavigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
 
 /******************* Includes  *******************/
@@ -111,7 +111,6 @@ const Redirect2FA = () => {
 
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
-	// const navigate = useNavigate();
 	const jwt = cookies.get('jwt');	
 	if (jwt != null) {
 		return (
@@ -124,12 +123,20 @@ const RedirectToSettings = () => {
 			</Routes>
 		</BrowserRouter>
 		);
+		
 	}
 	else
 	{
-		// navigate("/login");
-		<Route path="login" Component={LogingPageComponents}/>
-		console.log("Naadi nta z3ma")
+		console.log("Acces Denied")
+		return (
+			<BrowserRouter>
+				<Routes>
+					<Route path="/"			element={<Navigate to="welcome"/>}/>
+					<Route path="welcome"	element={<Navigate to="welcome"/>}/>
+					<Route path="*"			element={<Navigate to="/login"/>}/>
+				</Routes>
+			</BrowserRouter>
+		);
 	}
 };
 
@@ -140,9 +147,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 	<BrowserRouter>
 		<Routes>
 			{["welcome", "/"].map((idx) => 
-			<Route path={idx} Component={welcomePage} key={""}/>
+			<Route path={idx}	Component={welcomePage} key={""}/>
 			)}  
-			<Route path="login" Component={LogingPageComponents}/>
+			<Route path="login"	Component={LogingPageComponents}/>
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>
