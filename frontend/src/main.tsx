@@ -19,13 +19,20 @@ import axios from 'axios';
 import ChatPage from './Pages/chatPage/chatPage'
 
 
-
 export const LogingPageComponents = () => {
 	return (
 		<>
 			<Stars/>
-			<NavBar/>
 			<LoginPage/>
+		</>
+	);
+}
+
+export const ChatComponents = () => {
+	return (
+		<>
+			{/* <Stars/> */}
+			<ChatPage/>
 		</>
 	);
 }
@@ -110,9 +117,10 @@ const RedirectToSettings = () => {
 		return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="settings" Component={LoginSettingsComponents} />
-				<Route path="home" Component={HomeComponents}/> 
-				<Route path="profil" Component={ProfilComponents}/>
+				<Route path="settings"	Component={LoginSettingsComponents} />
+				<Route path="home"		Component={HomeComponents}/> 
+				<Route path="profil"	Component={ProfilComponents}/>
+				<Route path="chat"		Component={ChatComponents}/>
 			</Routes>
 		</BrowserRouter>
 		);
@@ -135,7 +143,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 			<Route path={idx} Component={welcomePage} key={""}/>
 			)}  
 			<Route path="login" Component={LogingPageComponents}/>
-			<Route path="chat" Component={ChatPage}/> 
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>
