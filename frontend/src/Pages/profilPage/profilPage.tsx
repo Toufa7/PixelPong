@@ -3,6 +3,8 @@ import './profilPage.scss'
 /******************* Packages  *******************/
 import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
+import { useEffect, useState } from "react";
+import axios from "axios";
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
@@ -42,34 +44,49 @@ const States = () => {
     );
 }
 
-const Profil = () => {
-    const coo = new Cookies();
-	let userAvatar = otoufah;
-	if (coo.get('jwt') != null) {
-		const token = jwt_decode(coo.get('jwt')) as { image: string };
-		const initialToken = coo.get('jwt');
-		if (coo.get('jwt') !== initialToken) {
-			userAvatar = "../../../backend/uploads/" + token.image;
+const Profil = () => {axios
+	const [userData, setUserData] = useState('my friend');
+	useEffect(() => {
+		async function fetchData () {
+			const cookie = new Cookies();
+			const token = jwt_decode(cookie.get('jwt'));
+			if (token) {
+				const endpoint = `http://localhost:3000/users/${token.sub}`;
+				const response = await axios.get(endpoint, { withCredentials: true });
+				setUserData(response.data);
+			}
 		}
-		else
-			userAvatar = token.image;
-	}
+		fetchData();
+	}, []);
 
+    const [isFriend, setIsFriend] = useState(false);
     return (
         <div className="profilBox">
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img src={userAvatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img src={userData.profileImage} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
+                        <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>
-                        <span className="playerName" style={{marginBottom: '10px'}}>Omar Toufah</span>
-                    </div>
                         <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="35" max="100"/>
+                    </div>
                         <span style={{textAlign: 'right'}}>78/100</span>
                     </div>
                 </div>
             </div>
+            <div>
+                <a className="nes-btn">Chat</a>
+                <a>
+                    {isFriend ? (
+                        <span  class="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friend</span>
+                    ) : (
+                        <span class="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</span>
+                    )}
+                </a>
+
+            </div>
+
             </div>
         </div>
     );

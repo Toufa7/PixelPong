@@ -16,7 +16,7 @@ import TwoFa from './Pages/2FA/twoFA';
 import Home from './Pages/HomePage/Home';
 import ProfilPage from './Pages/profilPage/profilPage';
 import axios from 'axios';
-
+import ChatPage from './Pages/chatPage/chatPage'
 
 
 export const LogingPageComponents = () => {
@@ -24,6 +24,15 @@ export const LogingPageComponents = () => {
 		<>
 			<Stars/>
 			<LoginPage/>
+		</>
+	);
+}
+
+export const ChatComponents = () => {
+	return (
+		<>
+			{/* <Stars/> */}
+			<ChatPage/>
 		</>
 	);
 }
@@ -109,7 +118,8 @@ const RedirectToSettings = () => {
 			<Routes>
 				<Route path="settings"	Component={LoginSettingsComponents} />
 				<Route path="home"		Component={HomeComponents}/> 
-				<Route path="profil"	Component={ProfilComponents}/> 
+				<Route path="profil"	Component={ProfilComponents}/>
+				<Route path="chat"		Component={ChatComponents}/>
 			</Routes>
 		</BrowserRouter>
 		);
@@ -121,9 +131,9 @@ const RedirectToSettings = () => {
 		return (
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={<Navigate to="welcome"/>}/>
-					<Route path="welcome" element={<Navigate to="welcome"/>}/>
-					<Route path="*" element={<Navigate to="/login"/>}/>
+					<Route path="/"			element={<Navigate to="welcome"/>}/>
+					<Route path="welcome"	element={<Navigate to="welcome"/>}/>
+					<Route path="*"			element={<Navigate to="/login"/>}/>
 				</Routes>
 			</BrowserRouter>
 		);
@@ -137,9 +147,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 	<BrowserRouter>
 		<Routes>
 			{["welcome", "/"].map((idx) => 
-			<Route path={idx} Component={welcomePage} key={""}/>
+			<Route path={idx}	Component={welcomePage} key={""}/>
 			)}  
-			<Route path="login" Component={LogingPageComponents}/>
+			<Route path="login"	Component={LogingPageComponents}/>
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>

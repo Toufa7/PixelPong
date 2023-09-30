@@ -21,7 +21,7 @@ const TopContainer = () => {
 		"Perfect your ping pong skills in our dedicated practice area",
 		"Challenge your friends to exciting ping pong matches."
 	];
-
+	
 	const [userData, setUserData] = useState('my friend');
 	useEffect(() => {
 		async function fetchData () {

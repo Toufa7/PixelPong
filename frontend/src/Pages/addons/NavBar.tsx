@@ -53,7 +53,7 @@ const NavBarBody = () => {
         )}
 		</div>
 		<div className="nav-item">
-			<a href="#" title="Chat">
+			<a href="chat" title="Chat">
 				<img src={msgLogo}/>
 			</a>
 		</div>

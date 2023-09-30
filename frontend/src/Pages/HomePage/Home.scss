@@ -183,13 +183,13 @@ body {
     border-radius: 5px;
 }
 .on-going-matches2 {
-    overflow: scroll;
     .match1 {
         border: 1px solid black;
         height: calc(100%/3);
         display: flex;
         align-items: center;
         margin-bottom: 5px;
+
         .position {
             margin-left: 10px;
             margin-right: 10px;
@@ -209,30 +209,29 @@ body {
     height: calc(100%/3);
     opacity: 0.8;
     flex-direction: row;
-        .match1{
-        height: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .left,
-        .right {
+        .match1 {
+            height: 100%;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-        }
+                .left,
+                .right {
+                    display: flex;
+                    align-items: center;
+                }
 
-        .left img,
-        .right img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
+                .left img,
+                .right img {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 10px;
+                }
 
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+                .center {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
     }   
 }
 
