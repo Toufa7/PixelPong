@@ -13,8 +13,15 @@ import siif from './assets/siif.svg';
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
 import image from './assets/medaille.svg'
+import React from "react";
 /*************************************************/
 
+
+const socket = io('ws://localhost:3000', {
+  path: '/online',
+  withCredentials: true,
+  transports: ['websocket'],
+});
 
 const TopContainer = () => {
 	const textInfos = [
@@ -52,7 +59,7 @@ const TopContainer = () => {
 				<a className="nes-btn" href="#">Let's go</a>
 			  </div>
 			</div>
-		  </div>
+		  </div>r should be able to block other us
 		</div>
 	  </div>
 	);
@@ -178,3 +185,7 @@ function Home() {
 }
 
 export default Home;
+function io(arg0: string, arg1: { path: string; withCredentials: boolean; transports: string[]; }) {
+	throw new Error("Function not implemented.");
+}
+

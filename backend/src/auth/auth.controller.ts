@@ -91,8 +91,6 @@ export class AuthController {
   async setTwoFA(@Req() req) {
     const secret = authenticator.generateSecret();
     const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
-    console.log(otpauth);
-    console.log(secret);
     const qr = await qrcode.toDataURL(otpauth);
     await this.authService.set2Fasecret(req.user.id, secret, otpauth);
     return qr;
@@ -108,7 +106,6 @@ export class AuthController {
   @Put('2fa/enable')
   @UseGuards(JwtGuard)
   async change2FAstatus(@Req() req) {
-    console.log('im here : : :');
     await this.authService.changetwofastatus(req.user.id);
     return { status: true };
   }
@@ -140,7 +137,6 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async validateOTP(@Body() body: inputDto, @Req() req, @Res() res) {
     const user = await this.usersService.findOne(req.user.id);
-    console.log('I Get this => ', body.otp);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
       return res
@@ -159,7 +155,6 @@ export class AuthController {
       const path = join('./uploads/', profileImage);
       await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
-      console.log('image :', profileImage);
       const extension = profileImage.split('.')[1];
       res.setHeader('Content-Type', 'image/' + extension);
       return file.pipe(res);
@@ -173,7 +168,6 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async updateInfo(@Req() req, @Res() res, @Body() body: UserDto) {
     const { username } = body;
-    console.log('intra 42', username);
 
     const user = await this.authService.updateinfo(req.user.id, username);
 

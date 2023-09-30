@@ -7,14 +7,19 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from '../auth/auth.service';
+import { UseGuards } from '@nestjs/common';
+import { WSGuard } from 'src/guards/jwt.guards';
 
 @WebSocketGateway({
-  origin: '*',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Authorization'],
-  credentials: true,
+  cors: {
+    origin: 'ws://localhost:5731',
+    credentials: true,
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Authorization'],
+  },
   path: '/online',
 })
+@UseGuards(WSGuard)
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   constructor(private readonly authservice: AuthService) {}

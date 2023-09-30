@@ -49,6 +49,9 @@ https://github.com/timolins/react-hot-toast/issues/40
 
 https://mycolor.space
 
+
+#333C54
+
 ## DataStructures : 
 
 * Map : 
@@ -80,8 +83,9 @@ https://howtodoinjava.com/typescript/maps/
 
 https://stackoverflow.com/questions/62185425/why-is-console-log-logging-twice-in-react-js
 
-
 ## Typescript :
 
 https://www.youtube.com/@kodebot
+
+https://stackoverflow.com/questions/52051857/nest-schedule-npm-not-working
 
