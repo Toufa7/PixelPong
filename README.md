@@ -12,6 +12,7 @@
     npm install xp.css
     npm i react-draggable
     npm i react-hot-toast
+    npm i react-scroll-horizontal
 
 # Run server:
 
@@ -44,13 +45,21 @@ https://stackoverflow.com/questions/61385454/how-to-post-multiple-axios-requests
 
 https://github.com/timolins/react-hot-toast/issues/40
 
+https://www.youtube.com/watch?v=5j7QLUx277Q
+
+
+## SFX : 
+
+https://pixabay.com/sound-effects/search/chip/
 
 ## Color Palettes :
 
 https://mycolor.space
 
 
-#333C54
+## Routing :
+
+https://stackoverflow.com/questions/70491774/usenavigate-may-be-used-only-in-the-context-of-a-router-component
 
 ## DataStructures : 
 
