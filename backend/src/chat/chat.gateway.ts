@@ -3,7 +3,7 @@ import {Server} from 'socket.io'
 
 @WebSocketGateway({
     cors : {
-        origin: ['http://localhost:3000']
+        origin: ['http://localhost:5173']
     }
 })
 export class ChatGateway{
@@ -26,10 +26,7 @@ export class ChatGateway{
     @SubscribeMessage('newMessage')
     onNewMessage(@MessageBody() body : any){
         console.log(body);
-        this.server.emit('onMessage',{
-            msg: 'new Message',
-            content: body,
-        })
+        this.server.emit('onMessage', body)
 
     }
 }

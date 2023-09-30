@@ -70,7 +70,7 @@ export class AuthController {
       const acces_token = this.authService.fourtwoLogin(req.user);
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
-      console.log('1st time loggin -> ', user.firstlogin);
+      // console.log('1st time loggin -> ', user.firstlogin);
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
       return res.redirect('http://localhost:5173/home');
@@ -140,7 +140,7 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async validateOTP(@Body() body: inputDto, @Req() req, @Res() res) {
     const user = await this.usersService.findOne(req.user.id);
-    console.log('I Get this => ', body.otp);
+    // console.log('I Get this => ', body.otp);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
       return res
@@ -173,7 +173,7 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async updateInfo(@Req() req, @Res() res, @Body() body: UserDto) {
     const { username } = body;
-    console.log('intra 42', username);
+    // console.log('intra 42', username);
 
     const user = await this.authService.updateinfo(req.user.id, username);
 
