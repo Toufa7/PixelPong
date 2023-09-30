@@ -12,7 +12,7 @@ export class FriendrequestDto {
 
   @IsString()
   status: string;
-  
+
   @IsDateString()
   createdAt: string;
 

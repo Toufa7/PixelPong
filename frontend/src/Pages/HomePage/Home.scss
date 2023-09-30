@@ -1,0 +1,261 @@
+body {
+    background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #333C54 !important;
+}
+
+.headerBox {
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+    padding-bottom: 20px;
+    text-align: center;
+    
+    
+    .topLoginBox {
+        margin-top: 60px;
+        width: 1200px;
+        height: 250px;
+        background-color: #C6A86A;
+        border-bottom: 8px solid #000000;
+        border-right: 8px solid #000000;
+        border-left: 8px solid #EBD9F0;
+        border-top: 8px solid #EBD9F0;
+        
+        .loginBoxHeader {
+            font-size:x-large;
+            height: 20%;
+            background-color: #C6A86A;
+            border-bottom: 8px solid #7C6E6E;
+            border-right: 8px solid #7C6E6E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            
+        }
+        
+        .loginBoxOutside {
+            height: 80%;
+            border-top: 8px solid #EBD9F0;
+            border-bottom: 8px solid #7C6E6E;
+            border-right: 8px solid #7C6E6E;
+            & img {
+                height: 10px !important; 
+                width: 10px;
+            }
+          
+          .playRaw {
+            display: flex;
+            height: 100%;
+            
+            .playWith {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .Friend
+            .Practice  {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+            .Friend {
+                background: #8d9c64;
+            }
+            .Practice {
+                background: #5c8b69;
+            }
+          }
+        }
+    }
+}
+
+.top-containers {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    padding-bottom: 20px;
+    column-gap: 85px;
+
+    .loginBox {
+        width: 550px;
+        height: 250px;
+        border-bottom: 8px solid #EBD9F0;
+        border-right: 8px solid #EBD9F0;
+        border-left: 8px solid #000000;
+        border-top: 8px solid #000000;
+
+        .loginBoxHeader {
+            font-size:x-large;
+            height: 20%;
+            border-bottom: 8px solid #7C6E6E;
+            border-right: 8px solid #7C6E6E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loginBoxOutside {
+            height: 80%;
+            border-top: 8px solid #EBD9F0;
+            border-bottom: 8px solid #7C6E6E;
+            border-right: 8px solid #7C6E6E;
+        }
+    }
+
+    .on-going-matches {
+        background-color: #C6716A;
+    }
+    
+    .states {
+        background-color:#D7B3E1;
+    } 
+}    
+
+.bottom-containers {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    column-gap: 85px;
+
+    .loginBox {
+        width: 550px;
+        height: 250px;
+        border: 2px solid black;
+        border-bottom: 8px solid #000000;
+        border-right: 8px solid #000000;
+        border-left: 8px solid #EBD9F0;
+        border-top: 8px solid #EBD9F0;
+
+        .loginBoxHeader {
+            font-size:x-large;
+            height: 20%;
+            border-bottom: 8px solid #7C6E6E;
+            border-right: 8px solid #7C6E6E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loginBoxOutside {
+            height: 80%;
+            border-top: 8px solid #EBD9F0;
+            border-bottom: 8px solid #7C6E6E;
+            border-right: 8px solid #7C6E6E;
+        }
+    }
+    
+    .achievements {
+        background-color: #3B7469;
+    }    
+    .latest-matches2 {
+        overflow: scroll;
+    }
+    .achievements2 {
+        overflow-x: auto;
+        white-space: pre;
+        display: flex;
+      }
+      
+      .achievements2 img {
+        height: 140px;
+        width: 150px;
+        margin: 5px;
+        // border: 2px solid #7C6E6E;
+      }
+
+      .achievements2 img:hover {
+
+          animation: carouselAnimation 2s ease infinite;
+      }
+
+
+
+      
+
+    .latest-matches {
+        background-color: #151315;
+        color: white;
+    }
+}    
+  .statesValues {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+  }
+
+
+.on-going-matches1 {
+    overflow: scroll;
+    padding: 10px;
+    border-radius: 5px;
+}
+.on-going-matches2 {
+    overflow: scroll;
+    .match1 {
+        border: 1px solid black;
+        height: calc(100%/3);
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        .position {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .name {
+            flex: 1;
+        }
+        .wins,
+        .loses,
+        .draw {
+            margin-right: 5px;
+        }
+    }
+}
+.matcheHistory {
+    height: calc(100%/3);
+    opacity: 0.8;
+    flex-direction: row;
+        .match1{
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .left,
+        .right {
+            display: flex;
+            align-items: center;
+        }
+
+        .left img,
+        .right img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }   
+}
+
+
+@keyframes carouselAnimation {
+    0% {
+      transform: translateY(0) rotate(-10deg);
+    }
+    33% {
+      transform: translateY(-5px) rotate(-20deg);
+    }
+    66% {
+      transform: translateY(5px) rotate(10deg);
+    }
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+  }

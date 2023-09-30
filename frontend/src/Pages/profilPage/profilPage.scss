@@ -1,0 +1,117 @@
+@import "../../../node_modules/nes.css/css/nes.min.css";
+
+body {
+    background: linear-gradient(to right, #4F3997, #6E58B6);
+}
+
+.StatesBox {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+
+    .headStatesBox {
+        width: 500px;
+        height: 488px;
+        background-color: cadetblue;
+        border-left: 8px solid #EBD9F0;
+        border-right: 8px solid #000000;
+        border-bottom: 8px solid #EBD9F0;
+
+        .statesBoxHeader {
+            height: 10%;
+            background-color: cadetblue;
+            border-bottom: 8px solid #7C6E6E;
+            border-left: 8px solid black;
+            border-top: 8px solid #EBD9F0;
+        }
+
+        
+        .statesBoxContent {
+            height: 90%;
+            border-top: 8px solid #EBD9F0;
+            border-left: 8px solid black;
+            border-bottom: 8px solid black;
+            color: white;
+            & div {
+                    margin: 20px;
+                    justify-content: space-between;
+                    display: flex;
+                .key {
+                    text-align: left;
+                }
+                .value {
+                    text-align: right;
+                }
+            }
+        }
+
+    }
+}
+
+
+.achivementsBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    
+    .fullAchivementsBox {
+        width: 652px;
+        height: 302px;
+        background: #BFB3E1;
+        border-bottom: 8px solid #7C6E6E;
+        border-left: 8px solid #7C6E6E;
+        border-right: 8px solid #EBD9F0;
+        
+        .headAchivementsBox {
+            height: 20%;
+            background-color: #BFB3E1;
+            border-bottom: 8px solid #7C6E6E;
+            border-left: 8px solid black;
+            border-top: 8px solid #EBD9F0;
+            color: #694694;
+        }
+
+        .contentAchivementsBox {
+            height: 80%;
+            border-top: 8px solid #EBD9F0;
+            border-left: 8px solid black;
+            border-bottom: 8px solid black;
+            overflow: scroll;
+            
+            .ico {
+                margin-left: 10px;
+                display: flex;
+                flex-direction: column;
+                width: 40px;
+                height: 58px; 
+                border: 2px solid red;
+            }
+            
+        }
+    }
+}
+
+.profilBox {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    .profilRectangle {
+        width: 655px;
+        height: 216px;
+        background-color: #F0A814CC;
+
+        .avatar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .left {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+}
