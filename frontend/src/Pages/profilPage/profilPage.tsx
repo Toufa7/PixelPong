@@ -52,14 +52,14 @@ const Profil = () => {
 			const cookie = new Cookies();
 			const token = jwt_decode(cookie.get('jwt'));
 			if (token) {
-				const endpoint = `http://localhost:3000/users/${token.sub}`;
+				const endpoint = `http://localhost:3000/users/${token.id}`;
 				const response = await axios.get(endpoint, { withCredentials: true });
+                console.log("Data -> ", response)
 				setUserData(response.data);
 			}
 		}
 		fetchData();
 	}, []);
-    console.log("Data -> ", userData.profileImage)
     const [isFriend, setIsFriend] = useState(false);
     return (
         <div className="profilBox">
@@ -80,9 +80,9 @@ const Profil = () => {
                 <a className="nes-btn">Chat</a>
                 <a>
                     {isFriend ? (
-                        <span  class="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friend</span>
+                        <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friend</a>
                     ) : (
-                        <span class="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</span>
+                        <a className="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</a>
                     )}
                 </a>
                 </div>

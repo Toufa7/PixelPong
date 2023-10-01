@@ -16,9 +16,6 @@ import { useContext, useEffect } from "react";
 import { socketContext } from "../socket-client";
 /**************************************/
 
-// const userInfo = () => {loginBoxInside
-// userInfo();
-
 
 const Buttons = () => {
  return (
