@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
@@ -58,7 +59,7 @@ const Profil = () => {
 		}
 		fetchData();
 	}, []);
-
+    console.log("Data -> ", userData.profileImage)
     const [isFriend, setIsFriend] = useState(false);
     return (
         <div className="profilBox">
@@ -113,16 +114,16 @@ const Achivements = () => {
                                 <span>{awards[0]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px',  marginRight: '20px', marginLeft: '5px'}} src={savage} />
-                                <span>{awards[1]}</span>
+                            <img style={{width: '70px', height: '70px', marginRight: '20px', opacity: '0.35', marginLeft: '5px'}} src={savage} />
+                            <span style={{opacity: '0.35'}}>{awards[1]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px',  marginRight: '20px', marginLeft: '5px'}} src={siif} />
-                                <span>{awards[2]}</span>
+                            <img style={{width: '70px', height: '70px', marginRight: '20px', opacity: '0.35', marginLeft: '5px'}} src={siif} />
+                            <span style={{opacity: '0.35'}}>{awards[2]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px',  marginTop: '20px',  marginRight: '20px', marginLeft: '5px'}} src={endpoint} />
-                                <span>{awards[2]}</span>
+                            <img style={{width: '70px', height: '70px',  marginTop: '20px', opacity: '0.35', marginRight: '20px', marginLeft: '5px'}} src={endpoint} />
+                                <span style={{opacity: '0.35'}}>{awards[2]}</span>
                         </div>
                         <div>
                             <img style={{width: '70px', transform: 'rotate(45deg)', height: '70px',  marginTop: '20px',  marginRight: '20px', marginLeft: '5px'}} src={key} />
