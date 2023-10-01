@@ -12,8 +12,8 @@ datasource db {
 
 // i want my user to have name username email token and can add friends block freinds delete friends and this user have a level and status onilne or offline
 model User {
-  id        String      @id @default(uuid())
-  // name      String
+  //User account
+  id        String      @id @default(uuid()) @unique
   username  String?   @unique
   email     String?   @unique
   token     String?   @unique
@@ -23,8 +23,12 @@ model User {
   twofa       Boolean? @default(false)
   stats     Stats[]  @relation("stats")
   status    UserStatus?
+
+  // game
   achievements Achievements[] @relation("achievements")
   matchhistory MatchHistory[] @relation("matchhistory")
+
+  //relations
   friends   User [] @relation("friends")
   friendsby       User[] @relation("friends")
   blocked      User[]   @relation("block")
@@ -32,9 +36,40 @@ model User {
   firstlogin Boolean @default(true)
   friendreqsent   Friendrequest[]   @relation("friendreqsent")
   friendreqreceived   Friendrequest[]   @relation("friendreqreceived")
+  //chat
+  DMsChat     DMsChat[]     @relation("DMsChat")
+  RecieverDMs  DMsChat[] @relation("ReciverDMsChat")
+  GroupChat   GroupChat[] @relation("GroupChat")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model DMsChat {
+  id        String      @id @default(uuid()) @unique
+  SenderId  String
+  Sender    User     @relation("DMsChat", fields: [SenderId], references: [id])
+  ReceiverId String
+  Receiver  User      @relation("ReciverDMsChat", fields: [ReceiverId], references: [id])
+  Messages String
+}
+
+model GroupChat{
+    id        String      @id @default(uuid()) @unique
+    SenderId  String
+    Sender    User     @relation("GroupChat", fields: [SenderId], references: [id])
+    Messages String
+    GroupType  GroupType
+    Password String?
+
+}
+
+
+enum GroupType{
+  PUBLIC
+  PRIVATE
+  PROTECTED
+}
+
 
 
 
