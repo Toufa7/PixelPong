@@ -12,6 +12,8 @@ type coordinates = {
 }
 
 
+//h----------------------------- Paddle --------------------------------
+
 export class Paddle {
 
     public  dy : number = 10;
@@ -113,4 +115,4 @@ export class Paddle {
         this.draw_paddle(this.color);
       }
       
-  }
+    }

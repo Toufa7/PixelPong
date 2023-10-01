@@ -31,7 +31,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           console.log("---------------CONNECTION SECTION ------------------")
           console.log("new Player connected " + Player.id);
           this.Players.AddPlayer(Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95);
-          this.Rooms.SetupRooms(Player,this.Players);
+          this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
           console.log("---------------------CCCoooCCC--------------------------------\n")
           // this.server.to(Player.id).emit("UpdatePlayerPos",this.Players.players);
           // console.log(this.Rooms);
@@ -51,7 +51,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         break;
       }
     }
-    this.Rooms.CleanRoom(Player,this.Players,this.server);
+    this.Rooms.CleanRoom(Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
     // console.log("this room + [" + JSON.stringify(this.Room_dl) + "] is affected ---> Player " + Player.id);
     if (!this.Room_dl.Player1 || !this.Room_dl.Player2){
       console.log("ENTERED !!");
@@ -77,7 +77,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   // }
 
   @SubscribeMessage("Player_movement")
-    HadnleMovement(@MessageBody() Player_data , @ConnectedSocket() Player : Socket){
+    HandleMovement(@MessageBody() Player_data , @ConnectedSocket() Player : Socket){
       let dy : number = 10;
         if ((Player_data.sig === "DOWN") && (Player_data.Key == Player_data.key_check)){
           // console.log("Player will Move Down from id --->" + this.Players.players[Player.id].id);
@@ -107,11 +107,63 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         
     }
 
+    @SubscribeMessage("Ball_movement")
+      HandleBallMovement(@MessageBody() Ball_data, @ConnectedSocket() Player : Socket){
+        this.check_collision_Ball(Ball_data,Player);
+    }
+
+    check_collision_Ball(Ball_data,Player : Socket){
+      let top = 0;
+      let left = 0;
+      let bottom = 0;
+      let right = 0;
+
+
+      for(const id in this.Rooms.rooms){
+          const Room = this.Rooms.rooms[id];
+          if (Room.Player1.id == Player.id){
+              top = (Room.GameBall.y - Room.GameBall.diameter / 2);
+              bottom = (Room.GameBall.y + Room.GameBall.diameter / 2);
+              left = (Room.GameBall.x - Room.GameBall.diameter / 2);
+              right = (Room.GameBall.x + Room.GameBall.diameter / 2);
+
+            if(top < 0){
+              Room.GameBall.x = Room.GameBall.x + 8;
+              Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+            }
+            if (bottom > this.screen_metrics.screen_height){
+              Room.GameBall.x = Room.GameBall.x - 8;
+              Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+            }
+            // if (Ball_data?.did_collide_player){
+            //   console.log("it collided");
+            //   Room.GameBall.x = Ball_data.pos_x;
+            //   Room.GameBall.y = Ball_data.pos_y;
+            //   Room.GameBall.ball_speed_x = Ball_data.ball_speed_x;
+            //   Room.GameBall.ball_speed_y = Ball_data.ball_speed_y;
+            //   // Ball_data.did_collide_player = false;
+            // }
+            if (right > this.screen_metrics.screen_width){
+              Room.GameBall.y = Room.GameBall.y - 8;
+              Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+            }
+            if (left < 0){
+              Room.GameBall.y = Room.GameBall.y - 8;
+              Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+            }
+            Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
+            Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+            break;
+        }
+      }
+    }
+
     @Interval(15)
     handleevent(){
       for(const id in this.Rooms.rooms){
         const Room = this.Rooms.rooms[id];
         this.server.to(Room.id).emit("UpdatePlayerPos",Room);
+        // this.server.to(Room.id).emit("UpdateBallPos",Room);
       }
         // this.server.emit("UpdatePlayerPos",this.Players.players);
     }

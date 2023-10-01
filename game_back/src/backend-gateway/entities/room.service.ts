@@ -3,6 +3,7 @@ import { PlayerDto } from "../dto/player_ft.dto";
 import { Server, Socket } from "socket.io";
 import { RoomDto } from "../dto/room.dto";
 import { Players_Management } from "./players-management.service";
+import { BallDto } from "../dto/ball.dto";
 
 @Injectable()
 export class Rooms{
@@ -32,7 +33,7 @@ export class Rooms{
         this.rooms[this.generate_Random_id(5)] = new RoomDto(0,this.generate_Random_id(5));
     }
 
-    SetupRooms(Player : Socket , Players : Players_Management){
+    SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_height){
         if (!this.is_Rooms_Available()){
             console.log("there is no room available or there are no rooms");
             this.create_room_for_player();
@@ -42,6 +43,7 @@ export class Rooms{
                     console.log("Room enterd ["+Room.id+"]")
                     Room.Player1 = Players.players[Player.id];
                     Room.Player1.room_id = Room.id;
+                    Room.GameBall = new BallDto(-10,10,24,screen_width / 2 , screen_height / 2);
                     Room.client_count++;
                     Player.join(Room.id);
                     break;
@@ -107,7 +109,7 @@ export class Rooms{
         return (0);
     }
 
-    CleanRoom(Player : Socket , Players : Players_Management , server : Server){
+    CleanRoom(Player : Socket , Players : Players_Management , server : Server,screen_width,screen_height){
         let room_id;
         console.log("\n--------------DISCONECTION------------------")
         console.log("Player disconnected " + Player.id);
@@ -119,6 +121,7 @@ export class Rooms{
             Room.client_count--;
             Player.leave(Room.id);
             delete Room.Player1;
+            Room.GameBall = new BallDto(-10,10,24,screen_width / 2 , screen_height / 2);
                 break;
         }
         else{
@@ -127,6 +130,7 @@ export class Rooms{
             Room.client_count--;
             Player.leave(Room.id);
             delete Room.Player2;
+            Room.GameBall = new BallDto(-10,10,24,screen_width / 2 , screen_height / 2);
             break;
             }
         }
