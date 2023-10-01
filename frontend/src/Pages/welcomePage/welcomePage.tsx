@@ -9,7 +9,7 @@ import light from './assets/light.svg';
 import clickImg from './assets/clickMe.gif';
 import sprinkle from './assets/sprinkle.svg';
 import sparkles from './assets/sparkles.gif';
-import '../../../node_modules/nes.css/css/nes.min.css';
+import 'nes.css/css/nes.min.css';
 import { useNavigate } from 'react-router-dom';
 import letsPlay from './assets/success.mp3';
 

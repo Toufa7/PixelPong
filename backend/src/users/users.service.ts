@@ -160,14 +160,14 @@ export class UsersService {
         },
       });
   }
-  async updatestatus(user: User) {
+  async updatestatus(user, status) {
     await this.prisma.user.update({
       where: {
         id: user.id,
       },
       data: {
         firstlogin: false,
-        status: UserStatus.ONLINE,
+        status: status,
       },
     });
   }

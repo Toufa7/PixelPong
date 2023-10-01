@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       //     throw new Error("token is baned");
       // console.log('what is going on  : ', payload);
       return {
-        id: payload.sub,
+        id: payload.id,
         username: payload.username,
         email: payload.email,
         image: payload.profileImage,
