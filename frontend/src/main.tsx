@@ -16,12 +16,8 @@ import TwoFa from './Pages/2FA/twoFA';
 import Home from './Pages/HomePage/Home';
 import ProfilPage from './Pages/profilPage/profilPage';
 import axios from 'axios';
-<<<<<<< HEAD
-import { socket, socketContext } from './Pages/socket-client';
-
-=======
 import ChatPage from './Pages/chatPage/chatPage'
->>>>>>> refs/remotes/origin/master
+import { socket, socketContext } from './Pages/socket-client';
 
 
 export const LogingPageComponents = () => {
