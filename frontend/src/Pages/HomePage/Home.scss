@@ -181,8 +181,11 @@ body {
 .on-going-matches1 {
     padding: 10px;
     border-radius: 5px;
+
 }
 .on-going-matches2 {
+    overflow: scroll;
+    scroll-behavior: smooth;
     .match1 {
         border: 1px solid black;
         height: calc(100%/3);

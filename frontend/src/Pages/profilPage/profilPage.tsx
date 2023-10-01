@@ -44,7 +44,7 @@ const States = () => {
     );
 }
 
-const Profil = () => {axios
+const Profil = () => {
 	const [userData, setUserData] = useState('my friend');
 	useEffect(() => {
 		async function fetchData () {
@@ -75,7 +75,7 @@ const Profil = () => {axios
                     </div>
                 </div>
             </div>
-            <div>
+            <div className='buttonat'>
                 <a className="nes-btn">Chat</a>
                 <a>
                     {isFriend ? (
@@ -84,6 +84,8 @@ const Profil = () => {axios
                         <span class="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</span>
                     )}
                 </a>
+                </div>
+            <div>
 
             </div>
 
@@ -100,7 +102,7 @@ const Achivements = () => {
         "Defeating a skilled opponent",
     ]
 
-    return (
+    return (    
         <div className="achivementsBox">
             <div className="fullAchivementsBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
@@ -137,10 +139,14 @@ const Achivements = () => {
 function ProfilPage() {
   return (
     <>
-        <Profil/>
-        <States/>
-        <Achivements/>
-    </>
+        <div className="topContainer">
+            <Profil/>
+            <States/>
+        </div>
+        <div className="downContainer">
+            <Achivements/>
+        </div>
+        </>
   )
 }
 
