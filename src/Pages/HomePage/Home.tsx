@@ -17,17 +17,14 @@ import React from "react";
 /*************************************************/
 
 
-const socket = io('ws://localhost:3000', {
-  path: '/online',
-  withCredentials: true,
-  transports: ['websocket'],
-});
 
 const TopContainer = () => {
 	const textInfos = [
 		"Perfect your ping pong skills in our dedicated practice area",
 		"Challenge your friends to exciting ping pong matches."
 	];
+
+	
 
 	const [userData, setUserData] = useState('my friend');
 	  
@@ -36,7 +33,7 @@ const TopContainer = () => {
 			const cookie = new Cookies();
 			const token = jwt_decode(cookie.get('jwt'));
 			if (token) {
-				const endpoint = "http://localhost:3000/users/" + token.sub;
+				const endpoint = "http://localhost:3000/users/" + token.id;
 				const response = await axios.get(endpoint, { withCredentials: true });
 				setUserData(response.data);
 			}
@@ -139,7 +136,7 @@ const BottomRight= () => {
 			const cookie = new Cookies();
 			const token = jwt_decode(cookie.get('jwt'));
 			if (token) {
-				const endpoint = 'http://localhost:3000/users/' + token.sub;
+				const endpoint = 'http://localhost:3000/users/' + token.id;
 				const response = await axios.get(endpoint, { withCredentials: true });
 				setUserData(response.data);
 			}

@@ -8,44 +8,66 @@ import {
 import { Server, Socket } from 'socket.io';
 import { AuthService } from '../auth/auth.service';
 import { UseGuards } from '@nestjs/common';
-import { WSGuard } from 'src/guards/jwt.guards';
+import { JwtGuard } from 'src/guards/jwt.guards';
+import { Client } from 'socket.io/dist/client';
+import { UsersService } from 'src/users/users.service';
+import { UserStatus } from '@prisma/client';
+// import { WSGuard } from 'src/guards/jwt.guards';
+import { decode } from 'jsonwebtoken';
+
 
 @WebSocketGateway({
   cors: {
-    origin: 'ws://localhost:5731',
+    origin: ['localhost:5173', 'localhost:3000'],
     credentials: true,
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Authorization'],
   },
-  path: '/online',
+  namespace: 'user',
 })
-@UseGuards(WSGuard)
+@UseGuards(JwtGuard)
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
-  constructor(private readonly authservice: AuthService) {}
+  constructor(private readonly authservice: AuthService,
+    private readonly userservice: UsersService) {}
+  connectedUsers: Map<string, Socket> = new Map();
 
-  connectedUsers: Map<string, Socket>;
-  @SubscribeMessage('connected')
+  // onModuleInit() {
+  //   this.server.on('connection', (socket) => {
+  //     console.log('id', socket.id);
+  //     console.log('connected to socket');
+  //   });
+  // }
   async handleConnection(client: Socket) {
+    const jwt = await this.getUser(client);
+    console.log('client connected -->' + client.id, '  ', jwt);
+    this.server.emit('chekcout', { msg: 'hello' });
     console.log('im here if you see this');
-    const user = await this.getUser(client);
-    if (user) this.connectedUsers.set(user.id, client);
+    if (jwt) {
+      const user = decode(jwt);
+
+      this.connectedUsers.set(client.id, client);
+      const status = UserStatus.ONLINE
+      this.userservice.updatestatus(user, status)
+    }
   }
 
-  @SubscribeMessage('disconnect')
-  handleDisconnect(client: Socket) {
-    this.connectedUsers.forEach((value, key) => {
-      if (value === client) {
-        this.connectedUsers.delete(key);
+  async handleDisconnect(client: Socket) {
+    console.log('A client disconnected');
+    if (this.connectedUsers.has(client.id)) {
+      const jwt = await this.getUser(client);
+      if (!jwt) {
+        this.connectedUsers.delete(client.id);
       }
-    });
+    }
   }
   getUser(client: Socket) {
-    const session = client.handshake.auth.session;
-
-    if (session && session.user) {
-      // If the user is stored in the session, return it
-      return session.user;
+    const session = client.handshake.headers.cookie;
+    if (session) {
+      const jwt = session.split('=')[1];
+      console.log('session ,', jwt);
+      if (session && jwt) {
+        return jwt;
+      }
     }
+    return null;
   }
 }

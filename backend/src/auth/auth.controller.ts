@@ -21,7 +21,7 @@ import { UsersService } from 'src/users/users.service';
 import { TokenBlacklistService } from './token-blacklist.service';
 import { authenticator } from 'otplib';
 import { diskStorage } from 'multer';
-import { User } from '@prisma/client';
+import { User, UserStatus } from '@prisma/client';
 import { createReadStream, promises as fsPromises } from 'fs';
 // import {fs} from 'extfs';
 
@@ -180,8 +180,9 @@ export class AuthController {
   @Post('logout')
   @UseGuards(JwtGuard)
   async logout(@Req() req, @Res() res) {
-    this.bantoken.addtokentoblacklist(req.cookies.jwt);
     res.clearCookie('jwt');
+    const status = UserStatus.OFFLINE;
+    await this.usersService.updatestatus(req.user, status);
     return res.status(200).json({ message: 'User logged out' });
   }
 }

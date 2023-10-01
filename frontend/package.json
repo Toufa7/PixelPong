@@ -19,12 +19,14 @@
     "react": "^18.2.0",
     "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
-    "react-draggable": "^4.4.5",
+    "react-draggable": "^4.4.6",
     "react-hot-toast": "^2.4.1",
     "react-notification": "^6.8.5",
     "react-notifications": "^1.7.4",
     "react-router-dom": "^6.16.0",
     "rpgui": "^1.0.3",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "typescript-cookie": "^1.0.6",
     "xp.css": "^0.2.6"
   },
@@ -37,7 +39,7 @@
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "sass": "^1.67.0",
+    "sass": "^1.68.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }

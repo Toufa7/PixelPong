@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import { Cookies } from "react-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import io from "socket.io-client";
 /******************* Includes  *******************/
 import logo from '../addons/assets/ping-pong-ball.svg';
 import medaille from './assets/medaille.svg';
@@ -28,16 +29,16 @@ const TopContainer = () => {
 			const cookie = new Cookies();
 			const token = jwt_decode(cookie.get('jwt'));
 			if (token) {
-				const endpoint = "http://localhost:3000/users/" + token.sub;
+				const endpoint = "http://localhost:3000/users/" + token.id;
 				const response = await axios.get(endpoint, { withCredentials: true });
 				setUserData(response.data);
 			}
 		}
 		fetchData();
 	}, []);
-
+	
 	return (
-	  <div className="headerBox">
+		<div className="headerBox">
 		<div className="topLoginBox">
 		  <div className="loginBoxHeader">Welcome {userData.username}</div>
 		  <div className="loginBoxOutside">
@@ -55,8 +56,7 @@ const TopContainer = () => {
 		</div>
 	  </div>
 	);
-  };
-
+};
 const TopLeft = () => {
 	return (
 	<div className="loginBox on-going-matches">
@@ -160,7 +160,7 @@ const BottomRight= () => {
 			const cookie = new Cookies();
 			const token = jwt_decode(cookie.get('jwt'));
 			if (token) {
-				const endpoint = 'http://localhost:3000/users/' + token.sub;
+				const endpoint = 'http://localhost:3000/users/' + token.id;
 				const response = await axios.get(endpoint, { withCredentials: true });
 				setUserData(response.data);
 			}

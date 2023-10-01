@@ -16,15 +16,18 @@ import TwoFa from './Pages/2FA/twoFA';
 import Home from './Pages/HomePage/Home';
 import ProfilPage from './Pages/profilPage/profilPage';
 import axios from 'axios';
+import { socket, socketContext } from './Pages/socket-client';
 
 
 
 export const LogingPageComponents = () => {
 	return (
 		<>
+			<socketContext.Provider value={socket}>
 			<Stars/>
 			<NavBar/>
 			<LoginPage/>
+			</socketContext.Provider>
 		</>
 	);
 }
@@ -61,9 +64,11 @@ const twoFAComponents = () => {
 const HomeComponents = () => {
 	return (
 		<>
+		<socketContext.Provider value={socket}>
 			<Stars/>
 			<NavBar/>
 			<Home/>
+			</socketContext.Provider>
 		</>
 	);
 }
