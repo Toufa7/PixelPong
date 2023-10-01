@@ -12,8 +12,8 @@ body {
     
     .topLoginBox {
         margin-top: 60px;
-        width: 1200px;
-        height: 250px;
+        width: 1280px;
+        height: 280px;
         background-color: #C6A86A;
         border-bottom: 8px solid #000000;
         border-right: 8px solid #000000;
@@ -29,8 +29,6 @@ body {
             display: flex;
             justify-content: center;
             align-items: center;
-            
-            
         }
         
         .loginBoxOutside {
@@ -78,8 +76,8 @@ body {
     column-gap: 85px;
 
     .loginBox {
-        width: 550px;
-        height: 250px;
+        width: 600px;
+        height: 280px;
         border-bottom: 8px solid #EBD9F0;
         border-right: 8px solid #EBD9F0;
         border-left: 8px solid #000000;
@@ -119,8 +117,8 @@ body {
     column-gap: 85px;
 
     .loginBox {
-        width: 550px;
-        height: 250px;
+        width: 600px;
+        height: 280px;
         border: 2px solid black;
         border-bottom: 8px solid #000000;
         border-right: 8px solid #000000;
@@ -150,28 +148,22 @@ body {
     }    
     .latest-matches2 {
         overflow: scroll;
+        scroll-behavior: smooth;
     }
     .achievements2 {
         overflow-x: auto;
         white-space: pre;
         display: flex;
-      }
-      
-      .achievements2 img {
-        height: 140px;
-        width: 150px;
-        margin: 5px;
-        // border: 2px solid #7C6E6E;
-      }
-
-      .achievements2 img:hover {
-
-          animation: carouselAnimation 2s ease infinite;
-      }
-
-
-
-      
+        img {
+            height: 140px;
+            width: 150px;
+            margin: 5px;
+            margin-top: 25px;
+            &:hover {
+                animation: carouselAnimation 2s ease infinite;
+            }
+        }
+    }
 
     .latest-matches {
         background-color: #151315;
@@ -187,18 +179,17 @@ body {
 
 
 .on-going-matches1 {
-    overflow: scroll;
     padding: 10px;
     border-radius: 5px;
 }
 .on-going-matches2 {
-    overflow: scroll;
     .match1 {
         border: 1px solid black;
         height: calc(100%/3);
         display: flex;
         align-items: center;
         margin-bottom: 5px;
+
         .position {
             margin-left: 10px;
             margin-right: 10px;
@@ -206,10 +197,11 @@ body {
         .name {
             flex: 1;
         }
-        .wins,
+        .wins ,
         .loses,
         .draw {
-            margin-right: 5px;
+            flex-flow: column;
+            margin-right: 15px;
         }
     }
 }
@@ -217,30 +209,29 @@ body {
     height: calc(100%/3);
     opacity: 0.8;
     flex-direction: row;
-        .match1{
-        height: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .left,
-        .right {
+        .match1 {
+            height: 100%;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-        }
+                .left,
+                .right {
+                    display: flex;
+                    align-items: center;
+                }
 
-        .left img,
-        .right img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
+                .left img,
+                .right img {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 10px;
+                }
 
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+                .center {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
     }   
 }
 

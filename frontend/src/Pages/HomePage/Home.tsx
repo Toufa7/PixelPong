@@ -5,9 +5,12 @@ import jwt_decode from 'jwt-decode';
 import { Cookies } from "react-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
+<<<<<<< HEAD
 import io from "socket.io-client";
+=======
+import HorizontalScroll from 'react-scroll-horizontal'
+>>>>>>> refs/remotes/origin/master
 /******************* Includes  *******************/
-import logo from '../addons/assets/ping-pong-ball.svg';
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
 import siif from './assets/siif.svg';
@@ -22,7 +25,7 @@ const TopContainer = () => {
 		"Perfect your ping pong skills in our dedicated practice area",
 		"Challenge your friends to exciting ping pong matches."
 	];
-
+	
 	const [userData, setUserData] = useState('my friend');
 	useEffect(() => {
 		async function fetchData () {
@@ -45,11 +48,11 @@ const TopContainer = () => {
 			<div className="playRaw">
 			  <div className="playWith Friend">
 					<p>{textInfos[0]}</p>
-					<a className="nes-btn" href="#">Vamos</a>
+					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
 			  </div>
 			  <div className="playWith Practice">
 					<p>{textInfos[1]}</p>
-					<a className="nes-btn" href="#">Vamos</a>
+					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
 			  </div>
 			</div>
 		  </div>
@@ -122,19 +125,21 @@ const BottomLeft = () => {
 		<div className="loginBox achievements">
 			<div className="loginBoxHeader achievements1">ACHIEVEMENTS</div>
 			<div className="loginBoxOutside achievements2">
+			<HorizontalScroll>
 				<img src={medaille}/>
 				<img src={savage}/>
 				<img src={endpoint}/>
 				<img src={key}/>
 				<img src={siif}/>
 				<img src={medaille}/>
+			</HorizontalScroll>
 			</div>
 		</div>
 	);
 }
 
 
-const MatchResult = (props: {player1 : string, player2 : string, color : string, rslt1 : number, rslt2 : number }) => {
+const MatchResult = (props: {player1 : string,  player2 : string, color : string, rslt1 : number, rslt2 : number }) => {
   return (
 	<div className="match1" style={{background: props.color, border: '1px solid black'}}>
 	  <div className="left">
@@ -146,7 +151,7 @@ const MatchResult = (props: {player1 : string, player2 : string, color : string,
 	  </div>
 	  <div className="right">
 		<span>{props.player2}</span>
-		<img src={logo} style={{width: '40px', height: '40px', marginLeft: '10px'}} className="player2"/>
+		<img src={endpoint} style={{width: '40px', height: '40px', marginLeft: '10px'}} className="player2"/>
 	  </div>
 	</div>
   );
@@ -167,7 +172,7 @@ const BottomRight= () => {
 		}
 		fetchData();
 	}, []);
-
+	console.log("Image ", userData);
 	const win = "#ff7670";
 	const lose = "#009e73";
 	const draw = "#178ee1";
@@ -178,8 +183,8 @@ const BottomRight= () => {
 			<div className="matcheHistory">
 				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={win}/>
 				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={lose}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={win}/>
 				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={draw}/>
+				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={win}/>
 				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={lose}/>
 				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={draw}/>
 				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={lose}/>
@@ -193,7 +198,7 @@ const BottomRight= () => {
 
 function Home() {
 	return (
-		<div>
+		<div style={{height: '100vh'}}>
 			<TopContainer/>
 			<div className="top-containers">
 			<TopLeft/>

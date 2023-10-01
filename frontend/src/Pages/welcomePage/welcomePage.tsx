@@ -11,11 +11,14 @@ import sprinkle from './assets/sprinkle.svg';
 import sparkles from './assets/sparkles.gif';
 import 'nes.css/css/nes.min.css';
 import { useNavigate } from 'react-router-dom';
-
-
+import letsPlay from './assets/success.mp3';
 
 function welcomePage() {
-  const navigate = useNavigate('');
+  function playing () {
+    new Audio(letsPlay).play();
+  }
+
+  const navigate = useNavigate();
   return (
     <div>
       <div id="pageContainer">
@@ -48,9 +51,8 @@ function welcomePage() {
               <img id='lowerMovingSparkle' src={sparkles} alt="movingparkle" width={86} height={76}></img>
               <img id='lowerRightSprinkle'src={sprinkle} alt="sprinkle" width={39} height={46.8}></img>
             </div>
-
             <div id="playButton">
-              <button id="letsPlayButton" type="button" className="nes-btn is-warning" onClick={() => {navigate('/login');}}>LET'S PLAY</button>
+              <button id="letsPlayButton" type="button" onMouseDown={playing} className="nes-btn is-warning" onClick={() => {navigate('/login');}}>LET'S PLAY</button>
               <img id='ClickMe' alt="clickImgGif" src={clickImg} width={94} height={90}></img>
             </div>
 

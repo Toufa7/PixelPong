@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import "./LoginSettings.scss"
 
@@ -14,11 +13,13 @@ import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 import NavBar from "../addons/NavBar";
+import { Router, useNavigate } from "react-router-dom";
 
 const retrieveCheckSendData = () => {
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
+    const navigate = useNavigate();
 
     if (avatar && usernameCheck.test(nicknameInput)) {
         const data = new FormData();
@@ -36,7 +37,15 @@ const retrieveCheckSendData = () => {
                 error: "An error occurred",
             }
         );
-            
+        <BrowserRouter>
+            <Routes>
+                navigate("/home");
+            </Routes>
+		</BrowserRouter>
+    }
+    else if (!avatar && nicknameInput.length == 0)
+    {
+        // TODO: Need to show the dialog
     }
     else if (!usernameCheck.test(nicknameInput))
         toast.error("Invalid Username");
@@ -102,6 +111,7 @@ export default function LoginSettings() {
       };
       
       return (
+        <div style={{height: '100vh'}}>
           <div className="container">
             <div className="settingsBox">
                 <div className="header">Settings</div>
@@ -130,7 +140,7 @@ export default function LoginSettings() {
                         <div className="startContainer">
                             <Toasts/>
                             <section>
-                                <button onClick={dialogPlease} type="button" className="nes-btn">Start</button>
+                                <button style={{width: '100px'}} onClick={dialogPlease} type="button" className="nes-btn">Start</button>
                                 <dialog className="nes-dialog" id="dialog-default">
                                     <form method="dialog">
                                         <p className="title">Warning</p>
@@ -146,6 +156,7 @@ export default function LoginSettings() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

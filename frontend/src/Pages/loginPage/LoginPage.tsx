@@ -29,7 +29,7 @@ const Buttons = () => {
     </div>
     <div className="text-OR">-- OR --</div>
     <div className="b">
-        <a className="nes-btn intra" href="http://localhost:3000/auth/42/">Intra 42</a>
+        <a className="nes-btn intra" target="_blank" href="http://localhost:3000/auth/42/">Intra 42</a>
     </div>
     </>
  );

@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
 
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, useNavigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
 
 /******************* Includes  *******************/
@@ -16,8 +16,12 @@ import TwoFa from './Pages/2FA/twoFA';
 import Home from './Pages/HomePage/Home';
 import ProfilPage from './Pages/profilPage/profilPage';
 import axios from 'axios';
+<<<<<<< HEAD
 import { socket, socketContext } from './Pages/socket-client';
 
+=======
+import ChatPage from './Pages/chatPage/chatPage'
+>>>>>>> refs/remotes/origin/master
 
 
 export const LogingPageComponents = () => {
@@ -25,9 +29,17 @@ export const LogingPageComponents = () => {
 		<>
 			<socketContext.Provider value={socket}>
 			<Stars/>
-			<NavBar/>
 			<LoginPage/>
 			</socketContext.Provider>
+		</>
+	);
+}
+
+export const ChatComponents = () => {
+	return (
+		<>
+			{/* <Stars/> */}
+			<ChatPage/>
 		</>
 	);
 }
@@ -108,24 +120,32 @@ const Redirect2FA = () => {
 
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
-	// const navigate = useNavigate();
 	const jwt = cookies.get('jwt');	
 	if (jwt != null) {
 		return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="settings" Component={LoginSettingsComponents} />
-				<Route path="home" Component={HomeComponents}/> 
-				<Route path="profil" Component={ProfilComponents}/> 
+				<Route path="settings"	Component={LoginSettingsComponents} />
+				<Route path="home"		Component={HomeComponents}/> 
+				<Route path="profil"	Component={ProfilComponents}/>
+				<Route path="chat"		Component={ChatComponents}/>
 			</Routes>
 		</BrowserRouter>
 		);
+		
 	}
 	else
 	{
-		// navigate("/login");
-		<Route path="login" Component={LogingPageComponents}/>
-		console.log("Naadi nta z3ma")
+		console.log("Acces Denied")
+		return (
+			<BrowserRouter>
+				<Routes>
+					<Route path="/"			element={<Navigate to="welcome"/>}/>
+					<Route path="welcome"	element={<Navigate to="welcome"/>}/>
+					<Route path="*"			element={<Navigate to="/login"/>}/>
+				</Routes>
+			</BrowserRouter>
+		);
 	}
 };
 
@@ -136,9 +156,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 	<BrowserRouter>
 		<Routes>
 			{["welcome", "/"].map((idx) => 
-			<Route path={idx} Component={welcomePage} key={""}/>
+			<Route path={idx}	Component={welcomePage} key={""}/>
 			)}  
-			<Route path="login" Component={LogingPageComponents}/>
+			<Route path="login"	Component={LogingPageComponents}/>
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>

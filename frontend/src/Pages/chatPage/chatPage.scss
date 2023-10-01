@@ -199,6 +199,7 @@
         flex: 16;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
 
         .chatUserDiv
         {
@@ -277,6 +278,7 @@
             padding: 15px;
             border: 5px solid;
             border-radius: 10px;
+            overflow: hidden;
 
             .conversationDiv
             {
@@ -299,6 +301,7 @@
                 {
                     display: flex;
 
+
                     .messageInfo
                     {
                         display: flex;
@@ -307,6 +310,20 @@
                         gap: 7px;
                         align-items: center;
                         justify-content: center;
+                    }
+
+                    .messageContent
+                    {
+                        display: flex;
+                        .nes-balloon.from-left {
+                            max-width: 72%;
+                            .message
+                            {
+                                overflow: visible;
+                                overflow-wrap: anywhere;
+                            }
+                        }
+                            
                     }
                 }
 
@@ -319,30 +336,37 @@
                 align-items: center;
                 justify-content: center;
 
-
-
-                .messageInputBox
+                .messageform
                 {
-                    outline: none;
-                    padding: 1%;
-                    border-top-color: #ebd9f0;
-                    border-top-width: 3px;
-                    border-right-color: #ebd9f0;
-                    border-right-width: 3px;
-                    border-bottom-color: #d9d9d9;
-                    border-bottom-width: 3px;
+                    display: flex;
+                    // flex: 1;
                     width: 80%;
-                    color: grey;
-                    background-color: #d9d9d9;
-
+                    align-items: center;
+                    justify-content: center;
+                    .messageInputBox
+                    {
+                        outline: none;
+                        padding: 1%;
+                        border-top-color: #ebd9f0;
+                        border-top-width: 3px;
+                        border-right-color: #ebd9f0;
+                        border-right-width: 3px;
+                        border-bottom-color: #d9d9d9;
+                        border-bottom-width: 3px;
+                        width: 80%;
+                        color: grey;
+                        background-color: #d9d9d9;
+    
+                    }
+    
+                    .sendButton
+                    {
+                        background-color: transparent;
+                        outline: none;
+                        border: none;
+                    }
                 }
 
-                .sendButton
-                {
-                    background-color: transparent;
-                    outline: none;
-                    border: none;
-                }
             }
         }
 
