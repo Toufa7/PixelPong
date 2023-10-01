@@ -5,11 +5,7 @@ import jwt_decode from 'jwt-decode';
 import { Cookies } from "react-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import io from "socket.io-client";
-=======
-import HorizontalScroll from 'react-scroll-horizontal'
->>>>>>> refs/remotes/origin/master
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
