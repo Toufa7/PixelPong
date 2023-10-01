@@ -287,47 +287,99 @@
                 overflow: scroll;
                 overflow-x: hidden;
                 overflow-y: auto;
+                display: flex;
+                flex-direction: column;
                 
-                img
-                {
-                    height: 70px;
-                    width: 70px;
-                    border-radius: 5%;
-                    object-fit: cover;
-                    align-self: flex-start;
-                    border: 3px solid;
-                }
-
+                
                 .messageComponent
                 {
+                    align-self: flex-start;
                     display: flex;
-
-
+                    
                     .messageInfo
                     {
+                        img
+                        {
+                            height: 70px;
+                            width: 70px;
+                            border-radius: 5%;
+                            object-fit: cover;
+                            align-self: flex-start;
+                            border: 3px solid;
+                        }
+
+                        order: 0;
                         display: flex;
                         flex-direction: column;
                         font-size: 0.8vh;
                         gap: 7px;
                         align-items: center;
-                        justify-content: center;
+                        justify-content: end;
                     }
 
-                    .messageContent
+                    .messageContent 
                     {
                         display: flex;
+                        order: 1;
+                        
                         .nes-balloon.from-left {
-                            max-width: 72%;
+                            // max-width: 93%;
                             .message
                             {
-                                overflow: visible;
-                                overflow-wrap: anywhere;
+                                word-break: break-word;
+                                // overflow: visible;
+                                // overflow-wrap: anywhere;
+                                // word-break: break-all;
                             }
                         }
                             
                     }
                 }
+                
+                .messageRightComponent
+                {
+                    display: flex;
+                    align-self: flex-end;
+                    
+                    .messageRightInfo
+                    {
+                        img
+                        {
+                            height: 70px;
+                            width: 70px;
+                            border-radius: 5%;
+                            object-fit: cover;
+                            align-self: flex-start;
+                            border: 3px solid;
+                        }
 
+                        order: 1;
+                        display: flex;
+                        flex-direction: column;
+                        font-size: 0.8vh;
+                        gap: 7px;
+                        align-items: center;
+                        justify-content: end;
+                    }
+
+                    .messageRightContent 
+                    {
+                        display: flex;
+                        order: 0;
+
+                        .nes-balloon.from-right {
+                            // max-width: 75%;
+                            .message
+                            {
+                                word-break: break-word;
+                                // overflow: visible;
+                                // overflow-wrap: anywhere;
+                                // word-break: break-all;
+                            }
+                        }
+                            
+                    }
+                }
             }
 
             .messageInput
@@ -344,6 +396,7 @@
                     width: 80%;
                     align-items: center;
                     justify-content: center;
+                    gap: 6px;
                     .messageInputBox
                     {
                         outline: none;
