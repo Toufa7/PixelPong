@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
@@ -44,21 +45,21 @@ const States = () => {
     );
 }
 
-const Profil = () => {axios
+const Profil = () => {
 	const [userData, setUserData] = useState('my friend');
 	useEffect(() => {
 		async function fetchData () {
 			const cookie = new Cookies();
 			const token = jwt_decode(cookie.get('jwt'));
 			if (token) {
-				const endpoint = `http://localhost:3000/users/${token.sub}`;
+				const endpoint = `http://localhost:3000/users/${token.id}`;
 				const response = await axios.get(endpoint, { withCredentials: true });
+                console.log("Data -> ", response)
 				setUserData(response.data);
 			}
 		}
 		fetchData();
 	}, []);
-
     const [isFriend, setIsFriend] = useState(false);
     return (
         <div className="profilBox">
@@ -75,15 +76,17 @@ const Profil = () => {axios
                     </div>
                 </div>
             </div>
-            <div>
+            <div className='buttonat'>
                 <a className="nes-btn">Chat</a>
                 <a>
                     {isFriend ? (
-                        <span  class="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friend</span>
+                        <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friend</a>
                     ) : (
-                        <span class="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</span>
+                        <a className="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</a>
                     )}
                 </a>
+                </div>
+            <div>
 
             </div>
 
@@ -100,7 +103,7 @@ const Achivements = () => {
         "Defeating a skilled opponent",
     ]
 
-    return (
+    return (    
         <div className="achivementsBox">
             <div className="fullAchivementsBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
@@ -111,16 +114,16 @@ const Achivements = () => {
                                 <span>{awards[0]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px',  marginRight: '20px', marginLeft: '5px'}} src={savage} />
-                                <span>{awards[1]}</span>
+                            <img style={{width: '70px', height: '70px', marginRight: '20px', opacity: '0.35', marginLeft: '5px'}} src={savage} />
+                            <span style={{opacity: '0.35'}}>{awards[1]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px',  marginRight: '20px', marginLeft: '5px'}} src={siif} />
-                                <span>{awards[2]}</span>
+                            <img style={{width: '70px', height: '70px', marginRight: '20px', opacity: '0.35', marginLeft: '5px'}} src={siif} />
+                            <span style={{opacity: '0.35'}}>{awards[2]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px',  marginTop: '20px',  marginRight: '20px', marginLeft: '5px'}} src={endpoint} />
-                                <span>{awards[2]}</span>
+                            <img style={{width: '70px', height: '70px',  marginTop: '20px', opacity: '0.35', marginRight: '20px', marginLeft: '5px'}} src={endpoint} />
+                                <span style={{opacity: '0.35'}}>{awards[2]}</span>
                         </div>
                         <div>
                             <img style={{width: '70px', transform: 'rotate(45deg)', height: '70px',  marginTop: '20px',  marginRight: '20px', marginLeft: '5px'}} src={key} />
@@ -137,10 +140,14 @@ const Achivements = () => {
 function ProfilPage() {
   return (
     <>
-        <Profil/>
-        <States/>
-        <Achivements/>
-    </>
+        <div className="topContainer">
+            <Profil/>
+            <States/>
+        </div>
+        <div className="downContainer">
+            <Achivements/>
+        </div>
+        </>
   )
 }
 

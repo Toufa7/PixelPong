@@ -5,7 +5,8 @@ import jwt_decode from 'jwt-decode';
 import { Cookies } from "react-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
+import HorizontalScroll from 'react-scroll-horizontal'
+import AnimatedText from 'react-animated-text-content';
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
@@ -42,11 +43,11 @@ const TopContainer = () => {
 		  <div className="loginBoxHeader">Welcome {userData.username}</div>
 		  <div className="loginBoxOutside">
 			<div className="playRaw">
-			  <div className="playWith Friend">
+			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
 					<p>{textInfos[0]}</p>
 					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
 			  </div>
-			  <div className="playWith Practice">
+			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
 					<p>{textInfos[1]}</p>
 					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
 			  </div>
@@ -56,6 +57,8 @@ const TopContainer = () => {
 	  </div>
 	);
 };
+
+
 const TopLeft = () => {
 	return (
 	<div className="loginBox on-going-matches">
@@ -63,27 +66,27 @@ const TopLeft = () => {
 		<div className="loginBoxOutside on-going-matches2">
 			<div style={{background: "#FDD43B"}}className="match1">
 				<span className="position">1</span>
-				<span className="name">Martin Ødegaard</span>
+				<AnimatedText duration={3} className="name" animationType="float" threshold={0.9} rootMargin="20%" >Martin Ødegaard</AnimatedText>
 				<span className="wins">95</span>
 				<span className="loses">10</span>
 				<span className="draw">12</span>
 			</div>
 			<div style={{background: "#BFBFBF"}} className="match1">
 				<span className="position">2</span>
-				<span className="name">Bukayo Saka</span>
+				<AnimatedText duration={2} className="name" animationType="float">Bukayo Saka</AnimatedText>
 				<span className="wins">12</span>
 				<span className="loses">76</span>
 				<span className="draw">1</span>
 			</div>
 			<div  style={{background: "#CA7E40"}} className="match1">
 				<span className="position">3</span>
-				<span className="name">William Saliba</span>
+				<AnimatedText duration={1} className="name" animationType="float">William Saliba</AnimatedText>
 				<span className="wins">4</span>
 				<span className="loses">0</span>
 				<span className="draw">1</span>
 			</div>
 			<div className="match1">
-				<span className="position">4</span>
+				<span className="position">X</span>
 				<span className="name">You</span>
 				<span className="wins">0</span>
 				<span className="loses">0</span>
@@ -100,16 +103,40 @@ const TopRight = () => {
 			<div className="loginBoxHeader states1">STATES</div>
 			<div style={{fontSize: 'x-large', display: "flex", justifyContent: 'center', alignItems: 'center'}} className="loginBoxOutside">
 				<div style={{textShadow: ' 0.1em 0.1em #FA005E'}} className="statesValues" >
-					<span style={{color: "orange"}}>Win Rate</span>
-					<span style={{color: "orange"}}>72.2%</span>
+					<span style={{color: "orange"}}>
+						<AnimatedText duration={1} className="name" animationType="bounce">
+							Win Rate
+						</AnimatedText>
+					</span>
+					<span style={{color: "orange"}}>
+					<AnimatedText duration={1} className="name" animationType="bounce">
+						72.2%
+						</AnimatedText>
+						</span>
 				</div>
 				<div style={{textShadow: ' 0.1em 0.1em #1f596b'}} className="statesValues">
-					<span style={{color: "#009e73"}}>Wins</span>
-					<span style={{color: "#009e73"}}>75</span>
+					<span style={{color: "#009e73"}}>
+					<AnimatedText duration={2} className="name" animationType="bounce">
+						Wins
+					</AnimatedText>
+						</span>
+					<span style={{color: "#009e73"}}>
+					<AnimatedText duration={2} className="name" animationType="bounce">
+						75
+					</AnimatedText>
+						</span>
 				</div>
 				<div style={{textShadow: ' 0.1em 0.1em #FA005E'}} className="statesValues">
-					<span style={{color: "#ff7670"}}>Loses</span>
-					<span style={{color: "#ff7670"}}>21</span>
+					<span style={{color: "#ff7670"}}>
+					<AnimatedText duration={3} className="name" animationType="bounce">
+						Loses
+					</AnimatedText>
+						</span>
+					<span style={{color: "#ff7670"}}>
+					<AnimatedText duration={3} className="name" animationType="bounce">
+						21
+					</AnimatedText>
+						</span>
 				</div>
 			</div>
 		</div>
@@ -118,6 +145,7 @@ const TopRight = () => {
 
 const BottomLeft = () => {
 	return (
+		
 		<div className="loginBox achievements">
 			<div className="loginBoxHeader achievements1">ACHIEVEMENTS</div>
 			<div className="loginBoxOutside achievements2">

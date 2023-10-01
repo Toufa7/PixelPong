@@ -14,9 +14,16 @@
     npm i react-hot-toast
     npm i react-scroll-horizontal
 
+<!-- https://github.com/kalkson/react-animated-text-content -->
+
 # Run server:
 
     npm run dev
+
+
+
+
+
 
 # Ressource :
 
@@ -25,6 +32,10 @@
 https://iconduck.com/sets/pixelarticons-icons-set
 
 https://www.streamlinehq.com/icons/pixel
+
+## FlexBox Visutalizer :
+
+https://flexbox.tech/
 
 ## Interface :
 
