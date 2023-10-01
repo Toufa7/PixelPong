@@ -1,32 +1,35 @@
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import {Server} from 'socket.io'
+import {
+  MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { Server } from 'socket.io';
 
 @WebSocketGateway({
-    cors : {
-        origin: ['http://localhost:5173']
-    }
+  cors: {
+    origin: ['http://localhost:3000', 'http://localhost:5173'],
+    credentials: true,
+  },
+  namespace: 'chat',
 })
-export class ChatGateway{
+export class ChatGateway {
+  @WebSocketServer()
+  server: Server;
 
-    @WebSocketServer()
+  onModuleInit() {
+    this.server.on('connection', (socket) => {
+      console.log(socket.id);
+      console.log('connected');
+    });
+  }
 
-    server : Server;
-
-    onModuleInit(){
-        this.server.on('connection', (socket) =>{
-            console.log(socket.id);
-            console.log("connected");
-        });
-
-    }
-
-
-
-
-    @SubscribeMessage('newMessage')
-    onNewMessage(@MessageBody() body : any){
-        console.log(body);
-        this.server.emit('onMessage', body)
-
-    }
+  @SubscribeMessage('newMessage')
+  onNewMessage(@MessageBody() body: any) {
+    console.log(body);
+    this.server.emit('onMessage', {
+      msg: 'new Message',
+      content: body,
+    });
+  }
 }

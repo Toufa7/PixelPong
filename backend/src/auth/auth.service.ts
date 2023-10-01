@@ -7,7 +7,7 @@ import { UsersService } from 'src/users/users.service';
 // import { CookiesService } from '@nestjsplus/cookies';
 
 interface Payload {
-  sub: string;
+  id: string;
   username: string;
   email: string;
   image?: string;
@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
   private generatePayload(user: User) {
     const payload: Payload = {
-      sub: user.id,
+      id: user.id,
       username: user.username,
       email: user.email,
       token: user.token,
@@ -62,7 +62,7 @@ export class AuthService {
           status: UserStatus.ONLINE,
         },
       });
-    } else this.usersService.updatestatus(user);
+    } else this.usersService.updatestatus(user, null);
     return user;
   }
 

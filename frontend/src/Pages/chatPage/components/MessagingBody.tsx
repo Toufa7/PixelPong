@@ -5,17 +5,16 @@ import { socketContext } from './socket.client';
 
 // const socket = useContext(socketContext);
 const MessagingBody = (props: any) => {
-	console.log("io");
 	const [messaging, setMessaging] = useState<string[]>([]);
 	
 	const handleNewMessage = (newMessage: string) => {
-		console.log("here ====");
-		props.psocket.emit('newMessage', newMessage)
-		props.psocket.on('onMessage', (payload: any) =>
-        {
-            console.log(`serv ${payload}`);
-			setMessaging(prevMessaging => [...prevMessaging, payload]);
-        });
+		// props.psocket.emit('newMessage', newMessage)
+		// props.psocket.on('onMessage', (payload: any) =>
+        // {
+		// 	setMessaging(prevMessaging => [...prevMessaging, payload]);
+        // });
+		
+		setMessaging(prevMessaging => [...prevMessaging, newMessage]);
 		console.log(messaging);
 	};
 

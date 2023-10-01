@@ -301,6 +301,7 @@
                 {
                     display: flex;
 
+
                     .messageInfo
                     {
                         display: flex;
@@ -309,6 +310,20 @@
                         gap: 7px;
                         align-items: center;
                         justify-content: center;
+                    }
+
+                    .messageContent
+                    {
+                        display: flex;
+                        .nes-balloon.from-left {
+                            max-width: 72%;
+                            .message
+                            {
+                                overflow: visible;
+                                overflow-wrap: anywhere;
+                            }
+                        }
+                            
                     }
                 }
 

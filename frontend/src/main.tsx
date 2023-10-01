@@ -17,13 +17,16 @@ import Home from './Pages/HomePage/Home';
 import ProfilPage from './Pages/profilPage/profilPage';
 import axios from 'axios';
 import ChatPage from './Pages/chatPage/chatPage'
+import { socket, socketContext } from './Pages/socket-client';
 
 
 export const LogingPageComponents = () => {
 	return (
 		<>
+			<socketContext.Provider value={socket}>
 			<Stars/>
 			<LoginPage/>
+			</socketContext.Provider>
 		</>
 	);
 }
@@ -69,9 +72,11 @@ const twoFAComponents = () => {
 const HomeComponents = () => {
 	return (
 		<>
+		<socketContext.Provider value={socket}>
 			<Stars/>
 			<NavBar/>
 			<Home/>
+			</socketContext.Provider>
 		</>
 	);
 }

@@ -11,7 +11,7 @@ const messageComponenet = (props: any) => {
         </div>
         <div className="messageContent">
             <div className="nes-balloon from-left">
-                <p>{props.content}</p>
+                <p className='message'>{props.content}</p>
             </div>
         </div>
     </div>

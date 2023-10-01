@@ -21,7 +21,7 @@ import { UsersService } from 'src/users/users.service';
 import { TokenBlacklistService } from './token-blacklist.service';
 import { authenticator } from 'otplib';
 import { diskStorage } from 'multer';
-import { User } from '@prisma/client';
+import { User, UserStatus } from '@prisma/client';
 import { createReadStream, promises as fsPromises } from 'fs';
 // import {fs} from 'extfs';
 
@@ -50,7 +50,7 @@ export class AuthController {
       const acces_token = this.authService.googleLogin(req.user);
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
-      
+
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
       return res.redirect('http://localhost:5173/home');
@@ -91,8 +91,6 @@ export class AuthController {
   async setTwoFA(@Req() req) {
     const secret = authenticator.generateSecret();
     const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
-    console.log(otpauth);
-    console.log(secret);
     const qr = await qrcode.toDataURL(otpauth);
     await this.authService.set2Fasecret(req.user.id, secret, otpauth);
     return qr;
@@ -108,7 +106,6 @@ export class AuthController {
   @Put('2fa/enable')
   @UseGuards(JwtGuard)
   async change2FAstatus(@Req() req) {
-    console.log('im here : : :');
     await this.authService.changetwofastatus(req.user.id);
     return { status: true };
   }
@@ -140,7 +137,6 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async validateOTP(@Body() body: inputDto, @Req() req, @Res() res) {
     const user = await this.usersService.findOne(req.user.id);
-    // console.log('I Get this => ', body.otp);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
       return res
@@ -159,7 +155,6 @@ export class AuthController {
       const path = join('./uploads/', profileImage);
       await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
-      console.log('image :', profileImage);
       const extension = profileImage.split('.')[1];
       res.setHeader('Content-Type', 'image/' + extension);
       return file.pipe(res);
@@ -173,7 +168,6 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async updateInfo(@Req() req, @Res() res, @Body() body: UserDto) {
     const { username } = body;
-    // console.log('intra 42', username);
 
     const user = await this.authService.updateinfo(req.user.id, username);
 
@@ -186,8 +180,9 @@ export class AuthController {
   @Post('logout')
   @UseGuards(JwtGuard)
   async logout(@Req() req, @Res() res) {
-    this.bantoken.addtokentoblacklist(req.cookies.jwt);
     res.clearCookie('jwt');
+    const status = UserStatus.OFFLINE;
+    await this.usersService.updatestatus(req.user, status);
     return res.status(200).json({ message: 'User logged out' });
   }
 }

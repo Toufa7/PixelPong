@@ -34,7 +34,6 @@ export class UsersController {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    console.log(user);
     return user;
   }
 
@@ -73,7 +72,6 @@ export class UsersController {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    console.log(user);
     return user;
   }
   @Patch(':userId/unblocked/:unblockedId')

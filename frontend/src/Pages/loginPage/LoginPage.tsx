@@ -1,5 +1,5 @@
 import "./LoginPage.scss";
-import "../../../node_modules/nes.css/css/nes.min.css";
+import "nes.css/css/nes.min.css";
 
 /******************* Packages  *******************/
 
@@ -12,6 +12,8 @@ import cloud from './assets/cloud.svg';
 import purpleDiamond from './assets/purpleDiamond.svg';
 import pinkDiamond from './assets/pinkDiamond.svg';
 import pingPongGif from './assets/pingPongGif.gif';
+import { useContext, useEffect } from "react";
+import { socketContext } from "../socket-client";
 
 /**************************************/
 
@@ -27,7 +29,7 @@ const Buttons = () => {
     </div>
     <div className="text-OR">-- OR --</div>
     <div className="b">
-        <a className="nes-btn intra" href="http://localhost:3000/auth/42/">Intra 42</a>
+        <a className="nes-btn intra" target="_blank" href="http://localhost:3000/auth/42/">Intra 42</a>
     </div>
     </>
  );
@@ -68,6 +70,15 @@ const Images = () => {
 
 
 export default function LoginPage() {
+
+  const socket = useContext(socketContext);
+
+  useEffect(()=>{
+    socket?.on("connect",()=>{
+        console.log("im connected");
+    })
+  },[]);
+
   return (
       <div className="loginPage">
         <div className="lb">
