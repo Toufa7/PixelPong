@@ -4,12 +4,84 @@ body {
 	background: linear-gradient(to right, #4F3997, #6E58B6);
 }
 
+.groupsAndFriendsBox {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	margin-bottom: 50px;
 
-.topContainer {    
+
+	.gAndFBox {
+		width: 500px; height: 488px;
+		background-color: #8ade84;
+		border-left: 8px solid #f9f871;
+		border-right: 8px solid #000000;
+		border-bottom: 8px solid #f9f871;
+
+		.gAndFHeader {
+			height: 10%;
+			background-color: #8ade84;
+			border-bottom: 8px solid #7C6E6E;
+			border-left: 8px solid black;
+			border-top: 8px solid #f9f871;
+		}
+		
+		.gAndFTabs {
+			display: flex;
+			height: 6%;
+			.A,
+			.B {
+				flex-grow: 1;
+			}
+		}
+		.gAndFContent {
+			height: 84%;
+			border-top: 8px solid #f9f871;
+			border-left: 8px solid black;
+			border-bottom: 8px solid black;
+			color: white;
+			overflow: scroll;
+			scroll-behavior: smooth;
+			.listParent {
+				.list {
+					border: 2px solid black;
+					display: flex;
+					align-items: center;
+					padding: 10px;
+					display: flex;
+
+					
+					.avatar {
+						width: 60px; height: 60px;
+						margin-right: 10px;
+						margin-left: 10px;
+						border-radius: 50px;
+						flex-grow: 0;
+
+					}
+					.name {
+					}
+					.ico {
+						height: 40px; width: 40px;
+						margin-top: 5px;
+						right: 22px;
+						flex-grow: 1;
+					}
+
+				}
+
+			}
+		}
+	}
+}
+
+.topContainer {
 	.StatesBox {
 		display: flex;
+		flex-direction: row;
 		justify-content: center;
 		text-align: center;
+		margin-bottom: 50px;
 	
 		.headStatesBox {
 			width: 500px; height: 488px;
@@ -98,8 +170,6 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 0.86vh;
-	font-size: 0.86vw;
 	
 	.fullAchivementsBox {
 		width: 652px; height: 302px;
@@ -123,6 +193,17 @@ body {
 			border-left: 8px solid black;
 			border-bottom: 8px solid black;
 			overflow: scroll;
+
+			.icons img {
+				width: 70px; height: 70px;
+				margin-top: 5px;
+				margin-right: 20px;
+				margin-left: 5px;
+				opacity: 0.35;
+			}
+			.icons span {
+				opacity: 0.35;
+			}
 		}
 	}
 }

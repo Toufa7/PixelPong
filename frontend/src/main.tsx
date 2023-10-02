@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 
@@ -34,7 +34,7 @@ export const LogingPageComponents = () => {
 export const ChatComponents = () => {
 	return (
 		<>
-			{/* <Stars/> */}
+			<Stars/>
 			<ChatPage/>
 		</>
 	);
@@ -53,9 +53,9 @@ const ProfilComponents = () => {
 const LoginSettingsComponents = () => {
 	return (
 		<>
-			<Stars/>
 			<NavBar/>
 			<LoginSettings/>
+			<Stars/>
 		</>
 	);
 }
@@ -83,9 +83,9 @@ const HomeComponents = () => {
 
 
 const Redirect2FA = () => {
-	const enablingEndpoint  = "http://localhost:3000/auth/2fa/get2FAstatus";
-	let resp = true;
-	axios.get(enablingEndpoint, { withCredentials: true })
+	const endpoint  = "http://localhost:3000/auth/2fa/get2FAstatus";
+	let resp;
+	axios.get(endpoint, {withCredentials: true })
 	.then ((response) => {
 		console.log("2fa Status -> " ,response.data)
 		resp = response.data;
@@ -95,7 +95,6 @@ const Redirect2FA = () => {
 	});
 	if (resp)
 	{
-		console.log("I Enter Because it's true")
 		return (
 			<BrowserRouter>
 			<Routes>

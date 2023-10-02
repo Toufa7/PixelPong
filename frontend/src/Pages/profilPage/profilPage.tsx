@@ -5,15 +5,14 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
 import siif from './assets/siif.svg';
-import otoufah from '../otoufah.jpg'
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
-
+import message from './assets/msgLogo.svg';
+import groupe from './../otoufah.jpg'
 
 const States = () => {
     return (
@@ -23,20 +22,20 @@ const States = () => {
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
                 <div className="statesBoxContent">
                     <div>
-                        <span className="key">WIN RATE</span>
-                        <span className="value">0</span>
+                        <span className="key">Win Rate</span>
+                        <span className="value">X</span>
                     </div>
                     <div>
-                        <span className="key">WINS</span>
-                        <span className="value">0</span>
+                        <span className="key">Wins</span>
+                        <span className="value">X</span>
                     </div>
                     <div>
-                        <span className="key">WIN STREAK RECORD</span>
-                        <span className="value">0</span>
+                        <span className="key">Win Streak Record</span>
+                        <span className="value">X</span>
                     </div>
                     <div>
-                        <span className="key">LOSES</span>
-                        <span className="value">0</span>
+                        <span className="key">Loses</span>
+                        <span className="value">X</span>
                     </div>
                 </div>
             </div>
@@ -46,27 +45,39 @@ const States = () => {
 }
 
 const Profil = () => {
-	const [userData, setUserData] = useState('my friend');
-	useEffect(() => {
-		async function fetchData () {
-			const cookie = new Cookies();
-			const token = jwt_decode(cookie.get('jwt'));
-			if (token) {
-				const endpoint = `http://localhost:3000/users/${token.id}`;
-				const response = await axios.get(endpoint, { withCredentials: true });
-                console.log("Data -> ", response)
-				setUserData(response.data);
-			}
-		}
-		fetchData();
-	}, []);
+
+    const cookie = new Cookies();
+    const token = jwt_decode(cookie.get('jwt'));
+    const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
+
+    const [userData, setUserData] = useState({
+        avatar: '',
+        username: 'Unknown'
+      });
+      
+      useEffect(() => {
+        async function fetchData() {
+          const cookie = new Cookies();
+          const token = jwt_decode(cookie.get('jwt'));
+          if (token) {
+            const endpoint = `http://localhost:3000/users/${token.id}`;
+            const response = await axios.get(endpoint, { withCredentials: true });
+            console.log("Data -> ", response);
+            setUserData(() => ({
+              avatar: response.data.profileImage,
+              username: response.data.username
+            }));
+          }
+        }
+        fetchData();
+      }, []);
     const [isFriend, setIsFriend] = useState(false);
     return (
         <div className="profilBox">
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img src={userData.profileImage} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img src={myAvatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>
@@ -77,21 +88,88 @@ const Profil = () => {
                 </div>
             </div>
             <div className='buttonat'>
-                <a className="nes-btn">Chat</a>
                 <a>
                     {isFriend ? (
-                        <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friend</a>
-                    ) : (
+                        <>
+                            <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friends</a>
+                            <a  href="/chat" className="nes-btn">Chat</a>
+                        </>
+                        ) : (
                         <a className="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</a>
                     )}
                 </a>
                 </div>
-            <div>
-
-            </div>
-
             </div>
         </div>
+    );
+}
+
+const GroupsAndFriends = () => {
+      const friends = [
+        "Helena Atkins",
+        "Cristina Singleton",
+        "Caleb Brady",
+        "Edward Colon",
+        "Saige Boyd",
+        "Damarion Wilkerson",
+        "Jaylah Nicholson",
+        "Jamir Escobar",
+        "Marissa Glass",
+        "Jaylen Goodwin",
+        "Akira Calderon"
+      ];
+
+      const groups = [
+        "Atkins",
+        "Wilkerson",
+        "Brady",
+        "Edward Colon",
+        "Cristina",
+        "Saige"
+      ];
+
+
+      const [label, setlabel] = useState(true);
+      const cookie = new Cookies();
+      const token = jwt_decode(cookie.get('jwt'));
+      const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
+      return (
+        <div className="groupsAndFriendsBox">
+          <div className="gAndFBox">
+            <div className="gAndFHeader">Groups & Friends</div>
+            <div className="gAndFTabs">
+              <button className='A' onChange={() => setlabel(true)} >Groups</button>
+              <button className='B' onChange={() => setlabel(false)} >Friends</button>
+            </div>
+            <div className="gAndFContent">
+                <div className="listParent">
+                    <div className="list">
+                        <>
+                        {
+                            label ? (
+                            friends.map((idx) => {
+                                <>
+                                <img className="avatar" src={myAvatar}/>
+                                <span className='name'>{idx}</span>
+                                <img className='ico' src={message}/>
+                                </>
+                            })
+                        ) : (
+                            friends.map((idx) => {
+                                <>
+                                <img className="avatar" src={myAvatar}/>
+                                <span className='name'>{idx}</span>
+                                <img className='ico' src={message}/>
+                                </>
+                            }))
+                            }
+                        </>
+                    </div>
+                    </div>
+            </div>
+            </div>
+        </div>
+
     );
 }
 
@@ -110,24 +188,24 @@ const Achivements = () => {
                 <div className="contentAchivementsBox">
                     <div className="icons">
                         <div>
-                            <img style={{width: '70px', height: '70px', marginTop: '5px',  marginRight: '20px', marginLeft: '5px'}} src={medaille} />
-                                <span>{awards[0]}</span>
+                            <img src={medaille} />
+                            <span>{awards[0]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px', marginRight: '20px', opacity: '0.35', marginLeft: '5px'}} src={savage} />
-                            <span style={{opacity: '0.35'}}>{awards[1]}</span>
+                            <img src={savage} />
+                            <span>{awards[1]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px', marginRight: '20px', opacity: '0.35', marginLeft: '5px'}} src={siif} />
-                            <span style={{opacity: '0.35'}}>{awards[2]}</span>
+                            <img src={siif} />
+                            <span>{awards[2]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', height: '70px',  marginTop: '20px', opacity: '0.35', marginRight: '20px', marginLeft: '5px'}} src={endpoint} />
-                                <span style={{opacity: '0.35'}}>{awards[2]}</span>
+                            <img src={endpoint} />
+                            <span>{awards[2]}</span>
                         </div>
                         <div>
-                            <img style={{width: '70px', transform: 'rotate(45deg)', height: '70px',  marginTop: '20px',  marginRight: '20px', marginLeft: '5px'}} src={key} />
-                                <span>{awards[2]}</span>
+                            <img style={{transform: 'rotate(45deg)'}} src={key} />
+                            <span>{awards[2]}</span>
                         </div>
                     </div>
                 </div>
@@ -135,7 +213,7 @@ const Achivements = () => {
         </div>
     );
 }   
-  
+
 
 function ProfilPage() {
   return (
@@ -145,6 +223,7 @@ function ProfilPage() {
             <States/>
         </div>
         <div className="downContainer">
+            <GroupsAndFriends/>
             <Achivements/>
         </div>
         </>

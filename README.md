@@ -13,17 +13,11 @@
     npm i react-draggable
     npm i react-hot-toast
     npm i react-scroll-horizontal
-
-<!-- https://github.com/kalkson/react-animated-text-content -->
+    npm install --save react-animated-text-content 
 
 # Run server:
 
     npm run dev
-
-
-
-
-
 
 # Ressource :
 
@@ -79,6 +73,16 @@ https://stackoverflow.com/questions/70491774/usenavigate-may-be-used-only-in-the
 https://howtodoinjava.com/typescript/maps/
 
 
+* The map() method of Array :
+
+
+        const arr = [9,4,5,7,8]
+        arr.map((value, idx) => {
+        console.log(`your index is -> ${idx} AND value is ${value}`);
+        })
+
+
+
     interface UserSettingsProps {
         name: string;
         avatar: string;
@@ -108,4 +112,10 @@ https://stackoverflow.com/questions/62185425/why-is-console-log-logging-twice-in
 https://www.youtube.com/@kodebot
 
 https://stackoverflow.com/questions/52051857/nest-schedule-npm-not-working
+
+
+## Multiple Values For UseState 
+
+
+https://codesandbox.io/s/usestate-with-an-object-multiple-values-sorta-d52zt
 
