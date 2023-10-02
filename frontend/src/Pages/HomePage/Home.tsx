@@ -7,6 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
+import {Motion, spring} from 'react-motion';
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
@@ -44,11 +45,15 @@ const TopContainer = () => {
 		  <div className="loginBoxOutside">
 			<div className="playRaw">
 			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
-					<p>{textInfos[0]}</p>
+					<AnimatedText duration={2} animationType="bounce">
+						{textInfos[0]}
+					</AnimatedText>
 					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
 			  </div>
 			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
-					<p>{textInfos[1]}</p>
+			  		<AnimatedText duration={2} animationType="bounce">
+						{textInfos[1]}
+					</AnimatedText>
 					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
 			  </div>
 			</div>
@@ -71,6 +76,7 @@ const TopLeft = () => {
 				<span className="loses">10</span>
 				<span className="draw">12</span>
 			</div>
+			
 			<div style={{background: "#BFBFBF"}} className="match1">
 				<span className="position">2</span>
 				<AnimatedText duration={2} className="name" animationType="float">Bukayo Saka</AnimatedText>
@@ -145,7 +151,6 @@ const TopRight = () => {
 
 const BottomLeft = () => {
 	return (
-		
 		<div className="loginBox achievements">
 			<div className="loginBoxHeader achievements1">ACHIEVEMENTS</div>
 			<div className="loginBoxOutside achievements2">

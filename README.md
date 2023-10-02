@@ -27,6 +27,8 @@ https://iconduck.com/sets/pixelarticons-icons-set
 
 https://www.streamlinehq.com/icons/pixel
 
+https://www.syncfusion.com/blogs/post/top-7-react-animation-libraries-in-2022.aspx
+
 ## FlexBox Visutalizer :
 
 https://flexbox.tech/

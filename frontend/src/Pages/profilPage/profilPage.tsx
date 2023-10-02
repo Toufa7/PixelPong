@@ -44,35 +44,44 @@ const Profil = () => {
 
     const cookie = new Cookies();
     const token = jwt_decode(cookie.get('jwt'));
-    const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
 
     const [userData, setUserData] = useState({
         avatar: '',
-        username: 'Unknown'
-      });
-      
-      useEffect(() => {
+        username: token.username,
+        check: true
+    });
+    
+    useEffect(() => {
         async function fetchData() {
-          const cookie = new Cookies();
-          const token = jwt_decode(cookie.get('jwt'));
-          if (token) {
-            const endpoint = `http://localhost:3000/users/${token.id}`;
-            const response = await axios.get(endpoint, { withCredentials: true });
-            console.log("Data -> ", response);
-            setUserData(() => ({
-              avatar: response.data.profileImage,
-              username: response.data.username
-            }));
-          }
+            const cookie = new Cookies();
+            const token = jwt_decode(cookie.get('jwt'));
+            let endpoints = [
+                `http://localhost:3000/auth/avatar/${token.id}`,
+                `http://localhost:3000/users/${token.id}`
+            ]
+            if (token) {
+
+                await axios.all(endpoints.map((idx) =>  axios.get(idx, {withCredentials: true})))
+                .then(axios.spread((avatarRes, userRes) => 
+                {
+                    console.log("AVATAR " ,avatarRes);
+                    setUserData(() => ({
+                        avatar: `http://localhost:3000/auth/avatar/${token.id}`,
+                        username: userRes.data.username,
+                        check: false
+                    }))
+                }))
+            }
         }
         fetchData();
-      }, []);
+    }, [])
+
     const [isFriend, setIsFriend] = useState(false);
     return (
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img src={myAvatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img  src={userData.check ? token.image : userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>
@@ -121,12 +130,30 @@ const GroupsAndFriends = () => {
         "Cristina",
         "Saige"
       ];
-
-
       const [label, setlabel] = useState(true);
+      const [Stausss, setAvataStatus] = useState({
+          avatar: '',
+          check: true
+      });
       const cookie = new Cookies();
       const token = jwt_decode(cookie.get('jwt'));
-      const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
+      console.log("Token ", token);
+      useEffect(() => {
+          async function checking() {
+            await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
+            .then((response) => {
+                console.log("Res ", response)
+                setAvataStatus(() => ({
+                    avatar: `http://localhost:3000/auth/avatar/${token.id}`,
+                    check: false
+                  }));
+            })
+            .catch(erro => {
+              console.log(`Error ${erro}`);
+            })
+        }
+        checking(); 
+      }, []);
       return (
           <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
@@ -146,7 +173,7 @@ const GroupsAndFriends = () => {
                         friends.map((friend, index) => (
                         <>
                             <div className='list'>
-                                <img className="avatar" src={myAvatar}/>
+                                <img className="avatar" src={Stausss.check ? token.image : Stausss.avatar}/>
                                 <span className='name' key={index}>{friend}</span>
                                 <img className='ico' src={message}/>
                             </div>

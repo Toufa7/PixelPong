@@ -10,12 +10,13 @@ body {
     flex-flow: row wrap;
     justify-content:space-evenly;
 	align-items: center;
-		.fullAchivementsBox {
-			width: 652px; height: 302px;
-			background: #BFB3E1;
-			border-bottom: 8px solid #7C6E6E;
-			border-left: 8px solid #7C6E6E;
-			border-right: 8px solid #EBD9F0;
+	.fullAchivementsBox {
+		width: 652px; height: 302px;
+		background: #BFB3E1;
+		border-bottom: 8px solid #7C6E6E;
+		border-left: 8px solid #7C6E6E;
+		border-right: 8px solid #EBD9F0;
+		z-index: 0;
 			
 			.headAchivementsBox {
 				height: 20%;
@@ -56,6 +57,7 @@ body {
 			border-left: 8px solid #f9f871;
 			border-right: 8px solid #000000;
 			border-bottom: 8px solid #f9f871;
+			z-index: 0;
 
 			.gAndFHeader {
 				height: 10%;
@@ -123,13 +125,15 @@ body {
     justify-content:space-evenly;
 	padding-bottom: 20px;
 	align-items: center;
-
-		.headStatesBox {
-			width: 500px; height: 488px;
-			background-color: cadetblue;
-			border-left: 8px solid #EBD9F0;
-			border-right: 8px solid #000000;
-			border-bottom: 8px solid #EBD9F0;
+	
+	
+	.headStatesBox {
+		width: 500px; height: 488px;
+		background-color: cadetblue;
+		border-left: 8px solid #EBD9F0;
+		border-right: 8px solid #000000;
+		border-bottom: 8px solid #EBD9F0;
+		z-index: 0;
 	
 			.statesBoxHeader {
 				height: 10%;
@@ -173,6 +177,8 @@ body {
 			border-left: 8px solid #7C6E6E;
 			border-right: 8px solid #EBD9F0;
 			flex-shrink: 1;
+			z-index: 0;
+
 	  
 		  .avatar {
 			height: 75%;
