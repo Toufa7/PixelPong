@@ -1,6 +1,7 @@
 import "./NavBar.scss";
 /******************* Includes  *******************/
 import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 /******************* Packages  *******************/
 /******************* Images  *******************/
@@ -15,7 +16,6 @@ import randomLogo from './assets/logo.svg'
 import Cookies from "universal-cookie";
 import {useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 /******************************************/  
 
 
@@ -97,30 +97,38 @@ const NavBarFooter = () => {
 		});
 	};
   
-	const [userData, setUserData] = useState('my friend');
-	useEffect(() => {
-		async function fetchData () {
-			const cookie = new Cookies();
-			const token = jwt_decode(cookie.get('jwt'));
-			if (token) {
-				const endpoint = "http://localhost:3000/users/" + token.id;
-				const response = await axios.get(endpoint, { withCredentials: true });
-				setUserData(response.data);
-			}
-		}
-		fetchData();
-	}, []);
-
     const cookie = new Cookies();
     const token = jwt_decode(cookie.get('jwt'));
-    const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
+    const [check, setUserData] = useState(false);
+    
+    useEffect(() => {
+        async function fetchData() {
+            const cookie = new Cookies();
+            const token = jwt_decode(cookie.get('jwt'));
+            if (token) {
+
+                await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
+                .then(() => 
+                {
+                    setUserData(true)
+                })
+				.catch(((avatarErr) => {
+                    console.log("AVATAR " ,avatarErr);
+				}))
+            }
+        }
+		fetchData();
+    }, [])
+
+
+
 
 
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<a href="/profil" title="Profile">
-			<img src={myAvatar} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+			<img src={check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</a>
 		</div>
 		<div className="nav-item">

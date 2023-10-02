@@ -194,7 +194,7 @@ body {
     scroll-behavior: smooth;
     .match1 {
         border: 1px solid black;
-        height: calc(100%/3);
+        height: calc(100%/3) !important;
         display: flex;
         align-items: center;
         margin-bottom: 5px;

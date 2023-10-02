@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
     "@types/node-fetch": "^2.6.5",
     "axios": "^1.5.0",
     "cookies-next": "^4.0.0",
@@ -20,6 +21,8 @@
     "nes.css": "^2.3.0",
     "react": "^18.2.0",
     "react-animated-text-content": "^1.0.1",
+    "react-anime": "^4.1.1",
+    "react-awesome-reveal": "^4.2.5",
     "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",

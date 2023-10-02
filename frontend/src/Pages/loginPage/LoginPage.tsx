@@ -6,6 +6,7 @@ import "nes.css/css/nes.min.css";
 // import jwt_decode from "jwt-decode";
 // import { getCookie } from 'typescript-cookie'
 import { motion, useMotionValue, useTransform } from "framer-motion";
+import Anime, { anime } from 'react-anime';
 /******************* Images  *******************/
 
 import cloud from './assets/cloud.svg';
@@ -35,20 +36,26 @@ const Buttons = () => {
 };
 
 const LoginBox = () => {
-
   return (
+    <Anime delay={anime.stagger(1000)} scale={[ 0.1, 0.9 ]}>
     <div className="loginBoxContainer">
       <div className="loginBox">
         <div className="loginBoxInside">
           <AnimatedText animationType="wave" type="chars">Sign In</AnimatedText>
             <div className="cloudImg">
+              <Anime  delay={anime.stagger(1000)} scale={[ 0.1, 0.9 ]}>
                 <img src={cloud} alt="cloudImg" />
+              </Anime>
             </div>
             <div className="pinkDiamond">
+            <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.8 }}>
               <img src={pinkDiamond} alt="pinkDiamond" />
+            </motion.div>
             </div>
             <div className="purpleDiamond">
-              <img src={purpleDiamond} alt="purpleDiamond" />
+              <motion.div whileHover={{ scale: 2 }} whileTap={{ scale: 0.8 }}>
+                <img src={purpleDiamond} alt="purpleDiamond" />
+              </motion.div>
             </div>
           </div>
             <div className="loginBoxOutside">
@@ -56,15 +63,16 @@ const LoginBox = () => {
           </div>
       </div>
       </div>
+                    </Anime>
+
   );
 };
 
 const Images = () => {
+
   return (
       <div className="retroImage">
-      <motion.img
-        src={pingPongGif}
-        className="pingPongGif"
+      <motion.img src={pingPongGif} className="pingPongGif"
         drag
         dragTransition={{ min: 0, max: 100 }}
         dragConstraints={{
@@ -73,6 +81,7 @@ const Images = () => {
           top: 0,
           bottom: 0
         }}
+        dragElastic={0.5}
       />
     </div>
   );

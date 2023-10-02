@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
 import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
 import {Motion, spring} from 'react-motion';
+import Anime, { anime } from 'react-anime';
+import { Fade } from "react-awesome-reveal";
+
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
@@ -38,10 +41,16 @@ const TopContainer = () => {
 		fetchData();
 	}, []);
 	
+
+
 	return (
 		<div className="headerBox">
 		<div className="topLoginBox">
-		  <div className="loginBoxHeader">Welcome {userData.username}</div>
+		  <div className="loginBoxHeader">
+			<Fade>
+				<>Welcome {userData.username}</>
+			</Fade>
+			</div>
 		  <div className="loginBoxOutside">
 			<div className="playRaw">
 			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
@@ -69,14 +78,13 @@ const TopLeft = () => {
 	<div className="loginBox on-going-matches">
 		<div className="loginBoxHeader on-going-matches1">LEADERBOARD</div>
 		<div className="loginBoxOutside on-going-matches2">
-			<div style={{background: "#FDD43B"}}className="match1">
+			<div style={{background: "#FDD43B"}} className="match1">
 				<span className="position">1</span>
 				<AnimatedText duration={3} className="name" animationType="float" threshold={0.9} rootMargin="20%" >Martin Ødegaard</AnimatedText>
 				<span className="wins">95</span>
 				<span className="loses">10</span>
 				<span className="draw">12</span>
 			</div>
-			
 			<div style={{background: "#BFBFBF"}} className="match1">
 				<span className="position">2</span>
 				<AnimatedText duration={2} className="name" animationType="float">Bukayo Saka</AnimatedText>
@@ -226,17 +234,33 @@ const BottomRight= () => {
 }
 
 function Home() {
+	// <Anime
+	// opacity={[0, 1]}
+	// scale={[0.5, 1]}
+	// duration={1000}
+	// easing="easeInOutQuad"
+
 	return (
 		<div style={{height: '100vh'}}>
+			<Anime
+				translateY={['-100%', '0%']}
+				duration={1000}
+				easing="easeInOutQuad">
 			<TopContainer/>
+			</Anime>
+			<Anime  delay={anime.stagger(1000)} scale={[ 0.1, 1 ]}>
 			<div className="top-containers">
-			<TopLeft/>
-			<TopRight/>
+				<TopLeft/>
+				<TopRight/>
 			</div>
+			</Anime>
+			<Anime opacity={[0, 1]} translateY={['-100%', '0%']} delay={500} duration={1000}>
+
 			<div className="bottom-containers">
 			<BottomLeft/>
 			<BottomRight/>
 			</div>
+			</Anime>
 		</div>
   );
 }
