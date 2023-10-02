@@ -150,7 +150,6 @@ import { Paddle } from './paddle.class';
                         this.ball_speed_x = -this.ball_speed_x;
                         console.log("---hit mid !!");
                         // this.collision_front = true;
-                        // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
                         return(false);
                     }
                     else{
@@ -164,7 +163,6 @@ import { Paddle } from './paddle.class';
                         // if (Math.floor(this.r))
                         //     this.ball_speed_y = -this.ball_speed_y;
                         // this.collision_front = true;
-                        // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
                         return(false);
                     }
     
@@ -225,12 +223,12 @@ import { Paddle } from './paddle.class';
             // console.log("in");
             // console.log(this.ball_speed_x);
             // console.log(this.ball_speed_y);
-            this.check_collision(paddle1,paddle2);
+            // this.check_collision(paddle1,paddle2);
             // if (this.collision_front){console.log("collided with player");}
             // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
-            this.pos.x = this.pos.x + this.ball_speed_x;
-            this.pos.y = this.pos.y + this.ball_speed_y;
-            // socket.emit("Ball_movement",);
+            // this.pos.x = this.pos.x + this.ball_speed_x;
+            // this.pos.y = this.pos.y + this.ball_speed_y;
+            socket.emit("Ball_movement");
 
             this.draw_the_ball("#e9ed09");
         }

@@ -8,7 +8,9 @@ import { ContextSocket, socket } from './socket_setup/client-connect';
 import { Paddle } from './game-classes/paddle.class';
 import { id_player } from './components/render_game_sketch_components';
 import { Ball } from './game-classes/Ball.class';
-
+import gifMatch from './assets/disk.gif';
+import f from "./assets/thirteen_pixel_fonts.ttf";
+import blur from "./assets/blurdisk.png";
 
 
 
@@ -19,6 +21,9 @@ export let screen_height = 500;
 
 export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   const Frontroom : any = {};
+  let MatchmakingPage : p5Types.Image;
+  let font : p5Types.Font;
+  let blured : p5Types.Image;
   
   
   socket?.on("PlayersOfRoom",(Backroom : any)=>{
@@ -42,7 +47,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         Frontroom[Backroom.id].Player2.Paddle = new Paddle(Frontroom[Backroom.id].Player2.x,Frontroom[Backroom.id].Player2.y,
           Frontroom[Backroom.id].Player2.width,Frontroom[Backroom.id].Player2.height,p5_ob,"#FFFA37");
 
-        Frontroom[Backroom.id].Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,Backroom.GameBall?.diameter,p5_ob,-Backroom.GameBall?.ball_speed_x,Backroom.GameBall?.ball_speed_y);
+        Frontroom[Backroom.id].Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall?.ball_speed_y);
       }
     }
     else{
@@ -58,7 +63,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
           Frontroom[Backroom.id].Player2.Paddle = new Paddle(Frontroom[Backroom.id].Player2.x,Frontroom[Backroom.id].Player2.y,
             Frontroom[Backroom.id].Player2.width,Frontroom[Backroom.id].Player2.height,p5_ob,"#FFFA37");
 
-          Frontroom[Backroom.id].Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,Backroom.GameBall?.diameter,p5_ob,-Backroom.GameBall?.ball_speed_x,Backroom.GameBall.ball_speed_y);
+          Frontroom[Backroom.id].Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall.ball_speed_y);
         }
     }
 
@@ -89,17 +94,26 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
           }
       })
 
-      // socket?.on("UpdateBallPos",(Backroom)=> {
-      //   for(const id in Frontroom){
-      //     if (socket.id == Frontroom[id].Player1?.id){
-      //       Frontroom[id].Player1.Ball.pos.x = Backroom.GameBall?.x;
-      //       Frontroom[id].Player1.Ball.pos.y = Backroom.GameBall?.y;
-      //     }else if (socket.id == Frontroom[id].Player2?.id){
-      //       Frontroom[id].Player2.Ball.pos.x = Backroom.GameBall?.x;
-      //       Frontroom[id].Player2.Ball.pos.y = Backroom.GameBall?.y;
-      //     }
-      //   }
-      // })
+      socket?.on("UpdateBallPos",(Backroom)=> {
+        let reverse_ball_x = screen_width - Backroom.GameBall?.x;
+
+        for(const id in Frontroom){
+          if (socket.id == Frontroom[id].Player1?.id){
+            Frontroom[id].Player1.Ball.pos.x = Backroom.GameBall?.x;
+            Frontroom[id].Player1.Ball.pos.y = Backroom.GameBall?.y;
+          }else if (socket.id == Frontroom[id].Player2?.id){
+            Frontroom[id].Player2.Ball.pos.x = reverse_ball_x;
+            Frontroom[id].Player2.Ball.pos.y = Backroom.GameBall?.y;
+          }
+        }
+      })
+
+      p5_ob.preload = () =>{
+        MatchmakingPage = p5_ob.loadImage(gifMatch);
+        font = p5_ob.loadFont(f);
+        // blured = p5_ob.loadImage(blur);
+        
+      }
 
       p5_ob.setup = () => {
       p5_ob.frameRate(60);
@@ -107,6 +121,9 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;
       const canvas_y = (p5_ob.windowHeight - p5_ob.height) / 2;
       canvas.position(canvas_x,canvas_y);
+      p5_ob.textFont(font);
+      p5_ob.textSize(20);
+      p5_ob.textAlign(p5_ob.CENTER, p5_ob.CENTER);
     }
     
     p5_ob.draw = () =>{
@@ -138,10 +155,21 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
       }
       else{
-        console.log("A player is missing");
-        // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-        // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-        // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
+        // console.log("A player is missing");
+        // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
+        // p5_ob.fill("#e31717");
+        // p5_ob.text("Matchmaking",100,100);
+        p5_ob.background("#080917");
+        p5_ob.image(MatchmakingPage,170,0,750,550);
+        // if (id_of_player1 == id_player){
+        //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+        //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+        //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
+        // }
+        // else if (id_of_player2 == id_player)
+        //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+        //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+        //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
       }
     }
   }

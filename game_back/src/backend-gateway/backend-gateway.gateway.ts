@@ -109,61 +109,110 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
     @SubscribeMessage("Ball_movement")
       HandleBallMovement(@MessageBody() Ball_data, @ConnectedSocket() Player : Socket){
-        this.check_collision_Ball(Ball_data,Player);
+        this.check_collision_Ball_with_env(Ball_data,Player);
     }
 
-    check_collision_Ball(Ball_data,Player : Socket){
+    check_collision_Ball_with_env(Ball_data,Player : Socket){
       let top = 0;
       let left = 0;
       let bottom = 0;
       let right = 0;
 
-
       for(const id in this.Rooms.rooms){
           const Room = this.Rooms.rooms[id];
-          if (Room.Player1.id == Player.id){
+          if (Room.Player1.id == Player.id || Room.Player2.id == Player.id){
               top = (Room.GameBall.y - Room.GameBall.diameter / 2);
               bottom = (Room.GameBall.y + Room.GameBall.diameter / 2);
               left = (Room.GameBall.x - Room.GameBall.diameter / 2);
               right = (Room.GameBall.x + Room.GameBall.diameter / 2);
 
-            if(top < 0){
-              Room.GameBall.x = Room.GameBall.x + 8;
-              Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+            if (this.check_collision_Ball_with_players(Ball_data,Player)){
+              Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
+              Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+              break;
             }
+            else{
+              if(top < 0){
+                Room.GameBall.x = Room.GameBall.x + 8;
+                Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+              }
             if (bottom > this.screen_metrics.screen_height){
               Room.GameBall.x = Room.GameBall.x - 8;
               Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
             }
-            // if (Ball_data?.did_collide_player){
-            //   console.log("it collided");
-            //   Room.GameBall.x = Ball_data.pos_x;
-            //   Room.GameBall.y = Ball_data.pos_y;
-            //   Room.GameBall.ball_speed_x = Ball_data.ball_speed_x;
-            //   Room.GameBall.ball_speed_y = Ball_data.ball_speed_y;
-            //   // Ball_data.did_collide_player = false;
+            // if (right > this.screen_metrics.screen_width){
+            //   // Room.GameBall.y = Room.GameBall.y - 8;
+            //   Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
             // }
-            if (right > this.screen_metrics.screen_width){
-              Room.GameBall.y = Room.GameBall.y - 8;
-              Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-            }
-            if (left < 0){
-              Room.GameBall.y = Room.GameBall.y - 8;
-              Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-            }
+            // if (left < 0){
+            //   // Room.GameBall.y = Room.GameBall.y - 8;
+            //   Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+            // }
             Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
             Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
             break;
+          }
         }
       }
     }
+
+    check_collision_Ball_with_players(Ball_data,Player : Socket) : boolean{
+      for(const id in this.Rooms.rooms){
+        const Room = this.Rooms.rooms[id];
+          let radius = Room.GameBall.diameter / 2;
+          let Ball_x = Room.GameBall.x;
+          let Ball_reverse_x = this.screen_metrics.screen_width - Room.GameBall.x;
+          if (Room.Player1.id == Player.id){
+              return (this.Ball_points_check(radius,Room,Room.Player1,this.screen_metrics.screen_width,Ball_x));
+          }else if (Room.Player2.id == Player.id){
+            return (this.Ball_points_check(radius,Room,Room.Player2,this.screen_metrics.screen_width,Ball_reverse_x));
+          }
+        }
+    }
+
+    Ball_points_check(radius : number,Room,Player,screen_width,Ball_x) : boolean{
+        for(let i = 0; i < 16 ; i++){
+          let degree = (i * 22.5) * (Math.PI / 180);
+    
+          let x_ball = radius * (Math.cos(Ball_x + degree)) + Ball_x;
+          let y_ball = radius * (Math.sin(Room.GameBall.y + degree)) + Room.GameBall.y;
+  
+          if (((x_ball > Player.x && x_ball < Player.x + Player.width && y_ball > Player.y && y_ball < Player.y + Player.height))){
+              if (x_ball < screen_width / 2){
+                  console.log("hit left half")
+                  if(y_ball > (Player.y + 15) && y_ball < (Player.y + Player.height - 11)){
+                      console.log("hit mid !!");
+                      Ball_x = Ball_x + 8;
+                      Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+                      // this.collision_front = true;
+                      return(true);
+                  }
+                  else{
+                      console.log("hit corner !!");
+                      console.log(Player.y);
+                      Ball_x = Ball_x + 8;
+                      Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+  
+                      // this.r = Math.random(0,2);
+                      // console.log("r--->" + this.r);
+                      // if (Math.floor(this.r))
+                      //     this.ball_speed_y = -this.ball_speed_y;
+                      // this.collision_front = true;
+                      return(true);
+                  }
+              }
+            }
+        }
+        return (false);
+    }
+
 
     @Interval(15)
     handleevent(){
       for(const id in this.Rooms.rooms){
         const Room = this.Rooms.rooms[id];
         this.server.to(Room.id).emit("UpdatePlayerPos",Room);
-        // this.server.to(Room.id).emit("UpdateBallPos",Room);
+        this.server.to(Room.id).emit("UpdateBallPos",Room);
       }
         // this.server.emit("UpdatePlayerPos",this.Players.players);
     }
