@@ -8,13 +8,13 @@
 
     .mainNavBarDiv
     {
-        flex: 1;
-        background-color: white;
+        flex: 1.4;
+        // background-color: white;
     }
 
     .chatNavBarDiv
     {
-        flex: 4;
+        flex: 5;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -48,9 +48,10 @@
 
                 input
                 {
+                    flex-shrink: 1;
                     outline: none;
-                    background-color: #221b3a;
-                    color: grey;
+                    background-color: #A6ABBD;
+                    color: black;
                     padding: 5px;
                     margin: 10px;
                     text-decoration-color: aliceblue;
@@ -187,7 +188,7 @@
             flex: 1;
             border-bottom-right-radius: 10px;
             border-bottom-left-radius: 10px;
-            background-color: #7259c1;
+            background-color: #333C54;
             border-left: 3px solid;
             border-bottom: 3px solid;
             border-right: 3px solid;
@@ -197,7 +198,7 @@
 
     .messagesDiv
     {
-        flex: 16;
+        flex: 18;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -221,7 +222,7 @@
                 font-weight: bolder;
                 width: fit-content;
                 font-size: 1.1vw;
-                background-color: #f98d85;
+                background-color: #F1F1E6;
                 margin: 5px;
                 padding: 3px;
                 padding-left: 15px;
@@ -233,15 +234,20 @@
             .playerPicProfile
             {
                 flex: 10;
+                display: flex;
+                align-items: center;
                 width: 95%;
-                background-color: #f7d284;
+                background-color: #C1CAE7;
                 margin: 5px;
                 padding: 15px;
                 border: 5px solid;
                 border-radius: 10px;
+                justify-content: space-between;
+
                 
                 .chatUser
                 {
+                    order: 0;
                     display: flex;
                     gap: 10px;
                     align-items: center;
@@ -255,14 +261,30 @@
                         align-self: flex-start;
                         border: 3px solid;
                     }
+
                     .chatUserName
                     {
+                        // display: flex;
+                        // align-self: center;
+                        // justify-self: center;
                         span
                         {
                             border: none;
                             background-color: transparent;
                             font-size: 2vw;
                         }
+                    }
+                }
+
+                .chatUserControls
+                {
+                    order: 1;
+                    .userControlButtons
+                    {
+                        padding: 15px;
+                        background-color: transparent;
+                        outline: none;
+                        border: none;
                     }
                 }
             }
@@ -273,7 +295,7 @@
             flex: 10;
             display: flex;
             flex-direction: column;
-            background-color: #d7b3e1;
+            background-color: #C1CAE7;
             width: 95%;
             margin: 5px;
             padding: 15px;
@@ -323,10 +345,11 @@
                         order: 1;
                         
                         .nes-balloon.from-left {
-                            // max-width: 93%;
+                            // max-width: 90%;
                             .message
                             {
                                 word-break: break-word;
+
                                 // overflow: visible;
                                 // overflow-wrap: anywhere;
                                 // word-break: break-all;
