@@ -12,12 +12,10 @@ import siif from './assets/siif.svg';
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
 import message from './assets/msgLogo.svg';
-import groupe from './../otoufah.jpg'
+import groupt from './../otoufah.jpg'
 
 const States = () => {
     return (
-        <div>
-        <div className="StatesBox">
             <div className="headStatesBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
                 <div className="statesBoxContent">
@@ -39,8 +37,6 @@ const States = () => {
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
     );
 }
 
@@ -73,7 +69,6 @@ const Profil = () => {
       }, []);
     const [isFriend, setIsFriend] = useState(false);
     return (
-        <div className="profilBox">
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
@@ -91,7 +86,7 @@ const Profil = () => {
                 <a>
                     {isFriend ? (
                         <>
-                            <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friends</a>
+                            <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
                             <a  href="/chat" className="nes-btn">Chat</a>
                         </>
                         ) : (
@@ -100,7 +95,6 @@ const Profil = () => {
                 </a>
                 </div>
             </div>
-        </div>
     );
 }
 
@@ -134,41 +128,45 @@ const GroupsAndFriends = () => {
       const token = jwt_decode(cookie.get('jwt'));
       const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
       return (
-        <div className="groupsAndFriendsBox">
           <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
             <div className="gAndFTabs">
-              <button className='A' onChange={() => setlabel(true)} >Groups</button>
-              <button className='B' onChange={() => setlabel(false)} >Friends</button>
+              <button className='A' onClick={() => {
+                    setlabel(true)
+                    console.log("Groups")
+                }}>Groups</button>
+              <button className='B' onClick={() => {
+                setlabel(false)
+                console.log("Friends")
+                }}>Friends</button>
             </div>
             <div className="gAndFContent">
                 <div className="listParent">
-                    <div className="list">
+                    {label ? (
+                        friends.map((friend, index) => (
                         <>
-                        {
-                            label ? (
-                            friends.map((idx) => {
-                                <>
+                            <div className='list'>
                                 <img className="avatar" src={myAvatar}/>
-                                <span className='name'>{idx}</span>
+                                <span className='name' key={index}>{friend}</span>
                                 <img className='ico' src={message}/>
-                                </>
-                            })
-                        ) : (
-                            friends.map((idx) => {
-                                <>
-                                <img className="avatar" src={myAvatar}/>
-                                <span className='name'>{idx}</span>
-                                <img className='ico' src={message}/>
-                                </>
-                            }))
-                            }
+                            </div>
+
                         </>
-                    </div>
+                  ))
+                    ) : (
+                        groups.map((group, index) => (
+                            <>
+                            <div className='list'>
+                                <img className="avatar" src={groupt}/>
+                                <span className='name' key={index}>{group}</span>
+                                <img className='ico' src={message}/>
+                            </div>
+                            </>
+                  ))
+                )}
                     </div>
             </div>
             </div>
-        </div>
 
     );
 }
@@ -182,7 +180,6 @@ const Achivements = () => {
     ]
 
     return (    
-        <div className="achivementsBox">
             <div className="fullAchivementsBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
                 <div className="contentAchivementsBox">
@@ -210,7 +207,6 @@ const Achivements = () => {
                     </div>
                 </div>
             </div>
-        </div>
     );
 }   
 
