@@ -13,6 +13,7 @@
     npm i react-draggable
     npm i react-hot-toast
     npm i react-scroll-horizontal
+    npm install --save react-animated-text-content
 
 <!-- https://github.com/kalkson/react-animated-text-content -->
 
