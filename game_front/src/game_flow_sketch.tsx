@@ -8,9 +8,18 @@ import { ContextSocket, socket } from './socket_setup/client-connect';
 import { Paddle } from './game-classes/paddle.class';
 import { id_player } from './components/render_game_sketch_components';
 import { Ball } from './game-classes/Ball.class';
+
+
+//h-             WORKING IMPORTS
+//y------------------------------------------
+
 import gifMatch from './assets/disk.gif';
 import f from "./assets/thirteen_pixel_fonts.ttf";
 import blur from "./assets/blurdisk.png";
+import loading from "./assets/loading.gif"
+
+//y------------------------------------------
+//h-   -------------------------------------
 
 
 
@@ -23,7 +32,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   const Frontroom : any = {};
   let MatchmakingPage : p5Types.Image;
   let font : p5Types.Font;
-  let blured : p5Types.Image;
+  let load : p5Types.Image;
   
   
   socket?.on("PlayersOfRoom",(Backroom : any)=>{
@@ -111,6 +120,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       p5_ob.preload = () =>{
         MatchmakingPage = p5_ob.loadImage(gifMatch);
         font = p5_ob.loadFont(f);
+        load = p5_ob.loadImage(loading);
         // blured = p5_ob.loadImage(blur);
         
       }
@@ -155,12 +165,16 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
       }
       else{
-        // console.log("A player is missing");
+        console.log("A player is missing");
         // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
-        // p5_ob.fill("#e31717");
-        // p5_ob.text("Matchmaking",100,100);
-        p5_ob.background("#080917");
+        // p5_ob.image(load,0,0);
+        //b- LOADING PAGE CODE
+        p5_ob.background(load);
         p5_ob.image(MatchmakingPage,170,0,750,550);
+        p5_ob.fill("#4aede8");
+        p5_ob.text("Loading",100,200);
+        //b- ----------------------
+        // p5_ob.text("...",190,100);
         // if (id_of_player1 == id_player){
         //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
         //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
