@@ -19,7 +19,7 @@ const retrieveCheckSendData = () => {
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     if (avatar && usernameCheck.test(nicknameInput)) {
         const data = new FormData();
@@ -37,11 +37,11 @@ const retrieveCheckSendData = () => {
                 error: "An error occurred",
             }
         );
-        <BrowserRouter>
-            <Routes>
-                navigate("/home");
-            </Routes>
-		</BrowserRouter>
+        // <BrowserRouter>
+        //     <Routes>
+        //         navigate("/home");
+        //     </Routes>
+		// </BrowserRouter>
     }
     else if (!avatar && nicknameInput.length == 0)
     {
@@ -140,8 +140,8 @@ export default function LoginSettings() {
                         <div className="startContainer">
                             <Toasts/>
                             <section>
-                                <button style={{width: '100px'}} onClick={dialogPlease} type="button" className="nes-btn">Start</button>
-                                <dialog className="nes-dialog" id="dialog-default">
+                                <button style={{width: '100px'}} onClick={retrieveCheckSendData} type="button" className="nes-btn">Start</button>
+                                {/* <dialog className="nes-dialog" id="dialog-default">
                                     <form method="dialog">
                                         <p className="title">Warning</p>
                                         <p>Do you wanna go with the default</p>
@@ -150,7 +150,7 @@ export default function LoginSettings() {
                                             <button onClick={retrieveCheckSendData} className="nes-btn is-success">Confirm</button>
                                         </menu>
                                     </form>
-                                </dialog>
+                                </dialog> */}
                             </section>
                         </div>
                     </div>

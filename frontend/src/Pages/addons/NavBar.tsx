@@ -111,11 +111,16 @@ const NavBarFooter = () => {
 		fetchData();
 	}, []);
 
+    const cookie = new Cookies();
+    const token = jwt_decode(cookie.get('jwt'));
+    const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
+
+
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<a href="/profil" title="Profile">
-			<img src={userData.profileImage} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+			<img src={myAvatar} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</a>
 		</div>
 		<div className="nav-item">
