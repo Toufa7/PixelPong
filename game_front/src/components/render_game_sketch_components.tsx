@@ -27,6 +27,7 @@ export const Websocket_render = () =>{
         socket?.off("connect");
         socket?.off("UpdatePlayerPos");
         socket?.off("PlayersOfRoom");
+        socket?.off("UpdateBallPos");
     }
 
     },[])
@@ -34,7 +35,7 @@ export const Websocket_render = () =>{
     return (
     <div>
         {/* <ReactP5Wrapper sketch={sketch_ot}/> */}
-        <div><ReactP5Wrapper sketch={sketch}/></div>
+        <ReactP5Wrapper sketch={sketch}/>
     </div>
     )
 }

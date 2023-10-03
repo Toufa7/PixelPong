@@ -13,10 +13,10 @@ import { Ball } from './game-classes/Ball.class';
 //h-             WORKING IMPORTS
 //y------------------------------------------
 
-import gifMatch from './assets/disk.gif';
+import gifMatch from './assets/tv.gif';
 import f from "./assets/thirteen_pixel_fonts.ttf";
-import blur from "./assets/blurdisk.png";
-import loading from "./assets/loading.gif"
+// import loading from "./assets/loading.gif";
+import over_g from "./assets/wdS.gif";
 
 //y------------------------------------------
 //h-   -------------------------------------
@@ -32,53 +32,66 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   const Frontroom : any = {};
   let MatchmakingPage : p5Types.Image;
   let font : p5Types.Font;
-  let load : p5Types.Image;
+  let ovp : p5Types.Image;
+  let change_screen :boolean = false;
   
   
+  
+  //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
+
   socket?.on("PlayersOfRoom",(Backroom : any)=>{
     console.log("Im -->" + socket.id);
     console.log(Backroom);
     
     if (!Frontroom[Backroom.id]){
       console.log("creating room ...!!");
-      Frontroom[Backroom.id] = {Player1:{Paddle:"",Ball:""},Player2:{Paddle:"",Ball:""},GameBall:""};
+      Frontroom[Backroom.id] = {client_count : "",Player1:{Paddle:"",Ball:""},Player2:{Paddle:"",Ball:""},GameBall:""};
       Frontroom[Backroom.id].GameBall = Backroom.GameBall;
+      Frontroom[Backroom.id].client_count = Backroom.client_count;
 
       if (Backroom.Player1){
       Frontroom[Backroom.id].Player1 = Backroom.Player1;
       Frontroom[Backroom.id].Player1.Paddle = new Paddle(Frontroom[Backroom.id].Player1.x,Frontroom[Backroom.id].Player1.y,
         Frontroom[Backroom.id].Player1.width,Frontroom[Backroom.id].Player1.height,p5_ob,"#FFFA37");
       
-      Frontroom[Backroom.id].Player1.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall?.ball_speed_y);
+      Frontroom[Backroom.id].Player1.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,
+          Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall?.ball_speed_y);
       }
       if (Backroom.Player2){
         Frontroom[Backroom.id].Player2 = Backroom.Player2;
         Frontroom[Backroom.id].Player2.Paddle = new Paddle(Frontroom[Backroom.id].Player2.x,Frontroom[Backroom.id].Player2.y,
           Frontroom[Backroom.id].Player2.width,Frontroom[Backroom.id].Player2.height,p5_ob,"#FFFA37");
 
-        Frontroom[Backroom.id].Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall?.ball_speed_y);
+        Frontroom[Backroom.id].Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,
+            Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall?.ball_speed_y);
       }
     }
     else{
+      Frontroom[Backroom.id].client_count = Backroom.client_count;
       if (!Frontroom[Backroom.id].Player1 && Backroom.Player1){
         Frontroom[Backroom.id].Player1 = Backroom.Player1;
         Frontroom[Backroom.id].Player1.Paddle = new Paddle(Frontroom[Backroom.id].Player1.x,Frontroom[Backroom.id].Player1.y,
           Frontroom[Backroom.id].Player1.width,Frontroom[Backroom.id].Player1.height,p5_ob,"#FFFA37");
 
-          Frontroom[Backroom.id].Player1.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall.ball_speed_y);
+          Frontroom[Backroom.id].Player1.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,
+              Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall.ball_speed_y);
         }
         if (!Frontroom[Backroom.id].Player2 && Backroom.Player2){
           Frontroom[Backroom.id].Player2 = Backroom.Player2;
           Frontroom[Backroom.id].Player2.Paddle = new Paddle(Frontroom[Backroom.id].Player2.x,Frontroom[Backroom.id].Player2.y,
             Frontroom[Backroom.id].Player2.width,Frontroom[Backroom.id].Player2.height,p5_ob,"#FFFA37");
 
-          Frontroom[Backroom.id].Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall.ball_speed_y);
+          Frontroom[Backroom.id].Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,
+              Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall.ball_speed_y);
         }
     }
 
+
+    //y- Handling disconnect of Player in frontend
+
     for(const id in Frontroom){
       if (!Backroom?.Player1){
-          console.log("Player 1 disconnected or doesn't exit in room ->" + Backroom?.id);
+          console.log("Player 1 disconnected or doesn't exist in room ->" + Backroom?.id);
           delete Frontroom[id].Player1;
       }
       if (!Backroom?.Player2){
@@ -86,10 +99,15 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         delete Frontroom[id].Player2;
       }
     }
+  //y---------------------------------------------
   
+
+  console.log("client_count--->"+Frontroom[Backroom.id].client_count);
   console.log(Frontroom);
 
   });
+
+      //r- Getting Position of player form Backend
       socket?.on("UpdatePlayerPos",(Backroom)=>{
           for(const id in Frontroom){
             if(Frontroom[id].Player1){
@@ -101,8 +119,9 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
               Frontroom[id].Player2.Paddle.pos.y = Backroom.Player2?.y;
             }
           }
-      })
+      });
 
+      //r- Getting Position of player from Backend
       socket?.on("UpdateBallPos",(Backroom)=> {
         let reverse_ball_x = screen_width - Backroom.GameBall?.x;
 
@@ -115,14 +134,14 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
             Frontroom[id].Player2.Ball.pos.y = Backroom.GameBall?.y;
           }
         }
-      })
+      });
 
+
+      //r- Loading Images
       p5_ob.preload = () =>{
         MatchmakingPage = p5_ob.loadImage(gifMatch);
         font = p5_ob.loadFont(f);
-        load = p5_ob.loadImage(loading);
-        // blured = p5_ob.loadImage(blur);
-        
+        ovp = p5_ob.loadImage(over_g);
       }
 
       p5_ob.setup = () => {
@@ -137,55 +156,79 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     }
     
     p5_ob.draw = () =>{
-    p5_ob.background("#FA9200");
-    for(const id in Frontroom){
-      const id_of_player1 = Frontroom[id].Player1?.id;
-      const id_of_player2 = Frontroom[id].Player2?.id;
-      const Player1 = Frontroom[id].Player1?.Paddle;
-      const Player2 = Frontroom[id].Player2?.Paddle;
-      if (id_of_player1 == id_player){
-        Player1?.update_Player_pos(canvas);
-        if (Player2 && id_of_player2 != id_player){
-          Player2.pos.x = screen_width - Player2.paddle_width;
-          Player2?.update_Player_pos(canvas);
+      if (!change_screen){
+        for(const id in Frontroom){
+          p5_ob.background("#FA9200");
+          const id_of_player1 = Frontroom[id].Player1?.id;
+          const id_of_player2 = Frontroom[id].Player2?.id;
+          const Player1 = Frontroom[id].Player1?.Paddle;
+          const Player2 = Frontroom[id].Player2?.Paddle;
+          if (id_of_player1 == id_player){
+            Player1?.update_Player_pos(canvas);
+            if (Player2 && id_of_player2 != id_player){
+              Player2.pos.x = screen_width - Player2.paddle_width;
+              Player2?.update_Player_pos(canvas);
+            }
+          }
+          else if (id_of_player2 == id_player){
+            Player2?.update_Player_pos(canvas);
+            if (Player1 && id_of_player1 != id_player){
+              Player1.pos.x = screen_width - Player1.paddle_width;
+              Player1?.update_Player_pos(canvas);
+            }
+          }
+    
+          //y- LOADING PAGE FOR PLAYERS
+    
+          
+          //   //r- CODE FOR DRAWING THE BALL
+          if (Frontroom[id].Player1 && Frontroom[id].Player2){
+              // console.log(Player1.pos.x);
+            if (id_of_player1 == id_player)
+              Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+            else if (id_of_player2 == id_player)
+            Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+          }
+          //   //r----------------------------
+    
+          
+          //   //b- LOADING PAGE CODE
+            else{
+            console.log("A player is missing");
+            // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
+            // p5_ob.image(load,0,0);
+            p5_ob.background("#000000");
+            p5_ob.image(MatchmakingPage,170,0,750,550);
+            // p5_ob.fill("#000000");
+            // p5_ob.text("Loading",100,200);
+            // p5_ob.text("...",190,100);
+            // if (id_of_player1 == id_player){
+            //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+            //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+            //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
+            }
+            socket?.on("PlayerLeave",()=>{
+              socket.disconnect();
+              change_screen = true;
+              // p5_ob.background("#000000");
+              // p5_ob.image(ovp,170,0,750,550);
+            });
+          //   //b- ----------------------
+    
+          //   // else if (id_of_player2 == id_player)
+          //   //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+          //   //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+          //   //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
+          // }
+    
+          //y----------------------------------
+          
         }
+      }else{
+        console.log("Game  Over someone forfaited");
+        p5_ob.background("#000000");
+        p5_ob.image(ovp,250,0,600,550);
       }
-      else if (id_of_player2 == id_player){
-        Player2?.update_Player_pos(canvas);
-        if (Player1 && id_of_player1 != id_player){
-          Player1.pos.x = screen_width - Player1.paddle_width;
-          Player1?.update_Player_pos(canvas);
-        }
-      }
-      if (Frontroom[id].Player1 && Frontroom[id].Player2){
-        // console.log(Player1.pos.x);
-        if (id_of_player1 == id_player)
-          Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
-        else if (id_of_player2 == id_player)
-        Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
-      }
-      else{
-        console.log("A player is missing");
-        // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
-        // p5_ob.image(load,0,0);
-        //b- LOADING PAGE CODE
-        p5_ob.background(load);
-        p5_ob.image(MatchmakingPage,170,0,750,550);
-        p5_ob.fill("#4aede8");
-        p5_ob.text("Loading",100,200);
-        //b- ----------------------
-        // p5_ob.text("...",190,100);
-        // if (id_of_player1 == id_player){
-        //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-        //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-        //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
-        // }
-        // else if (id_of_player2 == id_player)
-        //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-        //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-        //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
-      }
-    }
   }
 }
 

@@ -109,13 +109,13 @@ export class Rooms{
         return (0);
     }
 
-    CleanRoom(Player : Socket , Players : Players_Management , server : Server,screen_width,screen_height){
+    CleanRoom(Player_id : string, Player : Socket , Players : Players_Management , server : Server,screen_width,screen_height){
         let room_id;
         console.log("\n--------------DISCONECTION------------------")
-        console.log("Player disconnected " + Player.id);
+        console.log("Player disconnected " + Player_id);
         for(const id in this.rooms){
         const Room = this.rooms[id];
-        if (Player.id == Room.Player1?.id && Room.Player1){
+        if (Player_id == Room.Player1?.id && Room.Player1){
             console.log("Found the Player (Player1) in room ["+Room.id+"]-->" + Room.Player1.id);
             room_id = Room.id;
             Room.client_count--;
@@ -125,7 +125,7 @@ export class Rooms{
                 break;
         }
         else{
-            if (Player.id == Room.Player2?.id && Room.Player2){
+            if (Player_id == Room.Player2?.id && Room.Player2){
             console.log("Found the Player (Player2) in room ["+Room.id+"]-->" + Room.Player2.id);
             Room.client_count--;
             Player.leave(Room.id);
@@ -135,7 +135,7 @@ export class Rooms{
             }
         }
         }
-        delete Players.players[Player.id];
+        delete Players.players[Player_id];
         // server.to(room_id).emit("UpdatePlayerPos",Players.players);
         console.log(this.rooms);
         // console.log(Players.players);

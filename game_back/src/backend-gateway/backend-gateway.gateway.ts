@@ -36,6 +36,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           // this.server.to(Player.id).emit("UpdatePlayerPos",this.Players.players);
           // console.log(this.Rooms);
           this.SendToPlayersinRoom(Player,this.Rooms);
+          console.log("--->Players" + JSON.stringify(this.Players.players));
         })
   }
 
@@ -51,15 +52,39 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         break;
       }
     }
-    this.Rooms.CleanRoom(Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+    // if (Player.id == this.Room_dl.Player1?.id){
+      //   console.log("-------------------SEP-----------------\n");
+      //   console.log("Player one who disconnected");
+      //   console.log(this.Room_dl.Player2?.id + " have to disconnect");
+      //   this.Rooms.CleanRoom(this.Room_dl.Player2?.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+      //   console.log("\n-------------------------------------------");
+      // }
+      // else if (Player.id == this.Room_dl.Player2?.id){
+        //   console.log("-------------------SEP-----------------\n");
+        //   console.log("Player two who disconnected");
+        //   console.log(this.Room_dl.Player1?.id + " have to disconnect");
+        //   this.Rooms.CleanRoom(this.Room_dl.Player1?.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+        //   console.log("\n-------------------------------------------");
+        // }
+        this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+        if (this.Room_dl.client_count > 0){
+          console.log("-------------There still another Player in the room!!-------------");
+          this.server.to(this.Room_dl.id).emit("PlayerLeave");
+        }
+
     // console.log("this room + [" + JSON.stringify(this.Room_dl) + "] is affected ---> Player " + Player.id);
     if (!this.Room_dl.Player1 || !this.Room_dl.Player2){
       console.log("ENTERED !!");
       console.log(this.Room_dl.id);
       this.server.to(this.Room_dl.id).emit("PlayersOfRoom",this.Room_dl);
+      // if (this.Room_dl.client_count > 0)
+      //   this.server.to(this.Room_dl.id).emit("Dis",this.Room_dl);
     }
+    console.log(this.Players.players);
   }
 
+
+  
   SendToPlayersinRoom(Player : Socket , Rooms){
     for(const id in Rooms.rooms){
       const Room = Rooms.rooms[id];
@@ -79,15 +104,16 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   @SubscribeMessage("Player_movement")
     HandleMovement(@MessageBody() Player_data , @ConnectedSocket() Player : Socket){
       let dy : number = 10;
+      if (this.Players.players[Player.id]){
         if ((Player_data.sig === "DOWN") && (Player_data.Key == Player_data.key_check)){
           // console.log("Player will Move Down from id --->" + this.Players.players[Player.id].id);
           this.Players.players[Player.id].y += dy;
 
-          if (this.Players.players[Player.id].y < 0){
+          if (this.Players.players[Player.id]?.y < 0){
             this.Players.players[Player.id].y = 0;
           }
 
-          if (this.Players.players[Player.id].y > this.screen_metrics.screen_height - this.Players.players[Player.id].height){
+          if (this.Players.players[Player.id]?.y > this.screen_metrics.screen_height - this.Players.players[Player.id].height){
             this.Players.players[Player.id].y =  this.screen_metrics.screen_height - this.Players.players[Player.id].height;
             // console.log(this.screen_metrics.screen_width);
 
@@ -104,7 +130,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           // console.log("Mouse event " + Player_data.mouse_coord);
           this.Players.players[Player.id].y = Player_data.mouse_coord;
         }
-        
+      }
     }
 
     @SubscribeMessage("Ball_movement")
