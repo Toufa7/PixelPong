@@ -240,12 +240,21 @@ function Home() {
 	// duration={1000}
 	// easing="easeInOutQuad"
 
+	// anime({
+	// 	targets: '.on-going-matches1 .el',
+	// 	translateX: 250,
+	// 	direction: 'alternate',
+	// 	loop: true,
+	// 	easing: 'steps(5)'
+	//   })
+
+
 	return (
 		<div style={{height: '100vh'}}>
 			<Anime
 				translateY={['-100%', '0%']}
 				duration={1000}
-				easing="easeInOutQuad">
+				easing="steps(5)">
 			<TopContainer/>
 			</Anime>
 			<Anime  delay={anime.stagger(1000)} scale={[ 0.1, 1 ]}>

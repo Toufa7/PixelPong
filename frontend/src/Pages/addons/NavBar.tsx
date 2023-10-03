@@ -20,13 +20,6 @@ import { useEffect, useState } from "react";
 
 
 const NavBarBody = () => {
-	const [isNotificationClicked, setIsNotificationClicked] = useState(false);
-
-	const handleNotificationClicked = () => {
-		setIsNotificationClicked(!isNotificationClicked);
-		console.log("Clicked")
-	}
-
 	return (
 	<div className="nav-content">
 		<div className="nav-item">
@@ -36,21 +29,8 @@ const NavBarBody = () => {
 		</div>
 		<div className="nav-item" >
 			<a className="noti" href="#" title="Notifications">
-				<img src={notificationLogo} onClick={handleNotificationClicked}/>
+				<img src={notificationLogo}/>
 			</a>
-			{isNotificationClicked && (
-			<div className="notification-container">
-				<div className="nes-container with-title is-centered">
-				<p className="title">Notifications</p>
-				<div className="time">
-					<span>12:40</span>
-				</div>
-				<div className="message">
-					<span>Salam khouya bikhir</span>
-				</div>
-				</div>
-			</div>
-        )}
 		</div>
 		<div className="nav-item">
 			<a href="chat" title="Chat">
@@ -90,8 +70,7 @@ const NavBarFooter = () => {
 		axios.post("http://localhost:3000/auth/logout", {withCredentials: true})
 		.then((response) => {
 			console.log(response);
-			}
-		)
+		})
 		.catch((error) => {
 			console.log(error)
 		});
@@ -112,16 +91,13 @@ const NavBarFooter = () => {
                 {
                     setUserData(true)
                 })
-				.catch(((avatarErr) => {
-                    console.log("AVATAR " ,avatarErr);
+				.catch(((error) => {
+                    console.log("Error in NavBar " ,error);
 				}))
             }
         }
 		fetchData();
     }, [])
-
-
-
 
 
 	return (
