@@ -7,6 +7,8 @@ import "nes.css/css/nes.min.css";
 // import { getCookie } from 'typescript-cookie'
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import Anime, { anime } from 'react-anime';
+import AudioPlayer from 'react-h5-audio-player';
+import ringer from './assets/ringtone.mp3';
 /******************* Images  *******************/
 
 import cloud from './assets/cloud.svg';
@@ -63,7 +65,7 @@ const LoginBox = () => {
           </div>
       </div>
       </div>
-                    </Anime>
+      </Anime>
 
   );
 };
@@ -92,8 +94,21 @@ const Images = () => {
 
 export default function LoginPage() {
 
-  const socket = useContext(socketContext);
+  const MyComponent = () => {
+    useEffect(() => {
+      const audio = new Audio(ringer);
+      audio.loop = true;
+      audio.play();
+      return () => {
+        audio.pause();
+      };
+    }, []);
+    return <></>;
+  };
 
+
+
+  const socket = useContext(socketContext);
   useEffect(()=>{
     socket?.on("connect",()=>{
         console.log("im connected");
@@ -101,7 +116,8 @@ export default function LoginPage() {
   },[]);
 
   return (
-      <div className="loginPage">
+    <div className="loginPage">
+        <MyComponent />
         <div className="lb">
           <LoginBox/>
         </div>
