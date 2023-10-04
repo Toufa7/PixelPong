@@ -217,7 +217,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
                   console.log("hit left half")
                   if(y_ball > (Player.y + 15) && y_ball < (Player.y + Player.height - 11)){
                       console.log("hit mid !!");
-                      Ball_x = Ball_x + 8;
+                      // Ball_x = Ball_x + 8;
                       Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
                       // this.collision_front = true;
                       return(true);
@@ -225,7 +225,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
                   else{
                       console.log("hit corner !!");
                       console.log(Player.y);
-                      Ball_x = Ball_x + 8;
+                      // Ball_x = Ball_x + 8;
                       Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
   
                       // this.r = Math.random(0,2);
