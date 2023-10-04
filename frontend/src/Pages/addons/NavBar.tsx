@@ -9,9 +9,8 @@ import axios from "axios";
 import msgLogo from './assets/msgLogo.svg';
 import settingsLogo from './assets/settingsLogo.svg'
 import notificationLogo from './assets/notificationLogo.svg'
-import homeLogo from './assets/homeLogo.svg'
 import logoutLogo from './assets/logoutLogo.svg'
-import profilLogo from './assets/profilLogo.svg'
+import groups from './assets/groups.svg'
 import randomLogo from './assets/logo.svg'
 import Cookies from "universal-cookie";
 import {useNavigate} from "react-router-dom";
@@ -23,8 +22,8 @@ const NavBarBody = () => {
 	return (
 	<div className="nav-content">
 		<div className="nav-item">
-			<a href="/home" title="Home">
-				<img src={homeLogo}/>
+			<a href="/groups" title="Groups">
+				<img src={groups}/>
 			</a>
 		</div>
 		<div className="nav-item" >
@@ -85,7 +84,6 @@ const NavBarFooter = () => {
             const cookie = new Cookies();
             const token = jwt_decode(cookie.get('jwt'));
             if (token) {
-
                 await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
                 .then(() => 
                 {

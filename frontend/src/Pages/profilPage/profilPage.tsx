@@ -85,24 +85,12 @@ const Profil = () => {
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>
-                        <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="35" max="100"/>
+                        <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
                     </div>
                         <span style={{textAlign: 'right'}}>78/100</span>
                     </div>
                 </div>
             </div>
-            <div className='buttonat'>
-                <a>
-                    {isFriend ? (
-                        <>
-                            <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
-                            <a  href="/chat" className="nes-btn">Chat</a>
-                        </>
-                        ) : (
-                        <a className="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</a>
-                    )}
-                </a>
-                </div>
             </div>
     );
 }
@@ -126,7 +114,7 @@ const GroupsAndFriends = () => {
         "Atkins",
         "Wilkerson",
         "Brady",
-        "Edward Colon",
+        "Colon",
         "Cristina",
         "Saige"
       ];

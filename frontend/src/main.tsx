@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom/client'
 
 
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate, useNavigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
-
 /******************* Includes  *******************/
 import NavBar from './Pages/addons/NavBar';
 import Stars from './Pages/addons/Stars';
@@ -18,6 +17,20 @@ import ProfilPage from './Pages/profilPage/profilPage';
 import axios from 'axios';
 import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
+import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
+import Testing from './Pages/userProfilPage/userProfilPage'
+
+
+
+export const OtherUser = () => {
+	return (
+		<>
+			<Stars/>
+			<NavBar/>
+			<Testing/>
+		</>
+	);
+}
 
 
 export const LogingPageComponents = () => {
@@ -36,6 +49,18 @@ export const ChatComponents = () => {
 		<>
 			<Stars/>
 			<ChatPage/>
+		</>
+	);
+}
+
+
+
+
+export const ChatGroupsComponents = () => {
+	return (
+		<>
+			{/* <Stars/> */}
+			<ChatPageGroup/>
 		</>
 	);
 }
@@ -105,7 +130,7 @@ const Redirect2FA = () => {
 	}
 	else
 	{
-		console.log("I Enter Because it's FALSE")
+		console.log("I Enter Because it's false")
 		return (
 			<></>
 		);
@@ -121,9 +146,12 @@ const RedirectToSettings = () => {
 		<BrowserRouter>
 			<Routes>
 				<Route path="settings"	Component={LoginSettingsComponents} />
-				<Route path="home"		Component={HomeComponents}/> 
-				<Route path="profil"	Component={ProfilComponents}/>
-				<Route path="chat"		Component={ChatComponents}/>
+				<Route path="home"		Component={HomeComponents}/>
+	 
+				<Route path="profil/"	Component={ProfilComponents}/>
+				<Route path="profil/*"	Component={OtherUser}/>
+				<Route path="chat"		Component={ChatPage}/>
+				<Route path="groups"	Component={ChatGroupsComponents}/>
 			</Routes>
 		</BrowserRouter>
 		);
@@ -145,7 +173,7 @@ const RedirectToSettings = () => {
 };
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+	<React.StrictMode>
 	<RedirectToSettings/>
 	<Redirect2FA/>
 	<BrowserRouter>

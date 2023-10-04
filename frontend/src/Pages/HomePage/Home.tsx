@@ -247,8 +247,6 @@ function Home() {
 	// 	loop: true,
 	// 	easing: 'steps(5)'
 	//   })
-
-
 	return (
 		<div style={{height: '100vh'}}>
 			<Anime
@@ -257,19 +255,30 @@ function Home() {
 				easing="steps(5)">
 			<TopContainer/>
 			</Anime>
-			<Anime  delay={anime.stagger(1000)} scale={[ 0.1, 1 ]}>
 			<div className="top-containers">
+			<Anime
+				translateX={['-100%', '0%']}
+				duration={1000}
+				easing="steps(5)">
 				<TopLeft/>
-				<TopRight/>
-			</div>
 			</Anime>
-			<Anime opacity={[0, 1]} translateY={['-100%', '0%']} delay={500} duration={1000}>
-
+			<Anime
+				translateX={['100%', '0%']}
+				duration={1000}
+				easing="steps(5)">
+				<TopRight/>
+			</Anime>
+			</div>
 			<div className="bottom-containers">
+			<Anime
+				translateY={['100%', '0%']}
+				duration={1000}
+				easing="steps(5)">
 			<BottomLeft/>
 			<BottomRight/>
-			</div>
+
 			</Anime>
+			</div>
 		</div>
   );
 }

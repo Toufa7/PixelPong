@@ -34,6 +34,11 @@ https://www.streamlinehq.com/icons/pixel
 https://www.syncfusion.com/blogs/post/top-7-react-animation-libraries-in-2022.aspx
 
 
+# Sounds And Effects
+
+
+https://downloads.khinsider.com
+
 ## FlexBox Visutalizer :
 
 https://flexbox.tech/

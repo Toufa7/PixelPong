@@ -8,7 +8,7 @@ import "nes.css/css/nes.min.css";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import Anime, { anime } from 'react-anime';
 import AudioPlayer from 'react-h5-audio-player';
-import ringer from './assets/ringtone.mp3';
+import song from './assets/ringtone.mp3';
 /******************* Images  *******************/
 
 import cloud from './assets/cloud.svg';
@@ -90,13 +90,11 @@ const Images = () => {
 };
 
 
-
-
 export default function LoginPage() {
 
-  const MyComponent = () => {
+  const PlayingSong = () => {
     useEffect(() => {
-      const audio = new Audio(ringer);
+      const audio = new Audio(song);
       audio.loop = true;
       audio.play();
       return () => {
@@ -117,7 +115,7 @@ export default function LoginPage() {
 
   return (
     <div className="loginPage">
-        <MyComponent />
+        <PlayingSong />
         <div className="lb">
           <LoginBox/>
         </div>
