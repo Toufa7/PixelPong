@@ -155,6 +155,15 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       }
       //r------------------
 
+
+      socket?.on("PlayerLeave",()=>{
+        console.log("You won by Forfait --->" + socket?.id);
+        socket.disconnect();
+        change_screen = true;
+        // p5_ob.background("#000000");
+        // p5_ob.image(ovp,170,0,750,550);
+      });
+
       p5_ob.setup = () => {
       p5_ob.frameRate(60);
       canvas = p5_ob.createCanvas(screen_width , screen_height);
@@ -218,12 +227,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
             //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
             //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
             }
-            socket?.on("PlayerLeave",()=>{
-              socket.disconnect();
-              change_screen = true;
-              // p5_ob.background("#000000");
-              // p5_ob.image(ovp,170,0,750,550);
-            });
+            
           //   //b- ----------------------
     
           //   // else if (id_of_player2 == id_player)
@@ -242,6 +246,12 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       }
   }
 }
+
+
+
+
+
+
 
 
 
