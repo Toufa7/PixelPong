@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { Players_Management } from './entities/players-management.service';
-import { BackendGateway } from './backend-gateway.gateway';
+import { BackendGateway } from './Game-gateway.gateway';
 import { Rooms } from './entities/room.service';
 
 @Module({

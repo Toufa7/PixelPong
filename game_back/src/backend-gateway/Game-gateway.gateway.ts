@@ -6,8 +6,17 @@ import { Rooms } from './entities/room.service';
 import { Interval, Timeout } from '@nestjs/schedule';
 
 
-@WebSocketGateway({namespace :"/Game",cors : { origin : ['http://localhost:5173' , 'http://10.14.8.4:5173'] , methods: ["GET", "POST"], credentials: true , transports : 'websocket'},pingInterval: 1000,
-pingTimeout: 1000, path : '/online'})
+@WebSocketGateway({
+namespace :"/Game",
+cors : {
+origin : ['http://localhost:5173' , 'http://10.14.8.4:5173'] , 
+methods: ["GET", "POST"],
+credentials: true , transports : 'websocket'
+},
+pingInterval: 1000,
+pingTimeout: 1000,
+path : '/online'
+})
 export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
   constructor(private readonly Players: Players_Management,
       private readonly Rooms : Rooms) {}

@@ -28,17 +28,8 @@ export let screen_width = 1050;
 export let screen_height = 500;
 
 
-export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
-  const Frontroom : any = {};
-  let MatchmakingPage : p5Types.Image;
-  let font : p5Types.Font;
-  let ovp : p5Types.Image;
-  let change_screen :boolean = false;
-  
-  
-  
-  //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
 
+function SettingUpBackWithFront(Frontroom : any , p5_ob : any){
   socket?.on("PlayersOfRoom",(Backroom : any)=>{
     console.log("Im -->" + socket.id);
     console.log(Backroom);
@@ -106,8 +97,24 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   console.log(Frontroom);
 
   });
+}
+
+
+export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
+  const Frontroom : any = {};
+  let MatchmakingPage : p5Types.Image;
+  let font : p5Types.Font;
+  let ovp : p5Types.Image;
+  let change_screen :boolean = false;
+  
+  
+  
+  //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
+      SettingUpBackWithFront(Frontroom, p5_ob);
+  //o--------------------------------------------------------------------------
 
       //r- Getting Position of player form Backend
+
       socket?.on("UpdatePlayerPos",(Backroom)=>{
           for(const id in Frontroom){
             if(Frontroom[id].Player1){
@@ -120,8 +127,10 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
             }
           }
       });
+      //r-------------------------------------------
 
       //r- Getting Position of player from Backend
+
       socket?.on("UpdateBallPos",(Backroom)=> {
         let reverse_ball_x = screen_width - Backroom.GameBall?.x;
 
@@ -135,6 +144,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
           }
         }
       });
+      //r--------------------------------------------
 
 
       //r- Loading Images
@@ -143,6 +153,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         font = p5_ob.loadFont(f);
         ovp = p5_ob.loadImage(over_g);
       }
+      //r------------------
 
       p5_ob.setup = () => {
       p5_ob.frameRate(60);
