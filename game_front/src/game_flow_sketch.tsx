@@ -115,7 +115,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
 
       //r- Getting Position of player form Backend
 
-      socket?.on("UpdatePlayerPos",(Backroom)=>{
+      socket?.on("UpdatePlayerPos",(Backroom : any)=>{
           for(const id in Frontroom){
             if(Frontroom[id].Player1){
                 Frontroom[id].Player1.Paddle.pos.x = Backroom.Player1?.x;
@@ -131,7 +131,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
 
       //r- Getting Position of player from Backend
 
-      socket?.on("UpdateBallPos",(Backroom)=> {
+      socket?.on("UpdateBallPos",(Backroom : any)=> {
         let reverse_ball_x = screen_width - Backroom.GameBall?.x;
 
         for(const id in Frontroom){

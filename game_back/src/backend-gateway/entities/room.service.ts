@@ -43,7 +43,7 @@ export class Rooms{
                     console.log("Room enterd ["+Room.id+"]")
                     Room.Player1 = Players.players[Player.id];
                     Room.Player1.room_id = Room.id;
-                    Room.GameBall = new BallDto(-7,2,24,screen_width / 2 , screen_height / 2);
+                    Room.GameBall = new BallDto(-4,2,24,screen_width / 2 , screen_height / 2);
                     Room.client_count++;
                     Player.join(Room.id);
                     break;
@@ -121,7 +121,7 @@ export class Rooms{
             Room.client_count--;
             Player.leave(Room.id);
             delete Room.Player1;
-            Room.GameBall = new BallDto(-7,2,24,screen_width / 2 , screen_height / 2);
+            Room.GameBall = new BallDto(-4,2,24,screen_width / 2 , screen_height / 2);
                 break;
         }
         else{
@@ -130,7 +130,7 @@ export class Rooms{
             Room.client_count--;
             Player.leave(Room.id);
             delete Room.Player2;
-            Room.GameBall = new BallDto(-7,2,24,screen_width / 2 , screen_height / 2);
+            Room.GameBall = new BallDto(-4,2,24,screen_width / 2 , screen_height / 2);
             break;
             }
         }
