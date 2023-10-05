@@ -4,91 +4,131 @@ body {
 	background: linear-gradient(to right, #4F3997, #6E58B6);
 }
 
-.groupsAndFriendsBox {
+
+.downContainer {
 	display: flex;
-	justify-content: center;
-	text-align: center;
-	margin-bottom: 50px;
-
-
-	.gAndFBox {
-		width: 500px; height: 488px;
-		background-color: #8ade84;
-		border-left: 8px solid #f9f871;
-		border-right: 8px solid #000000;
-		border-bottom: 8px solid #f9f871;
-
-		.gAndFHeader {
-			height: 10%;
-			background-color: #8ade84;
-			border-bottom: 8px solid #7C6E6E;
-			border-left: 8px solid black;
-			border-top: 8px solid #f9f871;
-		}
-		
-		.gAndFTabs {
-			display: flex;
-			height: 6%;
-			.A,
-			.B {
-				flex-grow: 1;
+    flex-flow: row wrap;
+    justify-content:space-evenly;
+	align-items: center;
+	.fullAchivementsBox {
+		width: 652px; height: 302px;
+		background: #BFB3E1;
+		border-bottom: 8px solid #7C6E6E;
+		border-left: 8px solid #7C6E6E;
+		border-right: 8px solid #EBD9F0;
+		z-index: 0;
+			
+			.headAchivementsBox {
+				height: 20%;
+				background-color: #BFB3E1;
+				border-bottom: 8px solid #7C6E6E;
+				border-left: 8px solid black;
+				border-top: 8px solid #EBD9F0;
+				color: #694694;
 			}
-		}
-		.gAndFContent {
-			height: 84%;
-			border-top: 8px solid #f9f871;
-			border-left: 8px solid black;
-			border-bottom: 8px solid black;
-			color: white;
-			overflow: scroll;
-			scroll-behavior: smooth;
-			.listParent {
-				.list {
-					border: 2px solid black;
-					display: flex;
-					align-items: center;
-					padding: 10px;
-					display: flex;
-
-					
-					.avatar {
-						width: 60px; height: 60px;
-						margin-right: 10px;
-						margin-left: 10px;
-						border-radius: 50px;
-						flex-grow: 0;
-
-					}
-					.name {
-					}
-					.ico {
-						height: 40px; width: 40px;
-						margin-top: 5px;
-						right: 22px;
-						flex-grow: 1;
-					}
-
+	
+			.contentAchivementsBox {
+				height: 80%;
+				border-top: 8px solid #EBD9F0;
+				border-left: 8px solid black;
+				border-bottom: 8px solid black;
+				overflow: scroll;
+	
+				.icons img {
+					width: 70px; height: 70px;
+					margin-top: 5px;
+					margin-right: 20px;
+					margin-left: 15px;
+					margin-bottom: 15px;
+					opacity: 0.35;
 				}
-
+				.icons span {
+					opacity: 0.35;
+				}
 			}
 		}
 	}
-}
+	
+	
+		.gAndFBox {
+			
+			width: 500px; height: 488px;
+			background-color: #8ade84;
+			border-left: 8px solid #f9f871;
+			border-right: 8px solid #000000;
+			border-bottom: 8px solid #f9f871;
+			z-index: 0;
+
+			.gAndFHeader {
+				height: 10%;
+				background-color: #8ade84;
+				border-bottom: 8px solid #7C6E6E;
+				border-left: 8px solid black;
+				border-top: 8px solid #f9f871;
+				text-align: center;
+				font-size: x-large;
+			}
+			
+			.gAndFTabs {
+				display: flex;
+				height: 6%;
+				.A,
+				.B {
+					flex-grow: 1;
+				}
+			}
+			.gAndFContent {
+				height: 84%;
+				border-top: 8px solid #f9f871;
+				border-left: 8px solid black;
+				border-bottom: 8px solid black;
+				color: white;
+				overflow: scroll;
+				scroll-behavior: smooth;
+				.listParent {
+					.list {
+						border: 2px solid black;
+						display: flex;
+						align-items: center;
+						padding: 10px;
+						display: flex;
+						background: red;
+						overflow: auto;
+						.avatar {
+							width: 60px; height: 60px;
+							margin-right: 10px;
+							margin-left: 10px;
+							border-radius: 50px;
+
+						}
+						.name {
+							margin-left: 10px;
+							margin-right: auto;
+						}
+
+					}
+
+				}
+			}
+		}
+	
+
 
 .topContainer {
-	.StatesBox {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		text-align: center;
-		margin-bottom: 50px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:space-evenly;
+	padding-bottom: 20px;
+	align-items: center;
 	
-		.headStatesBox {
-			width: 500px; height: 488px;
-			background-color: cadetblue;
-			border-left: 8px solid #EBD9F0;
-			border-right: 8px solid #000000;
-			border-bottom: 8px solid #EBD9F0;
+	
+	.headStatesBox {
+		width: 500px; height: 488px;
+		background-color: cadetblue;
+		border-left: 8px solid #EBD9F0;
+		border-right: 8px solid #000000;
+		border-bottom: 8px solid #EBD9F0;
+		z-index: 0;
 	
 			.statesBoxHeader {
 				height: 10%;
@@ -96,9 +136,9 @@ body {
 				border-bottom: 8px solid #7C6E6E;
 				border-left: 8px solid black;
 				border-top: 8px solid #EBD9F0;
+				
 			}
 	
-			
 			.statesBoxContent {
 				height: 90%;
 				border-top: 8px solid #EBD9F0;
@@ -121,15 +161,8 @@ body {
 		}
 	}
 
-	.profilBox {
-		margin-top: 80px;
-		flex-direction: row;
-		display: flex;
-		justify-content: center;
-		align-items: flex-start;
 	  
 		.profilRectangle {
-			
 			width: 655px;
 			height: 216px;
 			background-color: #F0A814CC;
@@ -138,6 +171,8 @@ body {
 			border-left: 8px solid #7C6E6E;
 			border-right: 8px solid #EBD9F0;
 			flex-shrink: 1;
+			z-index: 0;
+
 	  
 		  .avatar {
 			height: 75%;
@@ -153,58 +188,19 @@ body {
 		}
 
 		.buttonat {
-			display: flex;
 			flex-shrink: 1;
-			flex-grow: 1;
-			background: black;
+			background: #aa855a;
 			align-items: center;
 			justify-content: center;
 			display: flex;
+			gap: 10px 20px !important;
+			
 		}
-	}
-}
-
-
-
-.achivementsBox {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+		.buttonat .nes-btn {
+			gap: 10px 20px !important;
+		}
 	
-	.fullAchivementsBox {
-		width: 652px; height: 302px;
-		background: #BFB3E1;
-		border-bottom: 8px solid #7C6E6E;
-		border-left: 8px solid #7C6E6E;
-		border-right: 8px solid #EBD9F0;
-		
-		.headAchivementsBox {
-			height: 20%;
-			background-color: #BFB3E1;
-			border-bottom: 8px solid #7C6E6E;
-			border-left: 8px solid black;
-			border-top: 8px solid #EBD9F0;
-			color: #694694;
-		}
 
-		.contentAchivementsBox {
-			height: 80%;
-			border-top: 8px solid #EBD9F0;
-			border-left: 8px solid black;
-			border-bottom: 8px solid black;
-			overflow: scroll;
 
-			.icons img {
-				width: 70px; height: 70px;
-				margin-top: 5px;
-				margin-right: 20px;
-				margin-left: 5px;
-				opacity: 0.35;
-			}
-			.icons span {
-				opacity: 0.35;
-			}
-		}
-	}
-}
+
 

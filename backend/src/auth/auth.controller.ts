@@ -105,7 +105,7 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async gettwofastatus(@Req() req) {
     const user = await this.usersService.findOne(req.user.id);
-    return user.twofa;
+    return user?.twofa;
   }
 
   @Put('2fa/enable')

@@ -46,6 +46,9 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       this.connectedUsers.set(client.id, client);
       const status = UserStatus.ONLINE;
+      console.log(
+        'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
+      );
       this.userservice.updatestatus(user, status);
     }
   }

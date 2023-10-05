@@ -1,6 +1,7 @@
 import "./NavBar.scss";
 /******************* Includes  *******************/
 import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 /******************* Packages  *******************/
 /******************* Images  *******************/
@@ -8,49 +9,27 @@ import jwt_decode from "jwt-decode";
 import msgLogo from './assets/msgLogo.svg';
 import settingsLogo from './assets/settingsLogo.svg'
 import notificationLogo from './assets/notificationLogo.svg'
-import homeLogo from './assets/homeLogo.svg'
 import logoutLogo from './assets/logoutLogo.svg'
-import profilLogo from './assets/profilLogo.svg'
+import groups from './assets/groups.svg'
 import randomLogo from './assets/logo.svg'
 import Cookies from "universal-cookie";
 import {useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 /******************************************/  
 
 
 const NavBarBody = () => {
-	const [isNotificationClicked, setIsNotificationClicked] = useState(false);
-
-	const handleNotificationClicked = () => {
-		setIsNotificationClicked(!isNotificationClicked);
-		console.log("Clicked")
-	}
-
 	return (
 	<div className="nav-content">
 		<div className="nav-item">
-			<a href="/home" title="Home">
-				<img src={homeLogo}/>
+			<a href="/groups" title="Groups">
+				<img src={groups}/>
 			</a>
 		</div>
 		<div className="nav-item" >
 			<a className="noti" href="#" title="Notifications">
-				<img src={notificationLogo} onClick={handleNotificationClicked}/>
+				<img src={notificationLogo}/>
 			</a>
-			{isNotificationClicked && (
-			<div className="notification-container">
-				<div className="nes-container with-title is-centered">
-				<p className="title">Notifications</p>
-				<div className="time">
-					<span>12:40</span>
-				</div>
-				<div className="message">
-					<span>Salam khouya bikhir</span>
-				</div>
-				</div>
-			</div>
-        )}
 		</div>
 		<div className="nav-item">
 			<a href="chat" title="Chat">
@@ -90,37 +69,40 @@ const NavBarFooter = () => {
 		axios.post("http://localhost:3000/auth/logout", {withCredentials: true})
 		.then((response) => {
 			console.log(response);
-			}
-		)
+		})
 		.catch((error) => {
 			console.log(error)
 		});
 	};
   
-	const [userData, setUserData] = useState('my friend');
-	useEffect(() => {
-		async function fetchData () {
-			const cookie = new Cookies();
-			const token = jwt_decode(cookie.get('jwt'));
-			if (token) {
-				const endpoint = "http://localhost:3000/users/" + token.id;
-				const response = await axios.get(endpoint, { withCredentials: true });
-				setUserData(response.data);
-			}
-		}
-		fetchData();
-	}, []);
-
     const cookie = new Cookies();
     const token = jwt_decode(cookie.get('jwt'));
-    const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
+    const [check, setUserData] = useState(false);
+    
+    useEffect(() => {
+        async function fetchData() {
+            const cookie = new Cookies();
+            const token = jwt_decode(cookie.get('jwt'));
+            if (token) {
+                await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
+                .then(() => 
+                {
+                    setUserData(true)
+                })
+				.catch(((error) => {
+                    console.log("Error in NavBar " ,error);
+				}))
+            }
+        }
+		fetchData();
+    }, [])
 
 
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<a href="/profil" title="Profile">
-			<img src={myAvatar} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+			<img src={check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</a>
 		</div>
 		<div className="nav-item">

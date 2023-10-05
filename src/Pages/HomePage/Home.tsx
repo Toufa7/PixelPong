@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import { Cookies } from "react-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import anime from 'animejs/lib/anime.es.js';
 /******************* Includes  *******************/
 import logo from '../addons/assets/ping-pong-ball.svg';
 import medaille from './assets/medaille.svg';
@@ -61,11 +62,12 @@ const TopContainer = () => {
 	  </div>
 	);
   };
-
 const TopLeft = () => {
 	return (
 	<div className="loginBox on-going-matches">
-		<div className="loginBoxHeader on-going-matches1">LEADERBOARD</div>
+		<div className="loginBoxHeader on-going-matches1">
+			LEADERBOARD
+			</div>
 		<div className="loginBoxOutside"></div>
 	</div>
 	);
@@ -181,8 +183,4 @@ function Home() {
   );
 }
 
-export default Home;
-function io(arg0: string, arg1: { path: string; withCredentials: boolean; transports: string[]; }) {
-	throw new Error("Function not implemented.");
-}
 

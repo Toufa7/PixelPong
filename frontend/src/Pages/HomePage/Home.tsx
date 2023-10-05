@@ -4,9 +4,13 @@ import "./Home.scss";
 import jwt_decode from 'jwt-decode';
 import { Cookies } from "react-cookie";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
+import {Motion, spring} from 'react-motion';
+import Anime, { anime } from 'react-anime';
+import { Fade } from "react-awesome-reveal";
+
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
 import savage from './assets/savage.svg';
@@ -14,6 +18,7 @@ import siif from './assets/siif.svg';
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
 import image from './assets/medaille.svg'
+import { socketContext } from "../socket-client";
 /*************************************************/
 
 
@@ -37,18 +42,27 @@ const TopContainer = () => {
 		fetchData();
 	}, []);
 	
+
 	return (
 		<div className="headerBox">
 		<div className="topLoginBox">
-		  <div className="loginBoxHeader">Welcome {userData.username}</div>
+		  <div className="loginBoxHeader">
+			<Fade>
+				<>Welcome {userData.username}</>
+			</Fade>
+			</div>
 		  <div className="loginBoxOutside">
 			<div className="playRaw">
 			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
-					<p>{textInfos[0]}</p>
+					<AnimatedText duration={2} animationType="bounce">
+						{textInfos[0]}
+					</AnimatedText>
 					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
 			  </div>
 			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
-					<p>{textInfos[1]}</p>
+			  		<AnimatedText duration={2} animationType="bounce">
+						{textInfos[1]}
+					</AnimatedText>
 					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
 			  </div>
 			</div>
@@ -58,13 +72,23 @@ const TopContainer = () => {
 	);
 };
 
+// const testing = () => {
+// 	const socket = useContext(socketContext);
+// 	useEffect(()=>{
+// 		socket?.on("connect",()=>{
+// 			console.log("im connected");
+// 	})
+// 	},[]);
+// }
+
+// testing();
 
 const TopLeft = () => {
 	return (
 	<div className="loginBox on-going-matches">
 		<div className="loginBoxHeader on-going-matches1">LEADERBOARD</div>
 		<div className="loginBoxOutside on-going-matches2">
-			<div style={{background: "#FDD43B"}}className="match1">
+			<div style={{background: "#FDD43B"}} className="match1">
 				<span className="position">1</span>
 				<AnimatedText duration={3} className="name" animationType="float" threshold={0.9} rootMargin="20%" >Martin Ødegaard</AnimatedText>
 				<span className="wins">95</span>
@@ -145,7 +169,6 @@ const TopRight = () => {
 
 const BottomLeft = () => {
 	return (
-		
 		<div className="loginBox achievements">
 			<div className="loginBoxHeader achievements1">ACHIEVEMENTS</div>
 			<div className="loginBoxOutside achievements2">
@@ -221,19 +244,55 @@ const BottomRight= () => {
 }
 
 function Home() {
+	// <Anime
+	// opacity={[0, 1]}
+	// scale={[0.5, 1]}
+	// duration={1000}
+	// easing="easeInOutQuad"
+
+	// anime({
+	// 	targets: '.on-going-matches1 .el',
+	// 	translateX: 250,
+	// 	direction: 'alternate',
+	// 	loop: true,
+	// 	easing: 'steps(5)'
+	//   })
 	return (
 		<div style={{height: '100vh'}}>
+			<Anime
+				translateY={['-100%', '0%']}
+				duration={1000}
+				easing="steps(5)">
 			<TopContainer/>
+			</Anime>
 			<div className="top-containers">
-			<TopLeft/>
-			<TopRight/>
+			<Anime
+				translateX={['-100%', '0%']}
+				duration={1000}
+				easing="steps(5)">
+				<TopLeft/>
+			</Anime>
+			<Anime
+				translateX={['100%', '0%']}
+				duration={1000}
+				easing="steps(5)">
+				<TopRight/>
+			</Anime>
 			</div>
 			<div className="bottom-containers">
+			<Anime
+				translateY={['100%', '0%']}
+				duration={1000}
+				easing="steps(5)">
 			<BottomLeft/>
 			<BottomRight/>
+
+			</Anime>
 			</div>
 		</div>
   );
 }
+
+
 
 export default Home;

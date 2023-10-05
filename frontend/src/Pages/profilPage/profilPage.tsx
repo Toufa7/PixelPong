@@ -12,12 +12,10 @@ import siif from './assets/siif.svg';
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
 import message from './assets/msgLogo.svg';
-import groupe from './../otoufah.jpg'
+import groupt from './../otoufah.jpg'
 
 const States = () => {
     return (
-        <div>
-        <div className="StatesBox">
             <div className="headStatesBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
                 <div className="statesBoxContent">
@@ -39,8 +37,6 @@ const States = () => {
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
     );
 }
 
@@ -48,59 +44,54 @@ const Profil = () => {
 
     const cookie = new Cookies();
     const token = jwt_decode(cookie.get('jwt'));
-    const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
 
     const [userData, setUserData] = useState({
         avatar: '',
-        username: 'Unknown'
-      });
-      
-      useEffect(() => {
+        username: token.username,
+        check: true
+    });
+    
+    useEffect(() => {
         async function fetchData() {
-          const cookie = new Cookies();
-          const token = jwt_decode(cookie.get('jwt'));
-          if (token) {
-            const endpoint = `http://localhost:3000/users/${token.id}`;
-            const response = await axios.get(endpoint, { withCredentials: true });
-            console.log("Data -> ", response);
-            setUserData(() => ({
-              avatar: response.data.profileImage,
-              username: response.data.username
-            }));
-          }
+            const cookie = new Cookies();
+            const token = jwt_decode(cookie.get('jwt'));
+            let endpoints = [
+                `http://localhost:3000/auth/avatar/${token.id}`,
+                `http://localhost:3000/users/${token.id}`
+            ]
+            if (token) {
+
+                await axios.all(endpoints.map((idx) =>  axios.get(idx, {withCredentials: true})))
+                .then(axios.spread((avatarRes, userRes) => 
+                {
+                    console.log("AVATAR " ,avatarRes);
+                    setUserData(() => ({
+                        avatar: `http://localhost:3000/auth/avatar/${token.id}`,
+                        username: userRes.data.username,
+                        check: false
+                    }))
+                }))
+            }
         }
         fetchData();
-      }, []);
+    }, [])
+
     const [isFriend, setIsFriend] = useState(false);
     return (
-        <div className="profilBox">
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img src={myAvatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img  src={userData.check ? token.image : userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>
-                        <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="35" max="100"/>
+                        <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
                     </div>
                         <span style={{textAlign: 'right'}}>78/100</span>
                     </div>
                 </div>
             </div>
-            <div className='buttonat'>
-                <a>
-                    {isFriend ? (
-                        <>
-                            <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Friends</a>
-                            <a  href="/chat" className="nes-btn">Chat</a>
-                        </>
-                        ) : (
-                        <a className="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</a>
-                    )}
-                </a>
-                </div>
             </div>
-        </div>
     );
 }
 
@@ -123,56 +114,74 @@ const GroupsAndFriends = () => {
         "Atkins",
         "Wilkerson",
         "Brady",
-        "Edward Colon",
+        "Colon",
         "Cristina",
         "Saige"
       ];
-
-
       const [label, setlabel] = useState(true);
+      const [Stausss, setAvataStatus] = useState({
+          avatar: '',
+          check: true
+      });
       const cookie = new Cookies();
       const token = jwt_decode(cookie.get('jwt'));
-        console.log("Token JWT -> ", token);
-
-      const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
-      console.log("My Avatar -> ", myAvatar);
-      const check = true;
+      console.log("Token ", token);
+      useEffect(() => {
+          async function checking() {
+            await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
+            .then((response) => {
+                console.log("Res ", response)
+                setAvataStatus(() => ({
+                    avatar: `http://localhost:3000/auth/avatar/${token.id}`,
+                    check: false
+                  }));
+            })
+            .catch(erro => {
+              console.log(`Error ${erro}`);
+            })
+        }
+        checking(); 
+      }, []);
       return (
-        <div className="groupsAndFriendsBox">
           <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
             <div className="gAndFTabs">
-              <button className='A' onChange={() => setlabel(true)} >Groups</button>
-              <button className='B' onChange={() => setlabel(false)} >Friends</button>
+              <button className='A' onClick={() => {
+                    setlabel(true)
+                    console.log("Groups")
+                }}>Groups</button>
+              <button className='B' onClick={() => {
+                setlabel(false)
+                console.log("Friends")
+                }}>Friends</button>
             </div>
             <div className="gAndFContent">
                 <div className="listParent">
-                    <div className="list">
+                    {label ? (
+                        friends.map((friend, index) => (
                         <>
-                        {
-                            label ? (
-                            friends.map((idx) => {
-                                <>
-                                <img className="avatar" src={myAvatar}/>
-                                <span className='name'>{idx}</span>
-                                <img className='ico' src={message}/>
-                                </>
-                            })
-                        ) : (
-                            friends.map((idx) => {
-                                <>
-                                <img className="avatar" src={check ? myAvatar : token.profileImage }/>
-                                <span className='name'>{idx}</span>
-                                <img className='ico' src={message}/>
-                                </>
-                            }))
-                            }
+                            <div className='list'>
+                                <img className="avatar" src={Stausss.check ? token.image : Stausss.avatar} alt="avatar" />
+                                <span className='name' key={index}>{friend}</span>								
+                                <button style={{ marginLeft: '10px' }}>Exit</button>
+                            </div>
+
                         </>
-                    </div>
+                  ))
+                    ) : (
+                        groups.map((group, index) => (
+                            <>
+                            <div className='list'>
+                                <img className="avatar" src={groupt} alt="avatar" />
+                                <span className='name' key={index}>{group}</span>
+								<button style={{ marginLeft: '10px' }}>Unifriend</button>
+                            </div>
+                            </>
+                  ))
+                )}
                     </div>
             </div>
             </div>
-        </div>
 
     );
 }
@@ -186,7 +195,6 @@ const Achivements = () => {
     ]
 
     return (    
-        <div className="achivementsBox">
             <div className="fullAchivementsBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
                 <div className="contentAchivementsBox">
@@ -214,7 +222,6 @@ const Achivements = () => {
                     </div>
                 </div>
             </div>
-        </div>
     );
 }   
 

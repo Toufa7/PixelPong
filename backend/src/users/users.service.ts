@@ -161,14 +161,30 @@ export class UsersService {
       });
   }
   async updatestatus(user, status) {
-    await this.prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        firstlogin: false,
-        status: status,
-      },
-    });
+    console.log("user     ",user, "           status ", status);
+    try {
+      const updatedUser = await this.prisma.user.updateManylll({
+        where: {
+          id: user.id,
+        },
+        data: {
+          firstlogin: false,
+          status: status,
+        },
+      });
+  
+      // Check if the user record was updated successfully
+      if (!updatedUser) {
+        throw new Error('User not found');
+      }
+  
+      // Handle success or return the updated user
+      return updatedUser;
+    } catch (error) {
+      // Handle the error (e.g., log it or throw a custom error)
+      console.error('Error updating user status:', error);
+      throw error;
+    }
   }
+  
 }

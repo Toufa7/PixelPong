@@ -3,6 +3,7 @@
     npm create vite@latest
 
 # Install npm modules:
+
     npm install
     npm install nes.css
     npm install react-cookie
@@ -13,7 +14,10 @@
     npm i react-draggable
     npm i react-hot-toast
     npm i react-scroll-horizontal
-    npm install --save react-animated-text-content 
+    npm install --save react-animated-text-content
+    npm i react-anime -S --force
+    npm install framer-motion --force
+    npm install react-awesome-reveal @emotion/react --force
 
 # Run server:
 
@@ -26,6 +30,14 @@
 https://iconduck.com/sets/pixelarticons-icons-set
 
 https://www.streamlinehq.com/icons/pixel
+
+https://www.syncfusion.com/blogs/post/top-7-react-animation-libraries-in-2022.aspx
+
+
+# Sounds And Effects
+
+
+https://downloads.khinsider.com
 
 ## FlexBox Visutalizer :
 
