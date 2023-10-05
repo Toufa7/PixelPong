@@ -1,0 +1,182 @@
+
+
+.loginPage {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #333C54;
+    margin-top: 30px;
+  
+    .lb {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .ig {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 100px;
+    }
+  }
+  
+  .loginBoxContainer {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    z-index: 0;
+  
+    .loginBox {
+      width: 500px;
+      height: 500px;
+      background:#726588;
+      text-align: center;
+      border-top: 8px solid #B19D9D;
+      border-right: 8px solid black;
+      border-bottom: 8px solid black;
+
+      .loginBoxInside {
+        font-size: x-large;
+        width: 100%;
+        height: 10%;
+        color: #240C0C;
+        background-color: #9779a0;
+        border-right: 8px solid #643F5E;
+        border-bottom: 8px solid #643F5E;
+        border-left: 8px solid #B19D9D;
+  
+        .cloudImg {
+          animation: flo 350s ease-in-out infinite;
+          position: relative;
+          bottom: 140px;
+          z-index: -1;
+        }
+  
+        .pinkDiamond {
+          width: 100px;
+          height: 42px;
+          animation: float 2s ease-in-out infinite;
+          position: relative;
+          bottom: 200px;
+          left: -50px;
+          z-index: -1;
+        }
+  
+        .purpleDiamond {
+          animation: float 1s ease-in-out infinite;
+          position: relative;
+          top: 280px;
+          left: 250px;
+        }
+      }
+  
+      .loginBoxOutside {
+        display: flex;
+        flex-direction: column;
+        height: 90%;
+        border: 8px solid;
+        border-color: #B19D9D #73517C #73517C #B19D9D;
+  
+        .a, .b {
+          flex: 1;
+  
+          .nes-btn {
+            max-width: 300px;
+            color: #E8B0B0;
+            animation: inAndOut 1s infinite;
+            box-shadow: 0 5px black;
+            text-align: center;
+  
+            &.google {
+              background: #4285F4 !important;
+              top: 50%;
+
+  
+              &:active {
+                background-color: #3e8e41;
+                box-shadow: 0 5px #666;
+                transform: translateY(8px);
+              }
+            }
+            
+            &.intra {
+              background: #0D6A80;
+              top: 20%;
+  
+              &:active {
+                background-color: #3e8e41;
+                box-shadow: 0 5px #666;
+                transform: translateY(8px);
+              }
+            }
+          }
+        }
+      }
+    }
+  
+    .text-OR {
+      font-size: 25px;
+      color: #240C0C;
+    }
+  }
+  
+  .retroImage {
+    width: 473px;
+    height: 845px;
+    background: url('./assets/retroImage.png');
+    background-size: cover;
+    flex-shrink: 0;
+    z-index: 0;
+
+    .pingPongGif {
+      width: 300px;
+      height: 350px;
+      position: relative;
+      top: 56%;
+      left: 20%;
+      z-index: -1;
+    }
+  }
+  
+  /******************* Animations  *******************/
+  @keyframes flo {
+    50% {
+      transform: translateX(10000px);
+    }
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+@keyframes inAndOut {
+  50% {
+    transform: translate(3px, 1px);
+  }
+}
+  
+  @media screen and (max-width: 768px) {
+    .loginPage {
+      flex-direction: column;
+    }
+  
+    .loginBoxContainer {
+      flex-direction: column;
+      margin-top: 52px;
+
+      .loginBox {
+        margin-top: 20px;
+      }
+    }
+  }
