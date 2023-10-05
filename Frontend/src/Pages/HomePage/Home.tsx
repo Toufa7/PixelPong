@@ -10,7 +10,6 @@ import AnimatedText from 'react-animated-text-content';
 import {Motion, spring} from 'react-motion';
 import Anime, { anime } from 'react-anime';
 import { Fade } from "react-awesome-reveal";
-import toast, { Toaster, useToaster } from 'react-hot-toast';
 
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
@@ -18,9 +17,12 @@ import savage from './assets/savage.svg';
 import siif from './assets/siif.svg';
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
-import image from './assets/medaille.svg';
-import avatar from './../otoufah.jpg';
+import image from './assets/medaille.svg'
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import avatar from '../otoufah.jpg'
 /*************************************************/
+
 
 const Notification = () => {
 
@@ -43,11 +45,11 @@ const Notification = () => {
 					<span style={{ marginLeft: '10px', marginRight: 'auto' }}>TouFa7</span>
 					{
 						isFriend ? (
-							<button style={{ marginLeft: '10px' }}>Friends</button>
+							<button onClick={() => setFriend(false)} style={{ marginLeft: '10px' }}>Friends</button>
 							) : (
 							<>
-								<button onClick={() => setFriend(false)} style={{ marginLeft: '10px' }}>Accept</button>
-								<button style={{ marginLeft: '10px' }}>Deny</button>
+								<button onClick={() => setFriend(true)} style={{ marginLeft: '10px' }}>Accept</button>
+								<button onClick={() => setFriend(true)} style={{ marginLeft: '10px' }}>Deny</button>
 							</>
 						)
 					}
@@ -60,6 +62,7 @@ const Notification = () => {
 	</div>
 	)
 }
+
 
 
 const TopContainer = () => {
@@ -86,30 +89,29 @@ const TopContainer = () => {
 	return (
 		<div className="headerBox">
 		<div className="topLoginBox">
-		<div className="loginBoxHeader">
+		  <div className="loginBoxHeader">
 			<Fade>
 				<>Welcome {userData.username}</>
 			</Fade>
 			</div>
-			<div className="loginBoxOutside">
-				<div className="playRaw">
-				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
-						<AnimatedText duration={2} animationType="bounce">
-							{textInfos[0]}
-						</AnimatedText>
-						<a style={{width: '100px'}} className="nes-btn" href="/game">Vamos</a>
-				</div>
-				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
+		  <div className="loginBoxOutside">
+			<div className="playRaw">
+			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
 					<AnimatedText duration={2} animationType="bounce">
+						{textInfos[0]}
+					</AnimatedText>
+					<a style={{width: '100px'}} className="nes-btn" href="/game">Vamos</a>
+			  </div>
+			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
+			  		<AnimatedText duration={2} animationType="bounce">
 						{textInfos[1]}
 					</AnimatedText>
 					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
-				</div>
+			  </div>
 			</div>
+		  </div>
 		</div>
-
-		</div>
-		</div>
+	  </div>
 	);
 };
 
@@ -164,10 +166,10 @@ const TopRight = () => {
 						</AnimatedText>
 					</span>
 					<span style={{color: "orange"}}>
-						<AnimatedText duration={1} className="name" animationType="bounce">
-							72.2%
+					<AnimatedText duration={1} className="name" animationType="bounce">
+						72.2%
 						</AnimatedText>
-					</span>
+						</span>
 				</div>
 				<div style={{textShadow: ' 0.1em 0.1em #1f596b'}} className="statesValues">
 					<span style={{color: "#009e73"}}>
@@ -220,17 +222,17 @@ const BottomLeft = () => {
 const MatchResult = (props: {player1 : string,  player2 : string, color : string, rslt1 : number, rslt2 : number }) => {
   return (
 	<div className="match1" style={{background: props.color, border: '1px solid black'}}>
-		<div className="left">
-			<img src={image} style={{width: '40px', height: '40px', marginRight: '10px', marginLeft: '10px'}} className="player1"/>
-			<span>{props.player1}</span>
-		</div>
-		<div className="result">
-			<span>{props.rslt1} : {props.rslt2}</span>
-		</div>
-		<div className="right">
-			<span>{props.player2}</span>
-			<img src={endpoint} style={{width: '40px', height: '40px', marginLeft: '10px'}} className="player2"/>
-		</div>
+	  <div className="left">
+		<img src={image} style={{width: '40px', height: '40px', marginRight: '10px', marginLeft: '10px'}} className="player1"/>
+		<span>{props.player1}</span>
+	  </div>
+	  <div className="result">
+		<span>{props.rslt1} : {props.rslt2}</span>
+	  </div>
+	  <div className="right">
+		<span>{props.player2}</span>
+		<img src={endpoint} style={{width: '40px', height: '40px', marginLeft: '10px'}} className="player2"/>
+	  </div>
 	</div>
   );
 }
@@ -274,14 +276,23 @@ const BottomRight= () => {
   );
 }
 
-
 function Home() {
+	// <Anime
+	// opacity={[0, 1]}
+	// scale={[0.5, 1]}
+	// duration={1000}
 	// easing="easeInOutQuad"
+
+	// anime({
+	// 	targets: '.on-going-matches1 .el',
+	// 	translateX: 250,
+	// 	direction: 'alternate',
+	// 	loop: true,
 	// 	easing: 'steps(5)'
+	//   })
 	return (
 		<div style={{height: '100vh'}}>
-						<Notification/>
-
+			<Notification/>
 			<Anime
 				translateY={['-100%', '0%']}
 				duration={2000}
@@ -309,8 +320,7 @@ function Home() {
 				>
 			<BottomLeft/>
 			<BottomRight/>
-		<div>
-		</div>
+
 			</Anime>
 			</div>
 		</div>

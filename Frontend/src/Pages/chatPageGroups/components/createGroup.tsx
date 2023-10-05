@@ -10,7 +10,7 @@ const CreateGroup = () => {
 	const [isProtected , setProtected] = useState(false);
 	const [groupName , setGroupName] = useState("");
 
-	console.log(groupName);
+	// console.log(groupName);
 	
 	const isCreateDisabled = groupName === "";
 

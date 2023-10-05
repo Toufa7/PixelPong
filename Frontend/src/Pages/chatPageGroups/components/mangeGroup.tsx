@@ -109,8 +109,7 @@ const ManageGroup = () => {
 	]
 	const [isProtected , setProtected] = useState(false);
 	const [groupName , setGroupName] = useState("");
-
-	console.log("Groupe Name ", groupName);
+	// groupName currenlty having the input
 	const isCreateDisabled = groupName === "";
 
 	return (
