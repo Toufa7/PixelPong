@@ -1,11 +1,11 @@
 import ChatUser from './ChatUser'
 import MessagingBody from './MessagingBody'
 import MessageLowerRibbon from './MessageLowerRibbon'
-import { socket, socketContext } from './socket.client'
+import {socketContext } from './socket.client'
 import { useContext } from 'react'
 
 
-const messages = () => {
+const Messages = () => {
   const socket = useContext(socketContext);
   console.log("Socket Connected");
   
@@ -20,4 +20,4 @@ const messages = () => {
   )
 }
 
-export default messages
+export default Messages

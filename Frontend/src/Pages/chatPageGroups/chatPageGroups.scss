@@ -19,6 +19,10 @@
         overflow: hidden;
         z-index: 0;
 
+        .selected {
+            background-color:#333c54;
+            color: white;        }
+
 
         .chatSearchDiv
         {

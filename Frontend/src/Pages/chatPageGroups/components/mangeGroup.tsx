@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import {useState } from "react";
 import avatar from '../../otoufah.jpg';
-import crown from '../assets/crown.svg'
+import crown from '../assets/crown.svg';
+
 const ListFriends = () => {
 	const [admins, isAdmin] = useState([
 		"Delaney Harris",
@@ -24,10 +25,7 @@ const ListFriends = () => {
 		"Talia Wu",
 		"Yahya Dawson"
 	]);
-	const openDialog = () => {
-		document.getElementById('dialog-default').showModal();
-	} 
-
+	
 	const handleKick = (status: boolean, index: number) => {
 		if (status){
 			isAdmin((prevAdmin) => {
@@ -44,7 +42,10 @@ const ListFriends = () => {
 			});
 		}
 	} 
-
+	
+	const openDialog = () => {
+		document.getElementById('dialog-default').showModal();
+	} 
 	return (
 		<section>
 		<button type="button" className="nes-btn" onClick={openDialog}>Manage Members</button>
@@ -52,8 +53,10 @@ const ListFriends = () => {
 			<form method="dialog">
 				<menu className="dialog-menu">
 				<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-					<label style={{fontSize: 'large'}}>Admins</label>
-					<img style={{ height: '30px', width: '30px'}}src={crown}></img>
+					<label style={{fontSize: 'large'}}>
+						Admins
+						<img style={{ height: '30px',   position: "relative", marginLeft: "5px" , top: '-3px',width: '30px'}}src={crown}></img>
+					</label>
 				</div>
 				<div style={{ height: 'fit-content', overflow: 'auto'}}>
 				<div style={{borderBottom: "1px solid" }}></div>
@@ -78,13 +81,13 @@ const ListFriends = () => {
 
 					<div style={{ height: 'fit-content', overflow: 'auto' }}>
 					{
-						members.map((name) => {
+						members.map((name, index) => {
 							return (
 								<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }}>
-								<img src={avatar} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
-								<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
-								<button style={{ marginLeft: '10px' }}>Mute</button>
-								<button style={{ marginLeft: '10px' }}>Kick</button>
+									<img src={avatar} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
+									<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
+									<button style={{ marginLeft: '10px' }}>Mute</button>
+									<button style={{ marginLeft: '10px' }} onClick={() => handleKick(true, index)}>Kick</button>
 								</div>
 							)
 							;})
@@ -98,7 +101,7 @@ const ListFriends = () => {
 	);
 };
   
-const manageGroup = () => {
+const ManageGroup = () => {
 	const privacy = [
 		"Group Chat Visibility: Limited to Members",
 		"Exclusive Access: Only Members Allowed",
@@ -113,9 +116,6 @@ const manageGroup = () => {
 	return (
 	<div className="chatDmDiv">
 		<div className="settingss">
-		
-		<label>Admin Panel</label>
-		<label>Groups Settings</label>
 		<div className="nes-field">
 		<input type="text" id="name_field" placeholder='Group Name' onChange={(e) => setGroupName(e.target.value)} className="nes-input"/>
 		</div>
@@ -133,6 +133,7 @@ const manageGroup = () => {
             <input type="password" id="password_field" placeholder="Password" className="nes-input" />
           </div>
         )}
+        <ListFriends/>
 		<label className="nes-btn">
 			<span>Change Avatar</span>
 			<input type="file"/>
@@ -142,11 +143,10 @@ const manageGroup = () => {
         <a className={`nes-btn ${isCreateDisabled ? "is-disabled" : ""}`} href="#">
           Update
         </a>
-        <ListFriends/>
 		</div>
 	</div>
 	)
 }
 
-export default manageGroup
+export default ManageGroup
 
