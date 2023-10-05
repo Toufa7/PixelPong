@@ -1,5 +1,5 @@
 import React from 'react'
-import NavBar from "./../../addons/NavBar"
+import NavBar from "../../addons/NavBar"
 
 const mainNavBar = () => {
   return (
