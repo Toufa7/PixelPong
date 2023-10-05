@@ -1,18 +1,17 @@
 import MainNavBar from './components/mainNavBar'
 import ChatNavBar from './components/chatNavBar'
-import Messages from './components/messages'
+import MessagesBox from './components/messagesBox'
+import arseanl from './assets/saka.jpeg'
 import './chatPageGroups.scss'
 
 const chatPageGroup = () => {
-  return (
-    <>
-    <div className="chatPage">
-      <MainNavBar/>
-      <ChatNavBar/>
-      <Messages/>
-    </div>
-    </>
-  )
+	return (
+		<div className="chatPage">
+			<MainNavBar/>
+			<ChatNavBar/>
+			<MessagesBox name="Arsenal Supporters" avatar={arseanl}/>
+		</div>
+	)
 }
 
-export default chatPageGroup
+export default chatPageGroup 

@@ -226,7 +226,7 @@ const Achivements = () => {
 }   
 
 
-function ProfilPage() {
+function OtherProfilPage() {
   return (
     <>
         <div className="topContainer">
@@ -241,4 +241,4 @@ function ProfilPage() {
   )
 }
 
-export default ProfilPage
+export default OtherProfilPage

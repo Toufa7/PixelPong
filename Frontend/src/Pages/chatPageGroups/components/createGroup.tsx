@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const createGroup = () => {
+const CreateGroup = () => {
 	const privacy = [
 		"Group Chat Visibility: Limited to Members",
 		"Exclusive Access: Only Members Allowed",
@@ -10,7 +10,7 @@ const createGroup = () => {
 	const [isProtected , setProtected] = useState(false);
 	const [groupName , setGroupName] = useState("");
 
-	console.log(groupName);
+	// console.log(groupName);
 	
 	const isCreateDisabled = groupName === "";
 
@@ -18,9 +18,6 @@ const createGroup = () => {
 	return (
 	<div className="chatDmDiv">
 		<div className="settingss">
-		
-		<label>Create Group</label>
-
 		<div className="nes-field">
 		<input type="text" id="name_field" placeholder='Group Name' onChange={(e) => setGroupName(e.target.value)} className="nes-input"/>
 		</div>
@@ -55,4 +52,4 @@ const createGroup = () => {
 	)
 }
 
-export default createGroup
+export default CreateGroup

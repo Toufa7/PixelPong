@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-
 /******************* Packages  *******************/
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
@@ -18,9 +17,7 @@ import axios from 'axios';
 import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
-import Testing from './Pages/userProfilPage/userProfilPage'
-import { Setup } from './Pages/GamePage/Setup_ comp';
-import { ContextSocket } from './Pages/GamePage/socket_setup/client-connect';
+import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
 
 
 export const OtherUser = () => {
@@ -28,7 +25,7 @@ export const OtherUser = () => {
 		<>
 			<Stars/>
 			<NavBar/>
-			<Testing/>
+			<OtherProfilPage/>
 		</>
 	);
 }
@@ -161,7 +158,7 @@ const RedirectToSettings = () => {
 				<Route path="game"		Component={GameComponents}/>
 				<Route path="profil/*"	Component={OtherUser}/>
 				<Route path="chat"		Component={ChatPage}/>
-				<Route path="groups"	Component={ChatGroupsComponents}/>
+				<Route path="/groups"	Component={ChatGroupsComponents}/>
 			</Routes>
 		</BrowserRouter>
 		);

@@ -19,7 +19,50 @@ import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
 import image from './assets/medaille.svg'
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import avatar from '../otoufah.jpg'
 /*************************************************/
+
+
+const Notification = () => {
+
+	// const acceptInvite = () => {
+	// 	toast.success('Invitation accepted');
+	// }
+	// const denyInvite = () => {
+	// 	toast.error('Invitation accepted');
+	// }
+
+	const [isFriend, setFriend] = useState(false);
+	return (
+		<div>
+		<button onClick={() => {
+			toast.custom(
+				<div style={{ display: 'flex', alignItems: 'center', background: "#ffeeca", color: "black", borderRadius: '10px' , zIndex: "-1"}}>
+					<div className="nes-container with-title is-centered">
+					<p style={{ background: "#ffeeca", border: '2px solid black'}} className="title">Invitation Request</p>					
+					<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar" />
+					<span style={{ marginLeft: '10px', marginRight: 'auto' }}>TouFa7</span>
+					{
+						isFriend ? (
+							<button onClick={() => setFriend(false)} style={{ marginLeft: '10px' }}>Friends</button>
+							) : (
+							<>
+								<button onClick={() => setFriend(true)} style={{ marginLeft: '10px' }}>Accept</button>
+								<button onClick={() => setFriend(true)} style={{ marginLeft: '10px' }}>Deny</button>
+							</>
+						)
+					}
+					</div>
+				</div>
+				, {duration: 5000, position: "top-right"});
+			}}
+			className="btn">Click Me</button>
+		<Toaster />
+	</div>
+	)
+}
+
 
 
 const TopContainer = () => {
@@ -249,6 +292,7 @@ function Home() {
 	//   })
 	return (
 		<div style={{height: '100vh'}}>
+			<Notification/>
 			<Anime
 				translateY={['-100%', '0%']}
 				duration={2000}
