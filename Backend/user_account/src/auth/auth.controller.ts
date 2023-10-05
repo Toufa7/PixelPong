@@ -52,8 +52,8 @@ export class AuthController {
       const user = await this.usersService.findOne(req.user.id);
 
       if (user.firstlogin)
-        return res.redirect('http://localhost:5173/settings');
-      return res.redirect('http://localhost:5173/home');
+        return res.redirect('http://localhost:5174/settings');
+      return res.redirect('http://localhost:5174/home');
     } catch (err) {
       console.log(err);
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
@@ -72,8 +72,8 @@ export class AuthController {
       const user = await this.usersService.findOne(req.user.id);
       // console.log('1st time loggin -> ', user.firstlogin);
       if (user.firstlogin)
-        return res.redirect('http://localhost:5173/settings');
-      return res.redirect('http://localhost:5173/home');
+        return res.redirect('http://localhost:5174/settings');
+      return res.redirect('http://localhost:5174/home');
       // return res.redirect('signup-success');
     } catch (err) {
       console.log(err);

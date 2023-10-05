@@ -18,7 +18,7 @@ import { decode } from 'jsonwebtoken';
 
 @WebSocketGateway({
   cors: {
-    origin: ['localhost:5173', 'localhost:3000'],
+    origin: ['localhost:517', 'localhost:3000'],
     credentials: true,
   },
   namespace: 'user',

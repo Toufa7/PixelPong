@@ -161,7 +161,7 @@ export class UsersService {
       });
   }
   async updatestatus(user, status) {
-    await this.prisma.user.update({
+    await this.prisma.user.updateMany({
       where: {
         id: user.id,
       },
