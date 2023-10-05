@@ -18,6 +18,9 @@
     npm i react-anime -S --force
     npm install framer-motion --force
     npm install react-awesome-reveal @emotion/react --force
+    npm i p5 --force
+    npm i react-p5-wrapper --force
+    npm i --save-dev @types/p5 --force
 
 # Run server:
 
@@ -33,6 +36,11 @@ https://www.streamlinehq.com/icons/pixel
 
 https://www.syncfusion.com/blogs/post/top-7-react-animation-libraries-in-2022.aspx
 
+
+# Sounds And Effects
+
+
+https://downloads.khinsider.com
 
 ## FlexBox Visutalizer :
 
