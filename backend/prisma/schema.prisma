@@ -60,18 +60,9 @@ model GroupChat{
     Messages String
     GroupType  GroupType
     Password String?
-
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
-
-
-enum GroupType{
-  PUBLIC
-  PRIVATE
-  PROTECTED
-}
-
-
-
 
 model Friendrequest{
   id        Int     @id @default(autoincrement())
@@ -85,6 +76,37 @@ model Friendrequest{
 }
 
 
+model Stats{
+  level    Int  @default(0)
+  user     User     @relation("stats", fields: [userId], references: [id])
+  userId   String     
+  wins     Int  @default(0)
+  loses    Int  @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([userId])
+}
+
+
+model Achievements  {
+  name      String
+  achievementType    Type
+  user      User     @relation("achievements", fields: [userId], references: [id])
+  userId    String     
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, achievementType])
+}
+model MatchHistory {
+  numberOfMatches        Int      @default(0)
+  user      User     @relation("matchhistory", fields: [userId], references: [id])
+  userId    String     
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId])
+}
 enum  Status {
   ACCEPTED
   PENDING
@@ -97,29 +119,6 @@ enum  UserStatus {
   AWAY
   BUSY
 } 
-model Stats{
-  level    Int  @default(0)
-  user     User     @relation("stats", fields: [userId], references: [id])
-  userId   String     
-  wins     Int  @default(0)
-  loses    Int  @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId])
-}
-
-
-model Achievements{
-  name      String
-  achievementType    Type
-  user      User     @relation("achievements", fields: [userId], references: [id])
-  userId    String     
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, achievementType])
-}
 
 enum Type {
   ADDFRIEND
@@ -132,12 +131,9 @@ enum Type {
   LEVEL10
 }
 
-model MatchHistory {
-  numberOfMatches        Int      @default(0)
-  user      User     @relation("matchhistory", fields: [userId], references: [id])
-  userId    String     
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId])
+enum GroupType{
+  PUBLIC
+  PRIVATE
+  PROTECTED
 }
+

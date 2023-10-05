@@ -1,4 +1,6 @@
 import {
+  ConnectedSocket,
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
@@ -14,7 +16,7 @@ import { UsersService } from 'src/users/users.service';
 import { UserStatus } from '@prisma/client';
 // import { WSGuard } from 'src/guards/jwt.guards';
 import { decode } from 'jsonwebtoken';
-
+import { RelationService } from 'src/users/relation/relation.service';
 
 @WebSocketGateway({
   cors: {
@@ -26,27 +28,25 @@ import { decode } from 'jsonwebtoken';
 @UseGuards(JwtGuard)
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
-  constructor(private readonly authservice: AuthService,
-    private readonly userservice: UsersService) {}
+  constructor(
+    private readonly authservice: AuthService,
+    private readonly userservice: UsersService,
+    private readonly relationservice: RelationService,
+  ) {}
   connectedUsers: Map<string, Socket> = new Map();
 
-  // onModuleInit() {
-  //   this.server.on('connection', (socket) => {
-  //     console.log('id', socket.id);
-  //     console.log('connected to socket');
-  //   });
-  // }
+  //handle connection and deconnection
+
   async handleConnection(client: Socket) {
     const jwt = await this.getUser(client);
     console.log('client connected -->' + client.id, '  ', jwt);
-    this.server.emit('chekcout', { msg: 'hello' });
-    console.log('im here if you see this');
+    this.server.emit('checkout', { msg: 'hello' });
     if (jwt) {
       const user = decode(jwt);
 
       this.connectedUsers.set(client.id, client);
-      const status = UserStatus.ONLINE
-      this.userservice.updatestatus(user, status)
+      const status = UserStatus.ONLINE;
+      this.userservice.updatestatus(user, status);
     }
   }
 
@@ -58,6 +58,15 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.connectedUsers.delete(client.id);
       }
     }
+  }
+
+  // handle friend request
+
+  async sendFriendRequest(
+    @MessageBody() data: { senderId: string; receiverId: string },
+    @ConnectedSocket() socket: Socket,
+  ) {
+    this.relationservice.sendFriendRequest(data.senderId, data.receiverId);
   }
   getUser(client: Socket) {
     const session = client.handshake.headers.cookie;

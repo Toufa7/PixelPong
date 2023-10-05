@@ -1,6 +1,8 @@
+import { Optional } from '@nestjs/common';
 import { IsDateString, IsInt, IsString } from 'class-validator';
 
 export class FriendrequestDto {
+  @Optional()
   @IsInt()
   id: number;
 
@@ -10,12 +12,15 @@ export class FriendrequestDto {
   @IsString()
   friendId: string;
 
-  @IsString()
-  status: string;
+  // @Optional()
+  // @IsString()
+  // status: string;
 
-  @IsDateString()
-  createdAt: string;
+  // @Optional()
+  // @IsDateString()
+  // createdAt: string;
 
-  @IsDateString()
-  updatedAt: string;
+  // @Optional()
+  // @IsDateString()
+  // updatedAt: string;
 }

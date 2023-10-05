@@ -132,7 +132,11 @@ const GroupsAndFriends = () => {
       const [label, setlabel] = useState(true);
       const cookie = new Cookies();
       const token = jwt_decode(cookie.get('jwt'));
+        console.log("Token JWT -> ", token);
+
       const myAvatar = `http://localhost:3000/auth/avatar/${token.id}`;
+      console.log("My Avatar -> ", myAvatar);
+      const check = true;
       return (
         <div className="groupsAndFriendsBox">
           <div className="gAndFBox">
@@ -157,7 +161,7 @@ const GroupsAndFriends = () => {
                         ) : (
                             friends.map((idx) => {
                                 <>
-                                <img className="avatar" src={myAvatar}/>
+                                <img className="avatar" src={check ? myAvatar : token.profileImage }/>
                                 <span className='name'>{idx}</span>
                                 <img className='ico' src={message}/>
                                 </>

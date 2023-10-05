@@ -12,7 +12,8 @@ export class RelationController {
       query.friendId,
     );
   }
-  @Patch('acceptFriendRequest/:id')
+
+    @Patch('acceptFriendRequest/:id')
   async acceptFriendRequest(@Query() query: FriendrequestDto) {
     return await this.Relationservice.acceptFriendRequest(
       query.id,
@@ -20,9 +21,8 @@ export class RelationController {
       query.friendId,
     );
   }
-  @Patch('refuseFriendRequest/:id')
-  async refuseFriendRequest(@Query() query: FriendrequestDto) {
-    return await this.Relationservice.refuseFriendRequest(query.id);
-  }
-  // @Get('')
+  // @Patch('refuseFriendRequest/:id')
+  // async refuseFriendRequest(@Query() query: FriendrequestDto) {
+  //   return await this.Relationservice.refuseFriendRequest(query.id);
+  // }
 }

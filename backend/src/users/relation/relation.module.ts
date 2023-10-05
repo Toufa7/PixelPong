@@ -6,5 +6,6 @@ import { RelationController } from './relation.controller';
 Module({
   controllers: [RelationController],
   providers: [PrismaService, RelationService],
+  exports: [RelationService],
 });
 export class RelationModule {}
