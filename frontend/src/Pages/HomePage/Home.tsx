@@ -18,6 +18,7 @@ import siif from './assets/siif.svg';
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
 import image from './assets/medaille.svg'
+import { useNavigate } from "react-router-dom";
 /*************************************************/
 
 
@@ -42,7 +43,6 @@ const TopContainer = () => {
 	}, []);
 	
 
-
 	return (
 		<div className="headerBox">
 		<div className="topLoginBox">
@@ -57,7 +57,7 @@ const TopContainer = () => {
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[0]}
 					</AnimatedText>
-					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
+					<a style={{width: '100px'}} className="nes-btn" href="/game">Vamos</a>
 			  </div>
 			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
 			  		<AnimatedText duration={2} animationType="bounce">
@@ -251,29 +251,29 @@ function Home() {
 		<div style={{height: '100vh'}}>
 			<Anime
 				translateY={['-100%', '0%']}
-				duration={1000}
-				easing="steps(5)">
+				duration={2000}
+				>
 			<TopContainer/>
 			</Anime>
 			<div className="top-containers">
 			<Anime
 				translateX={['-100%', '0%']}
-				duration={1000}
-				easing="steps(5)">
+				duration={2000}
+				>
 				<TopLeft/>
 			</Anime>
 			<Anime
 				translateX={['100%', '0%']}
-				duration={1000}
-				easing="steps(5)">
+				duration={2000}
+				>
 				<TopRight/>
 			</Anime>
 			</div>
 			<div className="bottom-containers">
 			<Anime
 				translateY={['100%', '0%']}
-				duration={1000}
-				easing="steps(5)">
+				duration={2000}
+				>
 			<BottomLeft/>
 			<BottomRight/>
 

@@ -19,7 +19,8 @@ import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
 import Testing from './Pages/userProfilPage/userProfilPage'
-
+import { Setup } from './Pages/GamePage/Setup_ comp';
+import { ContextSocket } from './Pages/GamePage/socket_setup/client-connect';
 
 
 export const OtherUser = () => {
@@ -101,7 +102,16 @@ const HomeComponents = () => {
 			<Stars/>
 			<NavBar/>
 			<Home/>
-			</socketContext.Provider>
+		</socketContext.Provider>
+		</>
+	);
+}
+
+const GameComponents = () => {
+	return (
+		<>
+		{/* <Stars/>
+		<Setup/> */}
 		</>
 	);
 }
@@ -147,8 +157,8 @@ const RedirectToSettings = () => {
 			<Routes>
 				<Route path="settings"	Component={LoginSettingsComponents} />
 				<Route path="home"		Component={HomeComponents}/>
-	 
 				<Route path="profil/"	Component={ProfilComponents}/>
+				<Route path="game"		Component={GameComponents}/>
 				<Route path="profil/*"	Component={OtherUser}/>
 				<Route path="chat"		Component={ChatPage}/>
 				<Route path="groups"	Component={ChatGroupsComponents}/>
