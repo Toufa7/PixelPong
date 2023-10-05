@@ -92,23 +92,18 @@ body {
 						align-items: center;
 						padding: 10px;
 						display: flex;
-
-						
+						background: red;
+						overflow: auto;
 						.avatar {
 							width: 60px; height: 60px;
 							margin-right: 10px;
 							margin-left: 10px;
 							border-radius: 50px;
-							flex-grow: 0;
 
 						}
 						.name {
-						}
-						.ico {
-							height: 40px; width: 40px;
-							margin-top: 5px;
-							right: 22px;
-							flex-grow: 1;
+							margin-left: 10px;
+							margin-right: auto;
 						}
 
 					}
@@ -144,7 +139,6 @@ body {
 				
 			}
 	
-			
 			.statesBoxContent {
 				height: 90%;
 				border-top: 8px solid #EBD9F0;

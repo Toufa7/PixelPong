@@ -8,6 +8,10 @@ const chatNavBar = () => {
     <div className="chatNavBarDiv">
         <ChatSearch/>
         <div className="chatsContainer">
+          <div className="choice">
+          <button>Group Settings</button>
+          <button>Create Group</button>
+          </div>
             {/* <CreateGroup/> */}
             <ManageGroup/>
             <Groupes/>

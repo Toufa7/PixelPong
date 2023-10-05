@@ -76,7 +76,7 @@ const ListFriends = () => {
 				</div>
 					<div style={{borderBottom: "1px solid" }}></div>
 
-					<div style={{ height: '280px', overflow: 'auto' }}>
+					<div style={{ height: 'fit-content', overflow: 'auto' }}>
 					{
 						members.map((name) => {
 							return (
