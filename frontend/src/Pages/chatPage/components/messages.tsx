@@ -1,21 +1,20 @@
 import ChatUser from './ChatUser'
 import MessagingBody from './MessagingBody'
 import MessageLowerRibbon from './MessageLowerRibbon'
-import { socket, socketContext } from './socket.client'
 import { useContext } from 'react'
+import { socketContext } from './socket.client'
 
 
 const messages = () => {
   const socket = useContext(socketContext);
-  console.log("Socket Connected");
   
   return (
     <div className="messagesDiv">
       <socketContext.Provider value = {socket}>
         <ChatUser />
-        <MessagingBody psocket = {socket} />
-        <MessageLowerRibbon />
+        <MessagingBody psocket={socket}/>
       </socketContext.Provider>
+        <MessageLowerRibbon />
     </div>
   )
 }

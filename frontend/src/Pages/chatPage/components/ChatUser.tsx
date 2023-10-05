@@ -16,9 +16,9 @@ const ChatUser = () => {
             <div className="chatUserName"><span>Omar Toufah</span></div>
           </div>
           <div className='chatUserControls'>
-            <button className='userControlButtons'><img src={play} width={50} height={50}></img></button>
-            <button className='userControlButtons'><img src={mute} width={50} height={50}></img></button>
-            <button className='userControlButtons'><img src={block} width={50} height={50}></img></button>
+              <button className='userControlButtons'><img src={play} width={50} height={50}></img></button>
+              <button className='userControlButtons'><img src={mute} width={50} height={50}></img></button>
+              <button className='userControlButtons'><img src={block} width={50} height={50}></img></button>
           </div>
         </div>
     </div>

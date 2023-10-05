@@ -1,6 +1,7 @@
 import omar from '../assets/images/otoufah.jpg'
 
 const messageComponenet = (props: any) => {
+  // console.log(props.content);
   return (
     <div className="messageComponent">
         <div className="messageInfo">
@@ -9,7 +10,7 @@ const messageComponenet = (props: any) => {
         </div>
         <div className="messageContent">
             <div className="nes-balloon from-left">
-                <p className='message'>{props.content}</p>
+                <p className='message'>{props.content.content}</p>
             </div>
         </div>
     </div>

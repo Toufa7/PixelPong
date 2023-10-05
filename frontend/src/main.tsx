@@ -34,7 +34,7 @@ export const LogingPageComponents = () => {
 export const ChatComponents = () => {
 	return (
 		<>
-			<Stars/>
+			{/* <Stars/> */}
 			<ChatPage/>
 		</>
 	);

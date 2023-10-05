@@ -1,10 +1,11 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server , Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
@@ -13,7 +14,7 @@ import { Server } from 'socket.io';
   },
   namespace: 'chat',
 })
-export class ChatGateway {
+export class ChatGateway  {
   @WebSocketServer()
   server: Server;
 
@@ -25,9 +26,9 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('newMessage')
-  onNewMessage(@MessageBody() body: any) {
+  onNewMessage(@MessageBody() body: any,@ConnectedSocket()client:Socket) {
     console.log(body);
-    this.server.emit('onMessage', {
+    this.server.to(client.id).emit('onMessage', {
       msg: 'new Message',
       content: body,
     });
