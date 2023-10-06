@@ -40,9 +40,9 @@ export const Websocket_render = () =>{
     },[])
 
     return (
-    <div>
+    <>
         {/* <ReactP5Wrapper sketch={sketch_ot}/> */}
         <ReactP5Wrapper sketch={sketch}/>
-    </div>
+    </>
     )
 }

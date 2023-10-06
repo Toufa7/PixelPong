@@ -155,7 +155,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
       for(const id in this.Rooms.rooms){
           const Room = this.Rooms.rooms[id];
-          if (Room.Player1.id == Player.id || Room.Player2.id == Player.id){
+          if (Room.Player1?.id == Player.id || Room.Player2?.id == Player.id){
               top = (Room.GameBall.y - Room.GameBall.diameter / 2);
               bottom = (Room.GameBall.y + Room.GameBall.diameter / 2);
               left = (Room.GameBall.x - Room.GameBall.diameter / 2);
@@ -206,6 +206,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
     }
 
     Ball_points_check(radius : number,Room,Player,screen_width,Ball_x) : boolean{
+      let r : number  = 0;
         for(let i = 0; i < 16 ; i++){
           let degree = (i * 22.5) * (Math.PI / 180);
     
@@ -213,29 +214,37 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           let y_ball = radius * (Math.sin(Room.GameBall.y + degree)) + Room.GameBall.y;
   
           if (((x_ball > Player.x && x_ball < Player.x + Player.width && y_ball > Player.y && y_ball < Player.y + Player.height))){
-              if (x_ball < screen_width / 2){
-                  console.log("hit left half")
-                  if(y_ball > (Player.y + 15) && y_ball < (Player.y + Player.height - 11)){
+              // if (x_ball < screen_width / 2){
+                  // console.log("hit left half")
+                  if(y_ball > (Player.y + 20 && x_ball < Player.x + Player.width) && y_ball < (Player.y + Player.height - 20)){
                       console.log("hit mid !!");
-                      Ball_x = Ball_x + 2;
+                      Ball_x = Ball_x + 20;
                       Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+                      
+                      // Room.GameBall.y = Room.GameBall.y + 5;
+                      // if (r){
+                      //   console.log(Math.floor(r));
+                      //   // Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+                      // }
                       // this.collision_front = true;
                       return(true);
                   }
                   else{
                       console.log("hit corner !!");
-                      console.log(Player.y);
-                      Ball_x = Ball_x + 2;
+                      // console.log(Player.y);
+                      Ball_x = Ball_x + 20;
                       Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-  
-                      // this.r = Math.random(0,2);
-                      // console.log("r--->" + this.r);
-                      // if (Math.floor(this.r))
-                      //     this.ball_speed_y = -this.ball_speed_y;
+                      // Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+                      r = Math.random() * 2;
+                      if (r){
+                        console.log(Math.floor(r));
+                        // Room.GameBall.y += 8;
+                        Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+                      }
                       // this.collision_front = true;
                       return(true);
                   }
-              }
+              // }
             }
         }
         return (false);

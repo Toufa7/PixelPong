@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import p5Types from "p5";
 import { isConstructorDeclaration } from 'typescript';
 import { P5CanvasInstance, ReactP5Wrapper, Sketch } from "react-p5-wrapper";
@@ -106,7 +105,9 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   let font : p5Types.Font;
   let ovp : p5Types.Image;
   let change_screen :boolean = false;
-  
+  let canvasDiv : any;
+  let width;
+  let height;
   
   
   //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
@@ -146,7 +147,6 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       });
       //r--------------------------------------------
 
-
       //r- Loading Images
       p5_ob.preload = () =>{
         MatchmakingPage = p5_ob.loadImage(gifMatch);
@@ -166,7 +166,12 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
 
       p5_ob.setup = () => {
       p5_ob.frameRate(60);
-      canvas = p5_ob.createCanvas(screen_width , screen_height);
+      canvasDiv = document.querySelector('#child_canvas');
+      width = canvasDiv?.offsetWidth;
+      height = canvasDiv?.offsetHeight;
+      console.log("div--->" + height);
+      console.log("div ----> " + width);
+      canvas = p5_ob.createCanvas(width , height).parent('child_canvas');
       const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;
       const canvas_y = (p5_ob.windowHeight - p5_ob.height) / 2;
       canvas.position(canvas_x,canvas_y);
@@ -176,73 +181,89 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     }
     
     p5_ob.draw = () =>{
-      if (!change_screen){
-        for(const id in Frontroom){
-          p5_ob.background("#FA9200");
-          const id_of_player1 = Frontroom[id].Player1?.id;
-          const id_of_player2 = Frontroom[id].Player2?.id;
-          const Player1 = Frontroom[id].Player1?.Paddle;
-          const Player2 = Frontroom[id].Player2?.Paddle;
-          if (id_of_player1 == id_player){
-            Player1?.update_Player_pos(canvas);
-            if (Player2 && id_of_player2 != id_player){
-              Player2.pos.x = screen_width - Player2.paddle_width;
-              Player2?.update_Player_pos(canvas);
-            }
-          }
-          else if (id_of_player2 == id_player){
-            Player2?.update_Player_pos(canvas);
-            if (Player1 && id_of_player1 != id_player){
-              Player1.pos.x = screen_width - Player1.paddle_width;
-              Player1?.update_Player_pos(canvas);
-            }
-          }
+      canvasDiv = document.querySelector('#child_canvas');
+    width = canvasDiv?.offsetWidth;
+    height = canvasDiv?.offsetHeight;
+      // if (!change_screen){
+      //   for(const id in Frontroom){
+      //     p5_ob.background("#FA9200");
+      //     const id_of_player1 = Frontroom[id].Player1?.id;
+      //     const id_of_player2 = Frontroom[id].Player2?.id;
+      //     const Player1 = Frontroom[id].Player1?.Paddle;
+      //     const Player2 = Frontroom[id].Player2?.Paddle;
+      //     if (id_of_player1 == id_player){
+      //       Player1?.update_Player_pos(canvas);
+      //       if (Player2 && id_of_player2 != id_player){
+      //         Player2.pos.x = screen_width - Player2.paddle_width;
+      //         Player2?.update_Player_pos(canvas);
+      //       }
+      //     }
+      //     else if (id_of_player2 == id_player){
+      //       Player2?.update_Player_pos(canvas);
+      //       if (Player1 && id_of_player1 != id_player){
+      //         Player1.pos.x = screen_width - Player1.paddle_width;
+      //         Player1?.update_Player_pos(canvas);
+      //       }
+      //     }
     
-          //y- LOADING PAGE FOR PLAYERS
-    
-          
-          //   //r- CODE FOR DRAWING THE BALL
-          if (Frontroom[id].Player1 && Frontroom[id].Player2){
-              // console.log(Player1.pos.x);
-            if (id_of_player1 == id_player)
-              Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
-            else if (id_of_player2 == id_player)
-            Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
-          }
-          //   //r----------------------------
+      //     //y- LOADING PAGE FOR PLAYERS
     
           
-          //   //b- LOADING PAGE CODE
-            else{
-            console.log("A player is missing");
-            // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
-            // p5_ob.image(load,0,0);
-            p5_ob.background("#000000");
-            p5_ob.image(MatchmakingPage,170,0,750,550);
-            // p5_ob.fill("#000000");
-            // p5_ob.text("Loading",100,200);
-            // p5_ob.text("...",190,100);
-            // if (id_of_player1 == id_player){
-            //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-            //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-            //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
-            }
+      //     //   //r- CODE FOR DRAWING THE BALL
+      //     if (Frontroom[id].Player1 && Frontroom[id].Player2){
+      //         // console.log(Player1.pos.x);
+      //       if (id_of_player1 == id_player)
+      //         Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+      //       else if (id_of_player2 == id_player)
+      //       Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+      //     }
+      //     //   //r----------------------------
+    
+          
+      //     //   //b- LOADING PAGE CODE
+      //       else{
+      //       console.log("A player is missing");
+      //       // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
+      //       // p5_ob.image(load,0,0);
+            // p5_ob.strokeWeight(4);
+            // p5_ob.stroke(51);
+            p5_ob.background("#fcba03");
+            // p5_ob.image(MatchmakingPage,170,0,750,550);
+            p5_ob.fill("#000000");
+            p5_ob.text("Loading",width / 2,height / 2);
+      //       // p5_ob.text("...",190,100);
+      //       // if (id_of_player1 == id_player){
+      //       //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+      //       //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+      //       //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
+      //       }
             
-          //   //b- ----------------------
+      //     //   //b- ----------------------
     
-          //   // else if (id_of_player2 == id_player)
-          //   //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-          //   //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-          //   //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
-          // }
+      //     //   // else if (id_of_player2 == id_player)
+      //     //   //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+      //     //   //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+      //     //   //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
+      //     // }
     
-          //y----------------------------------
+      //     //y----------------------------------
           
-        }
-      }else{
-        console.log("Game  Over someone forfaited");
-        p5_ob.background("#000000");
-        p5_ob.image(ovp,250,0,600,550);
+      //   }
+      // }else{
+      //   console.log("Game  Over someone forfaited");
+      //   p5_ob.background("#000000");
+      //   p5_ob.image(ovp,250,0,600,550);
+      // }
+  }
+
+  p5_ob.windowResized = () =>{
+    canvasDiv = document.querySelector('#child_canvas');
+    width = canvasDiv?.offsetWidth;
+    height = canvasDiv?.offsetHeight;
+    console.log("resize--> " + width);
+    console.log("resize--> " + height);
+    if (p5_ob){
+        p5_ob.resizeCanvas(width,height);
       }
   }
 }

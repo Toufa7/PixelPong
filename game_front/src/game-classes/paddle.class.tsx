@@ -93,13 +93,13 @@ export class Paddle {
           if (this.paddle_obj.keyCode === (this.paddle_obj.DOWN_ARROW)){
             key_code = this.paddle_obj.keyCode;
             key_pressed = this.paddle_obj.DOWN_ARROW;
-            socket.emit("Player_movement",{sig : "DOWN" , Key : key_code , key_check : key_pressed});
+            socket?.emit("Player_movement",{sig : "DOWN" , Key : key_code , key_check : key_pressed});
             // this.pos.y += this.dy;
           }
           else if (this.paddle_obj.keyCode === (this.paddle_obj.UP_ARROW)){
             key_code = this.paddle_obj.keyCode;
             key_pressed = this.paddle_obj.UP_ARROW;
-            socket.emit("Player_movement",{sig : "UP" , Key : key_code , key_check : key_pressed});
+            socket?.emit("Player_movement",{sig : "UP" , Key : key_code , key_check : key_pressed});
             // this.pos.y -= this.dy;
           }
         }
@@ -107,7 +107,7 @@ export class Paddle {
           // this.ms_y = event.layerY;
           // this.pos.y = this.ms_y;
           mouse_y = event.layerY;
-          socket.emit("Player_movement",{sig:"MOUSE",mouse_coord:mouse_y});
+          socket?.emit("Player_movement",{sig:"MOUSE",mouse_coord:mouse_y});
         })
         
         // console.log("[ x : " + this.pos.x + " , " + " y : " + this.pos.y + " ] ");
