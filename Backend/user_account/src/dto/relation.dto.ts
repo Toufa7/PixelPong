@@ -6,6 +6,7 @@ export class FriendrequestDto {
   @IsInt()
   id: number;
 
+  @Optional()
   @IsString()
   userId: string;
 

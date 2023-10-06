@@ -7,7 +7,7 @@ const chatSearch = () => {
     <div className="chatSearchDiv">
       <span>CHAT</span>
       <div className="searchForm">
-        <input type='text' placeholder='Search' className='searchBar'/>
+        {/* <input type='text' placeholder='Search' className='searchBar'/> */}
       </div>
       <div className="userChat"></div>
     </div>

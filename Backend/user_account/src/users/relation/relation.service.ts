@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Status, Type } from '@prisma/client';
 import { PrismaService } from 'src/auth/prisma.service';
+import { GateWayModule } from 'src/socket/gateaway.module';
+import { SocketGateway } from 'src/socket/socket.gateway';
 
 @Injectable()
 export class RelationService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,
+    private readonly gateway: SocketGateway,
+  ) {}
 
   async sendFriendRequest(senderId: string, receiverId: string) {
     try {
@@ -15,7 +19,6 @@ export class RelationService {
           status: Status.PENDING,
         },
       });
-
       return friendRequest;
     } catch (error) {
       console.log(error);

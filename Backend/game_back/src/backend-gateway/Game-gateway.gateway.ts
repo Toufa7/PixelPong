@@ -9,7 +9,7 @@ import { Interval, Timeout } from '@nestjs/schedule';
 @WebSocketGateway({
 namespace :"/game",
 cors : {
-origin : ['http://localhost:5174' , 'http://10.14.8.4:5174'] , 
+origin : ['http://localhost:5173' , 'http://10.14.8.4:5173'] , 
 methods: ["GET", "POST"],
 credentials: true , transports : 'websocket'
 },

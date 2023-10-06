@@ -1,23 +1,33 @@
-import { Controller, Post, Patch, Query } from '@nestjs/common';
+import { Controller, Post, Patch, Query, Req } from '@nestjs/common';
 import { RelationService } from './relation.service';
 import { FriendrequestDto } from 'src/dto/relation.dto';
 import { io } from 'socket.io-client';
+import { SocketGateway } from 'src/socket/socket.gateway';
+import { User } from '@prisma/client';
 
 @Controller('relation')
 export class RelationController {
-  constructor(private Relationservice: RelationService) {}
+  constructor(
+    private Relationservice: RelationService,
+    private event: SocketGateway,
+    private user: User,
+  ) {}
   @Post('sendFriendRequest')
-  async sendFriendRequest(@Query() query: FriendrequestDto) {
+  async sendFriendRequest(@Req() req, @Query() query: FriendrequestDto) {
     const friendrequest = await this.Relationservice.sendFriendRequest(
-      query.userId,
+      req.user.id,
       query.friendId,
     );
-  
-    // Assuming you have a user's socket ID or some identifier for the recipient
-
+    this.event.hanldleSendNotification(query.userId, query.friendId, {
+      userId: req.user.id,
+      type: 'friendrequest',
+      to: query.friendId,
+      avatar: this.user.profileImage,
+      message: `${this.user.username} sent friend request`,
+    });
   }
 
-    @Patch('acceptFriendRequest/:id')
+  @Patch('acceptFriendRequest/:id')
   async acceptFriendRequest(@Query() query: FriendrequestDto) {
     return await this.Relationservice.acceptFriendRequest(
       query.id,
