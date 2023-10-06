@@ -64,7 +64,7 @@ const Profil = () => {
                         avatar: avatarURL,
                         username: response.data.username,
                         check: false,
-                        userId : response.data.id;
+                        userId : response.data.id
                     }));
                 } catch (avatarError) {
                     // Avatar URL failed, set another value
@@ -72,7 +72,7 @@ const Profil = () => {
                         avatar: response.data.profileImage,
                         username: response.data.username,
                         check: false,
-                        userId : response.data.id;
+                        userId : response.data.id
 
                     }));
                 }
@@ -82,6 +82,7 @@ const Profil = () => {
     }, []);
 
 
+    const [friendRequest, setFriendRequest] = useState();
 
     const [isFriend, setIsFriend] = useState(false);
     return (
@@ -109,9 +110,12 @@ const Profil = () => {
                             <a className="nes-btn" href="#" onClick={() => 
                                 {
                                     setIsFriend(true)
-                                    axios.post("" ,{userData}, {withCredentials: true})
+                                    axios.post("http://localhost:3000/relation/sendFriendRequest",userData.userId, { withCredentials: true })
                                     .then((res) => {
-                                        console.log(res);
+                                        console.log("This Dat -> ", res);
+                                    })
+                                    .catch((error) => {
+                                        console.log(error);
                                     })
                                 }
                             }>Add Friend</a>
