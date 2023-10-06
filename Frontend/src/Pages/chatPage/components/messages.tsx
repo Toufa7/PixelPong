@@ -1,20 +1,17 @@
 import ChatUser from './ChatUser'
-import MessagingBody from './MessagingBody'
-import MessageLowerRibbon from './MessageLowerRibbon'
-import { useContext } from 'react'
-import { socketContext } from './socket.client'
+// import MessagingBody from './MessagingBody'
+import Diamond from '../../../assets/images/diamond.svg'
+import Sparkle from '../../../assets/images/sparkles.gif'
 
-
-const messages = () => {
-  const socket = useContext(socketContext);
+const messages = (props:any) => {
   
   return (
     <div className="messagesDiv">
-      <socketContext.Provider value = {socket}>
         <ChatUser />
-        <MessagingBody psocket={socket}/>
-      </socketContext.Provider>
-        <MessageLowerRibbon />
+        <div className="MessageLowerRibbonDiv">
+            <img className='leftDiamond' src={Diamond} alt="Bottom diamond" />
+            <img className='rightSparkle' src={Sparkle} alt="Bottom diamond" />
+        </div>
     </div>
   )
 }
