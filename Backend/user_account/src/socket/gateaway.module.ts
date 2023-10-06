@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { SocketGateway } from './socket.gateway ';
+import { SocketGateway } from './socket.gateway';
 import { AuthModule } from '../auth/auth.module';
 import { WSGuard } from 'src/guards/jwt.guards';
 import { UsersModule } from 'src/users/users.module';
