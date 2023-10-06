@@ -89,21 +89,12 @@ body {
 					.list {
 						border: 2px solid black;
 						display: flex;
-						align-items: center;
 						padding: 10px;
-						display: flex;
-						background: red;
-						overflow: auto;
 						.avatar {
-							width: 60px; height: 60px;
-							margin-right: 10px;
-							margin-left: 10px;
-							border-radius: 50px;
-
+							width: 70px; height: 60px;
 						}
 						.name {
-							margin-left: 10px;
-							margin-right: auto;
+							align-items: end;
 						}
 
 					}
@@ -112,8 +103,6 @@ body {
 			}
 		}
 	
-
-
 .topContainer {
     display: flex;
     flex-flow: row wrap;
@@ -159,46 +148,45 @@ body {
 				}
 			}
 		}
+}
+
+	  
+.profilRectangle {
+	width: 655px;
+	height: 216px;
+	background-color: #F0A814CC;
+	border-top: 8px solid #EBD9F0;
+	border-bottom: 8px solid #7C6E6E;
+	border-left: 8px solid #7C6E6E;
+	border-right: 8px solid #EBD9F0;
+	flex-shrink: 1;
+	z-index: 0;
+
+	.avatar {
+		height: 75%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.left {
+			display: flex;
+			align-items: center;
+		}
 	}
+}
 
-	  
-		.profilRectangle {
-			width: 655px;
-			height: 216px;
-			background-color: #F0A814CC;
-			border-top: 8px solid #EBD9F0;
-			border-bottom: 8px solid #7C6E6E;
-			border-left: 8px solid #7C6E6E;
-			border-right: 8px solid #EBD9F0;
-			flex-shrink: 1;
-			z-index: 0;
-
-	  
-		  .avatar {
-			height: 75%;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-	  
-			.left {
-			  display: flex;
-			  align-items: center;
-			}
-		  }
-		}
-
-		.buttonat {
-			flex-shrink: 1;
-			background: #aa855a;
-			align-items: center;
-			justify-content: center;
-			display: flex;
-			gap: 10px 20px !important;
-			
-		}
-		.buttonat .nes-btn {
-			gap: 10px 20px !important;
-		}
+.buttonat {
+	flex-shrink: 1;
+	background: #aa855a;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	gap: 10px 20px !important;
+	
+}
+.buttonat .nes-btn {
+	gap: 10px 20px !important;
+}
 	
 
 

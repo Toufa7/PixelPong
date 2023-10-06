@@ -11,21 +11,24 @@ interface groupInfo {
 
 const Messages = (props : groupInfo) => {
   const socket = useContext(socketContext);
-  const [clicked, isClicked] = useState(true);
+  const [clicked, isClicked] = useState(false);
   console.log("Socket Connected");
   
   return (
     <div className="messagesDiv">
       {/* <socketContext.Provider value = {socket}> */}
         {
-          clicked ? (
+          clicked ?
+          (
             <>
               <HeaderInfo name={props.name} avatar={props.avatar}/>
               {/* <MessagingBody psocket = {socket} /> */}
             </>
-            ) 
-            :
-          (<></>) 
+          ) :
+          (
+            <>
+            </>
+          ) 
         }
         <MessageLowerRibbon />
       {/* </socketContext.Provider> */}
