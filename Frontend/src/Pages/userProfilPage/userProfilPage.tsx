@@ -44,17 +44,18 @@ const Profil = () => {
     const [userData, setUserData] = useState({
         avatar: '',
         username: '',
-        check: true
+        check: true,
+        userId: ''
     });
     const path = window.location.pathname;
     useEffect(() => {
         async function fetchData() {
-            let endpoint = `http://localhost:3000/users${path}`;
+            const endpoint = `http://localhost:3000/users${path}`;
             // try {
                 const response = await axios.get(endpoint, { withCredentials: true });
-                console.log("Response For This User ", response);
+                console.log("User ID ", response.data.id);
                 
-                let avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
+                const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
                 console.log("Avatar URL  alocodee  ", avatarURL);
                 // Check if the avatar URL exists and is accessible
                 try {
@@ -62,21 +63,25 @@ const Profil = () => {
                     setUserData(() => ({
                         avatar: avatarURL,
                         username: response.data.username,
-                        check: false
+                        check: false,
+                        userId : response.data.id;
                     }));
                 } catch (avatarError) {
                     // Avatar URL failed, set another value
                     setUserData(() => ({
                         avatar: response.data.profileImage,
                         username: response.data.username,
-                        check: false
+                        check: false,
+                        userId : response.data.id;
+
                     }));
-                    console.log("Avatar Error ", userData.avatar);
                 }
              
         }
         fetchData();
     }, []);
+
+
 
     const [isFriend, setIsFriend] = useState(false);
     return (
@@ -101,8 +106,16 @@ const Profil = () => {
                             <a  href="/chat" className="nes-btn">Chat</a>
                         </>
                         ) : (
-                        <a className="nes-btn" href="#" onClick={() => setIsFriend(true)}>Add Friend</a>
-                    )}
+                            <a className="nes-btn" href="#" onClick={() => 
+                                {
+                                    setIsFriend(true)
+                                    axios.post("" ,{userData}, {withCredentials: true})
+                                    .then((res) => {
+                                        console.log(res);
+                                    })
+                                }
+                            }>Add Friend</a>
+                            )}
                 </a>
                 </div>
             </div>
@@ -156,6 +169,7 @@ const GroupsAndFriends = () => {
         }
         checking(); 
       }, []);
+
       return (
           <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
@@ -174,9 +188,9 @@ const GroupsAndFriends = () => {
                     {label ? (
                         friends.map((friend, index) => (
                         <>
-                            <div className='list'>
+                            <div className='list' key={index}>
                                 <img className="avatar" src={userData.check ? token.image : userData.avatar}/>
-                                <span className='name' key={index}>{friend}</span>
+                                <span className='name'>{friend}</span>
                                 <img className='ico' src={message}/>
                             </div>
 
@@ -185,9 +199,9 @@ const GroupsAndFriends = () => {
                     ) : (
                         groups.map((group, index) => (
                             <>
-                            <div className='list'>
+                            <div className='list' key={index}>
                                 <img className="avatar" src={groupt}/>
-                                <span className='name' key={index}>{group}</span>
+                                <span className='name' >{group}</span>
                                 <img className='ico' src={message}/>
                             </div>
                             </>
@@ -251,7 +265,7 @@ function OtherProfilPage() {
             <GroupsAndFriends/>
             <Achivements/>
         </div>
-        </>
+    </>
   )
 }
 

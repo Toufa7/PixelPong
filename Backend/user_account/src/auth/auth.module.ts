@@ -11,7 +11,6 @@ import { JwtGuard } from '../guards/jwt.guards';
 import { JwtStrategy } from '../passport/jwt-startegy/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { TokenBlacklistService } from './token-blacklist.service';
-import { UsersService } from 'src/users/users.service';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -21,7 +20,7 @@ import { UsersService } from 'src/users/users.service';
       signOptions: { expiresIn: '1d' },
     }),
     PassportModule.register({ defaultStrategy: '42' }),
-    // UsersModule,
+    UsersModule,
   ],
   providers: [
     AuthService,
@@ -32,7 +31,6 @@ import { UsersService } from 'src/users/users.service';
     fourtwoStrategy,
     JwtGuard,
     JwtStrategy,
-    UsersService,
   ],
   controllers: [AuthController],
   exports: [

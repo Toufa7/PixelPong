@@ -64,7 +64,7 @@ export class UsersController {
     @Param('userId', ParseUUIDPipe) userId: string,
     @Param('blockedId', ParseUUIDPipe) blockedId: string,
   ): Promise<void> {
-     await this.usersService.blockfriend(userId, blockedId);
+    await this.usersService.blockfriend(userId, blockedId);
   }
   @Get('profil/:username')
   async findOneByEmail(@Param('username') username: string) {

@@ -46,10 +46,10 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit('checkout', { msg: 'hello' });
     if (jwt) {
       const user = decode(jwt);
-      console.log("userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ", user);
+      console.log("userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ", user['id']);
       console.log("userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ", client.id);
 
-      this.connectedUsers.set(client.id, client);
+      this.connectedUsers.set(user['id'], client);
       const status = UserStatus.ONLINE;
       console.log(
         'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
@@ -83,14 +83,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async hanldleSendNotification(clientId: string , senderId: string, data) {
     try {
       this.gatewayservice.createnotification(data);
-      // await this.prisma.user.update({
-      //   where: {
-      //     id: clientId,
-      //   },
-      //   data: {
-      //     pendingnotifications: {increment: 1},
-      //   },
-      // });
       const sockets = this.connectedUsers.get(clientId);
       if (sockets) {
         console.log("sending notification");

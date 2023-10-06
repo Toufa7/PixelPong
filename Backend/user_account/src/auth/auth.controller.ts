@@ -70,10 +70,11 @@ export class AuthController {
       const acces_token = this.authService.fourtwoLogin(req.user);
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
-      console.log('1st time loggin -> ', user.firstlogin);
+      // console.log('1st time loggin -> ', user.firstlogin);
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
       return res.redirect('http://localhost:5173/home');
+      // return res.redirect('signup-success');
     } catch (err) {
       console.log(err);
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
@@ -99,7 +100,7 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async gettwofastatus(@Req() req) {
     const user = await this.usersService.findOne(req.user.id);
-    return user?.twofa;
+    return user.twofa;
   }
 
   @Put('2fa/enable')
@@ -119,23 +120,13 @@ export class AuthController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: '../frontend/public',
+        destination: './uploads',
         filename: (req, file, cb) => {
           const filename: string = (req.user as User).id;
           const extension = file.originalname.split('.')[1];
           cb(null, `${filename}.${extension}`);
         },
       }),
-      fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith('image/')) {
-          cb(null, true);
-        } else {
-          cb(
-            new Error('Invalid file type. Only image files are allowed.'),
-            false,
-          ); // Reject the file
-        }
-      },
     }),
   )
   UploadFile(@UploadedFile() file: Express.Multer.File, @Req() req) {

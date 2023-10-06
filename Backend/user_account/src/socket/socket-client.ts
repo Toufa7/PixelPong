@@ -9,15 +9,15 @@
 //   }
 //   onModuleInit() {
 //     this.registerConsumerEvent();
-//   } 
+//   }
 
 //   private registerConsumerEvent() {
 //     this.socketClient.emit('newMessage', { msg: 'hey ayoub!' });
-//     this.socketClient.ogbn('connect', () => {
+//     this.socketClient.on('connect', () => {
 //       console.log('conected to Gateway');
 //     });
 //     this.socketClient.on('onMessage', (payload: any) => {
 //       console.log(payload);
 //     });
 //   }
-// } 
+// }
