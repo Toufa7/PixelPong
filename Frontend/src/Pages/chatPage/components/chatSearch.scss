@@ -1,7 +1,51 @@
-.searchBar {
-    background-image: url("../assets/search.svg");
-    text-align: center;
-    // background-size: 30px;
-    // background-position: left;
-    background-repeat: no-repeat;
+.chatSearchDiv
+{
+    .fromClass
+    {
+        display: flex;
+        .searchBar
+        {
+            background-image: url("../assets/search.svg");
+            text-align: center;
+            // background-size: 30px;
+            // background-position: left;
+            background-repeat: no-repeat;
+            width: 100%;
+        }
+    }
+
+    .userChat
+    {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        gap: 15px;
+        cursor: pointer;
+        width: 100%;
+        color: #c1cae7;
+
+        img
+        {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            align-self: flex-start;
+        }
+
+        &:hover
+        {
+            background-color: #c1cae7;
+            color: #333c54;
+        }
+        
+        
+        .userChatinfo
+        {                        
+            span
+            {
+
+            }
+        }
+    }
 }

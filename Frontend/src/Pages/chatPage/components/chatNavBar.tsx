@@ -1,6 +1,7 @@
 import ChatSearch from './chatSearch'
 import Dms from './dms'
 
+
 const chatNavBar = () => {
   return (
     <div className="chatNavBarDiv">
