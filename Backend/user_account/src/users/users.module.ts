@@ -6,7 +6,7 @@ import { RelationModule } from './relation/relation.module';
 import { RelationService } from './relation/relation.service';
 
 @Module({
-  imports: [RelationModule],
+  imports: [RelationModule] ,
   providers: [RelationService, UsersService, PrismaService],
   controllers: [UsersController],
   exports: [UsersService],
