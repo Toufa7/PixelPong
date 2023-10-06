@@ -89,29 +89,29 @@ const TopContainer = () => {
 	return (
 		<div className="headerBox">
 		<div className="topLoginBox">
-		  <div className="loginBoxHeader">
+			<div className="loginBoxHeader">
 			<Fade>
 				<>Welcome {userData.username}</>
 			</Fade>
 			</div>
-		  <div className="loginBoxOutside">
+		<div className="loginBoxOutside">
 			<div className="playRaw">
-			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
+				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[0]}
 					</AnimatedText>
 					<a style={{width: '100px'}} className="nes-btn" href="/game">Vamos</a>
-			  </div>
-			  <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
-			  		<AnimatedText duration={2} animationType="bounce">
+				</div>
+				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
+					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[1]}
 					</AnimatedText>
 					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
-			  </div>
+				</div>
 			</div>
-		  </div>
 		</div>
-	  </div>
+		</div>
+		</div>
 	);
 };
 
@@ -222,17 +222,17 @@ const BottomLeft = () => {
 const MatchResult = (props: {player1 : string,  player2 : string, color : string, rslt1 : number, rslt2 : number }) => {
   return (
 	<div className="match1" style={{background: props.color, border: '1px solid black'}}>
-	  <div className="left">
+		<div className="left">
 		<img src={image} style={{width: '40px', height: '40px', marginRight: '10px', marginLeft: '10px'}} className="player1"/>
 		<span>{props.player1}</span>
-	  </div>
-	  <div className="result">
+		</div>
+	<div className="result">
 		<span>{props.rslt1} : {props.rslt2}</span>
-	  </div>
-	  <div className="right">
+	</div>
+	<div className="right">
 		<span>{props.player2}</span>
 		<img src={endpoint} style={{width: '40px', height: '40px', marginLeft: '10px'}} className="player2"/>
-	  </div>
+		</div>
 	</div>
   );
 }
@@ -292,7 +292,7 @@ function Home() {
 	//   })
 	return (
 		<div style={{height: '100vh'}}>
-			<Notification/>
+			{/* <Notification/> */}
 			<Anime
 				translateY={['-100%', '0%']}
 				duration={2000}

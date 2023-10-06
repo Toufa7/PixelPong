@@ -8,9 +8,9 @@ async function bootstrap() {
   // app.useStaticAssets('assets');
   app.enableCors({
     origin: [
-      'http://localhost:5174',
+      'http://localhost:d3,
       'http://localhost:3000',
-      'localhost:5174',
+      'localhost:d3,
     ],
     credentials: true,
   });

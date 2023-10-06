@@ -12,7 +12,6 @@ import img1 from './assets/Glasses.png';
 import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
-import NavBar from "../addons/NavBar";
 import { Router, useNavigate } from "react-router-dom";
 
 const retrieveCheckSendData = () => {
@@ -20,7 +19,9 @@ const retrieveCheckSendData = () => {
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
     // const navigate = useNavigate();
-
+        /**
+         * TODO: it's optionnaly either nickname or avatar or both
+         */
     if (avatar && usernameCheck.test(nicknameInput)) {
         const data = new FormData();
         data.append('file', avatar);
@@ -37,6 +38,9 @@ const retrieveCheckSendData = () => {
                 error: "An error occurred",
             }
         );
+        /**
+         * TODO: Need to redirect to home
+         */
         // <BrowserRouter>
         //     <Routes>
         //         navigate("/home");
@@ -48,7 +52,7 @@ const retrieveCheckSendData = () => {
         // TODO: Need to show the dialog
     }
     else if (!usernameCheck.test(nicknameInput))
-        toast.error("Invalid Username");
+        toast.error("Invalid Username", );
     else {
         toast.error('Choose an avatar');
     }
@@ -76,21 +80,6 @@ const Avatars = () => {
     );
 };
 
-const Toasts = () => {
-    return (
-        <Toaster
-            reverseOrder={false}
-            position='top-right'
-            toastOptions={{
-                style: {
-                    borderRadius: '8px',
-                    background: '#AC8FB4',
-                    color: '#fff'
-                },
-            }}
-        />
-    );
-}
 
 export default function LoginSettings() {   
     const [isChecked, set2FAStatus] = useState();
@@ -105,11 +94,6 @@ export default function LoginSettings() {
             console.log(error);
         });
     }   
-    const dialogPlease = () => {
-        const dialogElement = document.getElementById('dialog-default');
-        dialogElement.showModal();
-      };
-      
       return (
         <div style={{height: '100vh'}}>
           <div className="container">
@@ -123,7 +107,7 @@ export default function LoginSettings() {
                         <div className="choosingAvatarContainer">
                             <span className="is-primary">Choose Avatar</span>
                         </div>
-                            <Avatars />
+                            {/* <Avatars /> */}
                         <div className="uploadContainer">
                             <label className="nes-btn">
                                 <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
@@ -138,20 +122,8 @@ export default function LoginSettings() {
                         </label>
                      </div>
                         <div className="startContainer">
-                            <Toasts/>
-                            <section>
-                                <button style={{width: '100px'}} onClick={retrieveCheckSendData} type="button" className="nes-btn">Start</button>
-                                {/* <dialog className="nes-dialog" id="dialog-default">
-                                    <form method="dialog">
-                                        <p className="title">Warning</p>
-                                        <p>Do you wanna go with the default</p>
-                                        <menu className="dialog-menu">
-                                            <button className="nes-btn">Cancel</button>
-                                            <button onClick={retrieveCheckSendData} className="nes-btn is-success">Confirm</button>
-                                        </menu>
-                                    </form>
-                                </dialog> */}
-                            </section>
+                            <Toaster/>
+                            <button style={{width: 'fit-content'}} onClick={retrieveCheckSendData} type="button" className="nes-btn">Update</button>
                         </div>
                     </div>
                 </div>
