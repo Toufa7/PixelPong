@@ -8,7 +8,7 @@ import { GateWayModule } from 'src/socket/gateaway.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { SocketGateway } from 'src/socket/socket.gateway';
 @Module({
-  imports: [GateWayModule],
+  imports: [RelationModule] ,
   providers: [RelationService, UsersService, PrismaService],
   controllers: [UsersController, RelationController],
   exports: [UsersService, RelationService],
