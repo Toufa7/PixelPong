@@ -1,41 +1,53 @@
-import Send from '../../../assets/images/send.svg'
-import '../chatPage.scss'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import io from 'socket.io-client';
-// import axios from 'axios';
+import MessageComponent from './messageComponenet'
+import '../chatPage.scss'
+import Send from '../../../assets/images/send.svg'
 
+const Conversation = (props: any) => {    
+    const mesaageEndRef = useRef(null);
 
+    useEffect(() => {
+        mesaageEndRef.current?.scrollIntoView();
+    }, [props.MessageArr]);
 
-const messageInput = (props: any) => {
-  const firstRef = useRef(null);
-  const [input, setInput] = useState('');
+    return (
+        <div className="conversationDiv">
+        {props.MessagesArr.map((message: string, index:number) => (
+          <MessageComponent key={index} content={message}/>
+        ))}
+        <div ref={mesaageEndRef}/>
+      </div>
+    );
+  }
+
+const messageInput = () => {
+    const firstRef = useRef(null);
+    // const [input, setInput] = useState('');
+    const [messaging, setMessaging] = useState<string[]>([]);
+
 
   const onSubmitHandler = (e: any) =>{
     e.preventDefault();
-    const message = document.querySelector('.messageInputBox').value;
+    const message = document.querySelector('.messageInputBox')?.value;
     if (message != '')
     {
-      console.log('MSG: ', message);
-      props.onMessageInput(message);
-      firstRef.current.value = '';
+        // props.onMessageInput(message);
+        firstRef.current.value = '';
+        setMessaging(prevMessaging => [...prevMessaging, message]);
     }
-    // const endpnt = "https://dummyapi.io/data/v1/user?created=1"
-    // axios.get(endpnt, message)
-    // .then((res) =>{
-    //   console.log("Respon -> " ,res);
-    // })
-    // .catch((err) =>{
-    //   console.log(err);
-    // })
   }
 
   return (
-    <div className="messageInput">
-      <form className='messageform' onSubmit={onSubmitHandler}>
-        <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
-        <button className='sendButton'><img src={Send} type="submit" ></img></button>
-      </form>
-    </div>
+    <>
+        <Conversation MessagesArr={messaging}/>
+        <div className="messageInput">
+            <form className='messageform' onSubmit={onSubmitHandler}>
+            <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
+            <button className='sendButton'><img src={Send} type="submit" ></img></button>
+            </form>
+        </div>
+    </>
   )
 }
 

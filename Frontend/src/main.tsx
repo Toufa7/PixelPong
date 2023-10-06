@@ -2,8 +2,10 @@ import React, { useContext, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 
 /******************* Packages  *******************/
+
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
+
 /******************* Includes  *******************/
 import NavBar from './Pages/addons/NavBar';
 import Stars from './Pages/addons/Stars';
@@ -18,7 +20,6 @@ import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
 import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
-
 
 export const OtherUser = () => {
 	return (
@@ -44,7 +45,6 @@ export const LogingPageComponents = () => {
 export const ChatComponents = () => {
 	return (
 		<>
-			{/* <Stars/> */}
 			<ChatPage/>
 		</>
 	);
