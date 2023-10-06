@@ -134,7 +134,7 @@
 
                 .userChatGroupes
                 {
-                    max-height: 30vh;
+                    max-height: 60vh;
                     overflow: scroll;
                     overflow-y: auto;
                     overflow-x: hidden;
@@ -154,7 +154,7 @@
                             background-color: #d9d9d9;
                         }
 
-                        img
+                        .groupAvatar
                         {
                             height: 50px;
                             width: 50px;
