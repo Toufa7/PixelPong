@@ -86,4 +86,21 @@ export class UsersController {
   async getFriends(@Param('id', ParseUUIDPipe) id: string) {
     await this.usersService.getFriends(id);
   }
+
+  @Post('sendFriendRequest')
+  async sendFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
+    const notification = await this.usersService.sendFriendRequest(
+      req.user.id,
+      body.friendId,
+    );
+    console.log('abas;go;oguaho;sgu');
+    this.socket.hanldleSendNotification(body.friendId, req.user.id, {
+      userId: req.user.id,
+      type: 'friendrequestrecieved',
+      to: body.friendId,
+      photo: req.user.profileImage,
+      message: `${req.user.username} sent you a friend request`,
+    });
+    return notification;
+  }
 }

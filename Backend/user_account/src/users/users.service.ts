@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../auth/prisma.service';
-import { User, UserStatus } from '@prisma/client';
+import { Status, User, UserStatus } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -108,6 +108,7 @@ export class UsersService {
         username: username,
       },
       select: {
+        id: true,
         username: true,
         profileImage: true,
         achievements: true,
@@ -118,6 +119,15 @@ export class UsersService {
     return user;
   }
 
+  async sendFriendRequest(senderId: string, recieverId: string) {
+    return await this.prisma.friendrequest.create({
+      data: {
+        sender: { connect: { id: senderId } },
+        receiver: { connect: { id: recieverId } },
+        status: Status.PENDING,
+      },
+    });
+  }
   async search(query: string) {
     const users = await this.prisma.user.findMany({
       where: {

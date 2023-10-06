@@ -174,6 +174,7 @@ const GroupsAndFriends = () => {
                             <div className='list'>
                                 <img className="avatar" src={groupt} alt="avatar" />
                                 <span className='name' key={index}>{group}</span>
+								<button style={{ marginLeft: '10px' }}>Mute</button>
 								<button style={{ marginLeft: '10px' }}>Unifriend</button>
                             </div>
                             </>

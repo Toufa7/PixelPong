@@ -1,8 +1,8 @@
-// @ts-nocheck
 import { useEffect, useState } from 'react';
 import './twoFA.scss';
 import axios from 'axios';
 import { Toaster , toast} from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 
 const Toasts = () => {
@@ -23,6 +23,7 @@ const Toasts = () => {
 
 function TwoFa() {
     const [qrCode, updateQr] = useState();
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get("http://localhost:3000/auth/2fa/set2fa", { withCredentials: true })
@@ -50,8 +51,11 @@ function TwoFa() {
         axios.post("http://localhost:3000/auth/2fa/validate", data, { withCredentials: true })
         .then((response) => {
             console.log("Reponse ", response);
-            if (response.status != 201)
-                toast.success("Invalid Code");
+            if (response.status != 400)
+            {
+                toast.success("Success");
+                navigate("/home");
+            }
             else
                 toast.error("Invalid Code");
 

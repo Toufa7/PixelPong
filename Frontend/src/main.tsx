@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 
 /******************* Packages  *******************/
@@ -35,10 +35,9 @@ export const OtherUser = () => {
 export const LogingPageComponents = () => {
 	return (
 		<>
-			<socketContext.Provider value={socket}>
+			
 			<Stars/>
 			<LoginPage/>
-			</socketContext.Provider>
 		</>
 	);
 }
@@ -66,9 +65,11 @@ export const ChatGroupsComponents = () => {
 const ProfilComponents = () => {
 	return (
 		<>
+		{/* <socketContext.Provider value={socket}> */}
 			<Stars/>
 			<NavBar/>
 			<ProfilPage/>
+		{/* </socketContext.Provider> */}
 		</>
 	);
 }
@@ -93,6 +94,15 @@ const twoFAComponents = () => {
 	);
 }
 const HomeComponents = () => {
+	const socket = useContext(socketContext);
+	console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
+	useEffect(()=>{
+		socket?.on("connect",()=>{
+			console.log("im connected");
+		socket.close()
+	})
+	},[]);
+	
 	return (
 		<>
 		<socketContext.Provider value={socket}>

@@ -132,12 +132,12 @@
 //                     font-style: normal;
 //                 }
 
-//                 .userChatGroupes
-//                 {
-//                     max-height: 30vh;
-//                     overflow: scroll;
-//                     overflow-y: auto;
-//                     overflow-x: hidden;
+                .userChatGroupes
+                {
+                    max-height: 60vh;
+                    overflow: scroll;
+                    overflow-y: auto;
+                    overflow-x: hidden;
 
                     
 //                     .userChatGroup
@@ -154,14 +154,14 @@
 //                             background-color: #d9d9d9;
 //                         }
 
-//                         img
-//                         {
-//                             height: 50px;
-//                             width: 50px;
-//                             border-radius: 50%;
-//                             object-fit: cover;
-//                             align-self: flex-start;
-//                         }
+                        .groupAvatar
+                        {
+                            height: 50px;
+                            width: 50px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            align-self: flex-start;
+                        }
 
 //                     }
 

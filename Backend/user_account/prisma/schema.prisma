@@ -11,39 +11,54 @@ datasource db {
 }
 
 // i want my user to have name username email token and can add friends block freinds delete friends and this user have a level and status onilne or offline
-model User {
-  //User account
-  id        String      @id @default(uuid()) @unique
-  username  String?   @unique
-  email     String?   @unique
-  token     String?   @unique
-  twofasecret String? @unique
-  twofatoken String?
-  profileImage String?
-  twofa       Boolean? @default(false)
-  stats     Stats[]  @relation("stats")
-  status    UserStatus?
+  model User {
+    //User account
+    id        String      @id @default(uuid()) @unique
+    username  String?   @unique
+    email     String?   @unique
+    token     String?   @unique
+    twofasecret String? @unique
+    twofatoken String?
+    profileImage String?
+    twofa       Boolean? @default(false)
+    stats     Stats[]  @relation("stats")
+    status    UserStatus?
 
-  // game
-  achievements Achievements[] @relation("achievements")
-  matchhistory MatchHistory[] @relation("matchhistory")
+    // game
+    achievements Achievements[] @relation("achievements")
+    matchhistory MatchHistory[] @relation("matchhistory")
 
-  //relations
-  friends   User [] @relation("friends")
-  friendsby       User[] @relation("friends")
-  blocked      User[]   @relation("block")
-  blockedby      User[]   @relation("block")
-  firstlogin Boolean @default(true)
-  friendreqsent   Friendrequest[]   @relation("friendreqsent")
-  friendreqreceived   Friendrequest[]   @relation("friendreqreceived")
-  //chat
-  DMsChat     DMsChat[]     @relation("DMsChat")
-  RecieverDMs  DMsChat[] @relation("ReciverDMsChat")
-  GroupChat   GroupChat[] @relation("GroupChat")
+    //relations
+    friends   User [] @relation("friends")
+    friendsby       User[] @relation("friends")
+    blocked      User[]   @relation("block")
+    blockedby      User[]   @relation("block")
+    firstlogin Boolean? @default(true)
+    friendreqsent   Friendrequest[]   @relation("friendreqsent")
+    friendreqreceived   Friendrequest[]   @relation("friendreqreceived")
+    //chat
+    DMsChat     DMsChat[]     @relation("DMsChat")
+    RecieverDMs  DMsChat[] @relation("ReciverDMsChat")
+    GroupChat   GroupChat[] @relation("GroupChat")
+    notifications Notification[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+  }
+
+
+model Notification {
+  id        String     @id @default(uuid()) @unique
+  user   User @relation(fields: [userId], references: [id])
+  userId String
+  from   String
+  type String
+  // roomid Int?
+  message String?
+  photo String
+  username String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
+  }
 model DMsChat {
   id        String      @id @default(uuid()) @unique
   SenderId  String
@@ -101,8 +116,8 @@ model Stats{
   level    Int  @default(0)
   user     User     @relation("stats", fields: [userId], references: [id])
   userId   String     
-  wins     Int  @default(0)
-  loses    Int  @default(0)
+  wins     Int?  @default(0)
+  loses    Int?  @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
