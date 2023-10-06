@@ -5,15 +5,7 @@ import { PrismaService } from 'src/auth/prisma.service';
 @Injectable()
 export class RelationService {
   constructor(private prisma: PrismaService) {}
-  async sendFriendRequest(senderId: string, recieverId: string) {
-    return await this.prisma.friendrequest.create({
-      data: {
-        sender: { connect: { id: senderId } },
-        receiver: { connect: { id: recieverId } },
-        status: Status.PENDING,
-      },
-    });
-  }
+
   async acceptFriendRequest(id: number, senderId: string, recieverId: string) {
     await this.prisma.$transaction([
       this.prisma.friendrequest.update({

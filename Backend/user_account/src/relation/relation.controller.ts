@@ -24,22 +24,22 @@ export class RelationController {
   name() {
     console.log('hhhhhhhhh');
   }
-  @Post('sendFriendRequest')
-  async sendFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
-    const notification = await this.Relationservice.sendFriendRequest(
-      req.user.id,
-      body.friendId,
-    );
-    console.log('abas;go;oguaho;sgu');
-    this.socket.hanldleSendNotification(body.friendId, req.user.id, {
-      userId: req.user.id,
-      type: 'friendrequestrecieved',
-      to: body.friendId,
-      photo: req.user.profileImage,
-      message: `${req.user.username} sent you a friend request`,
-    });
-    return notification;
-  }
+  // @Post('sendFriendRequest')
+  // async sendFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
+  //   const notification = await this.Relationservice.sendFriendRequest(
+  //     req.user.id,
+  //     body.friendId,
+  //   );
+  //   console.log('abas;go;oguaho;sgu');
+  //   this.socket.hanldleSendNotification(body.friendId, req.user.id, {
+  //     userId: req.user.id,
+  //     type: 'friendrequestrecieved',
+  //     to: body.friendId,
+  //     photo: req.user.profileImage,
+  //     message: `${req.user.username} sent you a friend request`,
+  //   });
+  //   return notification;
+  // }
   @Patch('acceptFriendRequest/:id')
   async acceptFriendRequest(@Query() query: FriendrequestDto) {
     return await this.Relationservice.acceptFriendRequest(

@@ -11,7 +11,7 @@ export class GateWayService {
       data: {
         userId: data.userId,
         type: data.type,
-        from: data.to,
+        from: data.from,
         message: data.message,
         username: data.username,
         photo: data.photo,

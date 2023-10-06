@@ -119,15 +119,6 @@ export class UsersService {
     return user;
   }
 
-  async sendFriendRequest(senderId: string, recieverId: string) {
-    return await this.prisma.friendrequest.create({
-      data: {
-        sender: { connect: { id: senderId } },
-        receiver: { connect: { id: recieverId } },
-        status: Status.PENDING,
-      },
-    });
-  }
   async search(query: string) {
     const users = await this.prisma.user.findMany({
       where: {
@@ -178,6 +169,15 @@ export class UsersService {
       data: {
         firstlogin: false,
         status: status,
+      },
+    });
+  }
+  async sendFriendRequest(senderId: string, recieverId: string) {
+    return await this.prisma.friendrequest.create({
+      data: {
+        sender: { connect: { id: senderId } },
+        receiver: { connect: { id: recieverId } },
+        status: Status.PENDING,
       },
     });
   }

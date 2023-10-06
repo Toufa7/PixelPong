@@ -10,15 +10,23 @@ import {
   ParseUUIDPipe,
   HttpException,
   HttpStatus,
+  Post,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from '../guards/jwt.guards';
 import { UserDto } from 'src/dto/user.dto';
+import { FriendrequestDto } from 'src/dto/relation.dto';
+import { SocketGateway } from 'src/socket/socket.gateway';
+// import { User } from '@prisma/client';
 
 @Controller('users')
 @UseGuards(JwtGuard)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly socket: SocketGateway,
+  ) {}
   @Get('all')
   findAll() {
     const users = this.usersService.findAll();
@@ -89,17 +97,22 @@ export class UsersController {
 
   @Post('sendFriendRequest')
   async sendFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
+    console.log("im here", req.user['id']);
+    console.log("im here", body.userId);
+
     const notification = await this.usersService.sendFriendRequest(
       req.user.id,
-      body.friendId,
+      body.userId,
     );
-    console.log('abas;go;oguaho;sgu');
+    console.log('req', req.user);
+    const user = await this.usersService.findOne(req.user.id)
     this.socket.hanldleSendNotification(body.friendId, req.user.id, {
       userId: req.user.id,
       type: 'friendrequestrecieved',
-      to: body.friendId,
-      photo: req.user.profileImage,
+      photo: user.profileImage,
       message: `${req.user.username} sent you a friend request`,
+      from: body.userId,
+      username: user.username,
     });
     return notification;
   }
