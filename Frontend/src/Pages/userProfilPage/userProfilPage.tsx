@@ -110,7 +110,7 @@ const Profil = () => {
                             <a className="nes-btn" href="#" onClick={() => 
                                 {
                                     setIsFriend(true)
-                                    axios.post("http://localhost:3000/relation/sendFriendRequest",userData.userId, { withCredentials: true })
+                                    axios.post("http://localhost:3000/users/sendFriendRequest",userData, { withCredentials: true })
                                     .then((res) => {
                                         console.log("This Dat -> ", res);
                                     })
