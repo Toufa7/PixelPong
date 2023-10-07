@@ -106,14 +106,14 @@ import { Paddle } from './paddle.class';
     
             return (this.rt);
         }
-      
+
     
         public check_collision_core(radius : number , pos : p5Types.Vector , 
-          pos_ai : p5Types.Vector, ph : number , ph_ai : number , pw : number, pw_ai : number) : boolean{
+        pos_ai : p5Types.Vector, ph : number , ph_ai : number , pw : number, pw_ai : number) : boolean{
     
-          for(let i = 0; i < 16 ; i++){
+        for(let i = 0; i < 16 ; i++){
             let degree = (i * 22.5) * (this.ball_ob.PI / 180);
-      
+
             let x_ball = radius * (this.ball_ob.cos(this.pos.x + degree)) + this.pos.x;
             let y_ball = radius * (this.ball_ob.sin(this.pos.y + degree)) + this.pos.y;
     
@@ -257,4 +257,4 @@ import { Paddle } from './paddle.class';
         //       this.draw_the_ball('#F7F6FF');
         // }
     
-      }
+    }

@@ -106,6 +106,7 @@ export const Game_instance = () =>{
 
   const [newsocket, setScoket] = useState<Socket>();
   const [isConnected , setConnected] = useState<boolean>(false);
+  const [width,setWidth] = useState();
 
 
   useEffect(()=>{
@@ -129,6 +130,11 @@ export const Game_instance = () =>{
     }
 
   },[newsocket]);
+
+
+  useEffect(()=>{
+    // window.addEventListener("resize",)
+  },[]);
 
 
     const sketch : Sketch = (p5_ob : P5CanvasInstance) => {

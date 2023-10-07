@@ -82,10 +82,10 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         }
 
     // console.log("this room + [" + JSON.stringify(this.Room_dl) + "] is affected ---> Player " + Player.id);
-    if (!this.Room_dl.Player1 || !this.Room_dl.Player2){
+    if (!this.Room_dl?.Player1 || !this.Room_dl?.Player2){
       console.log("ENTERED !!");
-      console.log(this.Room_dl.id);
-      this.server.to(this.Room_dl.id).emit("PlayersOfRoom",this.Room_dl);
+      console.log(this.Room_dl?.id);
+      this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
       // if (this.Room_dl.client_count > 0)
       //   this.server.to(this.Room_dl.id).emit("Dis",this.Room_dl);
     }
