@@ -79,7 +79,7 @@ const GroupsList = () => {
 						</div>
 				);})
 			}
-			<dialog className="group-join-dialog" id="groupJoin">
+			<dialog className="nes-container is-rounded" id="groupJoin">
 				<h2 className="groupName">{groupName}</h2>
 				<img className="groupAvatar" src={avatarGroup} alt="Group Avatar" />
 				<p className="group-members">Total Members: 245</p>

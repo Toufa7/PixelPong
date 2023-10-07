@@ -5,6 +5,8 @@ import "./LoginSettings.scss"
 import {Toaster, toast } from 'react-hot-toast';
 import axios from "axios";
 import { useState } from "react";
+import Anime, { anime } from 'react-anime';
+
 /******************* Includes  *******************/
 import img3 from './assets/FarmerBoy.png';
 import img2 from './assets/Detective.png';
@@ -12,23 +14,25 @@ import img1 from './assets/Glasses.png';
 import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
+import myAvatar from '../otoufah.jpg';
 import { Router, useNavigate } from "react-router-dom";
+import { Cookies } from "react-cookie";
+import jwtDecode from "jwt-decode";
 
 const retrieveCheckSendData = () => {
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
-    // const navigate = useNavigate();
-        /**
-         * TODO: it's optionnaly either nickname or avatar or both
-         */
-    if (avatar && usernameCheck.test(nicknameInput)) {
-        const data = new FormData();
-        data.append('file', avatar);
-        toast.promise(
-            axios.all([
-                axios.post('http://localhost:3000/auth/signup-success', { username: nicknameInput }, { withCredentials: true }),
-                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
+    /**
+     * TODO: it's optionnaly either nickname or avatar or both
+    */
+   if (avatar && usernameCheck.test(nicknameInput)) {
+       const data = new FormData();
+       data.append('file', avatar);
+       toast.promise(
+           axios.all([
+               axios.post('http://localhost:3000/auth/signup-success', { username: nicknameInput }, { withCredentials: true }),
+               axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
             ]).then(axios.spread((responseNickname, responseAvatar) => {
                 console.log(responseNickname, responseAvatar);
             })),
@@ -37,22 +41,25 @@ const retrieveCheckSendData = () => {
                 success: "Success Settings!",
                 error: "An error occurred",
             }
-        );
-        /**
-         * TODO: Need to redirect to home
-         */
-        // <BrowserRouter>
-        //     <Routes>
-        //         navigate("/home");
-        //     </Routes>
-		// </BrowserRouter>
-    }
-    else if (!avatar && nicknameInput.length == 0)
-    {
-        // TODO: Need to show the dialog
-    }
+            );
+            /**
+             * TODO: Need to redirect to home
+            */
+           // <BrowserRouter>
+           //     <Routes>
+           //         navigate("/home");
+           //     </Routes>
+           // </BrowserRouter>
+        }
+        else if (!avatar && nicknameInput.length == 0)
+        {
+            console.log("No Data Need to be Shown")
+            document.getElementById('warning').showModal();
+        }
     else if (!usernameCheck.test(nicknameInput))
+    {
         toast.error("Invalid Username", );
+    }
     else {
         toast.error('Choose an avatar');
     }
@@ -88,12 +95,14 @@ export default function LoginSettings() {
         const endpoint = isChecked ? "http://localhost:3000/auth/2fa/disable" : "http://localhost:3000/auth/2fa/enable";
         const status = isChecked ? 1 : 0;
         axios.put(endpoint, status, { withCredentials: true }) 
-        .then ((response) => {
-            console.log("2FA Status " , response.data.status);
-        }).catch((error) => {
-            console.log(error);
+        .then (() => {
+        }).catch(() => {
         });
     }   
+
+    const cookie = new Cookies();
+    const token = jwtDecode(cookie.get('jwt'));
+
       return (
         <div style={{height: '100vh'}}>
           <div className="container">
@@ -107,7 +116,7 @@ export default function LoginSettings() {
                         <div className="choosingAvatarContainer">
                             <span className="is-primary">Choose Avatar</span>
                         </div>
-                            {/* <Avatars /> */}
+                            <Avatars />
                         <div className="uploadContainer">
                             <label className="nes-btn">
                                 <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
@@ -126,6 +135,25 @@ export default function LoginSettings() {
                             <button style={{width: 'fit-content'}} onClick={retrieveCheckSendData} type="button" className="nes-btn">Update</button>
                         </div>
                     </div>
+                    <section>
+                        <dialog style={{background: '#DDFFFF', width: '600px'}} className="nes-dialog is-rounded" id="warning">
+                            <form method="dialog">
+                                <p className="title">Warning</p>
+                                <p>Do you want to go with the default settings?</p>
+                                <Anime translateY={['-100%', '0%']} duration={3000}>
+                                    <div>
+                                        <img style={{width: '100px', height: '100px', borderRadius: '50%', margin: '10px'}} src={myAvatar}></img>
+                                        <a style={{fontWeight: "bold"}}>{token.username}</a>
+                                    </div>
+                                </Anime>
+                                <div>
+                                    <button style={{margin: '10px'}} className="nes-btn">Cancel</button>
+                                    <a style={{margin: '10px'}} href="/home" className="nes-btn is-primary">Confirm</a>
+                                </div>
+                            </form>
+                        </dialog>
+                    </section>
+
                 </div>
             </div>
         </div>

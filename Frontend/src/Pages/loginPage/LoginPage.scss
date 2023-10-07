@@ -24,9 +24,9 @@
   }
   
   .loginBoxContainer {
-    display: flex;
-    justify-content: left;
-    align-items: center;
+      // display: flex;
+      // justify-content: left;
+      // align-items: center;
     z-index: 0;
   
     .loginBox {
@@ -49,7 +49,7 @@
         border-left: 8px solid #B19D9D;
   
         .cloudImg {
-          animation: flo 350s ease-in-out infinite;
+          animation: flo 250s ease-in-out infinite;
           position: relative;
           bottom: 140px;
           z-index: -1;
@@ -98,7 +98,7 @@
               &:active {
                 background-color: #3e8e41;
                 box-shadow: 0 5px #666;
-                transform: translateY(8px);
+                transform: translateY(10px);
               }
             }
             
@@ -107,9 +107,9 @@
               top: 20%;
   
               &:active {
-                background-color: #3e8e41;
+                background-color: #666;
                 box-shadow: 0 5px #666;
-                transform: translateY(8px);
+                transform: translateY(10px);
               }
             }
           }
@@ -141,24 +141,25 @@
     }
   }
   
-  /******************* Animations  *******************/
-  @keyframes flo {
-    50% {
-      transform: translateX(10000px);
-    }
+/******************* Animations  *******************/
+@keyframes flo {
+  50% {
+    transform: translateX(1000px);
   }
-  
-  @keyframes float {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
+
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
   }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
   
 @keyframes inAndOut {
   50% {

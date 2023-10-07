@@ -1,15 +1,13 @@
 import "./Home.scss";
-
 /******************* Packages  *******************/
 import jwt_decode from 'jwt-decode';
+import { useEffect, useState } from "react";
 import { Cookies } from "react-cookie";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
-import {Motion, spring} from 'react-motion';
-import Anime, { anime } from 'react-anime';
 import { Fade } from "react-awesome-reveal";
+import Anime from 'react-anime';
 
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
@@ -18,7 +16,6 @@ import siif from './assets/siif.svg';
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
 import image from './assets/medaille.svg'
-import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import avatar from '../otoufah.jpg'
 /*************************************************/
@@ -26,9 +23,9 @@ import avatar from '../otoufah.jpg'
 
 const Notification = () => {
 
-	// const acceptInvite = () => {
-	// 	toast.success('Invitation accepted');
-	// }
+	const acceptInvite = () => {
+		toast.success('Invitation accepted');
+	}
 	// const denyInvite = () => {
 	// 	toast.error('Invitation accepted');
 	// }
@@ -37,6 +34,7 @@ const Notification = () => {
 	return (
 		<div>
 		<button onClick={() => {
+			<Toaster />
 			toast.custom(
 				<div style={{ display: 'flex', alignItems: 'center', background: "#ffeeca", color: "black", borderRadius: '10px' , zIndex: "-1"}}>
 					<div className="nes-container with-title is-centered">
@@ -48,7 +46,7 @@ const Notification = () => {
 							<button onClick={() => setFriend(false)} style={{ marginLeft: '10px' }}>Friends</button>
 							) : (
 							<>
-								<button onClick={() => setFriend(true)} style={{ marginLeft: '10px' }}>Accept</button>
+								<button onClick={() => {setFriend(true); acceptInvite()}} style={{ marginLeft: '10px' }}>Accept</button>
 								<button onClick={() => setFriend(true)} style={{ marginLeft: '10px' }}>Deny</button>
 							</>
 						)
@@ -58,7 +56,6 @@ const Notification = () => {
 				, {duration: 5000, position: "top-right"});
 			}}
 			className="btn">Click Me</button>
-		<Toaster />
 	</div>
 	)
 }
@@ -71,11 +68,17 @@ const TopContainer = () => {
 		"Challenge your friends to exciting ping pong matches."
 	];
 	
-	const [userData, setUserData] = useState('my friend');
+	interface Token {
+		id : string
+	}
+	const [userData, setUserData] = useState({
+		username: "",
+		avatar: ""
+	});
 	useEffect(() => {
 		async function fetchData () {
 			const cookie = new Cookies();
-			const token = jwt_decode(cookie.get('jwt'));
+			const token : Token = jwt_decode(cookie.get('jwt'));
 			if (token) {
 				const endpoint = "http://localhost:3000/users/" + token.id;
 				const response = await axios.get(endpoint, { withCredentials: true });
@@ -96,17 +99,17 @@ const TopContainer = () => {
 			</div>
 		<div className="loginBoxOutside">
 			<div className="playRaw">
-				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex',margin: '10px', flexDirection: 'column'}} className="playWith Friend">
+				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Friend">
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[0]}
 					</AnimatedText>
-					<a style={{width: '100px'}} className="nes-btn" href="/game">Vamos</a>
+					<a style={{width: '100px', marginTop: '30px'}} className="nes-btn" href="/game">Vamos</a>
 				</div>
 				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[1]}
 					</AnimatedText>
-					<a style={{width: '100px'}} className="nes-btn" href="#">Vamos</a>
+					<a style={{width: '100px', marginTop: '30px'}} className="nes-btn" href="#">Vamos</a>
 				</div>
 			</div>
 		</div>
@@ -237,13 +240,17 @@ const MatchResult = (props: {player1 : string,  player2 : string, color : string
   );
 }
 
-
+interface Token {
+	id : string
+}
 const BottomRight= () => {
-	const [userData, setUserData] = useState('my friend');
+	const [userData, setUserData] = useState({
+		username : ""
+	});
 	useEffect(() => {
 		async function fetchData () {
 			const cookie = new Cookies();
-			const token = jwt_decode(cookie.get('jwt'));
+			const token : Token = jwt_decode(cookie.get('jwt'));
 			if (token) {
 				const endpoint = 'http://localhost:3000/users/' + token.id;
 				const response = await axios.get(endpoint, { withCredentials: true });
@@ -252,7 +259,9 @@ const BottomRight= () => {
 		}
 		fetchData();
 	}, []);
-	console.log("Image ", userData);
+
+	console.log("userData ", userData)
+
 	const win = "#ff7670";
 	const lose = "#009e73";
 	const draw = "#178ee1";
@@ -276,55 +285,27 @@ const BottomRight= () => {
   );
 }
 
-function Home() {
-	// <Anime
-	// opacity={[0, 1]}
-	// scale={[0.5, 1]}
-	// duration={1000}
-	// easing="easeInOutQuad"
 
-	// anime({
-	// 	targets: '.on-going-matches1 .el',
-	// 	translateX: 250,
-	// 	direction: 'alternate',
-	// 	loop: true,
-	// 	easing: 'steps(5)'
-	//   })
-	return (
-		<div style={{height: '100vh'}}>
-			{/* <Notification/> */}
-			<Anime
-				translateY={['-100%', '0%']}
-				duration={2000}
-				>
-			<TopContainer/>
-			</Anime>
-			<div className="top-containers">
-			<Anime
-				translateX={['-100%', '0%']}
-				duration={2000}
-				>
-				<TopLeft/>
-			</Anime>
-			<Anime
-				translateX={['100%', '0%']}
-				duration={2000}
-				>
-				<TopRight/>
-			</Anime>
-			</div>
-			<div className="bottom-containers">
-			<Anime
-				translateY={['100%', '0%']}
-				duration={2000}
-				>
-			<BottomLeft/>
-			<BottomRight/>
-
-			</Anime>
-			</div>
+export default function Home() {
+  return (
+    <div style={{ height: '100vh' }}>
+      {/* <Anime translateY={['-100%', '0%']} duration={2000}> */}
+        <TopContainer />
+      {/* </Anime> */}
+      <div className="top-containers">
+        {/* <Anime translateX={['-100%', '0%']} duration={2000}> */}
+          <TopLeft />
+        {/* </Anime> */}
+        {/* <Anime translateX={['100%', '0%']} duration={2000}> */}
+          <TopRight />
+        {/* </Anime> */}
+      </div>
+      <div className="bottom-containers">
+        {/* <Anime translateY={['100%', '0%']} duration={2000}> */}
+          <BottomLeft />
+          <BottomRight />
+        {/* </Anime> */}
 		</div>
+    </div>
   );
 }
-
-export default Home;

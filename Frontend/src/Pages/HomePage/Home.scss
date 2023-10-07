@@ -4,14 +4,13 @@ body {
 
 .headerBox {
     display: flex;
-    margin-top: 20px;
     justify-content: center;
     padding-bottom: 20px;
     text-align: center;
     
     
     .topLoginBox {
-        margin-top: 60px;
+        // margin-top: 35px;
         width: 1280px;
         height: 280px;
         background-color: #C6A86A;
@@ -259,3 +258,10 @@ body {
       transform: translateY(0) rotate(0deg);
     }
   }
+
+@media only screen and (max-width: 600px) {
+    .headerBox {
+        font-size: small;
+        margin-top: 20px;
+    }
+}

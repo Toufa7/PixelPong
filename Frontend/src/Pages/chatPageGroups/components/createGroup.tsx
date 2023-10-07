@@ -8,6 +8,7 @@ const CreatingGroup = () => {
 	const password : string		= document.getElementById("password_field")?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload"]')?.files[0];
 	const regEx 				= /^[A-Za-z0-9_]{5,15}$/;
+	console.log("Choice => ", choice)
 	/**
 	 * TODO: Need en endpoint for creating group
 	*/
@@ -37,17 +38,17 @@ const CreatingGroup = () => {
 	else if (!regEx.test(groupName))
 	{
 		if (!groupName)
-			toast("Please Provide Name", {icon: "ℹ️" ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
+			toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
 		else
 			toast.error("Invalid Group Name", { style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 	}
 	else if (!choice)
 	{
-		toast.error("Choose Privacy", { style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
+		toast("Please Choose Privacy", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
 	}
 	else if (choice == 2 && !password)
 	{
-		toast("Password Missed", {icon: "ℹ️" ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
+		toast("Password Missed", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
 	}
 	else if (!groupAvatar)
 	{

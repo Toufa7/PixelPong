@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
 /******************* Packages  *******************/
@@ -107,43 +107,46 @@ const HomeComponents = () => {
 const GameComponents = () => {
 	return (
 		<>
-		{/* <Stars/>
-		<Setup/> */}
+		<Stars/>
+		{/* <Setup/> */}
 		</>
 	);
 }
 
 
 const Redirect2FA = () => {
-	const endpoint  = "http://localhost:3000/auth/2fa/get2FAstatus";
-	let resp;
-	axios.get(endpoint, {withCredentials: true })
-	.then ((response) => {
-		console.log("2fa Status -> " ,response.data)
-		resp = response.data;
-	})
-	.catch((error) => {
-		console.log(error);
-	});
-	if (resp)
-	{
+	const [twoFAStatus, setTwoFAStatus] = useState(false);
+  
+	useEffect(() => {
+		const fetchTwoFAStatus = async () => {
+		try {
+			const endpoint = 'http://localhost:3000/auth/2fa/get2FAstatus';
+			const response = await axios.get(endpoint, { withCredentials: true });
+			console.log('2fa Status -> ', response.data);
+			setTwoFAStatus(response.data);
+		}
+		catch (error) {
+			console.log(error);
+		}
+	};
+	fetchTwoFAStatus();
+	}, []);
+  
+	if (twoFAStatus) {
 		return (
-			<BrowserRouter>
+		<BrowserRouter>
 			<Routes>
-				<Route path="two-factor-autentication" Component={twoFAComponents} />
+			<Route path="two-factor-authentication" Component={twoFAComponents} />
 			</Routes>
-			</BrowserRouter>
+		</BrowserRouter>
 		);
 	}
-	else
-	{
-		console.log("I Enter Because it's false")
-		return (
-			<></>
-		);
+	else {
+		console.log("I enter because it's false");
+		return <></>;
 	}
-};
-
+  };
+  
 
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
