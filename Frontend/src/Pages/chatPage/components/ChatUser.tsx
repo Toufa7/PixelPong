@@ -8,6 +8,7 @@ const MessagingBody = (props: any) => {
 	return (
 	<div className="MessagingBodyDiv">
 		<MessageInput/>
+
 	</div>
 	)
 }
@@ -30,6 +31,7 @@ const ChatUser = (props:any) => {
           </div>
       </div>
       <MessagingBody/>
+      <div className='chatBodyLowerRibbon'></div>
     </div>
   );
 }
