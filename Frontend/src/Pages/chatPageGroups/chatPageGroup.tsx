@@ -6,7 +6,7 @@ import './chatPageGroups.scss'
 
 const chatPageGroup = () => {
 	return (
-		<div className="chatPage">
+		<div className="chatGroupPage">
 			<MainNavBar/>
 			<ChatNavBar/>
 			<MessagesBox name="Arsenal Supporters" avatar={arseanl}/>

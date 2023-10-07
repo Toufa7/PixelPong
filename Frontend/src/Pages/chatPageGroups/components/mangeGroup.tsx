@@ -148,8 +148,8 @@ const ManageGroup = () => {
 	const [update , setUpdate] = useState("");
 	const oldName = "CurrentName";
 	return (
-	<div style={{border: '1px solid', background: '#e5f0ff'}}  className="chatDmDiv">
-		<div className="settingss">
+	<div className="chatDmDiv">
+		<div className="groupSettings">
 		<div className="nes-field">
 		<input  style={{background: '#E9E9ED'}} type="text" id="name_field" maxLength={18} placeholder={oldName} onChange={(e) => setUpdate(e.target.value)} className="nes-input"/>
 		</div>

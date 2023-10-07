@@ -118,6 +118,16 @@ const TopContainer = () => {
 	);
 };
 
+// const testing = () => {
+// 	const socket = useContext(socketContext);
+// 	useEffect(()=>{
+// 		socket?.on("connect",()=>{
+// 			console.log("im connected");
+// 	})
+// 	},[]);
+// }
+
+// testing();
 
 const TopLeft = () => {
 	return (
@@ -309,3 +319,8 @@ export default function Home() {
     </div>
   );
 }
+
+
+// socket.on('friendRequest', (friendrequest) => {
+// 	// Handle the friend request received from the server
+// 	console.log('Received friend request:', friendrequest);

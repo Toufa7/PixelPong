@@ -95,13 +95,6 @@ export default function LoginPage() {
 
 
 
-  const socket = useContext(socketContext);
-  useEffect(()=>{
-	socket?.on("connect",()=>{
-		console.log("im connected");
-	})
-  }, []);
-
   return (
 	<div className="loginPage">
 		<PlayingSong />

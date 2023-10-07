@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
 /******************* Packages  *******************/
+
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
+
 /******************* Includes  *******************/
 import NavBar from './Pages/addons/NavBar';
 import Stars from './Pages/addons/Stars';
@@ -19,7 +21,6 @@ import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
 import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
 
-
 export const OtherUser = () => {
 	return (
 		<>
@@ -34,10 +35,9 @@ export const OtherUser = () => {
 export const LogingPageComponents = () => {
 	return (
 		<>
-			<socketContext.Provider value={socket}>
+			
 			<Stars/>
 			<LoginPage/>
-			</socketContext.Provider>
 		</>
 	);
 }
@@ -45,7 +45,6 @@ export const LogingPageComponents = () => {
 export const ChatComponents = () => {
 	return (
 		<>
-			{/* <Stars/> */}
 			<ChatPage/>
 		</>
 	);
@@ -66,9 +65,11 @@ export const ChatGroupsComponents = () => {
 const ProfilComponents = () => {
 	return (
 		<>
+		{/* <socketContext.Provider value={socket}> */}
 			<Stars/>
 			<NavBar/>
 			<ProfilPage/>
+		{/* </socketContext.Provider> */}
 		</>
 	);
 }
@@ -93,6 +94,15 @@ const twoFAComponents = () => {
 	);
 }
 const HomeComponents = () => {
+	// const socket = useContext(socketContext);
+	// console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
+	// useEffect(()=>{
+	// 	socket?.on("connect",()=>{
+	// 		console.log("im connected");
+	// 	socket.close()
+	// })
+	// },[]);
+	
 	return (
 		<>
 		<socketContext.Provider value={socket}>

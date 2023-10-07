@@ -76,10 +76,10 @@ const CreateGroup = () => {
 	const [isProtected , setProtected] = useState(false);
 	const isCreateDisabled = groupName === "";
 	return (
-		<div style={{border: '1px solid', background: '#e5f0ff', borderRadius: '10px'}}className="chatDmDiv">
-			<div  className="settingss">
+		<div className="chatDmDiv">
+			<div  className="groupSettings">
 				<div className="nes-field">
-					<input style={{background: '#E9E9ED'}} type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
+					<input 	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
 				</div>
 				<label style={{marginTop: '10px'}}>Select Privacy</label>
 				<div className="nes-select">

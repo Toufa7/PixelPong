@@ -3,6 +3,7 @@ body {
 }
 
 .headerBox {
+    margin-top: 40px;
     display: flex;
     justify-content: center;
     padding-bottom: 20px;
@@ -262,6 +263,6 @@ body {
 @media only screen and (max-width: 600px) {
     .headerBox {
         font-size: small;
-        margin-top: 20px;
+        margin-top: 80px;
     }
 }

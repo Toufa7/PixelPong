@@ -3,7 +3,7 @@ import NavBar from "../../addons/NavBar"
 
 const mainNavBar = () => {
   return (
-    <div className="mainNavBarDiv">
+    <div className="mainNavBarDivGroup">
       <NavBar/>
     </div>
   )

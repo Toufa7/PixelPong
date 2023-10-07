@@ -16,9 +16,8 @@ import { UsersService } from 'src/users/users.service';
 import { UserStatus } from '@prisma/client';
 // import { WSGuard } from 'src/guards/jwt.guards';
 import { decode } from 'jsonwebtoken';
-import { RelationService } from 'src/users/relation/relation.service';
+import { RelationService } from 'src/relation/relation.service';
 import { io } from 'socket.io-client';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 import { GateWayService } from './socket.service';
 
 @WebSocketGateway({
@@ -46,8 +45,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit('checkout', { msg: 'hello' });
     if (jwt) {
       const user = decode(jwt);
-      console.log("userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ", user['id']);
-      console.log("userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ", client.id);
+      console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
+      console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
       this.connectedUsers.set(user['id'], client);
       const status = UserStatus.ONLINE;
@@ -80,12 +79,12 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // Send a notification to a specific user
 
-  async hanldleSendNotification(clientId: string , senderId: string, data) {
+  async hanldleSendNotification(clientId: string, senderId: string, data) {
     try {
       this.gatewayservice.createnotification(data);
       const sockets = this.connectedUsers.get(clientId);
       if (sockets) {
-        console.log("sending notification");
+        console.log('sending notification');
         this.server.to(clientId).emit('notification', data);
       }
     } catch (error) {

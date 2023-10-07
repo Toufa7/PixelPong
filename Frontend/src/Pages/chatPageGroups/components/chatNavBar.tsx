@@ -15,9 +15,9 @@ const ChatNavBar = () => {
   );
 
   return (
-	<div className="chatNavBarDiv">
+	<div className="chatNavBarDivGroup">
 		<ChatSearch/>
-		<div className="chatsContainer">
+		<div className="chatsContainerGroup">
 			<div className="choice" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 				<button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
 				<button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
@@ -31,7 +31,7 @@ const ChatNavBar = () => {
 			}
 			<GroupsList />
 		</div>
-		<div className="chatLowerRibbon"></div>
+		<div className="chatLowerRibbonGroup"></div>
 	</div>
   )
 }
@@ -79,9 +79,10 @@ const GroupsList = () => {
 						</div>
 				);})
 			}
-			<dialog className="nes-container is-rounded" id="groupJoin">
+			<dialog className="nes-container" id="groupJoin">
 				<h2 className="groupName">{groupName}</h2>
-				<img className="groupAvatar" src={avatarGroup} alt="Group Avatar" />
+				
+				<img className="groupAvatar" src={avatarGroup} />
 				<p className="group-members">Total Members: 245</p>
 				<button className="nes-btn">Join Group</button>
 			</dialog>

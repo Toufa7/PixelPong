@@ -7,14 +7,14 @@ interface groupInfo {
 
 const GroupHeaderInfo = (props: groupInfo) => {
   return (
-	<div className="chatUserDiv">
-		<div className="playerPicProfile">
-			<div className="chatUser">
+	<div className="chatUserDivGroup">
+		<div className="groupPicProfile">
+			<div className="chatGroup">
 			<img src={props.avatar} alt="user-photo" />
-			<div className="chatUserName"><span>{props.name}</span></div>
+			<div className="chatGroupName"><span>{props.name}</span></div>
 			</div>
-			<div className='chatUserControls'>
-			<button className='userControlButtons'>
+			<div className='chatGroupControls'>
+			<button className='groupControlButtons'>
 				<img src={exit} width={50} height={50}></img>
 			</button>
 			</div>

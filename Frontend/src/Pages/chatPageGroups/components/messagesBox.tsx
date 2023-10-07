@@ -1,7 +1,7 @@
 import HeaderInfo from './groupHeader';
 import MessagingBody from './MessagingBody';
 import MessageLowerRibbon from './MessageLowerRibbon';
-import {socketContext } from './socket.client';
+// import {socketContext } from './socket.client';
 import { useContext, useState} from 'react';
 
 interface groupInfo {
@@ -10,19 +10,19 @@ interface groupInfo {
 }
 
 const Messages = (props : groupInfo) => {
-  const socket = useContext(socketContext);
-  const [clicked, isClicked] = useState(false);
+  // const socket = useContext(socketContext);
+  const [clicked, isClicked] = useState(true);
   console.log("Socket Connected");
   
   return (
-    <div className="messagesDiv">
-      <socketContext.Provider value = {socket}>
+    <div className="messagesDivGroup">
+      {/* <socketContext.Provider value = {socket}> */}
         {
           clicked ?
           (
             <>
               <HeaderInfo name={props.name} avatar={props.avatar}/>
-              <MessagingBody psocket = {socket} />
+              {/* <MessagingBody psocket = {socket} /> */}
             </>
           ) :
           (
@@ -31,7 +31,7 @@ const Messages = (props : groupInfo) => {
           ) 
         }
         <MessageLowerRibbon />
-      </socketContext.Provider>
+      {/* </socketContext.Provider> */}
     </div>
   )
 }
