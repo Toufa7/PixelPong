@@ -76,7 +76,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         //   console.log("\n-------------------------------------------");
         // }
         this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
-        if (this.Room_dl.client_count > 0){
+        if (this.Room_dl?.client_count > 0){
           console.log("-------------There still another Player in the room!!-------------");
           this.server.to(this.Room_dl.id).emit("PlayerLeave");
         }

@@ -2,14 +2,14 @@
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { convertTypeAcquisitionFromJson, isConstructorDeclaration } from 'typescript';
-import { screen_height , screen_width } from '../game_flow_sketch';
-import { socket } from '../socket_setup/client-connect';
+import { screen_height , screen_width, socket } from '../game_flow_sketch';
+// import { socket } from '../socket_setup/client-connect';
 import { Paddle } from './paddle.class';
 
 //h----------------------------- Ball --------------------------------
 
     export class Ball{
-  
+
         public corrd_x : number;
         public corrd_y : number;
         public diameter : number;
@@ -28,11 +28,11 @@ import { Paddle } from './paddle.class';
         public  r : number;
     
         public pos : p5Types.Vector;
-      
+
     
         public constructor(cr_x : number , cr_y : number , dia : number ,  bl : p5Types,ball_speed_x : number,ball_speed_y : number){
             this.ball_ob = bl;
-      
+
             this.corrd_x = cr_x;
             this.corrd_y = cr_y;
             this.ball_speed_x = ball_speed_x;
@@ -48,7 +48,7 @@ import { Paddle } from './paddle.class';
             // this.lose_win_for_reset_player_one = false;
             // this.lose_win_for_reset_player_two = false;
         }
-      
+
         public draw_the_ball(color : string){
     
             //p- ellipse parameters
@@ -61,16 +61,16 @@ import { Paddle } from './paddle.class';
     
             // this.ball_ob.image(ball_sprites,this.pos.x,this.pos.y,this.diameter,this.diameter);
         }
-      
+
         public get_points() : {left : number , right : number , top : number , bottom  : number} {
             return ({
-              left : (this.pos.x - this.diameter / 2),
-              right : (this.pos.x + this.diameter / 2),
-              top : (this.pos.y - this.diameter /2) , 
-              bottom : (this.pos.y + this.diameter / 2)
-          });
+                left : (this.pos.x - this.diameter / 2),
+                right : (this.pos.x + this.diameter / 2),
+                top : (this.pos.y - this.diameter /2) , 
+                bottom : (this.pos.y + this.diameter / 2)
+            });
         }
-      
+
         public check_collision(paddle : Paddle,ai_paddle : Paddle) : boolean{
             this.rt = this.check_collision_of_ball_pd(paddle,ai_paddle);
     
@@ -78,13 +78,13 @@ import { Paddle } from './paddle.class';
     
             if(this.get_points().top < 0){
                 this.pos.y = by;
-              this.pos.x = this.pos.x + 8;
-              this.ball_speed_y = -this.ball_speed_y;
+                this.pos.x = this.pos.x + 8;
+                this.ball_speed_y = -this.ball_speed_y;
             }
             if (this.get_points().bottom > screen_height){
                 this.pos.y = by;
-              this.pos.x = this.pos.x - 8;
-              this.ball_speed_y = -this.ball_speed_y;
+                this.pos.x = this.pos.x - 8;
+                this.ball_speed_y = -this.ball_speed_y;
             }
 
             // if (this.get_points().right > screen_width){
@@ -228,7 +228,7 @@ import { Paddle } from './paddle.class';
             // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
             // this.pos.x = this.pos.x + this.ball_speed_x;
             // this.pos.y = this.pos.y + this.ball_speed_y;
-            socket.emit("Ball_movement");
+            socket?.emit("Ball_movement");
 
             this.draw_the_ball("#e9ed09");
         }

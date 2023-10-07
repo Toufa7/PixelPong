@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import p5Types from "p5";
 import { isConstructorDeclaration } from 'typescript';
 import { P5CanvasInstance, ReactP5Wrapper, Sketch } from "react-p5-wrapper";
-import { ContextSocket, socket } from './socket_setup/client-connect';
+// import { ContextSocket, socket } from './socket_setup/client-connect';
 import { Paddle } from './game-classes/paddle.class';
-import { id_player } from './components/render_game_sketch_components';
+// import { id_player } from './components/render_game_sketch_components';
 import { Ball } from './game-classes/Ball.class';
 
 
@@ -16,6 +16,7 @@ import gifMatch from './assets/tv.gif';
 import f from "./assets/thirteen_pixel_fonts.ttf";
 // import loading from "./assets/loading.gif";
 import over_g from "./assets/wdS.gif";
+import { Socket, io } from 'socket.io-client';
 
 //y------------------------------------------
 //h-   -------------------------------------
@@ -25,10 +26,12 @@ import over_g from "./assets/wdS.gif";
 let canvas : p5Types.Renderer;
 export let screen_width = 1050;
 export let screen_height = 500;
+let id_player : any;
+export let socket : Socket;
 
 
 
-function SettingUpBackWithFront(Frontroom : any , p5_ob : any){
+function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any){
   socket?.on("PlayersOfRoom",(Backroom : any)=>{
     console.log("Im -->" + socket.id);
     console.log(Backroom);
@@ -99,174 +102,214 @@ function SettingUpBackWithFront(Frontroom : any , p5_ob : any){
 }
 
 
-export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
-  const Frontroom : any = {};
-  let MatchmakingPage : p5Types.Image;
-  let font : p5Types.Font;
-  let ovp : p5Types.Image;
-  let change_screen :boolean = false;
-  let canvasDiv : any;
-  let width;
-  let height;
-  
-  
-  //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
-      SettingUpBackWithFront(Frontroom, p5_ob);
-  //o--------------------------------------------------------------------------
+export const Game_instance = () =>{
 
-      //r- Getting Position of player form Backend
+  const [newsocket, setScoket] = useState<Socket>();
+  const [isConnected , setConnected] = useState<boolean>(false);
 
-      socket?.on("UpdatePlayerPos",(Backroom : any)=>{
-          for(const id in Frontroom){
-            if(Frontroom[id].Player1){
-                Frontroom[id].Player1.Paddle.pos.x = Backroom.Player1?.x;
-                Frontroom[id].Player1.Paddle.pos.y = Backroom.Player1?.y;
+
+  useEffect(()=>{
+    if (!isConnected){
+      socket = io("ws://localhost:5000/Game" , { path : '/online' ,  withCredentials: true , transports: ["websocket"] });
+      setScoket(socket);
+      setConnected(true);
+    }
+    socket?.on("connect",() =>{
+      id_player = socket.id;
+      socket?.emit("screen_metrics",{s_w : screen_width , s_h : screen_height});
+    });
+
+    return () => {
+        socket?.off("connect");
+        socket?.off("UpdatePlayerPos");
+        socket?.off("PlayerLeave");
+        socket?.off("PlayersOfRoom");
+        socket?.off("UpdateBallPos");
+        newsocket?.close();
+    }
+
+  },[newsocket]);
+
+
+    const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
+      const Frontroom : any = {};
+      let MatchmakingPage : p5Types.Image;
+      let font : p5Types.Font;
+      let ovp : p5Types.Image;
+      let change_screen :boolean = false;
+      let canvasDiv : any;
+      let width;
+      let height;
+    
+    
+    //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
+        SettingUpBackWithFront(socket, Frontroom, p5_ob);
+    //o--------------------------------------------------------------------------
+  
+        //r- Getting Position of player form Backend
+  
+        socket?.on("UpdatePlayerPos",(Backroom : any)=>{
+            for(const id in Frontroom){
+              if(Frontroom[id].Player1){
+                  Frontroom[id].Player1.Paddle.pos.x = Backroom.Player1?.x;
+                  Frontroom[id].Player1.Paddle.pos.y = Backroom.Player1?.y;
+              }
+              if (Frontroom[id].Player2){
+                Frontroom[id].Player2.Paddle.pos.x = Backroom.Player2?.x;
+                Frontroom[id].Player2.Paddle.pos.y = Backroom.Player2?.y;
+              }
             }
-            if (Frontroom[id].Player2){
-              Frontroom[id].Player2.Paddle.pos.x = Backroom.Player2?.x;
-              Frontroom[id].Player2.Paddle.pos.y = Backroom.Player2?.y;
+        });
+        //r-------------------------------------------
+  
+        //r- Getting Position of Ball from Backend
+  
+        socket?.on("UpdateBallPos",(Backroom : any)=> {
+          let reverse_ball_x = screen_width - Backroom.GameBall?.x;
+  
+          for(const id in Frontroom){
+            if (socket.id == Frontroom[id].Player1?.id){
+              Frontroom[id].Player1.Ball.pos.x = Backroom.GameBall?.x;
+              Frontroom[id].Player1.Ball.pos.y = Backroom.GameBall?.y;
+            }else if (socket.id == Frontroom[id].Player2?.id){
+              Frontroom[id].Player2.Ball.pos.x = reverse_ball_x;
+              Frontroom[id].Player2.Ball.pos.y = Backroom.GameBall?.y;
             }
           }
-      });
-      //r-------------------------------------------
-
-      //r- Getting Position of player from Backend
-
-      socket?.on("UpdateBallPos",(Backroom : any)=> {
-        let reverse_ball_x = screen_width - Backroom.GameBall?.x;
-
-        for(const id in Frontroom){
-          if (socket.id == Frontroom[id].Player1?.id){
-            Frontroom[id].Player1.Ball.pos.x = Backroom.GameBall?.x;
-            Frontroom[id].Player1.Ball.pos.y = Backroom.GameBall?.y;
-          }else if (socket.id == Frontroom[id].Player2?.id){
-            Frontroom[id].Player2.Ball.pos.x = reverse_ball_x;
-            Frontroom[id].Player2.Ball.pos.y = Backroom.GameBall?.y;
+        });
+        //r--------------------------------------------
+  
+        //r- Loading Images
+        p5_ob.preload = () =>{
+          MatchmakingPage = p5_ob.loadImage(gifMatch);
+          font = p5_ob.loadFont(f);
+          ovp = p5_ob.loadImage(over_g);
+        }
+        //r------------------
+  
+  
+        socket?.on("PlayerLeave",()=>{
+          console.log("You won by Forfait --->" + socket?.id);
+          socket.disconnect();
+          change_screen = true;
+          // p5_ob.background("#000000");
+          // p5_ob.image(ovp,170,0,750,550);
+        });
+  
+        p5_ob.setup = () => {
+        p5_ob.frameRate(60);
+        // canvasDiv = document.querySelector('#child_canvas');
+        // width = canvasDiv?.offsetWidth;
+        //- height = canvasDiv?.offsetHeight;
+        // console.log("div--->" + height);
+        // console.log("div ----> " + width);
+        // canvas = p5_ob.createCanvas(width , height).parent('child_canvas');
+        canvas = p5_ob.createCanvas(screen_width,screen_height);
+        const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;
+        const canvas_y = (p5_ob.windowHeight - p5_ob.height) / 2;
+        canvas.position(canvas_x,canvas_y);
+        p5_ob.textFont(font);
+        p5_ob.textSize(20);
+        p5_ob.textAlign(p5_ob.CENTER, p5_ob.CENTER);
+      }
+      
+      p5_ob.draw = () =>{
+        // canvasDiv = document.querySelector('#child_canvas');
+      // width = canvasDiv?.offsetWidth;
+      //- height = canvasDiv?.offsetHeight;
+        if (!change_screen){
+          for(const id in Frontroom){
+            p5_ob.background("#FA9200");
+            const id_of_player1 = Frontroom[id].Player1?.id;
+            const id_of_player2 = Frontroom[id].Player2?.id;
+            const Player1 = Frontroom[id].Player1?.Paddle;
+            const Player2 = Frontroom[id].Player2?.Paddle;
+            if (id_of_player1 == id_player){
+              Player1?.update_Player_pos(canvas);
+              if (Player2 && id_of_player2 != id_player){
+                Player2.pos.x = screen_width - Player2.paddle_width;
+                Player2?.update_Player_pos(canvas);
+              }
+            }
+            else if (id_of_player2 == id_player){
+              Player2?.update_Player_pos(canvas);
+              if (Player1 && id_of_player1 != id_player){
+                Player1.pos.x = screen_width - Player1.paddle_width;
+                Player1?.update_Player_pos(canvas);
+              }
+            }
+      
+        //     //y- LOADING PAGE FOR PLAYERS
+      
+            
+        //     //   //r- CODE FOR DRAWING THE BALL
+            if (Frontroom[id].Player1 && Frontroom[id].Player2){
+                // console.log(Player1.pos.x);
+              if (id_of_player1 == id_player)
+                Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+              else if (id_of_player2 == id_player)
+              Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+            }
+        //     //   //r----------------------------
+      
+            
+        //     //   //b- LOADING PAGE CODE
+          else{
+        //       console.log("A player is missing");
+        //       // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
+        //       // p5_ob.image(load,0,0);
+              // p5_ob.strokeWeight(4);
+              // p5_ob.stroke(51);
+              // p5_ob.background("#fcba03");
+              p5_ob.background("#000000");
+              p5_ob.image(MatchmakingPage,170,0,750,550);
+              // p5_ob.fill("#000000");
+              // p5_ob.text("Loading",width / 2,height / 2);
+        //       // p5_ob.text("...",190,100);
+        //       // if (id_of_player1 == id_player){
+        //       //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+        //       //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+        //       //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
+        //       }
+              
+        //     //   //b- ----------------------
+      
+        //     //   // else if (id_of_player2 == id_player)
+        //     //   //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+        //     //   //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+        //     //   //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
+        //     // }
+      
+        //     //y----------------------------------
+            
           }
         }
-      });
-      //r--------------------------------------------
-
-      //r- Loading Images
-      p5_ob.preload = () =>{
-        MatchmakingPage = p5_ob.loadImage(gifMatch);
-        font = p5_ob.loadFont(f);
-        ovp = p5_ob.loadImage(over_g);
       }
-      //r------------------
-
-
-      socket?.on("PlayerLeave",()=>{
-        console.log("You won by Forfait --->" + socket?.id);
-        socket.disconnect();
-        change_screen = true;
-        // p5_ob.background("#000000");
-        // p5_ob.image(ovp,170,0,750,550);
-      });
-
-      p5_ob.setup = () => {
-      p5_ob.frameRate(60);
-      canvasDiv = document.querySelector('#child_canvas');
-      width = canvasDiv?.offsetWidth;
-      height = canvasDiv?.offsetHeight;
-      console.log("div--->" + height);
-      console.log("div ----> " + width);
-      canvas = p5_ob.createCanvas(width , height).parent('child_canvas');
-      const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;
-      const canvas_y = (p5_ob.windowHeight - p5_ob.height) / 2;
-      canvas.position(canvas_x,canvas_y);
-      p5_ob.textFont(font);
-      p5_ob.textSize(20);
-      p5_ob.textAlign(p5_ob.CENTER, p5_ob.CENTER);
+      else{
+          console.log("Game  Over someone forfaited");
+          p5_ob.background("#000000");
+          p5_ob.image(ovp,250,0,600,550);
+      }
     }
-    
-    p5_ob.draw = () =>{
-      canvasDiv = document.querySelector('#child_canvas');
-    width = canvasDiv?.offsetWidth;
-    height = canvasDiv?.offsetHeight;
-      // if (!change_screen){
-      //   for(const id in Frontroom){
-      //     p5_ob.background("#FA9200");
-      //     const id_of_player1 = Frontroom[id].Player1?.id;
-      //     const id_of_player2 = Frontroom[id].Player2?.id;
-      //     const Player1 = Frontroom[id].Player1?.Paddle;
-      //     const Player2 = Frontroom[id].Player2?.Paddle;
-      //     if (id_of_player1 == id_player){
-      //       Player1?.update_Player_pos(canvas);
-      //       if (Player2 && id_of_player2 != id_player){
-      //         Player2.pos.x = screen_width - Player2.paddle_width;
-      //         Player2?.update_Player_pos(canvas);
-      //       }
-      //     }
-      //     else if (id_of_player2 == id_player){
-      //       Player2?.update_Player_pos(canvas);
-      //       if (Player1 && id_of_player1 != id_player){
-      //         Player1.pos.x = screen_width - Player1.paddle_width;
-      //         Player1?.update_Player_pos(canvas);
-      //       }
-      //     }
-    
-      //     //y- LOADING PAGE FOR PLAYERS
-    
-          
-      //     //   //r- CODE FOR DRAWING THE BALL
-      //     if (Frontroom[id].Player1 && Frontroom[id].Player2){
-      //         // console.log(Player1.pos.x);
-      //       if (id_of_player1 == id_player)
-      //         Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
-      //       else if (id_of_player2 == id_player)
-      //       Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
-      //     }
-      //     //   //r----------------------------
-    
-          
-      //     //   //b- LOADING PAGE CODE
-      //       else{
-      //       console.log("A player is missing");
-      //       // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
-      //       // p5_ob.image(load,0,0);
-            // p5_ob.strokeWeight(4);
-            // p5_ob.stroke(51);
-            p5_ob.background("#fcba03");
-            // p5_ob.image(MatchmakingPage,170,0,750,550);
-            p5_ob.fill("#000000");
-            p5_ob.text("Loading",width / 2,height / 2);
-      //       // p5_ob.text("...",190,100);
-      //       // if (id_of_player1 == id_player){
-      //       //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-      //       //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-      //       //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
-      //       }
-            
-      //     //   //b- ----------------------
-    
-      //     //   // else if (id_of_player2 == id_player)
-      //     //   //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-      //     //   //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-      //     //   //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
-      //     // }
-    
-      //     //y----------------------------------
-          
-      //   }
-      // }else{
-      //   console.log("Game  Over someone forfaited");
-      //   p5_ob.background("#000000");
-      //   p5_ob.image(ovp,250,0,600,550);
-      // }
+  
+    // p5_ob.windowResized = () =>{
+    //   canvasDiv = document.querySelector('#child_canvas');
+    //   width = canvasDiv?.offsetWidth;
+    //-   height = canvasDiv?.offsetHeight;
+    //   console.log("resize--> " + width);
+    //   console.log("resize--> " + height);
+    //   if (p5_ob){
+    //       p5_ob.resizeCanvas(width,height);
+    //     }
+    // }
   }
 
-  p5_ob.windowResized = () =>{
-    canvasDiv = document.querySelector('#child_canvas');
-    width = canvasDiv?.offsetWidth;
-    height = canvasDiv?.offsetHeight;
-    console.log("resize--> " + width);
-    console.log("resize--> " + height);
-    if (p5_ob){
-        p5_ob.resizeCanvas(width,height);
-      }
-  }
+  return (
+    <ReactP5Wrapper sketch={sketch}/>
+  )
 }
+
+
 
 
 
