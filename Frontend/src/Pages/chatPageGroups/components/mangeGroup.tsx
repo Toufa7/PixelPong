@@ -30,7 +30,6 @@ const UpdateGroup = () => {
 			else if (password.length < 8)
 				toast.error("Password Length", {position: "top-right"})
 			axios.put(endpoint, {groupname: groupName, avatar: groupAvatar, groupPassword: password, privacy: "protected"}, {withCredentials: true})
-
 		}
 	}
 	else if (!usernameCheck.test(groupName))
@@ -43,16 +42,12 @@ const UpdateGroup = () => {
 
 const ListFriends = () => {
 	const [admins, isAdmin] = useState([
-		"Delaney Harris",
-		"Kamari Mahoney",
-		"Mohamed Delacruz",
-		"Marlene Knapp",
-		"Darion Horne"
+		"Delaney Harris","Kamari Mahoney","Mohamed Delacruz","Marlene Knapp","Darion Horne"
 	]);
 	const [members, isMember] = useState([
 		"Jacqueline Hoover",
 		"Farhan Cisneros",
-		"Talia	 Wu",
+		"Talia Wu",
 		"Jacqueline Hoover",
 		"Farhan Cisneros",
 		"Talia Wu",
@@ -124,7 +119,7 @@ const ListFriends = () => {
 									<img src={avatar} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
 									<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
 									<button style={{ marginLeft: '10px' }}>Mute</button>
-									<button style={{ marginLeft: '10px' }} onClick={() => handleKick(true, index)}>Kick</button>
+									<button style={{ marginLeft: '10px' }} onClick={() => kickMember(true, index)}>Kick</button>
 								</div>
 							)
 							;})

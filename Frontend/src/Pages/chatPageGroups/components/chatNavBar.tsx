@@ -65,6 +65,10 @@ const GroupsList = () => {
 		document.getElementById('groupJoin').showModal();
 		setGroupName(groupName);
 	}
+	const [joinGroup, setJoinGroup] = useState({
+		join: true,
+		isMember : true
+	});
 	return (
 		<div className="chatGroupesDiv">
 		<i>GROUPES</i>
@@ -81,10 +85,25 @@ const GroupsList = () => {
 			}
 			<dialog className="nes-container" id="groupJoin">
 				<h2 className="groupName">{groupName}</h2>
-				
 				<img className="groupAvatar" src={avatarGroup} />
 				<p className="group-members">Total Members: 245</p>
-				<button className="nes-btn">Join Group</button>
+				{
+					// joinGroup.join ? (
+					// 	<button onClick={() => setJoinGroup(joinGroup.isMember, joinGroup.join)} className="nes-btn">Join Group</button>
+					// )
+					// :
+					// {
+					// 	joinGroup.isMember ? (
+					// 		<button onClick={() => setJoinGroup(false)} className="nes-btn">Join Group</button>
+					// 	)	
+					// 	: 
+					// 	(
+					// 		<button className="nes-btn">Exit</button>
+					// 	)
+					// }
+				}
+
+
 			</dialog>
 		</div>
 		</div>

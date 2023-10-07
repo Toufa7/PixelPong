@@ -8,6 +8,7 @@ import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
 import { Fade } from "react-awesome-reveal";
 import Anime from 'react-anime';
+import notification from './assets/notification.mp3';
 
 /******************* Includes  *******************/
 import medaille from './assets/medaille.svg';
@@ -20,33 +21,6 @@ import toast, { Toaster } from "react-hot-toast";
 import avatar from '../otoufah.jpg'
 import { socket } from "../socket-client";
 /*************************************************/
-
-
-const Notification = () => {
-
-	// const denyInvite = () => {
-	// 	toast.error('Invitation accepted');
-	// }
-	return (
-		<div>
-		<button onClick={() => {
-			<Toaster />
-			toast.custom(
-				<div style={{ display: 'flex', alignItems: 'center', background: "#ffeeca", color: "black", borderRadius: '10px' , zIndex: "-1"}}>
-					<div className="nes-container with-title is-centered">
-					<p style={{ background: "#ffeeca", border: '2px solid black'}} className="title">Invitation Request</p>					
-					<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar" />
-					<span style={{ marginLeft: '10px', marginRight: 'auto' }}>TouFa7</span>
-					</div>
-				</div>
-				, {duration: 5000, position: "top-right"});
-			}}
-			className="btn">Click Me</button>
-	</div>
-	)
-}
-
-
 
 const TopContainer = () => {
 	const textInfos = [
@@ -282,80 +256,59 @@ const BottomRight= () => {
 }
 
 
+
+
 export default function Home() {
 
+	const AcceptFriend = async () =>  {
+		await axios.patch("http://localhost:3000/users/acceptFriendRequest", {withCredentials : true})
+		.then((rese) => {
+			console.log("Notifcation Accept ", rese);
+		})
+
+	}
+
+	const RefuseFriend = async () => {
+		await axios.patch("http://localhost:3000/users/refuseFriendRequest", {withCredentials : true})
+		.then((rese) => {
+			console.log("Notifcation Accept ", rese);
+		})
+	}
+
+
   useEffect(() => {
-    // Connect to the socket.io server
-    // Listen for notifications from the server
-    socket.on('notification', (data) => {
-      // Handle the incoming notification data here
-      console.log('Received notification:', data);
-
-	//   {
-	// 	<div>
-	// 	<button onClick={() => {
-	// 		toast.custom(
-	// 			<div style={{ display: 'flex', alignItems: 'center', background: "#ffeeca", color: "black", borderRadius: '10px' , zIndex: "-1"}}>
-	// 				<div className="nes-container with-title is-centered">
-	// 				<p style={{ background: "#ffeeca", border: '2px solid black'}} className="title">Invitation Request</p>					
-	// 				<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar" />
-	// 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>TouFa7</span>
-	// 				</div>
-	// 			</div>
-	// 			, {duration: 5000, position: "top-right"});
-	// 		}}
-	// 		className="btn">Click Me</button>
-	// 	</div>
-	//   }
-	  return (
-		<div>
-		<button onClick={() => {
-			toast.custom(
-				<div style={{ display: 'flex', alignItems: 'center', background: "#ffeeca", color: "black", borderRadius: '10px' , zIndex: "-1"}}>
-					<div className="nes-container with-title is-centered">
-					<p style={{ background: "#ffeeca", border: '2px solid black'}} className="title">Invitation Request</p>					
-					<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar" />
-					<span style={{ marginLeft: '10px', marginRight: 'auto' }}>TouFa7</span>
-					</div>
+	socket.on('notification', (data) => {
+		console.log('Received notification:', data);
+		const audio = new Audio(notification);
+		audio.play();
+		toast.custom(
+			<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1',}}>
+				<div style={{ width: '400px', height: '120px' }} className="nes-container with-title is-centered">
+					<p style={{ background: '#ffeeca', border: '2px solid black' }} className="title">Invitation Request</p>
+				<div style={{ display: 'flex', alignItems: 'center' }}>
+					<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>
+				<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
+				<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
 				</div>
-				, {duration: 5000, position: "top-right"});
-			}}
-			className="btn">Click Me</button>
-	</div>
-	)
+				</div>
+			</div>,
+			{ duration: 5000, position: 'top-right' });
+		});
+	}, []);
 
-    });
-
-    // Clean up the socket connection when the component unmounts
-    // return () => {
-    //   socket.disconnect();
-    // };
-  }, []);
   return (
     <div style={{ height: '100vh' }}>
-      {/* <Anime translateY={['-100%', '0%']} duration={2000}> */}
+		<Toaster/>
         <TopContainer />
-      {/* </Anime> */}
       <div className="top-containers">
-        {/* <Anime translateX={['-100%', '0%']} duration={2000}> */}
           <TopLeft />
-        {/* </Anime> */}
-        {/* <Anime translateX={['100%', '0%']} duration={2000}> */}
           <TopRight />
-        {/* </Anime> */}
       </div>
       <div className="bottom-containers">
-        {/* <Anime translateY={['100%', '0%']} duration={2000}> */}
-          <BottomLeft />
-          <BottomRight />
-        {/* </Anime> */}
-		<Toaster/>
+		<BottomLeft />
+		<BottomRight />
 		</div>
     </div>
   );
 }
-
-
-// socket.on('friendRequest', (friendrequest) => {
-// 	// Handle the friend request received from the server
-// 	console.log('Received friend request:', friendrequest);

@@ -116,4 +116,17 @@ export class UsersController {
     });
     return notification;
   }
+
+  @Patch('acceptFriendRequest')
+  async acceptFriendRequest(@Body() body: FriendrequestDto) {
+    return await this.usersService.acceptFriendRequest(
+      body.id,
+      body.userId,
+      body.friendId,
+    );
+  }
+  @Patch('refuseFriendRequest/')
+  async refuseFriendRequest(@Body() body: FriendrequestDto) {
+    return await this.usersService.refuseFriendRequest(body.id);
+  }
 }

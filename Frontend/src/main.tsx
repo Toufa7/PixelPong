@@ -132,7 +132,6 @@ const Redirect2FA = () => {
 		try {
 			const endpoint = 'http://localhost:3000/auth/2fa/get2FAstatus';
 			const response = await axios.get(endpoint, { withCredentials: true });
-			console.log('2fa Status -> ', response.data);
 			setTwoFAStatus(response.data);
 		}
 		catch (error) {
@@ -152,7 +151,6 @@ const Redirect2FA = () => {
 		);
 	}
 	else {
-		console.log("I enter because it's false");
 		return <></>;
 	}
   };
@@ -179,7 +177,6 @@ const RedirectToSettings = () => {
 	}
 	else
 	{
-		console.log("Acces Denied")
 		return (
 			<BrowserRouter>
 				<Routes>

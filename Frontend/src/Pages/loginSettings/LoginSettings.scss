@@ -48,10 +48,11 @@ body {
 				margin-bottom: 20px;
 				width: 340px;
 			}
-			.nes-field {
+			.nes-field > input {
 				height: fit-content;
 				margin-top: 10px;
 				margin-bottom: 10px;
+				background: #E9E9ED;
 			}
 			.startContainer  .nes-btn {
 				animation: inAndOut 1s ease-in-out infinite;
@@ -94,7 +95,7 @@ body {
 	50% {
 		transform: translate(3px, 1px);
 	}
-	}
+}
 
 @keyframes shake {
 	0%, 20%, 40%, 60%, 80% {

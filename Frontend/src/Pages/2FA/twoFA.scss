@@ -1,8 +1,6 @@
 @import "nes.css/css/nes.min.css";
-
-body {
-    background: #5237AC;
-    font-family: 'Press Start 2P', cursive;
+.body {
+    background: red;
 }
 
 .container {
@@ -16,7 +14,6 @@ body {
         background-color: #A473B1;
         border: 6px solid;
         border-color: #643F5E #643F5E olive olive;      
-        
         
         .header {
             height: 10%;
@@ -49,7 +46,7 @@ body {
             }
             .verify {
                 .nes-btn {
-                    animation: inAndOut 2s infinite;
+                    // animation: inAndOut 2s infinite;
                     &:active {
                         background-color: #666;
                         box-shadow: 0 5px #666;
