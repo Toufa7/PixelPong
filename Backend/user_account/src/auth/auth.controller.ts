@@ -53,7 +53,11 @@ export class AuthController {
 
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
-      return res.redirect('http://localhost:5173/home');
+      else{
+        if(user.twofa)
+          return res.redirect('http://localhost:5173/two-factor-authentication');
+        return res.redirect('http://localhost:5173/home');
+      }
     } catch (err) {
       console.log(err);
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
@@ -73,7 +77,11 @@ export class AuthController {
       // console.log('1st time loggin -> ', user.firstlogin);
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
-      return res.redirect('http://localhost:5173/home');
+      else{
+        if(user.twofa)
+          return res.redirect('http://localhost:5173/two-factor-authentication');
+        return res.redirect('http://localhost:5173/home');
+      }
       // return res.redirect('signup-success');
     } catch (err) {
       console.log(err);
