@@ -18,19 +18,15 @@ import key from './assets/key.svg';
 import image from './assets/medaille.svg'
 import toast, { Toaster } from "react-hot-toast";
 import avatar from '../otoufah.jpg'
+import { socket } from "../socket-client";
 /*************************************************/
 
 
 const Notification = () => {
 
-	const acceptInvite = () => {
-		toast.success('Invitation accepted');
-	}
 	// const denyInvite = () => {
 	// 	toast.error('Invitation accepted');
 	// }
-
-	const [isFriend, setFriend] = useState(false);
 	return (
 		<div>
 		<button onClick={() => {
@@ -41,16 +37,6 @@ const Notification = () => {
 					<p style={{ background: "#ffeeca", border: '2px solid black'}} className="title">Invitation Request</p>					
 					<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar" />
 					<span style={{ marginLeft: '10px', marginRight: 'auto' }}>TouFa7</span>
-					{
-						isFriend ? (
-							<button onClick={() => setFriend(false)} style={{ marginLeft: '10px' }}>Friends</button>
-							) : (
-							<>
-								<button onClick={() => {setFriend(true); acceptInvite()}} style={{ marginLeft: '10px' }}>Accept</button>
-								<button onClick={() => setFriend(true)} style={{ marginLeft: '10px' }}>Deny</button>
-							</>
-						)
-					}
 					</div>
 				</div>
 				, {duration: 5000, position: "top-right"});
@@ -297,6 +283,54 @@ const BottomRight= () => {
 
 
 export default function Home() {
+
+  useEffect(() => {
+    // Connect to the socket.io server
+    // Listen for notifications from the server
+    socket.on('notification', (data) => {
+      // Handle the incoming notification data here
+      console.log('Received notification:', data);
+
+	//   {
+	// 	<div>
+	// 	<button onClick={() => {
+	// 		toast.custom(
+	// 			<div style={{ display: 'flex', alignItems: 'center', background: "#ffeeca", color: "black", borderRadius: '10px' , zIndex: "-1"}}>
+	// 				<div className="nes-container with-title is-centered">
+	// 				<p style={{ background: "#ffeeca", border: '2px solid black'}} className="title">Invitation Request</p>					
+	// 				<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar" />
+	// 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>TouFa7</span>
+	// 				</div>
+	// 			</div>
+	// 			, {duration: 5000, position: "top-right"});
+	// 		}}
+	// 		className="btn">Click Me</button>
+	// 	</div>
+	//   }
+	  return (
+		<div>
+		<button onClick={() => {
+			toast.custom(
+				<div style={{ display: 'flex', alignItems: 'center', background: "#ffeeca", color: "black", borderRadius: '10px' , zIndex: "-1"}}>
+					<div className="nes-container with-title is-centered">
+					<p style={{ background: "#ffeeca", border: '2px solid black'}} className="title">Invitation Request</p>					
+					<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar" />
+					<span style={{ marginLeft: '10px', marginRight: 'auto' }}>TouFa7</span>
+					</div>
+				</div>
+				, {duration: 5000, position: "top-right"});
+			}}
+			className="btn">Click Me</button>
+	</div>
+	)
+
+    });
+
+    // Clean up the socket connection when the component unmounts
+    // return () => {
+    //   socket.disconnect();
+    // };
+  }, []);
   return (
     <div style={{ height: '100vh' }}>
       {/* <Anime translateY={['-100%', '0%']} duration={2000}> */}
@@ -315,6 +349,7 @@ export default function Home() {
           <BottomLeft />
           <BottomRight />
         {/* </Anime> */}
+		<Toaster/>
 		</div>
     </div>
   );

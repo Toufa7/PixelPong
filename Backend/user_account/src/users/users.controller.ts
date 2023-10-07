@@ -106,7 +106,7 @@ export class UsersController {
     );
     console.log('req', req.user);
     const user = await this.usersService.findOne(req.user.id)
-    this.socket.hanldleSendNotification(body.friendId, req.user.id, {
+    this.socket.hanldleSendNotification(body.userId, req.user.id, {
       userId: req.user.id,
       type: 'friendrequestrecieved',
       photo: user.profileImage,

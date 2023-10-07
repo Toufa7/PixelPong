@@ -75,17 +75,19 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Handle the friend request and send notifications as needed
     const { receiverId, type } = data;
     // this.sendNotification(receiverId, type);
-  }
+  } 
 
   // Send a notification to a specific user
 
   async hanldleSendNotification(clientId: string, senderId: string, data) {
     try {
-      this.gatewayservice.createnotification(data);
+      await this.gatewayservice.createnotification(data);
       const sockets = this.connectedUsers.get(clientId);
+      console.log(sockets.id)
+
       if (sockets) {
-        console.log('sending notification');
-        this.server.to(clientId).emit('notification', data);
+        console.log('sending  ');
+        this.server.emit('notification', data);
       }
     } catch (error) {
       console.log(error);
