@@ -8,7 +8,7 @@
     
     .mainNavBarDiv
     {
-        flex: 2.4;
+        flex: 1.6;
     }
     
     .chatMessage
@@ -18,7 +18,7 @@
         
         .chatNavBarDiv
         {
-            flex: 1;
+            flex: 1.5;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -143,10 +143,10 @@
             
             .chatLowerRibbon
             {
-                flex: 2;
+                flex: 1;
                 border-bottom-right-radius: 10px;
                 border-bottom-left-radius: 10px;
-                background-color: #333C54;
+                flex-shrink: 2;
                 border-left: 3px solid;
                 border-bottom: 3px solid;
                 border-right: 3px solid;
@@ -156,7 +156,7 @@
         
         .userProfileAndMessages
         {
-            flex: 5;
+            flex: 6;
             display: flex;
             
             .usrProfileConversation
@@ -405,42 +405,47 @@
                         
                     }
                 }
+
+                .chatBodyLowerRibbon
+                {
+                    flex: 1.2;
+                }
             }
         }
     }
     
 }
 
-.messagesDiv
-{
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    z-index: 0;
+// .messagesDiv
+// {
+//     display: flex;
+//     flex-direction: column;
+//     overflow: hidden;
+//     z-index: 0;
     
-    .MessageLowerRibbonDiv
-    {
-        flex: 1;
-        display: flex;
-        justify-content: space-between;
+//     .MessageLowerRibbonDiv
+//     {
+//         flex: 1;
+//         display: flex;
+//         justify-content: space-between;
         
-        .leftDiamond
-        {
-            position: relative;
-            height: 79px;
-            width: 61px;
-            left: 21%;
-        }
+//         .leftDiamond
+//         {
+//             position: relative;
+//             height: 79px;
+//             width: 61px;
+//             left: 21%;
+//         }
         
-        .rightSparkle
-        {
-            position: relative;
-            width: 86px;
-            height: 76px;
-            right: 4%;
-        }
-    }
-}
+//         .rightSparkle
+//         {
+//             position: relative;
+//             width: 86px;
+//             height: 76px;
+//             right: 4%;
+//         }
+//     }
+// }
 
 .chatDmDiv
 {
