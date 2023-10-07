@@ -4,7 +4,6 @@ body {
 	background: linear-gradient(to right, #4F3997, #6E58B6);
 }
 
-
 .downContainer {
 	display: flex;
     flex-flow: row wrap;
@@ -51,7 +50,6 @@ body {
 	
 	
 		.gAndFBox {
-			
 			width: 500px; height: 488px;
 			background-color: #8ade84;
 			border-left: 8px solid #f9f871;
@@ -96,9 +94,7 @@ body {
 						.name {
 							align-items: end;
 						}
-
 					}
-
 				}
 			}
 		}
@@ -187,8 +183,8 @@ body {
 .buttonat .nes-btn {
 	gap: 10px 20px !important;
 }
-	
-
-
-
-
+@media only screen and (max-width: 600px) {
+    .profilRectangle {
+        margin-top: 75px;
+    }
+}
