@@ -102,11 +102,19 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
 }
 
 
+function console_resize(){
+  let p = document.getElementById('canvas_renderer');
+  let width = p?.offsetWidth;
+  let height = p?.offsetHeight;
+  console.log("Window resized");
+  console.log("width -->" + width + " height " + height);
+}
+
 export const Game_instance = () =>{
 
   const [newsocket, setScoket] = useState<Socket>();
   const [isConnected , setConnected] = useState<boolean>(false);
-  const [width,setWidth] = useState();
+  // const [width,setWidth] = useState();
 
 
   useEffect(()=>{
@@ -115,25 +123,29 @@ export const Game_instance = () =>{
       setScoket(socket);
       setConnected(true);
     }
+    if (isConnected){
     socket?.on("connect",() =>{
       id_player = socket.id;
       socket?.emit("screen_metrics",{s_w : screen_width , s_h : screen_height});
     });
-
+  }
+    
     return () => {
         socket?.off("connect");
         socket?.off("UpdatePlayerPos");
         socket?.off("PlayerLeave");
         socket?.off("PlayersOfRoom");
         socket?.off("UpdateBallPos");
+        newsocket?.disconnect();
         newsocket?.close();
+        setConnected(false);
     }
 
   },[newsocket]);
 
 
   useEffect(()=>{
-    // window.addEventListener("resize",)
+    window.addEventListener("resize",console_resize);
   },[]);
 
 

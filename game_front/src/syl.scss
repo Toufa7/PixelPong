@@ -1,0 +1,49 @@
+$orange : orange;
+$Border_option : solid 4px black;
+$child_width : 1900px;
+$child_height : 700px;
+
+body {
+    background: $orange;
+}
+
+
+#Parent{
+    display: flex;
+    // height: 100vh;
+    // width: 100vw;
+    transform: translateY(50%);
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    background-color: rebeccapurple;
+    
+    #canvas_renderer{
+    display: flex;
+    text-align-last: center;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border: $Border_option;
+    width: $child_width;
+    height: $child_height;
+    background-color : red;
+    }
+}
+
+@media (max-width: 800px) {
+    #Parent{
+        flex-shrink: 1;
+        #canvas_renderer {
+            flex-shrink: 1;
+        background-color: green;
+        }
+    }
+}
+
+// @media screen and (min-width: 1440px) {
+//     #Parent{
+//         transform: translateY(50%);
+//         background-color: blanchedalmond;
+//     }
+// }

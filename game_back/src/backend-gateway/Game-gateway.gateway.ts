@@ -89,6 +89,12 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       // if (this.Room_dl.client_count > 0)
       //   this.server.to(this.Room_dl.id).emit("Dis",this.Room_dl);
     }
+    // if (!this.Players.players){
+    //   for(const id in this.Rooms.rooms){
+    //     const Room = this.Rooms.rooms;
+
+    //   }
+    // }
     console.log(this.Players.players);
   }
 
@@ -260,6 +266,13 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       }
         // this.server.emit("UpdatePlayerPos",this.Players.players);
     }
+
+    // @Interval(1000)
+    // CleanUp(){
+    //   if (!this.Players.players){
+    //     console.log("there is no Players")
+    //   }
+    // }
 }
 
 

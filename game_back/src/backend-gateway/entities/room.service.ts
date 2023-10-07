@@ -39,7 +39,7 @@ export class Rooms{
             this.create_room_for_player();
             for(const id in this.rooms){
                 const Room = this.rooms[id];
-                if (Room.client_count == 0 && !Room.Player1){
+                if ((Room.client_count == 0 && !Room.Player1) && Players.players[Player.id]){
                     console.log("Room enterd ["+Room.id+"]")
                     Room.Player1 = Players.players[Player.id];
                     Room.Player1.room_id = Room.id;
@@ -66,7 +66,7 @@ export class Rooms{
 
     CheckForRooms(Room,Player : Socket , Players : Players_Management) : number{
         if (Room.client_count == 1){
-            if (!Room.Player1){
+            if (!Room.Player1 && Players.players[Player.id]){
                 console.log("Player 1 spot is available in Room["+Room.id+"]");
                 Room.Player1 = Players.players[Player.id];
                 Room.Player1.room_id = Room.id;
@@ -75,7 +75,7 @@ export class Rooms{
                 console.log(this.rooms);
                 return (1);
             }
-            else if (!Room.Player2){
+            else if (!Room.Player2 && Players.players[Player.id]){
                 console.log("Player 2 spot is available in Room["+Room.id+"]");
                 Room.Player2 = Players.players[Player.id];
                 Room.Player2.room_id = Room.id;
@@ -86,7 +86,7 @@ export class Rooms{
             }
         }
         else if (Room.client_count == 0){
-            if (!Room.Player1){
+            if (!Room.Player1 && Players.players[Player.id]){
                 console.log("Player 1 spot is available in Room["+Room.id+"]");
                 Room.Player1 = Players.players[Player.id];
                 Room.Player1.room_id = Room.id;
@@ -95,7 +95,7 @@ export class Rooms{
                 console.log(this.rooms);
                 return (1);
             }
-            else if (!Room.Player2){
+            else if (!Room.Player2 && Players.players[Player.id]){
                 console.log("Player 2 spot is available in Room["+Room.id+"]");
                 Room.Player2 = Players.players[Player.id];
                 Room.Player2.room_id = Room.id;
