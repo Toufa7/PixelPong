@@ -21,6 +21,7 @@
     npm i p5 --force
     npm i react-p5-wrapper --force
     npm i --save-dev @types/p5 --force
+    npm i react-countdown --force 
 
 # Run server:
 

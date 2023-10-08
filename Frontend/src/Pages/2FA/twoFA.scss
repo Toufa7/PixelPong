@@ -16,8 +16,11 @@
         border-color: #643F5E #643F5E olive olive;      
         
         .header {
-            height: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background: palegreen;
+            font-size:x-large;
             border-right: 8px solid white;
             border-bottom: 8px solid white;
         }

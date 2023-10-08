@@ -260,25 +260,25 @@ const BottomRight= () => {
 
 export default function Home() {
 
-	const AcceptFriend = async () =>  {
-		await axios.patch("http://localhost:3000/users/acceptFriendRequest", {withCredentials : true})
-		.then((rese) => {
-			console.log("Notifcation Accept ", rese);
-		})
-
-	}
-
-	const RefuseFriend = async () => {
-		await axios.patch("http://localhost:3000/users/refuseFriendRequest", {withCredentials : true})
-		.then((rese) => {
-			console.log("Notifcation Accept ", rese);
-		})
-	}
-
-
-  useEffect(() => {
-	socket.on('notification', (data) => {
-		console.log('Received notification:', data);
+	
+	
+	useEffect(() => {
+		socket.on('notification', (data) => {
+			console.log('Received notification:', data);
+			const AcceptFriend = async () =>  {
+				await axios.patch("http://localhost:3000/users/acceptFriendRequest", data,{withCredentials : true})
+				.then((rese) => {
+					console.log("Notifcation Accept ", rese);
+				})
+		
+			}
+		
+			const RefuseFriend = async () => {
+				await axios.patch("http://localhost:3000/users/refuseFriendRequest", data,{withCredentials : true})
+				.then((rese) => {
+					console.log("Notifcation Accept ", rese);
+				})
+			}
 		const audio = new Audio(notification);
 		audio.play();
 		toast.custom(

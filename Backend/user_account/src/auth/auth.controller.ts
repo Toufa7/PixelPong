@@ -39,6 +39,7 @@ export class AuthController {
     private usersService: UsersService,
     private Prismaservice: PrismaService,
     private readonly bantoken: TokenBlacklistService,
+    // private readonly user: User,
   ) {}
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -147,6 +148,7 @@ export class AuthController {
     const user = await this.usersService.findOne(req.user.id);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
+      user.authenticated = true;
       return res
         .status(200)
         .json({ message: 'OTP is valid. Allow the user to log in.' });

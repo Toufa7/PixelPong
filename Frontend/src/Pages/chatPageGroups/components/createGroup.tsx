@@ -79,7 +79,7 @@ const CreateGroup = () => {
 		<div className="chatDmDiv">
 			<div className="groupSettings">
 				<div  className="nes-field">
-					<input 	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
+					<input style={{background: '#E9E9ED'}}	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
 				</div>
 				<label style={{marginTop: '10px'}}>Select Privacy</label>
 				<div className="nes-select">

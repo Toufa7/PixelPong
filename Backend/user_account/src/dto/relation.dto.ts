@@ -10,7 +10,7 @@ export class FriendrequestDto {
   userId: string;
   @IsOptional()
   @IsString()
-  friendId: string;
+  from: string;
   @IsOptional()
   @IsString()
   status: string;
