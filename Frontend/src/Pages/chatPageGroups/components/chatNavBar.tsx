@@ -7,6 +7,7 @@ import publicGroup from '../assets/public.svg'
 import protectedGroup from '../assets/protected.svg'
 import privateGroup from '../assets/private.svg'
 import './chatNavBar.scss'
+import { useLocation } from 'react-router-dom';
 const ChatNavBar = () => {
   const [data, setLabel] = useState({
 		label : false,
@@ -65,10 +66,9 @@ const GroupsList = () => {
 		document.getElementById('groupJoin').showModal();
 		setGroupName(groupName);
 	}
-	const [joinGroup, setJoinGroup] = useState({
-		join: true,
-		isMember : true
-	});
+	let location = useLocation();
+	console.log("Location => ", location);
+	const [joinGroup, setJoinGroup] = useState(true);
 	return (
 		<div className="chatGroupesDiv">
 		<i>GROUPES</i>
@@ -88,22 +88,20 @@ const GroupsList = () => {
 				<img className="groupAvatar" src={avatarGroup} />
 				<p className="group-members">Total Members: 245</p>
 				{
-					// joinGroup.join ? (
-					// 	<button onClick={() => setJoinGroup(joinGroup.isMember, joinGroup.join)} className="nes-btn">Join Group</button>
-					// )
-					// :
-					// {
-					// 	joinGroup.isMember ? (
-					// 		<button onClick={() => setJoinGroup(false)} className="nes-btn">Join Group</button>
-					// 	)	
-					// 	: 
-					// 	(
-					// 		<button className="nes-btn">Exit</button>
-					// 	)
-					// }
+					joinGroup ? (
+						<button onClick={() => setJoinGroup(false)} className="nes-btn">Join Group</button>
+					)
+					: 
+					(
+						joinGroup ? (
+							<button onClick={() => setJoinGroup(true)} className="nes-btn">Pending</button>
+						)
+						: 
+						(
+							<button onClick={() => setJoinGroup(true)} className="nes-btn">Exit</button>
+						)
+					)
 				}
-
-
 			</dialog>
 		</div>
 		</div>

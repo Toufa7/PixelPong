@@ -20,6 +20,7 @@ import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
 import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
+import ErrorPage from './Pages/errorPage/errorPage';
 
 export const OtherUser = () => {
 	return (
@@ -163,13 +164,14 @@ const RedirectToSettings = () => {
 		return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="settings"	Component={LoginSettingsComponents} />
+				<Route path="settings"	Component={ LoginSettingsComponents} />
 				<Route path="home"		Component={HomeComponents}/>
 				<Route path="profil/"	Component={ProfilComponents}/>
 				<Route path="game"		Component={GameComponents}/>
 				<Route path="profil/*"	Component={OtherUser}/>
 				<Route path="chat"		Component={ChatPage}/>
 				<Route path="/groups"	Component={ChatGroupsComponents}/>
+				<Route path="*" 		element={<ErrorPage/>} />			
 			</Routes>
 		</BrowserRouter>
 		);

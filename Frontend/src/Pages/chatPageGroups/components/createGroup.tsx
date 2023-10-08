@@ -77,8 +77,8 @@ const CreateGroup = () => {
 	const isCreateDisabled = groupName === "";
 	return (
 		<div className="chatDmDiv">
-			<div  className="groupSettings">
-				<div className="nes-field">
+			<div className="groupSettings">
+				<div  className="nes-field">
 					<input 	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
 				</div>
 				<label style={{marginTop: '10px'}}>Select Privacy</label>

@@ -5,7 +5,7 @@ import {Toaster, toast } from 'react-hot-toast';
 import axios from "axios";
 import { useState } from "react";
 import Anime, { anime } from 'react-anime';
-
+import { Navigate } from "react-router-dom";
 /******************* Includes  *******************/
 import img3 from './assets/FarmerBoy.png';
 import img2 from './assets/Detective.png';
@@ -14,18 +14,19 @@ import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 import myAvatar from '../otoufah.jpg';
-import { BrowserRouter, Router, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Router, Routes, useNavigate, useParams, useRouteError } from "react-router-dom";
 import { Cookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
 
-const retrieveCheckSendData = () => {
+const RetrieveCheckSendData = () => {
+
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
     /**
      * TODO: it's optionnaly either nickname or avatar or both
     */
-   const navigate = useNavigate();
+//    const navigate = useNavigate();
    if (avatar && usernameCheck.test(nicknameInput)) {
        const data = new FormData();
        data.append('file', avatar);
@@ -44,19 +45,8 @@ const retrieveCheckSendData = () => {
             );
             /**
              * TODO: Need to redirect to home
-            */
-        //    <BrowserRouter>
-        //        <Routes>
-        //            navigate("/home");
-        //        </Routes>
-        //    </BrowserRouter>
-        <BrowserRouter>
-        <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/account-settings" component={AccountSettingsPage} />
-        </Switch>
-        </BrowserRouter>
-        }
+            */                
+    }
         else if (!avatar && nicknameInput.length == 0)
         {
             console.log("No Data Need to be Shown")
@@ -109,12 +99,17 @@ export default function LoginSettings() {
         });
     }   
 
+
+    interface Token {
+        username : string
+    }
     const cookie = new Cookies();
-    const token = jwtDecode(cookie.get('jwt'));
+    const token : Token = jwtDecode(cookie.get('jwt'));
 	const [update , setUpdate] = useState("");
 
       return (
         <div style={{height: '100vh'}}>
+            <Toaster/>
           <div className="container">
             <div className="settingsBox">
                 <div className="header">Settings</div>
@@ -141,8 +136,7 @@ export default function LoginSettings() {
                         </label>
                      </div>
                         <div className="startContainer">
-                            <Toaster/>
-                            <button style={{width: 'fit-content'}} onClick={retrieveCheckSendData} type="button"  disabled={update ? false : true} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update</button>
+                            <button style={{width: 'fit-content'}} onClick={RetrieveCheckSendData} type="button" className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update</button>
                         </div>
                     </div>
                     <section>
