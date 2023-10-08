@@ -20,7 +20,6 @@ import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
 import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
-import ErrorPage from './Pages/errorPage/errorPage';
 
 export const OtherUser = () => {
 	return (
@@ -159,19 +158,46 @@ const Redirect2FA = () => {
 
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
-	const jwt = cookies.get('jwt');	
-	if (jwt != null) {
+	const gifError = "https://cdna.artstation.com/p/assets/images/images/042/426/882/original/lane-galvao-pc001.gif";
+	const jwt = cookies.get('jwt');
+	const [twoFAStatus, setTwoFAStatus] = useState(false);
+	const [twoFAValid, setTwoFAValid] = useState(false);
+  
+	useEffect(() => {
+		const fetchTwoFAStatus = async () => {
+		try {
+			const endpoint = 'http://localhost:3000/auth/2fa/get2FAstatus';
+			const response = await axios.get(endpoint, { withCredentials: true });
+			setTwoFAStatus(response.data);
+		}
+		catch (error) {
+			console.log(error);
+		}
+	};
+	fetchTwoFAStatus();
+	}, []);
+  
+	axios.get("http://localhost:3000/auth/2fa/validate", { withCredentials: true })
+	.then((rese) => {
+		setTwoFAValid(rese.data);
+		
+	})
+
+
+
+
+	if (jwt) {
 		return (
 		<BrowserRouter>
 			<Routes>
 				<Route path="settings"	Component={ LoginSettingsComponents} />
 				<Route path="home"		Component={HomeComponents}/>
-				<Route path="profil/"	Component={ProfilComponents}/>
+				<Route path="profil"	Component={ProfilComponents}/>
 				<Route path="game"		Component={GameComponents}/>
 				<Route path="profil/*"	Component={OtherUser}/>
 				<Route path="chat"		Component={ChatPage}/>
 				<Route path="/groups"	Component={ChatGroupsComponents}/>
-				<Route path="*" 		element={<ErrorPage/>} />			
+				{/* <Route path="*" 		element={<img src={gifError}></img>} />			 */}
 			</Routes>
 		</BrowserRouter>
 		);

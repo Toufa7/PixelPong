@@ -58,8 +58,6 @@ function TwoFa() {
             }
             else
                 toast.error("Invalid Code");
-
-            
         })
         .catch((error) => {
             console.log("Error ", error)
