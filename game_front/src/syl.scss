@@ -18,13 +18,13 @@ body {
     justify-content: center;
 
 #child{
-    background-color: rebeccapurple;
+    // background-color: rebeccapurple;
     // padding: 5px;
     width: 1050px;
     height: 500px;
     // margin: 15em;
     line-height: 20px;
-    border: $Border_option;
+    // border: $Border_option;
     text-align: center;
     }
 
@@ -33,7 +33,10 @@ body {
 @media (max-width: 800px) {
     #root{
         #child{
-        background-color: green;
+            line-height: 20px;
+    // border: $Border_option;
+    text-align: center;
+        // background-color: green;
         }
     }
 }
