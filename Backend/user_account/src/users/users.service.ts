@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../auth/prisma.service';
-import { Status, User, UserStatus } from '@prisma/client';
+import { Status, Type, User, UserStatus } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -181,4 +181,72 @@ export class UsersService {
       },
     });
   }
+  
+  async acceptFriendRequest(id: number, senderId: string, recieverId: string) {
+    await this.prisma.$transaction([
+      this.prisma.friendrequest.update({
+        where: { id: id },
+        data: { status: Status.ACCEPTED },
+      }),
+      this.prisma.user.update({
+        where: {
+          id: senderId,
+        },
+        data: {
+          friends: {
+            connect: {
+              id: recieverId,
+            },
+          },
+        },
+      }),
+      this.prisma.user.update({
+        where: {
+          id: recieverId,
+        },
+      data: {
+        friends: {
+          connect: {
+            id: senderId,
+          },
+        },
+      },
+    }),
+    this.prisma.friendrequest.delete({
+      where:{
+        id,
+      },
+    })
+  ]);
+  console.log(id);
+  }
+
+async refuseFriendRequest(id: number) {
+  await this.prisma.$transaction([
+  this.prisma.friendrequest.update({
+    where: { id: id },
+    data: { status: Status.DECLINED },
+  }),
+  this.prisma.friendrequest.delete({
+    where:{
+      id,
+    },
+  })
+])
+}
+
+
+async findFriendRequestIdBySenderReceiver(senderId: string, receiverId: string): Promise<number | null> {
+  const friendrequest = await this.prisma.friendrequest.findFirst({
+    where: {
+      senderId,
+      receiverId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  return friendrequest?.id || null;
+}
 }

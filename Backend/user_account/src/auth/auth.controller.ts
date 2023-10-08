@@ -39,6 +39,7 @@ export class AuthController {
     private usersService: UsersService,
     private Prismaservice: PrismaService,
     private readonly bantoken: TokenBlacklistService,
+    // private readonly user: User,
   ) {}
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -53,7 +54,11 @@ export class AuthController {
 
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
-      return res.redirect('http://localhost:5173/home');
+      else{
+        if(user.twofa)
+          return res.redirect('http://localhost:5173/two-factor-authentication');
+        return res.redirect('http://localhost:5173/home');
+      }
     } catch (err) {
       console.log(err);
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
@@ -73,7 +78,11 @@ export class AuthController {
       // console.log('1st time loggin -> ', user.firstlogin);
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
-      return res.redirect('http://localhost:5173/home');
+      else{
+        if(user.twofa)
+          return res.redirect('http://localhost:5173/two-factor-authentication');
+        return res.redirect('http://localhost:5173/home');
+      }
       // return res.redirect('signup-success');
     } catch (err) {
       console.log(err);
@@ -139,6 +148,7 @@ export class AuthController {
     const user = await this.usersService.findOne(req.user.id);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
+      user.authenticated = true;
       return res
         .status(200)
         .json({ message: 'OTP is valid. Allow the user to log in.' });

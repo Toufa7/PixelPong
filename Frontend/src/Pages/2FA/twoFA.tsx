@@ -3,7 +3,7 @@ import './twoFA.scss';
 import axios from 'axios';
 import { Toaster , toast} from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-
+import Countdown from 'react-countdown';
 
 const Toasts = () => {
     return (
@@ -20,6 +20,18 @@ const Toasts = () => {
         />
     );
 }
+
+
+const renderer = ({ minutes, seconds, completed }) => {
+  if (completed) {
+    return (
+        <span>You are good to go!</span>
+    );
+  } else {
+    return <span>00:{seconds}</span>;
+  }
+};
+
 
 function TwoFa() {
     const [qrCode, updateQr] = useState();
@@ -58,8 +70,6 @@ function TwoFa() {
             }
             else
                 toast.error("Invalid Code");
-
-            
         })
         .catch((error) => {
             console.log("Error ", error)
@@ -70,12 +80,16 @@ function TwoFa() {
     return (
         <div className="container">
             <div className="twoFaBox">
-                <div className="header">2FA</div>
+                <div style={{height: '50px'}} className="header">2FA</div>
                 <div className="content">
-                    <p>Enter the authentication code</p>
+                    <p>Ingrese el código de autenticación</p>
                     <img className="qrcode" src={qrCode} alt="QR Code"/>
                     <div className="nes-field">
-                        <p>Please enter the 6 digits code from your authentication
+                    <Countdown
+                        date={Date.now() + 30000}
+                        renderer={renderer}
+                    />
+                        <p>Ingrese el código de 6 dígitos de su aplicación de autenticación
                             <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US' target='_blank'> app</a>
                         </p>
                         <input type="text" maxLength={1} id="name_field" className="nes-input" placeholder='*'/>
@@ -87,7 +101,7 @@ function TwoFa() {
                     </div>
                     <div className="verify">
                         <Toasts/>
-                        <button onClick={iClick} className="nes-btn">Verify</button>
+                        <button onClick={iClick} className="nes-btn">Verificar</button>
                     </div>
             </div>
         </div>

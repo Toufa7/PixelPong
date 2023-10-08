@@ -39,6 +39,7 @@ export class UsersController {
   @Get('/:id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const user = await this.usersService.findOne(id);
+    console.log(user.authenticated) 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -106,7 +107,7 @@ export class UsersController {
     );
     console.log('req', req.user);
     const user = await this.usersService.findOne(req.user.id)
-    this.socket.hanldleSendNotification(body.friendId, req.user.id, {
+    this.socket.hanldleSendNotification(body.userId, req.user.id, {
       userId: req.user.id,
       type: 'friendrequestrecieved',
       photo: user.profileImage,
@@ -115,5 +116,26 @@ export class UsersController {
       username: user.username,
     });
     return notification;
+  }
+
+  @Patch('acceptFriendRequest')
+  async acceptFriendRequest(@Body() body: FriendrequestDto) {
+    const friendrequest = await  this.usersService.findFriendRequestIdBySenderReceiver(
+      body.userId,
+      body.from)
+      console.log("Bodyyyy", body)
+    const find = await  this.usersService.acceptFriendRequest(
+      friendrequest,
+      body.userId,
+      body.from,
+    );
+    return find;
+  }
+  @Patch('refuseFriendRequest/')
+  async refuseFriendRequest(@Body() body: FriendrequestDto) {
+    const friendrequest = await  this.usersService.findFriendRequestIdBySenderReceiver(
+      body.userId,
+      body.from)
+    return await this.usersService.refuseFriendRequest(friendrequest);
   }
 }

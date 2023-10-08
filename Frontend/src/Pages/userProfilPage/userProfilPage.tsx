@@ -12,7 +12,8 @@ import siif from './assets/siif.svg';
 import endpoint from './assets/endpoint.svg';
 import key from './assets/key.svg';
 import message from './assets/msgLogo.svg';
-import groupt from './../otoufah.jpg'
+import myAvatar from './../otoufah.jpg'
+import { useLocation } from 'react-router-dom';
 
 const States = () => {
     return (
@@ -47,17 +48,17 @@ const Profil = () => {
         check: true,
         userId: ''
     });
-    const path = window.location.pathname;
+    // const path = window.location.pathname;
+    const location = useLocation();
     useEffect(() => {
         async function fetchData() {
-            const endpoint = `http://localhost:3000/users${path}`;
+            const endpoint = `http://localhost:3000/users${location.pathname}`;
             // try {
                 const response = await axios.get(endpoint, { withCredentials: true });
                 console.log("User ID ", response.data.id);
                 
                 const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
                 console.log("Avatar URL  alocodee  ", avatarURL);
-                // Check if the avatar URL exists and is accessible
                 try {
                     await axios.get(avatarURL, { withCredentials: true });
                     setUserData(() => ({
@@ -67,7 +68,6 @@ const Profil = () => {
                         userId : response.data.id
                     }));
                 } catch (avatarError) {
-                    // Avatar URL failed, set another value
                     setUserData(() => ({
                         avatar: response.data.profileImage,
                         username: response.data.username,
@@ -81,8 +81,6 @@ const Profil = () => {
         fetchData();
     }, []);
 
-
-    const [friendRequest, setFriendRequest] = useState();
 
     const [isFriend, setIsFriend] = useState(false);
     return (
@@ -204,7 +202,7 @@ const GroupsAndFriends = () => {
                         groups.map((group, index) => (
                             <>
                             <div className='list' key={index}>
-                                <img className="avatar" src={groupt}/>
+                                <img className="avatar" src={myAvatar}/>
                                 <span className='name' >{group}</span>
                                 <img className='ico' src={message}/>
                             </div>

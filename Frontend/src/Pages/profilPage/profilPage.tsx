@@ -61,7 +61,8 @@ const Profil = () => {
             ]
             if (token) {
 
-                await axios.all(endpoints.map((idx) =>  axios.get(idx, {withCredentials: true})))
+                await axios.all(endpoints.map((idx) =>
+                axios.get(idx, {withCredentials: true})))
                 .then(axios.spread((avatarRes, userRes) => 
                 {
                     console.log("AVATAR " ,avatarRes);

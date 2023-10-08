@@ -23,6 +23,7 @@ datasource db {
     twofa       Boolean? @default(false)
     stats     Stats[]  @relation("stats")
     status    UserStatus?
+    authenticated Boolean @default(false)
 
     // game
     achievements Achievements[] @relation("achievements")

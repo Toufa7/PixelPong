@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom/client'
 
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
-
+import jwt_decode from "jwt-decode";
 /******************* Includes  *******************/
 import NavBar from './Pages/addons/NavBar';
 import Stars from './Pages/addons/Stars';
@@ -19,7 +19,7 @@ import axios from 'axios';
 import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
-import OtherProfilPage from './Pages/userProfilPage/userProfilPage';
+import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
 import ErrorPage from './Pages/errorPage/errorPage';
 
 export const OtherUser = () => {
@@ -89,7 +89,6 @@ const twoFAComponents = () => {
 	return (
 		<>
 			<Stars/>
-			<NavBar/>
 			<TwoFa/>
 		</>
 	);
@@ -125,48 +124,53 @@ const GameComponents = () => {
 }
 
 
-const Redirect2FA = () => {
-	const [twoFAStatus, setTwoFAStatus] = useState(false);
-  
+const RedirectToSettings = () => {
+	const cookies = new Cookies();
+	const jwt = cookies.get('jwt');
+	const token = jwt_decode(jwt);
+	console.log("A")
+	const [data, setData] = useState(false);
 	useEffect(() => {
 		const fetchTwoFAStatus = async () => {
-		try {
-			const endpoint = 'http://localhost:3000/auth/2fa/get2FAstatus';
-			const response = await axios.get(endpoint, { withCredentials: true });
-			console.log('2fa Status -> ', response.data);
-			setTwoFAStatus(response.data);
-		}
+			try {
+				const endpoint1 = `http://localhost:3000/users/${token.id}`;
+				const response1 = await axios.get(endpoint1, { withCredentials: true });
+				setData(response1.data);
+				console.log("DATA -> ", response1.data);
+			}
 		catch (error) {
 			console.log(error);
 		}
 	};
 	fetchTwoFAStatus();
 	}, []);
+
+	const [twoFAStatus, setTwoFAStatus] = useState(false);
   
-	if (twoFAStatus) {
-		return (
-		<BrowserRouter>
-			<Routes>
-			<Route path="two-factor-authentication" Component={twoFAComponents} />
-			</Routes>
-		</BrowserRouter>
-		);
-	}
-	else {
-		console.log("I enter because it's false");
-		return <></>;
-	}
-  };
+	useEffect(() => {
+		const fetchTwoFAVerificatoin = async () => {
+		try {
+			const endpoint = 'http://localhost:3000/auth/2fa/get2FAstatus';
+			const response = await axios.get(endpoint, { withCredentials: true });
+			setTwoFAStatus(response.data);
+		}
+		catch (error) {
+			console.log(error);
+		}
+	};
+	fetchTwoFAVerificatoin();
+	}, []);
   
 
-const RedirectToSettings = () => {
-	const cookies = new Cookies();
-	const jwt = cookies.get('jwt');	
-	if (jwt != null) {
+	console.log("2FA Status => ", twoFAStatus);
+	console.log("2FA Code => ", data);
+	console.log("JWT => ", jwt);
+	
+	if (jwt) {
 		return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="settings"	Component={LoginSettingsComponents} />
+				<Route path="settings"	Component={ LoginSettingsComponents} />
 				<Route path="home"		Component={HomeComponents}/>
 				<Route path="profil/"	Component={ProfilComponents}/>
 				<Route path="game"		Component={GameComponents}/>
@@ -180,25 +184,32 @@ const RedirectToSettings = () => {
 		);
 		
 	}
-	else
-	{
-		console.log("Acces Denied")
-		return (
-			<BrowserRouter>
-				<Routes>
-					<Route path="/"			element={<Navigate to="welcome"/>}/>
-					<Route path="welcome"	element={<Navigate to="welcome"/>}/>
-					<Route path="*"			element={<Navigate to="/login"/>}/>
-				</Routes>
-			</BrowserRouter>
-		);
-	}
+	// else if (jwt && twoFAStatus && !data ){
+	// 	return (
+	// 		<BrowserRouter>
+	// 			<Routes>
+	// 				<Route path="*"	 element={<Navigate to="/two-factor-authentication"/>}/>
+	// 			</Routes>
+	// 		</BrowserRouter>
+	// 	);	
+	// }
+	// else
+	// {
+	// 	return (
+	// 		<BrowserRouter>
+	// 			<Routes>
+	// 				<Route path="/"			element={<Navigate to="welcome"/>}/>
+	// 				<Route path="welcome"	element={<Navigate to="welcome"/>}/>
+	// 				<Route path="*"			element={<Navigate to="/login"/>}/>
+	// 			</Routes>
+	// 		</BrowserRouter>
+	// 	);
+	// }
 };
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 	<RedirectToSettings/>
-	<Redirect2FA/>
 	<BrowserRouter>
 		<Routes>
 			{["welcome", "/"].map((idx) => 

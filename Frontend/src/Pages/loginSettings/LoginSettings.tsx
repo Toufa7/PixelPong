@@ -1,4 +1,3 @@
-// @ts-nocheck
 import "./LoginSettings.scss"
 
 /******************* Packages  *******************/
@@ -6,7 +5,7 @@ import {Toaster, toast } from 'react-hot-toast';
 import axios from "axios";
 import { useState } from "react";
 import Anime, { anime } from 'react-anime';
-
+import { Navigate } from "react-router-dom";
 /******************* Includes  *******************/
 import img3 from './assets/FarmerBoy.png';
 import img2 from './assets/Detective.png';
@@ -15,17 +14,19 @@ import img4 from './assets/Lady.png';
 import img5 from './assets/old_man.png';
 import img6 from './assets/Girl2.png';
 import myAvatar from '../otoufah.jpg';
-import { Router, useNavigate } from "react-router-dom";
+import { BrowserRouter, Router, Routes, useNavigate, useParams, useRouteError } from "react-router-dom";
 import { Cookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
 
-const retrieveCheckSendData = () => {
+const RetrieveCheckSendData = () => {
+
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
     /**
      * TODO: it's optionnaly either nickname or avatar or both
     */
+//    const navigate = useNavigate();
    if (avatar && usernameCheck.test(nicknameInput)) {
        const data = new FormData();
        data.append('file', avatar);
@@ -44,25 +45,23 @@ const retrieveCheckSendData = () => {
             );
             /**
              * TODO: Need to redirect to home
-            */
-           // <BrowserRouter>
-           //     <Routes>
-           //         navigate("/home");
-           //     </Routes>
-           // </BrowserRouter>
-        }
+            */                
+    }
         else if (!avatar && nicknameInput.length == 0)
         {
             console.log("No Data Need to be Shown")
-            document.getElementById('warning').showModal();
+            document.getElementById('warning')?.showModal();
         }
-    else if (!usernameCheck.test(nicknameInput))
-    {
-        toast.error("Invalid Username", );
-    }
-    else {
-        toast.error('Choose an avatar');
-    }
+        else if (!nicknameInput){
+            toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
+        }
+        else if (!usernameCheck.test(nicknameInput))
+        {
+            toast.error("Invalid Username", { style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
+        }
+        else {
+            toast("Choose an avatar", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
+        }
 }
 
 const Avatars = () => {
@@ -100,23 +99,29 @@ export default function LoginSettings() {
         });
     }   
 
+
+    interface Token {
+        username : string
+    }
     const cookie = new Cookies();
-    const token = jwtDecode(cookie.get('jwt'));
+    const token : Token = jwtDecode(cookie.get('jwt'));
+	const [update , setUpdate] = useState("");
 
       return (
         <div style={{height: '100vh'}}>
+            <Toaster/>
           <div className="container">
             <div className="settingsBox">
                 <div className="header">Settings</div>
                 <div className="content">
                     <div>
                         <div className="nes-field">
-                            <input type="text" name="nickname" className="nes-input" required placeholder='Choose Nickname'/>
+                            <input onChange={(e) => setUpdate(e.target.value)} type="text" name="nickname" className="nes-input" required placeholder='Choose Nickname'/>
                         </div>
                         <div className="choosingAvatarContainer">
                             <span className="is-primary">Choose Avatar</span>
                         </div>
-                            <Avatars />
+                            {/* <Avatars /> */}
                         <div className="uploadContainer">
                             <label className="nes-btn">
                                 <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
@@ -131,8 +136,7 @@ export default function LoginSettings() {
                         </label>
                      </div>
                         <div className="startContainer">
-                            <Toaster/>
-                            <button style={{width: 'fit-content'}} onClick={retrieveCheckSendData} type="button" className="nes-btn">Update</button>
+                            <button style={{width: 'fit-content'}} onClick={RetrieveCheckSendData} type="button" className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update</button>
                         </div>
                     </div>
                     <section>
