@@ -68,10 +68,10 @@ const NavBarFooter = () => {
 		navigate('/login');
 		axios.post("http://localhost:3000/auth/logout", {withCredentials: true})
 		.then((response) => {
-			console.log(response);
+			//console.log(response);
 		})
 		.catch((error) => {
-			console.log(error)
+			//console.log(error)
 		});
 	};
   
@@ -90,7 +90,7 @@ const NavBarFooter = () => {
                     setUserData(true)
                 })
 				.catch(((error) => {
-                    console.log("Error in NavBar " ,error);
+                    //console.log("Error in NavBar " ,error);
 				}))
             }
         }

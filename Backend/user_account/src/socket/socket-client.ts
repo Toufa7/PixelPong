@@ -14,10 +14,10 @@
 //   private registerConsumerEvent() {
 //     this.socketClient.emit('newMessage', { msg: 'hey ayoub!' });
 //     this.socketClient.on('connect', () => {
-//       console.log('conected to Gateway');
+//       //console.log('conected to Gateway');
 //     });
 //     this.socketClient.on('onMessage', (payload: any) => {
-//       console.log(payload);
+//       //console.log(payload);
 //     });
 //   }
 // }

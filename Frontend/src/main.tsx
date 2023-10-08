@@ -96,10 +96,10 @@ const twoFAComponents = () => {
 }
 const HomeComponents = () => {
 	// const socket = useContext(socketContext);
-	// console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
+	// //console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
 	// useEffect(()=>{
 	// 	socket?.on("connect",()=>{
-	// 		console.log("im connected");
+	// 		//console.log("im connected");
 	// 	socket.close()
 	// })
 	// },[]);
@@ -136,7 +136,7 @@ const Redirect2FA = () => {
 			setTwoFAStatus(response.data);
 		}
 		catch (error) {
-			console.log(error);
+			//console.log(error);
 		}
 	};
 	fetchTwoFAStatus();
@@ -171,7 +171,7 @@ const RedirectToSettings = () => {
 				<Route path="profil/*"	Component={OtherUser}/>
 				<Route path="chat"		Component={ChatPage}/>
 				<Route path="/groups"	Component={ChatGroupsComponents}/>
-				<Route path="*" 		element={<ErrorPage/>} />			
+				{/* <Route path="*" 		element={<ErrorPage/>} />		 */}
 			</Routes>
 		</BrowserRouter>
 		);

@@ -39,11 +39,11 @@ let map = new Map <any , any>();
       if (session) {
         const jwt = session.split('=')[1];
         const t = decode(jwt);
-        console.log("************",t?.['id'],"************"); 
+        //console.log("************",t?.['id'],"************"); 
         if (session && jwt) {
           try{
             const user = await this.Jwt.verifyAsync(jwt,{secret:'THISISMYJWTSECRET'});
-            // console.log('=================================> ',user);
+            // //console.log('=================================> ',user);
             return user;
           }catch(err){
             return null; 
@@ -54,14 +54,14 @@ let map = new Map <any , any>();
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
-      console.log("Im hererererererere");
+      //console.log("Im hererererererere");
       this.logger.log(`connected : ${client.id}`  );
       
       const user = await this.getUser(client);
-      console.log(user);
+      //console.log(user);
       if(user){
         map.set(user.id, client.id);
-        console.log(map);
+        //console.log(map);
       }
     }
 
@@ -94,7 +94,7 @@ let map = new Map <any , any>();
         if(tab.filter(e => e == element.messageDMs).length == 0)
           tab.push(element.messageDMs);
       });
-      // console.log("dmschat :: ", tab);
+      // //console.log("dmschat :: ", tab);
       this.server.emit('psotOldCnv'  , tab );
     }
 
@@ -119,7 +119,7 @@ let map = new Map <any , any>();
                   ]
                 },
             });
-            // console.log("dmschat :: ", dMSChat);
+            // //console.log("dmschat :: ", dMSChat);
             if (!dMSChat){
                 const dMSChat1 =  await this.prisma.dmschat.create({
                     data: {
@@ -138,10 +138,10 @@ let map = new Map <any , any>();
     //////////////////send messages ///////////////////////
     @SubscribeMessage('msgToServer')
     async handleMessage(client : Socket, body : any) {
-      console.log("Im hererererererere" , body);
+      //console.log("Im hererererererere" , body);
         const user = await this.getUser(client);
-        console.log("=================> ",user);
-        // console.log("body sub :: ", body.id);
+        //console.log("=================> ",user);
+        // //console.log("body sub :: ", body.id);
         const idUs = map.get(body.id);
         // if(client.id == idUs){
             const dMSChat1 =  await this.prisma.dmschat.create({
@@ -152,7 +152,7 @@ let map = new Map <any , any>();
                 messageDMs : body.msg
               },
           });
-          console.log(idUs);
+          //console.log(idUs);
             this.server.to(idUs).emit('msgToClient', body.msg);
         // }
     }
@@ -185,15 +185,15 @@ let map = new Map <any , any>();
     // // this.server.handlshake.cookiee;
     // onModuleInit(){
     //     this.server.on('connection', (socket) =>{
-    //         console.log(socket.id);
-    //         console.log("connected");
+    //         //console.log(socket.id);
+    //         //console.log("connected");
     //     });
 
     // }
 
     // @SubscribeMessage('newMessage')
     // onNewMessage( client: Socket, @MessageBody() body : any){
-    //     console.log(client);
+    //     //console.log(client);
 
     //     this.server.emit('onMessage', body)
 

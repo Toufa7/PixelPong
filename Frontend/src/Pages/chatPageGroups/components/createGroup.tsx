@@ -8,7 +8,7 @@ const CreatingGroup = () => {
 	const password : string		= document.getElementById("password_field")?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload"]')?.files[0];
 	const regEx 				= /^[A-Za-z0-9_]{5,15}$/;
-	console.log("Choice => ", choice)
+	//console.log("Choice => ", choice)
 	/**
 	 * TODO: Need en endpoint for creating group
 	*/
@@ -17,21 +17,21 @@ const CreatingGroup = () => {
 	// 	textAlign: "center",
 	// 	width: '300px',
 	// }
-	console.log("Privacy -> ", choice)
+	//console.log("Privacy -> ", choice)
 	if (regEx.test(groupName) && groupAvatar && choice)
 	{
 		const data = new FormData();
 		data.append('files', groupAvatar);
 		if (choice == 0) {
-			console.log(`Group Name ${groupName} | Privacy Public`)
+			//console.log(`Group Name ${groupName} | Privacy Public`)
 			axios.post(endpoint, {groupname: groupName, avatar: groupAvatar,  privacy: "public"}, {withCredentials: true});
 		}
 		else if (choice == 1) {
-			console.log(`Group Name ${groupName} | Privacy Private`)
+			//console.log(`Group Name ${groupName} | Privacy Private`)
 			axios.post(endpoint, {groupname: groupName, avatar: groupAvatar,  privacy: "private"}, {withCredentials: true});
 		}
 		else {
-			console.log(`Group Name ${groupName} | Group Password ${password} | Privacy Protected`)			
+			//console.log(`Group Name ${groupName} | Group Password ${password} | Privacy Protected`)			
 			axios.post(endpoint, {groupname: groupName, groupPassword: password, avatar: groupAvatar, privacy: "protected"}, {withCredentials: true});
 		}
 	}
@@ -66,7 +66,7 @@ const CreateGroup = () => {
 	const [password, setPassword] = useState('');
 
 	const handlePasswordChange = (event : string) => {
-		console.log("Event ", event);
+		//console.log("Event ", event);
 		const maskedValue = event.replace(/./g, '*');
 		setPassword(maskedValue);
 	};

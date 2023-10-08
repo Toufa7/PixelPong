@@ -67,7 +67,7 @@ const GroupsList = () => {
 		setGroupName(groupName);
 	}
 	let location = useLocation();
-	console.log("Location => ", location);
+	//console.log("Location => ", location);
 	const [joinGroup, setJoinGroup] = useState(true);
 	return (
 		<div className="chatGroupesDiv">

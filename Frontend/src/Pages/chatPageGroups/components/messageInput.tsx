@@ -15,17 +15,17 @@ const messageInput = (props: any) => {
     const message = document.querySelector('.messageInputBox').value;
     if (message != '')
     {
-      console.log('MSG: ', message);
+      //console.log('MSG: ', message);
       props.onMessageInput(message);
       firstRef.current.value = '';
     }
     // const endpnt = "https://dummyapi.io/data/v1/user?created=1"
     // axios.get(endpnt, message)
     // .then((res) =>{
-    //   console.log("Respon -> " ,res);
+    //   //console.log("Respon -> " ,res);
     // })
     // .catch((err) =>{
-    //   console.log(err);
+    //   //console.log(err);
     // })
   }
 

@@ -28,11 +28,11 @@ function TwoFa() {
     useEffect(() => {
         axios.get("http://localhost:3000/auth/2fa/set2fa", { withCredentials: true })
         .then((response) => {
-            console.log("Reponse GET -> ", response);
+            //console.log("Reponse GET -> ", response);
             updateQr(response.data);
         })
         .catch((error) => {
-            console.log("Error: ", error);
+            //console.log("Error: ", error);
         });
     }, []);
 
@@ -46,11 +46,11 @@ function TwoFa() {
         const data = {
             otp : a
         }
-        console.log("Code => ", a);
+        //console.log("Code => ", a);
         
         axios.post("http://localhost:3000/auth/2fa/validate", data, { withCredentials: true })
         .then((response) => {
-            console.log("Reponse ", response);
+            //console.log("Reponse ", response);
             if (response.status != 400)
             {
                 toast.success("Success");
@@ -62,7 +62,7 @@ function TwoFa() {
             
         })
         .catch((error) => {
-            console.log("Error ", error)
+            //console.log("Error ", error)
             toast.error("Invalid Code");
         })
     }

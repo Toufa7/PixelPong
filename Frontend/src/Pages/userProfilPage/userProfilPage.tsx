@@ -55,10 +55,10 @@ const Profil = () => {
             const endpoint = `http://localhost:3000/users${location.pathname}`;
             // try {
                 const response = await axios.get(endpoint, { withCredentials: true });
-                console.log("User ID ", response.data.id);
+                //console.log("User ID ", response.data.id);
                 
                 const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
-                console.log("Avatar URL  alocodee  ", avatarURL);
+                //console.log("Avatar URL  alocodee  ", avatarURL);
                 try {
                     await axios.get(avatarURL, { withCredentials: true });
                     setUserData(() => ({
@@ -110,10 +110,10 @@ const Profil = () => {
                                     setIsFriend(true)
                                     axios.post("http://localhost:3000/users/sendFriendRequest",userData, { withCredentials: true })
                                     .then((res) => {
-                                        console.log("This Dat -> ", res);
+                                        //console.log("This Dat -> ", res);
                                     })
                                     .catch((error) => {
-                                        console.log(error);
+                                        //console.log(error);
                                     })
                                 }
                             }>Add Friend</a>
@@ -154,19 +154,19 @@ const GroupsAndFriends = () => {
       });
       const cookie = new Cookies();
       const token = jwt_decode(cookie.get('jwt'));
-      console.log("Token ", token);
+      //console.log("Token ", token);
       useEffect(() => {
           async function checking() {
             await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
             .then((response) => {
-                console.log("Res ", response)
+                //console.log("Res ", response)
                 setAvataStatus(() => ({
                     avatar: `http://localhost:3000/auth/avatar/${token.id}`,
                     check: false
                   }));
             })
             .catch(erro => {
-              console.log(`Error ${erro}`);
+              //console.log(`Error ${erro}`);
             })
         }
         checking(); 
@@ -178,11 +178,11 @@ const GroupsAndFriends = () => {
             <div className="gAndFTabs">
               <button className='A' onClick={() => {
                     setlabel(true)
-                    console.log("Groups")
+                    //console.log("Groups")
                 }}>Groups</button>
               <button className='B' onClick={() => {
                 setlabel(false)
-                console.log("Friends")
+                //console.log("Friends")
                 }}>Friends</button>
             </div>
             <div className="gAndFContent">

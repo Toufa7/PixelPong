@@ -82,7 +82,7 @@ const TopContainer = () => {
 // 	const socket = useContext(socketContext);
 // 	useEffect(()=>{
 // 		socket?.on("connect",()=>{
-// 			console.log("im connected");
+// 			//console.log("im connected");
 // 	})
 // 	},[]);
 // }
@@ -230,7 +230,7 @@ const BottomRight= () => {
 		fetchData();
 	}, []);
 
-	console.log("userData ", userData)
+	//console.log("userData ", userData)
 
 	const win = "#ff7670";
 	const lose = "#009e73";
@@ -263,7 +263,7 @@ export default function Home() {
 	const AcceptFriend = async () =>  {
 		await axios.patch("http://localhost:3000/users/acceptFriendRequest", {withCredentials : true})
 		.then((rese) => {
-			console.log("Notifcation Accept ", rese);
+			//console.log("Notifcation Accept ", rese);
 		})
 
 	}
@@ -271,14 +271,14 @@ export default function Home() {
 	const RefuseFriend = async () => {
 		await axios.patch("http://localhost:3000/users/refuseFriendRequest", {withCredentials : true})
 		.then((rese) => {
-			console.log("Notifcation Accept ", rese);
+			//console.log("Notifcation Accept ", rese);
 		})
 	}
 
 
   useEffect(() => {
 	socket.on('notification', (data) => {
-		console.log('Received notification:', data);
+		//console.log('Received notification:', data);
 		const audio = new Audio(notification);
 		audio.play();
 		toast.custom(

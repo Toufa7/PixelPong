@@ -120,22 +120,22 @@ import { Paddle } from './paddle.class';
             if (((x_ball > pos.x && x_ball < pos.x + pw && y_ball > pos.y && y_ball < pos.y + ph) 
             || (x_ball > pos_ai.x && x_ball < pos_ai.x + pw_ai && y_ball > pos_ai.y && y_ball < pos_ai.y + ph_ai))){
                 if (x_ball < screen_width / 2){
-                    console.log("hit left half")
+                    //console.log("hit left half")
                     if(y_ball > (pos.y + 15) && y_ball < (pos.y + ph - 11)){
-                        console.log("hit mid !!");
+                        //console.log("hit mid !!");
                         this.pos.x = this.pos.x + 8;
                         this.ball_speed_x = -this.ball_speed_x;
                         // this.collision_front = true;
                         return(true);
                     }
                     else{
-                        console.log("hit corner !!");
-                        console.log(pos.y);
+                        //console.log("hit corner !!");
+                        //console.log(pos.y);
                         this.pos.x = this.pos.x + 8;
                         this.ball_speed_x = -this.ball_speed_x;
     
                         this.r = this.ball_ob.random(0,2);
-                        console.log("r--->" + this.r);
+                        //console.log("r--->" + this.r);
                         // if (Math.floor(this.r))
                         //     this.ball_speed_y = -this.ball_speed_y;
                         // this.collision_front = true;
@@ -143,23 +143,23 @@ import { Paddle } from './paddle.class';
                     }
                 }
                 else{
-                    console.log("right half");
+                    //console.log("right half");
                     if(y_ball > (pos_ai.y + 15) && y_ball < (pos_ai.y + ph_ai - 11)){
                         this.pos.x = this.pos.x - 8;
                       // this.collision_happend = true;
                         this.ball_speed_x = -this.ball_speed_x;
-                        console.log("---hit mid !!");
+                        //console.log("---hit mid !!");
                         // this.collision_front = true;
                         return(false);
                     }
                     else{
                       // this.collision_happend = true;
                         this.pos.x = this.pos.x - 8;
-                        console.log("---hit corner !!");
+                        //console.log("---hit corner !!");
                         this.ball_speed_x = -this.ball_speed_x;
     
                         this.r = this.ball_ob.random(0,2);
-                        console.log("r--->" + this.r);
+                        //console.log("r--->" + this.r);
                         // if (Math.floor(this.r))
                         //     this.ball_speed_y = -this.ball_speed_y;
                         // this.collision_front = true;
@@ -188,7 +188,7 @@ import { Paddle } from './paddle.class';
         // public get_side_to_punch(paddle : Paddle) : string{
         //     if (paddle.pos.x < screen_width / 2 
         //     && (this.pos.x <= screen_width / 2 && this.pos.x >= paddle.pos.x)){
-        //       console.log("left side");
+        //       //console.log("left side");
         //         return ("left side");
         //     }
         //     return("nothing");
@@ -198,7 +198,7 @@ import { Paddle } from './paddle.class';
         //   let full_power : number = 500
         //     let reset_punch = this.check_collision(paddle,ai_paddle);
         //       if (this.ball_ob.keyIsPressed){
-        //         console.log("SPACE");
+        //         //console.log("SPACE");
         //         if (this.super_punch && this.get_side_to_punch(paddle) === "left side" 
         //               && this.ball_ob.keyCode === 32 && paddle.palyer_system.sp_power_points == full_power){
     
@@ -206,12 +206,12 @@ import { Paddle } from './paddle.class';
         //           this.ball_speed_y = this.ball_speed_x + 40;
         //           paddle.palyer_system.sp_power_points = 0;
         //           this.super_punch = false;
-        //           console.log("SUPER PUNCH !!!");
+        //           //console.log("SUPER PUNCH !!!");
         //         }
         //       }
     
             //   if (reset_punch && this.super_punch === false){
-            //     console.log("super punch deplited!!");
+            //     //console.log("super punch deplited!!");
     
             //     //y- Reseting speed of ball
                 
@@ -220,11 +220,11 @@ import { Paddle } from './paddle.class';
             //       this.ball_speed_y = Math.floor(rdn) ? -10 : 10;
             //       reset_punch = false;
             //   }
-            // console.log("in");
-            // console.log(this.ball_speed_x);
-            // console.log(this.ball_speed_y);
+            // //console.log("in");
+            // //console.log(this.ball_speed_x);
+            // //console.log(this.ball_speed_y);
             // this.check_collision(paddle1,paddle2);
-            // if (this.collision_front){console.log("collided with player");}
+            // if (this.collision_front){//console.log("collided with player");}
             // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
             // this.pos.x = this.pos.x + this.ball_speed_x;
             // this.pos.y = this.pos.y + this.ball_speed_y;
@@ -250,7 +250,7 @@ import { Paddle } from './paddle.class';
         //       this.update_pos(paddle,Ai_pd);
             
         //     canvas.mousePressed((event : any) =>{
-        //         // console.log("mouse pressed");
+        //         // //console.log("mouse pressed");
         //         this.pos.x = this.pos.x + 8;
         //         this.shot = true;
         //       })
