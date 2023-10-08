@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom/client'
 
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
-
+import jwt_decode from "jwt-decode";
 /******************* Includes  *******************/
 import NavBar from './Pages/addons/NavBar';
 import Stars from './Pages/addons/Stars';
@@ -158,9 +158,33 @@ const Redirect2FA = () => {
 
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
-	const jwt = cookies.get('jwt');	
+	const jwt = cookies.get('jwt');
+	const token = jwt_decode(jwt);
+	console.log("Token -> ", token)
+	const [data, setData] = useState(false);
 
-	if (jwt) {
+	axios.get(`http://localhost:3000/users/${token.id}`, {withCredentials: true})
+	.then((response) => {
+		// console.log("Inside -> ", response);
+		setData(response.data);
+	})
+
+
+	// console.log("Data -> ", data);
+
+
+
+
+
+
+
+
+
+
+
+
+
+	if (jwt && data) {
 		return (
 		<BrowserRouter>
 			<Routes>
@@ -171,13 +195,21 @@ const RedirectToSettings = () => {
 				<Route path="profil/*"	Component={OtherUser}/>
 				<Route path="chat"		Component={ChatPage}/>
 				<Route path="/groups"	Component={ChatGroupsComponents}/>
-				<Route path="*" 		element={<ErrorPage/>} />			
 			</Routes>
 		</BrowserRouter>
 		);
 		
 	}
-	else
+	else if (jwt && !data){
+		return (
+			<BrowserRouter>
+				<Routes>
+					<Route path="*"	 element={<Navigate to="/two-factor-authentication"/>}/>
+				</Routes>
+			</BrowserRouter>
+		);	
+	}
+	else if (!jwt)
 	{
 		return (
 			<BrowserRouter>
