@@ -1,49 +1,39 @@
-$orange : orange;
+$orange : rgb(56, 53, 53);
 $Border_option : solid 4px black;
-$child_width : 1900px;
-$child_height : 700px;
-
+$child_width : 900px;
+$child_height : 300px;
+$gap : 4vh;
+$padding : 4vh;
+$color : #48CAE4;
 body {
     background: $orange;
 }
 
+#root{
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-#Parent{
-    display: flex;
-    // height: 100vh;
-    // width: 100vw;
-    transform: translateY(50%);
-    align-items: center;
-    align-self: center;
-    justify-content: center;
+#child{
     background-color: rebeccapurple;
-    
-    #canvas_renderer{
-    display: flex;
-    text-align-last: center;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
+    // padding: 5px;
+    width: 1050px;
+    height: 500px;
+    // margin: 15em;
+    line-height: 20px;
     border: $Border_option;
-    width: $child_width;
-    height: $child_height;
-    background-color : red;
+    text-align: center;
     }
+
 }
 
 @media (max-width: 800px) {
-    #Parent{
-        flex-shrink: 1;
-        #canvas_renderer {
-            flex-shrink: 1;
+    #root{
+        #child{
         background-color: green;
         }
     }
 }
-
-// @media screen and (min-width: 1440px) {
-//     #Parent{
-//         transform: translateY(50%);
-//         background-color: blanchedalmond;
-//     }
-// }

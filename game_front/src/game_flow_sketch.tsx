@@ -17,6 +17,8 @@ import f from "./assets/thirteen_pixel_fonts.ttf";
 // import loading from "./assets/loading.gif";
 import over_g from "./assets/wdS.gif";
 import { Socket, io } from 'socket.io-client';
+import { socket } from './socket_setup/client-connect';
+import { id_player } from './components/render_game_sketch_components';
 
 //y------------------------------------------
 //h-   -------------------------------------
@@ -26,8 +28,8 @@ import { Socket, io } from 'socket.io-client';
 let canvas : p5Types.Renderer;
 export let screen_width = 1050;
 export let screen_height = 500;
-let id_player : any;
-export let socket : Socket;
+// let id_player : any;
+// export let socket : Socket;
 
 
 
@@ -101,63 +103,48 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
   });
 }
 
+// export const Game_instance = () =>{
 
-function console_resize(){
-  let p = document.getElementById('canvas_renderer');
-  let width = p?.offsetWidth;
-  let height = p?.offsetHeight;
-  console.log("Window resized");
-  console.log("width -->" + width + " height " + height);
-}
-
-export const Game_instance = () =>{
-
-  const [newsocket, setScoket] = useState<Socket>();
-  const [isConnected , setConnected] = useState<boolean>(false);
-  // const [width,setWidth] = useState();
+//   const [newsocket, setScoket] = useState<Socket>();
+//   const [isConnected , setConnected] = useState<boolean>(false);
 
 
-  useEffect(()=>{
-    if (!isConnected){
-      socket = io("ws://localhost:5000/Game" , { path : '/online' ,  withCredentials: true , transports: ["websocket"] });
-      setScoket(socket);
-      setConnected(true);
-    }
-    if (isConnected){
-    socket?.on("connect",() =>{
-      id_player = socket.id;
-      socket?.emit("screen_metrics",{s_w : screen_width , s_h : screen_height});
-    });
-  }
+//   useEffect(()=>{
+//     if (!isConnected){
+//       socket = io("ws://localhost:5000/Game" , { path : '/online' ,  withCredentials: true , transports: ["websocket"] });
+//       setScoket(socket);
+//       setConnected(true);
+//     }
+//     if (isConnected){
+//     socket?.on("connect",() =>{
+//       id_player = socket.id;
+//       socket?.emit("screen_metrics",{s_w : screen_width , s_h : screen_height});
+//     });
+//   }
     
-    return () => {
-        socket?.off("connect");
-        socket?.off("UpdatePlayerPos");
-        socket?.off("PlayerLeave");
-        socket?.off("PlayersOfRoom");
-        socket?.off("UpdateBallPos");
-        newsocket?.disconnect();
-        newsocket?.close();
-        setConnected(false);
-    }
+//     return () => {
+//         socket?.off("connect");
+//         socket?.off("UpdatePlayerPos");
+//         socket?.off("PlayerLeave");
+//         socket?.off("PlayersOfRoom");
+//         socket?.off("UpdateBallPos");
+//         newsocket?.disconnect();
+//         newsocket?.close();
+//         setConnected(false);
+//     }
 
-  },[newsocket]);
-
-
-  useEffect(()=>{
-    window.addEventListener("resize",console_resize);
-  },[]);
+//   },[newsocket]);
 
 
-    const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
+export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       const Frontroom : any = {};
       let MatchmakingPage : p5Types.Image;
       let font : p5Types.Font;
       let ovp : p5Types.Image;
       let change_screen :boolean = false;
       let canvasDiv : any;
-      let width;
-      let height;
+      let width : any;
+      let height : any;
     
     
     //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
@@ -216,16 +203,17 @@ export const Game_instance = () =>{
   
         p5_ob.setup = () => {
         p5_ob.frameRate(60);
-        // canvasDiv = document.querySelector('#child_canvas');
-        // width = canvasDiv?.offsetWidth;
-        //- height = canvasDiv?.offsetHeight;
-        // console.log("div--->" + height);
-        // console.log("div ----> " + width);
-        // canvas = p5_ob.createCanvas(width , height).parent('child_canvas');
-        canvas = p5_ob.createCanvas(screen_width,screen_height);
+        canvasDiv = document.getElementById('child');
+        width = document.getElementById('child')?.offsetWidth;
+        height = document.getElementById('child')?.offsetHeight;
+
+        canvas = p5_ob.createCanvas(width,height).parent(canvasDiv);
+
+        // canvas = p5_ob.createCanvas(screen_width,screen_height);
         const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;
         const canvas_y = (p5_ob.windowHeight - p5_ob.height) / 2;
         canvas.position(canvas_x,canvas_y);
+
         p5_ob.textFont(font);
         p5_ob.textSize(20);
         p5_ob.textAlign(p5_ob.CENTER, p5_ob.CENTER);
@@ -279,8 +267,8 @@ export const Game_instance = () =>{
               // p5_ob.strokeWeight(4);
               // p5_ob.stroke(51);
               // p5_ob.background("#fcba03");
-              p5_ob.background("#000000");
-              p5_ob.image(MatchmakingPage,170,0,750,550);
+              p5_ob.background(MatchmakingPage);
+              // p5_ob.image(MatchmakingPage,170,0,750,550);
               // p5_ob.fill("#000000");
               // p5_ob.text("Loading",width / 2,height / 2);
         //       // p5_ob.text("...",190,100);
@@ -305,27 +293,31 @@ export const Game_instance = () =>{
       }
       else{
           console.log("Game  Over someone forfaited");
-          p5_ob.background("#000000");
-          p5_ob.image(ovp,250,0,600,550);
+          p5_ob.background(ovp);
+          // p5_ob.image(ovp,250,0,600,550);
       }
     }
   
-    // p5_ob.windowResized = () =>{
-    //   canvasDiv = document.querySelector('#child_canvas');
-    //   width = canvasDiv?.offsetWidth;
-    //-   height = canvasDiv?.offsetHeight;
-    //   console.log("resize--> " + width);
-    //   console.log("resize--> " + height);
-    //   if (p5_ob){
-    //       p5_ob.resizeCanvas(width,height);
-    //     }
-    // }
+    p5_ob.windowResized = () =>{
+      canvasDiv = document.getElementById('child');
+      width = canvasDiv?.offsetWidth;
+      height = canvasDiv?.offsetHeight;
+      console.log("resize--> " + width);
+      console.log("resize--> " + height);
+      if (p5_ob){
+        p5_ob.resizeCanvas(width,height);
+        canvas = p5_ob.createCanvas(width,height).parent(canvasDiv);
+        const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;
+        const canvas_y = (p5_ob.windowHeight - p5_ob.height) / 2;
+        canvas.position(canvas_x,canvas_y);
+        }
+    }
   }
 
-  return (
-    <ReactP5Wrapper sketch={sketch}/>
-  )
-}
+  // return (
+  //   <ReactP5Wrapper sketch={sketch}/>
+  // )
+// }
 
 
 

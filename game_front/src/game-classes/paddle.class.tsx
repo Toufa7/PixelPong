@@ -2,7 +2,8 @@
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { convertTypeAcquisitionFromJson, isConstructorDeclaration } from 'typescript';
-import { screen_height , screen_width, socket } from '../game_flow_sketch';
+import { screen_height , screen_width } from '../game_flow_sketch';
+import { socket } from '../socket_setup/client-connect';
 // import { socket } from '../socket_setup/client-connect';
 
 
