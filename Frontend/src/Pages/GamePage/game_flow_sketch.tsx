@@ -31,11 +31,11 @@ export let screen_height = 500;
 
 function SettingUpBackWithFront(Frontroom : any , p5_ob : any){
   socket?.on("PlayersOfRoom",(Backroom : any)=>{
-    console.log("Im -->" + socket.id);
-    console.log(Backroom);
+    //console.log("Im -->" + socket.id);
+    //console.log(Backroom);
     
     if (!Frontroom[Backroom.id]){
-      console.log("creating room ...!!");
+      //console.log("creating room ...!!");
       Frontroom[Backroom.id] = {client_count : "",Player1:{Paddle:"",Ball:""},Player2:{Paddle:"",Ball:""},GameBall:""};
       Frontroom[Backroom.id].GameBall = Backroom.GameBall;
       Frontroom[Backroom.id].client_count = Backroom.client_count;
@@ -82,19 +82,19 @@ function SettingUpBackWithFront(Frontroom : any , p5_ob : any){
 
     for(const id in Frontroom){
       if (!Backroom?.Player1){
-          console.log("Player 1 disconnected or doesn't exist in room ->" + Backroom?.id);
+          //console.log("Player 1 disconnected or doesn't exist in room ->" + Backroom?.id);
           delete Frontroom[id].Player1;
       }
       if (!Backroom?.Player2){
-        console.log("Player 2 disconnected or doesn't exist in room ->" + Backroom?.id);
+        //console.log("Player 2 disconnected or doesn't exist in room ->" + Backroom?.id);
         delete Frontroom[id].Player2;
       }
     }
   //y---------------------------------------------
   
 
-  console.log("client_count--->"+Frontroom[Backroom.id].client_count);
-  console.log(Frontroom);
+  //console.log("client_count--->"+Frontroom[Backroom.id].client_count);
+  //console.log(Frontroom);
 
   });
 }
@@ -157,7 +157,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
 
 
       socket?.on("PlayerLeave",()=>{
-        console.log("You won by Forfait --->" + socket?.id);
+        //console.log("You won by Forfait --->" + socket?.id);
         socket.disconnect();
         change_screen = true;
         // p5_ob.background("#000000");
@@ -203,7 +203,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
           
           //   //r- CODE FOR DRAWING THE BALL
           if (Frontroom[id].Player1 && Frontroom[id].Player2){
-              // console.log(Player1.pos.x);
+              // //console.log(Player1.pos.x);
             if (id_of_player1 == id_player)
               Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
             else if (id_of_player2 == id_player)
@@ -214,7 +214,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
           
           //   //b- LOADING PAGE CODE
             else{
-            console.log("A player is missing");
+            //console.log("A player is missing");
             // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
             // p5_ob.image(load,0,0);
             p5_ob.background("#000000");
@@ -240,7 +240,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
           
         }
       }else{
-        console.log("Game  Over someone forfaited");
+        //console.log("Game  Over someone forfaited");
         p5_ob.background("#000000");
         p5_ob.image(ovp,250,0,600,550);
       }
@@ -266,14 +266,14 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
 
 
 
-          // console.log("I got Coords");
-          // console.log(Backroom.Player1?.y);
+          // //console.log("I got Coords");
+          // //console.log(Backroom.Player1?.y);
 
 
 
 
-   // console.log("My Player ID --> "+ id_player);
-      // console.log("ID of Player --->" + id_player);
+   // //console.log("My Player ID --> "+ id_player);
+      // //console.log("ID of Player --->" + id_player);
       //   frontendPlayers[id_player]?.update_Player_pos(canvas);
 
 
@@ -298,12 +298,12 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   //   }
   // }  
 
-  // //     console.log(data.msg);
+  // //     //console.log(data.msg);
   // //     // players[data.Players.id] = new Paddle(data.Players.x,20,80,data.Players.y,p5_ob);
   // //     // players[data.Players] = new Paddle()
   // //     // socket?.emit("populate-toserver",{Player:data.Players});
-  // //     // console.log(players);
-  //   // console.log(frontendPlayers[socket.id]);
-  //   // console.log(socket.id);
-  //   // console.log(frontendPlayers[socket.id]);
+  // //     // //console.log(players);
+  //   // //console.log(frontendPlayers[socket.id]);
+  //   // //console.log(socket.id);
+  //   // //console.log(frontendPlayers[socket.id]);
   // })

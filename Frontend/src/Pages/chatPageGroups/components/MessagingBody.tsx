@@ -15,7 +15,7 @@ const MessagingBody = (props: any) => {
         // });
 		
 		setMessaging(prevMessaging => [...prevMessaging, newMessage]);
-		console.log(messaging);
+		//console.log(messaging);
 	};
 
 	return (

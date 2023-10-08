@@ -7,7 +7,7 @@
 
 // const Messages = () => {
 //   const socket = useContext(socketContext);
-//   console.log("Socket Connected");
+//   //console.log("Socket Connected");
   
 //   return (
 //     <div className="messagesDiv">

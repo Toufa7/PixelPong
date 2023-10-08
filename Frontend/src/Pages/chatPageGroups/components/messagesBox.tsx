@@ -12,7 +12,7 @@ interface groupInfo {
 const Messages = (props : groupInfo) => {
   // const socket = useContext(socketContext);
   const [clicked, isClicked] = useState(true);
-  console.log("Socket Connected");
+  //console.log("Socket Connected");
   
   return (
     <div className="messagesDivGroup">

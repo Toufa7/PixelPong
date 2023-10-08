@@ -95,10 +95,10 @@ const twoFAComponents = () => {
 }
 const HomeComponents = () => {
 	// const socket = useContext(socketContext);
-	// console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
+	// //console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
 	// useEffect(()=>{
 	// 	socket?.on("connect",()=>{
-	// 		console.log("im connected");
+	// 		//console.log("im connected");
 	// 	socket.close()
 	// })
 	// },[]);
@@ -142,7 +142,7 @@ const RedirectToSettings = () => {
 			console.log(error);
 		}
 	};
-	fetchTwoFAStatus();
+	fetchTwoFAVerificatoin();
 	}, []);
 
 	const [twoFAStatus, setTwoFAStatus] = useState(false);
@@ -155,7 +155,7 @@ const RedirectToSettings = () => {
 			setTwoFAStatus(response.data);
 		}
 		catch (error) {
-			console.log(error);
+			//console.log(error);
 		}
 	};
 	fetchTwoFAVerificatoin();

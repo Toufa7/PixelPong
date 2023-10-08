@@ -60,7 +60,7 @@ export class AuthController {
         return res.redirect('http://localhost:5173/home');
       }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
@@ -75,7 +75,7 @@ export class AuthController {
       const acces_token = this.authService.fourtwoLogin(req.user);
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
-      // console.log('1st time loggin -> ', user.firstlogin);
+      // //console.log('1st time loggin -> ', user.firstlogin);
       if (user.firstlogin)
         return res.redirect('http://localhost:5173/settings');
       else{
@@ -85,7 +85,7 @@ export class AuthController {
       }
       // return res.redirect('signup-success');
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }

@@ -82,7 +82,7 @@ const TopContainer = () => {
 // 	const socket = useContext(socketContext);
 // 	useEffect(()=>{
 // 		socket?.on("connect",()=>{
-// 			console.log("im connected");
+// 			//console.log("im connected");
 // 	})
 // 	},[]);
 // }
@@ -230,7 +230,7 @@ const BottomRight= () => {
 		fetchData();
 	}, []);
 
-	console.log("userData ", userData)
+	//console.log("userData ", userData)
 
 	const win = "#ff7670";
 	const lose = "#009e73";

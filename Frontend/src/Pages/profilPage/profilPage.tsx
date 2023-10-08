@@ -65,7 +65,7 @@ const Profil = () => {
                 axios.get(idx, {withCredentials: true})))
                 .then(axios.spread((avatarRes, userRes) => 
                 {
-                    console.log("AVATAR " ,avatarRes);
+                    //console.log("AVATAR " ,avatarRes);
                     setUserData(() => ({
                         avatar: `http://localhost:3000/auth/avatar/${token.id}`,
                         username: userRes.data.username,
@@ -126,19 +126,19 @@ const GroupsAndFriends = () => {
       });
       const cookie = new Cookies();
       const token = jwt_decode(cookie.get('jwt'));
-      console.log("Token ", token);
+      //console.log("Token ", token);
       useEffect(() => {
           async function checking() {
             await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
             .then((response) => {
-                console.log("Res ", response)
+                //console.log("Res ", response)
                 setAvataStatus(() => ({
                     avatar: `http://localhost:3000/auth/avatar/${token.id}`,
                     check: false
                   }));
             })
             .catch(erro => {
-              console.log(`Error ${erro}`);
+              //console.log(`Error ${erro}`);
             })
         }
         checking(); 
@@ -149,11 +149,11 @@ const GroupsAndFriends = () => {
             <div className="gAndFTabs">
               <button className='A' onClick={() => {
                     setlabel(true)
-                    console.log("Groups")
+                    //console.log("Groups")
                 }}>Groups</button>
               <button className='B' onClick={() => {
                 setlabel(false)
-                console.log("Friends")
+                //console.log("Friends")
                 }}>Friends</button>
             </div>
             <div className="gAndFContent">
