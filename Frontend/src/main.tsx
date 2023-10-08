@@ -88,7 +88,6 @@ const twoFAComponents = () => {
 	return (
 		<>
 			<Stars/>
-			<NavBar/>
 			<TwoFa/>
 		</>
 	);
@@ -159,7 +158,8 @@ const Redirect2FA = () => {
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
 	const jwt = cookies.get('jwt');	
-	if (jwt != null) {
+
+	if (jwt) {
 		return (
 		<BrowserRouter>
 			<Routes>

@@ -119,14 +119,22 @@ export class UsersController {
 
   @Patch('acceptFriendRequest')
   async acceptFriendRequest(@Body() body: FriendrequestDto) {
-    return await this.usersService.acceptFriendRequest(
-      body.id,
+    const friendrequest = await  this.usersService.findFriendRequestIdBySenderReceiver(
       body.userId,
-      body.friendId,
+      body.from)
+      console.log("Bodyyyy", body)
+    const find = await  this.usersService.acceptFriendRequest(
+      friendrequest,
+      body.userId,
+      body.from,
     );
+    return find;
   }
   @Patch('refuseFriendRequest/')
   async refuseFriendRequest(@Body() body: FriendrequestDto) {
-    return await this.usersService.refuseFriendRequest(body.id);
+    const friendrequest = await  this.usersService.findFriendRequestIdBySenderReceiver(
+      body.userId,
+      body.from)
+    return await this.usersService.refuseFriendRequest(friendrequest);
   }
 }
