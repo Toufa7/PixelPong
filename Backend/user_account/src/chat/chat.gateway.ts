@@ -77,9 +77,10 @@ let map = new Map <any , any>();
 
     ////////////////////////////////// -----DM-- ////////////////////////////////
 
-    /////////////////get old convetation ///////////////////////
+    ///////////////get old convetation ///////////////////////
     @SubscribeMessage('getOldCnv')
-    async getConv(client : Socket, id : any) {
+    async getConv(client : Socket) {
+      console.log('Hello from Backend');
       const user = await this.getUser(client);
       const dMSChat1 =  await this.prisma.dmschat.findMany({
         where: {
@@ -91,18 +92,22 @@ let map = new Map <any , any>();
       });
       let tab : string[] = [];
       dMSChat1.forEach(element => {
-        if(tab.filter(e => e == element.messageDMs).length == 0)
-          tab.push(element.messageDMs);
+        if(tab.filter(e => e == element.receiverId).length == 0)
+          tab.push(element.receiverId);
       });
       // console.log("dmschat :: ", tab);
-      this.server.emit('psotOldCnv'  , tab );
+      this.server.emit('postOldCnv'  , tab );
     }
 
+
+    // how to use this in front end
+    // emit using this event ('getOldCnv')
+    // receive on ('postOldCnv')
 
 
 
     //////////////////get messages ///////////////////////
-    @SubscribeMessage('getMsg')
+    @SubscribeMessage('getOldMsg')
     async getMsg(client : Socket, id : any) {
       const user = await this.getUser(client);
       const dMSChat =  await this.prisma.dmschat.findMany({
@@ -120,20 +125,20 @@ let map = new Map <any , any>();
                 },
             });
             // console.log("dmschat :: ", dMSChat);
-            if (!dMSChat){
-                const dMSChat1 =  await this.prisma.dmschat.create({
-                    data: {
+            // if (!dMSChat){
+            //     const dMSChat1 =  await this.prisma.dmschat.create({
+            //         data: {
         
-                      sender: {connect: {id: user.id}},
-                      receiver: {connect: {id:id}},
-                      messageDMs : ""
-                    },
-                });
-                this.server.emit('msgToClient'  , dMSChat1 );
-            }
-            else{
-              this.server.emit('msgToClient'  , dMSChat);
-            }
+            //           sender: {connect: {id: user.id}},
+            //           receiver: {connect: {id:id}},
+            //           messageDMs : ""
+            //         },
+            //     });
+            //     this.server.emit('msgToClient'  , dMSChat1 );
+            // }
+            // else{
+              this.server.emit('postOldMsg'  , dMSChat);
+            // }
     }
     //////////////////send messages ///////////////////////
     @SubscribeMessage('msgToServer')
@@ -156,6 +161,9 @@ let map = new Map <any , any>();
             this.server.to(idUs).emit('msgToClient', body.msg);
         // }
     }
+
+
+    ///frontend send body{idre , msg}
 
     ////////////////////////////////// -----ROMM-- ////////////////////////////////
 

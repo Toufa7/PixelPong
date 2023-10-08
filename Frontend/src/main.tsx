@@ -142,7 +142,7 @@ const RedirectToSettings = () => {
 			console.log(error);
 		}
 	};
-	fetchTwoFAVerificatoin();
+	// fetchTwoFAVerificatoin();
 	}, []);
 
 	const [twoFAStatus, setTwoFAStatus] = useState(false);

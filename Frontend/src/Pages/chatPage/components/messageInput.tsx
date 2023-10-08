@@ -26,13 +26,14 @@ const messageInput = (props: any) => {
 
     interface chatAgent
     {
-        username: string;
         id: string;
+        username: string;
         pic: string;
-        side: boolean;
+        side: number;
         message: string;
         timestamp: string;
     }
+    
 
     const firstRef = useRef(null);
     // const [input, setInput] = useState('');
