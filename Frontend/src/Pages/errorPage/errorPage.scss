@@ -1,7 +1,6 @@
 body {
     height: 98vh;
     width: 99vw;
-    background-color: orange;
     background: url('./assets/windows-xp-bliss.jpg');
     background-position: center;
     background-repeat: no-repeat;
@@ -47,11 +46,6 @@ body {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-
-            // .progressBar
-            // {
-                
-            // }
         }
 
         .directionButtons

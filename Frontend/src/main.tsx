@@ -19,7 +19,8 @@ import axios from 'axios';
 import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
-import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
+import OtherProfilPage from './Pages/userProfilPage/userProfilPage';
+import ErrorPage from './Pages/errorPage/errorPage';
 
 export const OtherUser = () => {
 	return (
@@ -172,6 +173,8 @@ const RedirectToSettings = () => {
 				<Route path="profil/*"	Component={OtherUser}/>
 				<Route path="chat"		Component={ChatPage}/>
 				<Route path="/groups"	Component={ChatGroupsComponents}/>
+				<Route path="*"			element={<p>404</p>}/>
+
 			</Routes>
 		</BrowserRouter>
 		);
