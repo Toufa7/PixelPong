@@ -400,6 +400,10 @@
                                 background-color: transparent;
                                 outline: none;
                                 border: none;
+
+                                :hover  {
+                                    transform: scale(0.9);
+                                }
                             }
                         }
                         

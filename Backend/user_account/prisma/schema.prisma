@@ -11,18 +11,19 @@ datasource db {
 }
 
 // i want my user to have name username email token and can add friends block freinds delete friends and this user have a level and status onilne or offline
-model User {
-  //User account
-  id        String      @id @default(uuid()) @unique
-  username  String?   @unique
-  email     String?   @unique
-  token     String?   @unique
-  twofasecret String? @unique
-  twofatoken String?
-  profileImage String?
-  twofa       Boolean? @default(false)
-  stats     Stats[]  @relation("stats")
-  status    UserStatus?
+  model User {
+    //User account
+    id        String      @id @default(uuid()) @unique
+    username  String?   @unique
+    email     String?   @unique
+    token     String?   @unique
+    twofasecret String? @unique
+    twofatoken String?
+    profileImage String?
+    twofa       Boolean? @default(false)
+    stats     Stats[]  @relation("stats")
+    status    UserStatus?
+    authenticated Boolean @default(false)
 
   // game
   achievements Achievements[] @relation("achievements")

@@ -190,7 +190,7 @@ export class UsersService {
       }),
       this.prisma.user.update({
         where: {
-          username: senderId,
+          id: senderId,
         },
         data: {
           friends: {
@@ -202,7 +202,7 @@ export class UsersService {
       }),
       this.prisma.user.update({
         where: {
-          username: recieverId,
+          id: recieverId,
         },
       data: {
         friends: {
@@ -212,21 +212,41 @@ export class UsersService {
         },
       },
     }),
+    this.prisma.friendrequest.delete({
+      where:{
+        id,
+      },
+    })
   ]);
-  this.prisma.achievements.create({
-    data: {
-      userId: senderId,
-      name: 'Add First friend',
-      achievementType: Type.ADDFRIEND,
-    },
-  });
-}
+  console.log(id);
+  }
 
 async refuseFriendRequest(id: number) {
-  await this.prisma.friendrequest.update({
+  await this.prisma.$transaction([
+  this.prisma.friendrequest.update({
     where: { id: id },
     data: { status: Status.DECLINED },
-  });
+  }),
+  this.prisma.friendrequest.delete({
+    where:{
+      id,
+    },
+  })
+])
 }
 
+
+async findFriendRequestIdBySenderReceiver(senderId: string, receiverId: string): Promise<number | null> {
+  const friendrequest = await this.prisma.friendrequest.findFirst({
+    where: {
+      senderId,
+      receiverId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  return friendrequest?.id || null;
+}
 }

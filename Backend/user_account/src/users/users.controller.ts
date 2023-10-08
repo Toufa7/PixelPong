@@ -39,6 +39,7 @@ export class UsersController {
   @Get('/:id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const user = await this.usersService.findOne(id);
+    console.log(user.authenticated) 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -119,14 +120,22 @@ export class UsersController {
 
   @Patch('acceptFriendRequest')
   async acceptFriendRequest(@Body() body: FriendrequestDto) {
-    return await this.usersService.acceptFriendRequest(
-      body.id,
+    const friendrequest = await  this.usersService.findFriendRequestIdBySenderReceiver(
       body.userId,
-      body.friendId,
+      body.from)
+      console.log("Bodyyyy", body)
+    const find = await  this.usersService.acceptFriendRequest(
+      friendrequest,
+      body.userId,
+      body.from,
     );
+    return find;
   }
   @Patch('refuseFriendRequest/')
   async refuseFriendRequest(@Body() body: FriendrequestDto) {
-    return await this.usersService.refuseFriendRequest(body.id);
+    const friendrequest = await  this.usersService.findFriendRequestIdBySenderReceiver(
+      body.userId,
+      body.from)
+    return await this.usersService.refuseFriendRequest(friendrequest);
   }
 }

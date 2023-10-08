@@ -2,10 +2,10 @@ import Messages from '../components/messages'
 //This component is used to display the conversation
 //of a user in a conversation
 
-const dmChatUser = ({userName, pic, userId}: any) => {
+const dmChatUser = ({userName, pic, userId, id}: any) => {
     
     const handleOnClick = () => {
-        userId(userName);
+        userId(id);
     };
   
     return (

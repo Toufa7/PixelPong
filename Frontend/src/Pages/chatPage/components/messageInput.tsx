@@ -1,16 +1,17 @@
 import { useState, useRef, useEffect } from 'react'
-import io from 'socket.io-client';
 import MessageComponent from './messageComponenet'
+import io from 'socket.io-client';
 import '../chatPage.scss'
 import Send from '../../../assets/images/send.svg'
 
-const Conversation = (props: any) => {    
+const Conversation = (props: any) => {
     const mesaageEndRef = useRef(null);
 
     useEffect(() => {
         mesaageEndRef.current?.scrollIntoView();
     }, [props.MessageArr]);
 
+    //Side 0 (Right) for sender Side 1 (Left) for receiver
     return (
         <div className="conversationDiv">
         {props.MessagesArr.map((message: string, index:number) => (
@@ -21,7 +22,18 @@ const Conversation = (props: any) => {
     );
   }
 
-const messageInput = () => {
+const messageInput = (props: any) => {
+
+    interface chatAgent
+    {
+        username: string;
+        id: string;
+        pic: string;
+        side: boolean;
+        message: string;
+        timestamp: string;
+    }
+
     const firstRef = useRef(null);
     // const [input, setInput] = useState('');
     const [messaging, setMessaging] = useState<string[]>([]);
@@ -43,8 +55,8 @@ const messageInput = () => {
         <Conversation MessagesArr={messaging}/>
         <div className="messageInput">
             <form className='messageform' onSubmit={onSubmitHandler}>
-            <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
-            <button className='sendButton'><img src={Send} type="submit" ></img></button>
+                <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
+                <button className='sendButton'><img src={Send}></img></button>
             </form>
         </div>
     </>

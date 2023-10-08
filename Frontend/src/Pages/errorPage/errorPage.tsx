@@ -1,4 +1,3 @@
-import React from 'react'
 import './errorPage.scss'
 import "xp.css/dist/XP.css";
 import ErrorIcon from './assets/error_icon.png'
@@ -6,7 +5,7 @@ import Draggable from 'react-draggable';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 
-const errorPage = () => {
+const ErrorPage = () => {
 
     const navigate = useNavigate();
     return (
@@ -48,4 +47,4 @@ const errorPage = () => {
   )
 }
 
-export default errorPage
+export default ErrorPage

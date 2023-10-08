@@ -27,6 +27,7 @@
     "react-anime": "^4.1.1",
     "react-awesome-reveal": "^4.2.5",
     "react-cookie": "^6.1.1",
+    "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
     "react-h5-audio-player": "^3.9.0",

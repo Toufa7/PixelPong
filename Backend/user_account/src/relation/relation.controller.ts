@@ -40,17 +40,17 @@ export class RelationController {
   //   });
   //   return notification;
   // }
-  @Patch('acceptFriendRequest/:id')
-  async acceptFriendRequest(@Query() query: FriendrequestDto) {
-    return await this.Relationservice.acceptFriendRequest(
-      query.id,
-      query.userId,
-      query.friendId,
-    );
-  }
-  @Patch('refuseFriendRequest/:id')
-  async refuseFriendRequest(@Query() query: FriendrequestDto) {
-    return await this.Relationservice.refuseFriendRequest(query.id);
-  }
+  // @Patch('acceptFriendRequest/:id')
+  // async acceptFriendRequest(@Query() query: FriendrequestDto) {
+  //   return await this.Relationservice.acceptFriendRequest(
+  //     query.id,
+  //     query.userId,
+  //     query.friendId,
+  //   );
+  // }
+  // @Patch('refuseFriendRequest/:id')
+  // async refuseFriendRequest(@Query() query: FriendrequestDto) {
+  //   return await this.Relationservice.refuseFriendRequest(query.id);
+  // }
   // @Get('')
 }
