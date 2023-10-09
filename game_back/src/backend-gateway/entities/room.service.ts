@@ -136,9 +136,7 @@ export class Rooms{
         }
         }
         delete Players.players[Player_id];
-        // server.to(room_id).emit("UpdatePlayerPos",Players.players);
         console.log(this.rooms);
-        // console.log(Players.players);
         console.log("---------------------DDiiiDD-------------------------");
     }
 

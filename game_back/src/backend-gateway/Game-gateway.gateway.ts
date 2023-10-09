@@ -55,46 +55,20 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       const Room = this.Rooms.rooms[id];
       if (Room.Player1?.id == Player_deleted  || Room.Player2?.id == Player_deleted){
         this.Room_dl = this.Rooms.rooms[id];
-        // console.log("Player disconnected in Room [" + this.Room_dl + "]");
-        // console.log(this.Room_dl);
-        // console.log("-----------------SEP-------------");
         break;
       }
     }
-    // if (Player.id == this.Room_dl.Player1?.id){
-      //   console.log("-------------------SEP-----------------\n");
-      //   console.log("Player one who disconnected");
-      //   console.log(this.Room_dl.Player2?.id + " have to disconnect");
-      //   this.Rooms.CleanRoom(this.Room_dl.Player2?.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
-      //   console.log("\n-------------------------------------------");
-      // }
-      // else if (Player.id == this.Room_dl.Player2?.id){
-        //   console.log("-------------------SEP-----------------\n");
-        //   console.log("Player two who disconnected");
-        //   console.log(this.Room_dl.Player1?.id + " have to disconnect");
-        //   this.Rooms.CleanRoom(this.Room_dl.Player1?.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
-        //   console.log("\n-------------------------------------------");
-        // }
         this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
         if (this.Room_dl?.client_count > 0){
           console.log("-------------There still another Player in the room!!-------------");
           this.server.to(this.Room_dl.id).emit("PlayerLeave");
         }
 
-    // console.log("this room + [" + JSON.stringify(this.Room_dl) + "] is affected ---> Player " + Player.id);
     if (!this.Room_dl?.Player1 || !this.Room_dl?.Player2){
       console.log("ENTERED !!");
       console.log(this.Room_dl?.id);
       this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
-      // if (this.Room_dl.client_count > 0)
-      //   this.server.to(this.Room_dl.id).emit("Dis",this.Room_dl);
     }
-    // if (!this.Players.players){
-    //   for(const id in this.Rooms.rooms){
-    //     const Room = this.Rooms.rooms;
-
-    //   }
-    // }
     console.log(this.Players.players);
   }
 
@@ -213,37 +187,24 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           let y_ball = radius * (Math.sin(Room.GameBall.y + degree)) + Room.GameBall.y;
   
           if (((x_ball > Player.x && x_ball < Player.x + Player.width && y_ball > Player.y && y_ball < Player.y + Player.height))){
-              // if (x_ball < screen_width / 2){
-                  // console.log("hit left half")
                   if(y_ball > (Player.y + 20 && x_ball < Player.x + Player.width) && y_ball < (Player.y + Player.height - 20)){
                       console.log("hit mid !!");
                       Ball_x = Ball_x + 20;
                       Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-                      
-                      // Room.GameBall.y = Room.GameBall.y + 5;
-                      // if (r){
-                      //   console.log(Math.floor(r));
-                      //   // Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-                      // }
-                      // this.collision_front = true;
                       return(true);
                   }
                   else{
                       console.log("hit corner !!");
-                      // console.log(Player.y);
                       Ball_x = Ball_x + 20;
                       Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
                       // Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
                       r = Math.random() * 2;
                       if (r){
                         console.log(Math.floor(r));
-                        // Room.GameBall.y += 8;
                         Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
                       }
-                      // this.collision_front = true;
                       return(true);
                   }
-              // }
             }
         }
         return (false);
@@ -257,15 +218,12 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         this.server.to(Room.id).emit("UpdatePlayerPos",Room);
         this.server.to(Room.id).emit("UpdateBallPos",Room);
       }
-        // this.server.emit("UpdatePlayerPos",this.Players.players);
     }
 
 @SubscribeMessage("UpdateScreenmetrics")
     FillScreenMetrics(@MessageBody() screen , @ConnectedSocket() Player : Socket){
     this.screen_metrics.screen_width = screen.s_w;
     this.screen_metrics.screen_height = screen.s_h;
-    // console.log("--->screen width" + this.screen_metrics.screen_width);
-    // console.log("--->screen height" + this.screen_metrics.screen_height);
   }
 }
 
