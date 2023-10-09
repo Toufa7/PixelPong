@@ -21,6 +21,7 @@ import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
 import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
 import ErrorPage from './Pages/errorPage/errorPage';
+import { Setup } from './Pages/GamePage/Setup_ comp';
 
 export const OtherUser = () => {
 	return (
@@ -118,7 +119,7 @@ const GameComponents = () => {
 	return (
 		<>
 		<Stars/>
-		{/* <Setup/> */}
+		<Setup/>
 		</>
 	);
 }

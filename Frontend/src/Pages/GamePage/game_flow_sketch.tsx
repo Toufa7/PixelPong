@@ -31,11 +31,11 @@ export let screen_height = 500;
 
 function SettingUpBackWithFront(Frontroom : any , p5_ob : any){
   socket?.on("PlayersOfRoom",(Backroom : any)=>{
-    //console.log("Im -->" + socket.id);
+    console.log("Im -->" + socket.id);
     //console.log(Backroom);
     
     if (!Frontroom[Backroom.id]){
-      //console.log("creating room ...!!");
+      console.log("creating room ...!!");
       Frontroom[Backroom.id] = {client_count : "",Player1:{Paddle:"",Ball:""},Player2:{Paddle:"",Ball:""},GameBall:""};
       Frontroom[Backroom.id].GameBall = Backroom.GameBall;
       Frontroom[Backroom.id].client_count = Backroom.client_count;
@@ -82,19 +82,19 @@ function SettingUpBackWithFront(Frontroom : any , p5_ob : any){
 
     for(const id in Frontroom){
       if (!Backroom?.Player1){
-          //console.log("Player 1 disconnected or doesn't exist in room ->" + Backroom?.id);
+          console.log("Player 1 disconnected or doesn't exist in room ->" + Backroom?.id);
           delete Frontroom[id].Player1;
       }
       if (!Backroom?.Player2){
-        //console.log("Player 2 disconnected or doesn't exist in room ->" + Backroom?.id);
+        console.log("Player 2 disconnected or doesn't exist in room ->" + Backroom?.id);
         delete Frontroom[id].Player2;
       }
     }
   //y---------------------------------------------
   
 
-  //console.log("client_count--->"+Frontroom[Backroom.id].client_count);
-  //console.log(Frontroom);
+  console.log("client_count--->"+Frontroom[Backroom.id].client_count);
+  console.log(Frontroom);
 
   });
 }
@@ -157,7 +157,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
 
 
       socket?.on("PlayerLeave",()=>{
-        //console.log("You won by Forfait --->" + socket?.id);
+        console.log("You won by Forfait --->" + socket?.id);
         socket.disconnect();
         change_screen = true;
         // p5_ob.background("#000000");

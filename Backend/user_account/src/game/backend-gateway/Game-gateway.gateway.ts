@@ -81,13 +81,13 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           this.server.to(this.Room_dl.id).emit("PlayerLeave");
         }
 
-    console.log("this room + [" + JSON.stringify(this.Room_dl) + "] is affected ---> Player " + Player.id);
+    // //console.log("this room + [" + JSON.stringify(this.Room_dl) + "] is affected ---> Player " + Player.id);
     if (!this.Room_dl?.Player1 || !this.Room_dl?.Player2){
       console.log("ENTERED !!");
       console.log(this.Room_dl?.id);
       this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
-      if (this.Room_dl.client_count > 0)
-        this.server.to(this.Room_dl.id).emit("Dis",this.Room_dl);
+      // if (this.Room_dl.client_count > 0)
+      //   this.server.to(this.Room_dl.id).emit("Dis",this.Room_dl);
     }
     console.log(this.Players.players);
   }
@@ -115,7 +115,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       let dy : number = 10;
       if (this.Players.players[Player.id]){
         if ((Player_data.sig === "DOWN") && (Player_data.Key == Player_data.key_check)){
-          // console.log("Player will Move Down from id --->" + this.Players.players[Player.id].id);
+          // //console.log("Player will Move Down from id --->" + this.Players.players[Player.id].id);
           this.Players.players[Player.id].y += dy;
 
           if (this.Players.players[Player.id]?.y < 0){
@@ -124,19 +124,19 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
           if (this.Players.players[Player.id]?.y > this.screen_metrics.screen_height - this.Players.players[Player.id].height){
             this.Players.players[Player.id].y =  this.screen_metrics.screen_height - this.Players.players[Player.id].height;
-            // console.log(this.screen_metrics.screen_width);
+            // //console.log(this.screen_metrics.screen_width);
 
           }
           // return;
         }
         else if ((Player_data.sig === "UP") && (Player_data.Key == Player_data.key_check)){
-          // console.log("Player will Move UP from id --->" + this.Players.players[Player.id].id);
+          // //console.log("Player will Move UP from id --->" + this.Players.players[Player.id].id);
           this.Players.players[Player.id].y -= dy;
           // return;
         }
 
         else if (Player_data.sig === "MOUSE"){
-          // console.log("Mouse event " + Player_data.mouse_coord);
+          // //console.log("Mouse event " + Player_data.mouse_coord);
           this.Players.players[Player.id].y = Player_data.mouse_coord;
         }
       }
@@ -217,7 +217,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
                   //console.log("hit left half")
                   if(y_ball > (Player.y + 15) && y_ball < (Player.y + Player.height - 11)){
                       //console.log("hit mid !!");
-                      Ball_x = Ball_x + 8;
+                      // Ball_x = Ball_x + 8;
                       Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
                       // this.collision_front = true;
                       return(true);
@@ -225,7 +225,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
                   else{
                       //console.log("hit corner !!");
                       //console.log(Player.y);
-                      Ball_x = Ball_x + 8;
+                      // Ball_x = Ball_x + 8;
                       Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
   
                       // this.r = Math.random(0,2);
