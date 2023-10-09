@@ -44,7 +44,7 @@ const Dms = (props:any) => {
         pic: string;
         id: string;
     }
-    
+
     
     // const fetchUserData = () => {
     //     const [data, setData] = useState({})
@@ -64,16 +64,12 @@ const Dms = (props:any) => {
 
     // const dataUser = fetchUserData();
 
-    
     // console.log("dataUser -> ", dataUser);
     // let obj: chatUser = {userName: dataUser.userName, pic: dataUser.pic, id: dataUser.id};
-
-
-    
     
     let usersArr: chatUser[] = [];
-    let user:chatUser = {userName: "mamella", pic: "https://cdn.intra.42.fr/users/197a70ba79da6fe509bf37fad4b0b0fb/mamellal.jpg", id: "5ec73896-c9f1-48cc-9f64-be90ace0ab55"}
-    let user1:chatUser = {userName: "ibnada", pic: "https://cdn.intra.42.fr/users/694c3817bb51281e259c9b77f2788851/ibnada.jpg", id: "7141cdae-4f9c-4c6c-a02b-a7c1564ad6f5"}
+    let user:chatUser = {userName: "mamella", pic: "https://cdn.intra.42.fr/users/197a70ba79da6fe509bf37fad4b0b0fb/mamellal.jpg", id: "cdb272fa-d1e9-4105-b2cf-eb23aa2f9fa0"}
+    let user1:chatUser = {userName: "ibnada", pic: "https://cdn.intra.42.fr/users/694c3817bb51281e259c9b77f2788851/ibnada.jpg", id: "32f775de-c030-49ba-bd79-276f7f56666c"}
     
     usersArr.push(user);
     usersArr.push(user1);

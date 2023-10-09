@@ -1,10 +1,9 @@
-import mamella from '../assets/images/mamellal.jpg'
-
 const messageRightComponenet = (props: any) => {
+  console.log("Am here");
   return (
     <div className="messageRightComponent">
         <div className="messageRightInfo">
-            <img src={mamella} alt="message-fromRight" />
+            <img src={props.pic} alt="message-fromRight" />
             <span>10:30 AM</span>
         </div>
         <div className="messageRightContent">

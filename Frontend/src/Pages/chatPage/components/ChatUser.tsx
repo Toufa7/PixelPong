@@ -20,7 +20,7 @@ const ChatUser = (props:any) => {
                 setRemoteUser(response.data);
             }
             catch (error) {
-                console.log("ERROR: Getting current user info : ", error);
+                console.log("ERROR : fetchCurrentUserInfo() : ", error);
             }
         }
         fetchCurrentUserInfo(props.pcurrentUserId);
@@ -59,7 +59,7 @@ const MessagingBody = (props: any) => {
 
     return (
     <div className="MessagingBodyDiv">
-        {/* Passing Parent props to the child localUser and remoteUser */}
+        {/* Passing Parent props to the child (localUser and remoteUser) */}
         <MessageInput Sender={props.localUser} Receiver={props.remoteUser}/>
     </div>
     )
