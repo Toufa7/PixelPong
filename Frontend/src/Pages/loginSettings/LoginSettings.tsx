@@ -35,7 +35,7 @@ const RetrieveCheckSendData = () => {
                axios.post('http://localhost:3000/auth/signup-success', { username: nicknameInput }, { withCredentials: true }),
                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
             ]).then(axios.spread((responseNickname, responseAvatar) => {
-                console.log(responseNickname, responseAvatar);
+                //console.log(responseNickname, responseAvatar);
             })),
             {
                 loading: "Sending data...",
@@ -49,7 +49,7 @@ const RetrieveCheckSendData = () => {
     }
         else if (!avatar && nicknameInput.length == 0)
         {
-            console.log("No Data Need to be Shown")
+            //console.log("No Data Need to be Shown")
             document.getElementById('warning')?.showModal();
         }
         else if (!nicknameInput){
@@ -67,7 +67,7 @@ const RetrieveCheckSendData = () => {
 const Avatars = () => {
     const handleClick = (idx : number) => {
         const avatars = [{img1}.img1,{img2}.img2,{img3}.img3,{img4}.img4,{img5}.img5,{img6}.img6];
-        console.log("Avatar Seleted: " , avatars[idx])
+        //console.log("Avatar Seleted: " , avatars[idx])
     }
 
     return (

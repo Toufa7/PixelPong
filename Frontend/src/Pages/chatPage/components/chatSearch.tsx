@@ -12,7 +12,7 @@ const chatSearch = () => {
     const [visible, setVisible] = useState(true);
 
     const removeElement = () => {
-        console.log("Remove element is been called");
+        //console.log("Remove element is been called");
         setVisible((prev) => !prev);
         FoundState(false);
         notFoundState(false);

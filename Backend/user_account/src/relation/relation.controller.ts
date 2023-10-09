@@ -22,7 +22,7 @@ export class RelationController {
   ) {}
   @Get('a')
   name() {
-    console.log('hhhhhhhhh');
+    //console.log('hhhhhhhhh');
   }
   // @Post('sendFriendRequest')
   // async sendFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
@@ -30,7 +30,7 @@ export class RelationController {
   //     req.user.id,
   //     body.friendId,
   //   );
-  //   console.log('abas;go;oguaho;sgu');
+  //   //console.log('abas;go;oguaho;sgu');
   //   this.socket.hanldleSendNotification(body.friendId, req.user.id, {
   //     userId: req.user.id,
   //     type: 'friendrequestrecieved',

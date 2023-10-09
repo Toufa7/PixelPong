@@ -6,16 +6,16 @@ import { GateWayModule } from './gateaway.module';
 @Injectable()
 export class GateWayService {
   constructor(private prismaservice: PrismaService) {}
-  async createnotification(data) {
-    await this.prismaservice.notification.create({
-      data: {
-        userId: data.userId,
-        type: data.type,
-        from: data.from,
-        message: data.message,
-        username: data.username,
-        photo: data.photo,
-      },
-    });
-  }
+  // async createnotification(data) {
+  //   await this.prismaservice.notification.create({
+  //     data: {
+  //       userId: data.userId,
+  //       type: data.type,
+  //       from: data.from,
+  //       message: data.message,
+  //       username: data.username,
+  //       photo: data.photo,
+  //     },
+  //   });
+  // }
 }

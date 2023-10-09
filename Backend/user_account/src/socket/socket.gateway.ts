@@ -41,24 +41,24 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleConnection(client: Socket) {
     const jwt = await this.getUser(client);
-    console.log('client connected -->' + client.id, '  ', jwt);
+    //console.log('client connected -->' + client.id, '  ', jwt);
     this.server.emit('checkout', { msg: 'hello' });
     if (jwt) {
       const user = decode(jwt);
-      console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
-      console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
+      // //console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
+      // //console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
       this.connectedUsers.set(user['id'], client);
       const status = UserStatus.ONLINE;
-      console.log(
-        'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
-      );
+      // //console.log(
+      //   'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
+      // );
       this.userservice.updatestatus(user, status);
     }
   }
 
   async handleDisconnect(client: Socket) {
-    console.log('A client disconnected');
+    //console.log('A client disconnected');
     if (this.connectedUsers.has(client.id)) {
       const jwt = await this.getUser(client);
       if (!jwt) {
@@ -81,23 +81,23 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async hanldleSendNotification(clientId: string, senderId: string, data) {
     try {
-      await this.gatewayservice.createnotification(data);
+      // await this.gatewayservice.createnotification(data);
       const sockets = this.connectedUsers.get(clientId);
-      console.log(sockets.id)
+      //console.log(sockets.id)
 
       if (sockets) {
-        console.log('sending  ');
+        //console.log('sending  ');
         this.server.emit('notification', data);
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
   getUser(client: Socket) {
     const session = client.handshake.headers.cookie;
     if (session) {
       const jwt = session.split('=')[1];
-      console.log('session ,', jwt);
+      // //console.log('session ,', jwt);
       if (session && jwt) {
         return jwt;
       }

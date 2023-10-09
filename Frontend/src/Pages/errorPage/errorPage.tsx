@@ -1,4 +1,3 @@
-import React from 'react'
 import './errorPage.scss'
 import "xp.css/dist/XP.css";
 import ErrorIcon from './assets/error_icon.png'

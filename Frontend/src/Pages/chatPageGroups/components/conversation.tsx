@@ -7,7 +7,7 @@ const conversation = (props : any) => {
   // const chatbox = useRef(null);
   // useEffect(() => chatbox.current.scrollIntoView(false), [props.MessageArr]);
   
-  // console.log("MessaArr inside conversation ===> ", props.MessageArr);
+  // //console.log("MessaArr inside conversation ===> ", props.MessageArr);
   useEffect(() => {
     mesaageEndRef.current?.scrollIntoView();
   }, [props.MessageArr]);

@@ -110,7 +110,7 @@ export class Paddle {
           socket.emit("Player_movement",{sig:"MOUSE",mouse_coord:mouse_y});
         })
         
-        // console.log("[ x : " + this.pos.x + " , " + " y : " + this.pos.y + " ] ");
+        // //console.log("[ x : " + this.pos.x + " , " + " y : " + this.pos.y + " ] ");
 
         this.draw_paddle(this.color);
       }
