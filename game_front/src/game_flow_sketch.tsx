@@ -12,7 +12,7 @@ import { Ball } from './game-classes/Ball.class';
 //h-             WORKING IMPORTS
 //y------------------------------------------
 
-import gifMatch from './assets/dif.gif';
+import gifMatch from './assets/colors-ping.gif';
 import f from "./assets/cubecavern_memesbruh03.ttf";
 // import loading from "./assets/loading.gif";
 import over_g from "./assets/wdS.gif";
