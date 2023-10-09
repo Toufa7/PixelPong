@@ -34,7 +34,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   }
 
   handleConnection(Player: Socket) {
-        Player.on("screen_metrics",(screen)=> {
+        Player.on("PlayerEntered",(screen)=> {
           this.screen_metrics.screen_width = screen.s_w;
           this.screen_metrics.screen_height = screen.s_h;
           console.log("---------------CONNECTION SECTION ------------------")
@@ -108,13 +108,6 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
     }
   }
 
-  // @SubscribeMessage("screen_metrics")
-  // FillScreenMetrics(@MessageBody() screen , @ConnectedSocket() Player : Socket){
-  //   this.screen_metrics.screen_width = screen.s_w;
-  //   this.screen_metrics.screen_height = screen.s_h;
-  //   console.log("--->screen width" + this.screen_metrics.screen_width);
-  //   console.log("--->screen height" + this.screen_metrics.screen_height);
-  // }
 
   @SubscribeMessage("Player_movement")
     HandleMovement(@MessageBody() Player_data , @ConnectedSocket() Player : Socket){
@@ -267,12 +260,13 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         // this.server.emit("UpdatePlayerPos",this.Players.players);
     }
 
-    // @Interval(1000)
-    // CleanUp(){
-    //   if (!this.Players.players){
-    //     console.log("there is no Players")
-    //   }
-    // }
+    @SubscribeMessage("UpdateScreenmetrics")
+    FillScreenMetrics(@MessageBody() screen , @ConnectedSocket() Player : Socket){
+    this.screen_metrics.screen_width = screen.s_w;
+    this.screen_metrics.screen_height = screen.s_h;
+    console.log("--->screen width" + this.screen_metrics.screen_width);
+    console.log("--->screen height" + this.screen_metrics.screen_height);
+  }
 }
 
 

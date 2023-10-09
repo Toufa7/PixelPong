@@ -17,8 +17,8 @@ import f from "./assets/thirteen_pixel_fonts.ttf";
 // import loading from "./assets/loading.gif";
 import over_g from "./assets/wdS.gif";
 import { Socket, io } from 'socket.io-client';
-import { socket } from './socket_setup/client-connect';
-import { id_player } from './components/render_game_sketch_components';
+// import { socket } from './socket_setup/client-connect';
+// import { id_player } from './components/render_game_sketch_components';
 
 //y------------------------------------------
 //h-   -------------------------------------
@@ -28,8 +28,8 @@ import { id_player } from './components/render_game_sketch_components';
 let canvas : p5Types.Renderer;
 export let screen_width = 1050;
 export let screen_height = 500;
-// let id_player : any;
-// export let socket : Socket;
+let id_player : any;
+export let socket : Socket;
 
 
 
@@ -103,40 +103,31 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
   });
 }
 
-// export const Game_instance = () =>{
+export const Game_instance = () =>{
 
-//   const [newsocket, setScoket] = useState<Socket>();
-//   const [isConnected , setConnected] = useState<boolean>(false);
-
-
-//   useEffect(()=>{
-//     if (!isConnected){
-//       socket = io("ws://localhost:5000/Game" , { path : '/online' ,  withCredentials: true , transports: ["websocket"] });
-//       setScoket(socket);
-//       setConnected(true);
-//     }
-//     if (isConnected){
-//     socket?.on("connect",() =>{
-//       id_player = socket.id;
-//       socket?.emit("screen_metrics",{s_w : screen_width , s_h : screen_height});
-//     });
-//   }
-    
-//     return () => {
-//         socket?.off("connect");
-//         socket?.off("UpdatePlayerPos");
-//         socket?.off("PlayerLeave");
-//         socket?.off("PlayersOfRoom");
-//         socket?.off("UpdateBallPos");
-//         newsocket?.disconnect();
-//         newsocket?.close();
-//         setConnected(false);
-//     }
-
-//   },[newsocket]);
+  // const [newsocket, setScoket] = useState<Socket>();
+  // const [isConnected , setConnected] = useState<boolean>(false);
 
 
-export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
+  socket = io("ws://localhost:5000/Game" , { path : '/online' ,  withCredentials: true , transports: ["websocket"] });
+  useEffect(()=>{
+      socket?.on("connect",() =>{
+      id_player = socket.id;
+      socket?.emit("PlayerEntered",{s_w : screen_width , s_h : screen_height});
+      });
+      return () => {
+        socket?.off("connect");
+        socket?.off("UpdatePlayerPos");
+        socket?.off("PlayerLeave");
+        socket?.off("PlayersOfRoom");
+        socket?.off("UpdateBallPos");
+        // setConnected(false);
+      }
+
+  },[]);
+
+
+const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       const Frontroom : any = {};
       let MatchmakingPage : p5Types.Image;
       let font : p5Types.Font;
@@ -230,6 +221,7 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
             const id_of_player2 = Frontroom[id].Player2?.id;
             const Player1 = Frontroom[id].Player1?.Paddle;
             const Player2 = Frontroom[id].Player2?.Paddle;
+            
             if (id_of_player1 == id_player){
               Player1?.update_Player_pos(canvas);
               if (Player2 && id_of_player2 != id_player){
@@ -314,10 +306,10 @@ export const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     }
   }
 
-  // return (
-  //   <ReactP5Wrapper sketch={sketch}/>
-  // )
-// }
+  return (
+    <ReactP5Wrapper sketch={sketch}/>
+  )
+}
 
 
 
