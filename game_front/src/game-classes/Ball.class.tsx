@@ -2,7 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { convertTypeAcquisitionFromJson, isConstructorDeclaration } from 'typescript';
-import { screen_height , screen_width, socket} from '../game_flow_sketch';
+import {height, socket, width} from '../game_flow_sketch';
 // import { socket } from '../socket_setup/client-connect';
 import { Paddle } from './paddle.class';
 // import { socket } from '../socket_setup/client-connect';
@@ -75,14 +75,14 @@ import { Paddle } from './paddle.class';
         public check_collision(paddle : Paddle,ai_paddle : Paddle) : boolean{
             this.rt = this.check_collision_of_ball_pd(paddle,ai_paddle);
     
-            let by = this.ball_ob.constrain(this.pos.y,0,screen_height - 5);
+            let by = this.ball_ob.constrain(this.pos.y,0,height - 5);
     
             if(this.get_points().top < 0){
                 this.pos.y = by;
                 this.pos.x = this.pos.x + 8;
                 this.ball_speed_y = -this.ball_speed_y;
             }
-            if (this.get_points().bottom > screen_height){
+            if (this.get_points().bottom > height){
                 this.pos.y = by;
                 this.pos.x = this.pos.x - 8;
                 this.ball_speed_y = -this.ball_speed_y;
@@ -120,7 +120,7 @@ import { Paddle } from './paddle.class';
     
             if (((x_ball > pos.x && x_ball < pos.x + pw && y_ball > pos.y && y_ball < pos.y + ph) 
             || (x_ball > pos_ai.x && x_ball < pos_ai.x + pw_ai && y_ball > pos_ai.y && y_ball < pos_ai.y + ph_ai))){
-                if (x_ball < screen_width / 2){
+                if (x_ball < width / 2){
                     console.log("hit left half")
                     if(y_ball > (pos.y + 15) && y_ball < (pos.y + ph - 11)){
                         console.log("hit mid !!");

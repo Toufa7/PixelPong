@@ -12,8 +12,8 @@ import { Ball } from './game-classes/Ball.class';
 //h-             WORKING IMPORTS
 //y------------------------------------------
 
-import gifMatch from './assets/tv.gif';
-import f from "./assets/thirteen_pixel_fonts.ttf";
+import gifMatch from './assets/dif.gif';
+import f from "./assets/cubecavern_memesbruh03.ttf";
 // import loading from "./assets/loading.gif";
 import over_g from "./assets/wdS.gif";
 import { Socket, io } from 'socket.io-client';
@@ -26,8 +26,8 @@ import { Socket, io } from 'socket.io-client';
 
 
 let canvas : p5Types.Renderer;
-export let screen_width = 1050;
-export let screen_height = 500;
+// export let screen_width = 1050;
+// export let screen_height = 500;
 let id_player : any;
 export let socket : Socket;
 let canvasDiv : any;
@@ -163,7 +163,7 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         //r- Getting Position of Ball from Backend
   
         socket?.on("UpdateBallPos",(Backroom : any)=> {
-          let reverse_ball_x = screen_width - Backroom.GameBall?.x;
+          let reverse_ball_x = width - Backroom.GameBall?.x;
   
           for(const id in Frontroom){
             if (socket.id == Frontroom[id].Player1?.id){
@@ -213,7 +213,7 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         canvas.position(canvas_x,canvas_y);
 
         p5_ob.textFont(font);
-        p5_ob.textSize(20);
+        p5_ob.textSize(70);
         p5_ob.textAlign(p5_ob.CENTER, p5_ob.CENTER);
       }
       
@@ -268,8 +268,8 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
               // p5_ob.background("#fcba03");
               p5_ob.background(MatchmakingPage);
               // p5_ob.image(MatchmakingPage,170,0,750,550);
-              // p5_ob.fill("#000000");
-              // p5_ob.text("Loading",width / 2,height / 2);
+              p5_ob.fill("#000000");
+              p5_ob.text("MatchMaking ...",width / 2,(height / 2) + 230);
         //       // p5_ob.text("...",190,100);
         //       // if (id_of_player1 == id_player){
         //       //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
