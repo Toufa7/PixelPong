@@ -5,55 +5,40 @@ import MessageRightComponenet from './messageRightComponenet ';
 import '../chatPage.scss'
 import Send from '../../../assets/images/send.svg'
 
+// Class chatAgent responsible for defining the properties of each person onthe conversation
+interface chatAgent
+{
+    id: string;
+    username: string;
+    pic: string;
+    side: number;
+    message: string;
+    timestamp: string;
+}
+
 const Conversation = (props: any) =>
 {
-    interface chatAgent
-    {
-        id: string;
-        username: string;
-        pic: string;
-        side: number;
-        message: string;
-        timestamp: string;
-    }
-
     const mesaageEndRef = useRef(null);
 
     useEffect(() => {
         mesaageEndRef.current?.scrollIntoView();
-    }, [props.MessageArr]);
-
-
-    console.log("**********>", props.MessagesArr);
+    }, [props.MessagesArr]);
 
     //Side 0 (Right) for sender Side 1 (Left) for receiver
     return (
         <div className="conversationDiv">
-        {
-            props.MessagesArr.map((message: chatAgent, index:number) => (message.side == 0 ? 
-                <MessageComponent key={index} content={message.message} pic={message.pic} />
-                : <MessageRightComponenet key={index} content={message.message} pic={message.pic} />)
-                // <MessageComponent key={index} content={message.message} pic={message.pic} />
-                // if (message.side == 0) {
-                //     <MessageRightComponenet key={index} content={message.message} pic={message.pic} />
-                // }
-        )}
-        <div ref={mesaageEndRef}/>
-      </div>
+            {
+                props.MessagesArr.map((message: chatAgent, index:number) => (
+                    message.side == 0   ? <MessageComponent key={index} content={message.message} pic={message.pic} />
+                                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} />
+                ))
+            }
+            <div ref={mesaageEndRef}/>
+        </div>
     );
   }
 
 const messageInput = (props: any) => {
-
-    interface chatAgent
-    {
-        id: string;
-        username: string;
-        pic: string;
-        side: number;
-        message: string;
-        timestamp: string;
-    }
 
     const firstRef = useRef(null);
     // const [input, setInput] = useState('');

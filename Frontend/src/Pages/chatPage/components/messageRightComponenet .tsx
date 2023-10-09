@@ -1,3 +1,6 @@
+//This conponenet is responsible of displaying a message in a conversation
+//on the left side, with it's properties like picture, timestamps etc...
+
 const messageRightComponenet = (props: any) => {
   console.log("Am here");
   return (
@@ -12,8 +15,6 @@ const messageRightComponenet = (props: any) => {
             </div>
         </div>
     </div>
-
-    
   )
 }
 

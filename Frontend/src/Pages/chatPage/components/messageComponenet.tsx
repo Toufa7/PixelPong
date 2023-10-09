@@ -1,3 +1,6 @@
+//This conponenet is responsible of displaying a message in a conversation
+//on the left side, with it's properties like picture, timestamps etc...
+
 const messageComponenet = (props: any) => {
   return (
     <div className="messageComponent">
