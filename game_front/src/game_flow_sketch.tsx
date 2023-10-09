@@ -30,6 +30,9 @@ export let screen_width = 1050;
 export let screen_height = 500;
 let id_player : any;
 export let socket : Socket;
+let canvasDiv : any;
+export let width : any;
+export let height : any;
 
 
 
@@ -113,7 +116,9 @@ export const Game_instance = () =>{
   useEffect(()=>{
       socket?.on("connect",() =>{
       id_player = socket.id;
-      socket?.emit("PlayerEntered",{s_w : screen_width , s_h : screen_height});
+      width = document.getElementById('child')?.offsetWidth;
+      height = document.getElementById('child')?.offsetHeight;
+      socket?.emit("PlayerEntered",{s_w : width , s_h : height});
       });
       return () => {
         socket?.off("connect");
@@ -133,9 +138,6 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       let font : p5Types.Font;
       let ovp : p5Types.Image;
       let change_screen :boolean = false;
-      let canvasDiv : any;
-      let width : any;
-      let height : any;
     
     
     //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
@@ -173,6 +175,8 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
             }
           }
         });
+
+
         //r--------------------------------------------
   
         //r- Loading Images
@@ -197,6 +201,9 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         canvasDiv = document.getElementById('child');
         width = document.getElementById('child')?.offsetWidth;
         height = document.getElementById('child')?.offsetHeight;
+
+          console.log(width);
+          console.log(height);
 
         canvas = p5_ob.createCanvas(width,height).parent(canvasDiv);
 
@@ -225,14 +232,14 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
             if (id_of_player1 == id_player){
               Player1?.update_Player_pos(canvas);
               if (Player2 && id_of_player2 != id_player){
-                Player2.pos.x = screen_width - Player2.paddle_width;
+                Player2.pos.x = width - Player2.paddle_width;
                 Player2?.update_Player_pos(canvas);
               }
             }
             else if (id_of_player2 == id_player){
               Player2?.update_Player_pos(canvas);
               if (Player1 && id_of_player1 != id_player){
-                Player1.pos.x = screen_width - Player1.paddle_width;
+                Player1.pos.x = width - Player1.paddle_width;
                 Player1?.update_Player_pos(canvas);
               }
             }
@@ -294,9 +301,10 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
       canvasDiv = document.getElementById('child');
       width = canvasDiv?.offsetWidth;
       height = canvasDiv?.offsetHeight;
-      console.log("resize--> " + width);
-      console.log("resize--> " + height);
+      // console.log("resize--> " + width);
+      // console.log("resize--> " + height);
       if (p5_ob){
+        socket?.emit("UpdateScreenmetrics",{s_w : width , s_h : height});
         p5_ob.resizeCanvas(width,height);
         canvas = p5_ob.createCanvas(width,height).parent(canvasDiv);
         const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;

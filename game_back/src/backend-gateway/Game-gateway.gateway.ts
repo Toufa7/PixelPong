@@ -260,12 +260,12 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         // this.server.emit("UpdatePlayerPos",this.Players.players);
     }
 
-    @SubscribeMessage("UpdateScreenmetrics")
+@SubscribeMessage("UpdateScreenmetrics")
     FillScreenMetrics(@MessageBody() screen , @ConnectedSocket() Player : Socket){
     this.screen_metrics.screen_width = screen.s_w;
     this.screen_metrics.screen_height = screen.s_h;
-    console.log("--->screen width" + this.screen_metrics.screen_width);
-    console.log("--->screen height" + this.screen_metrics.screen_height);
+    // console.log("--->screen width" + this.screen_metrics.screen_width);
+    // console.log("--->screen height" + this.screen_metrics.screen_height);
   }
 }
 
