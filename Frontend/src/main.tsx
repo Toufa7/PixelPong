@@ -95,10 +95,10 @@ const twoFAComponents = () => {
 }
 const HomeComponents = () => {
 	// const socket = useContext(socketContext);
-	// console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
+	// //console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
 	// useEffect(()=>{
 	// 	socket?.on("connect",()=>{
-	// 		console.log("im connected");
+	// 		//console.log("im connected");
 	// 	socket.close()
 	// })
 	// },[]);
@@ -124,49 +124,37 @@ const GameComponents = () => {
 }
 
 
-const RedirectToSettings = () => {
+const Routing = () => {
 	const cookies = new Cookies();
-	const jwt = cookies.get('jwt');
-	const token = jwt_decode(jwt);
-	console.log("A")
+	const logged = cookies.get('jwt');
 	const [data, setData] = useState(false);
-	useEffect(() => {
-		const fetchTwoFAStatus = async () => {
-			try {
-				const endpoint1 = `http://localhost:3000/users/${token.id}`;
-				const response1 = await axios.get(endpoint1, { withCredentials: true });
-				setData(response1.data);
-				console.log("DATA -> ", response1.data);
-			}
-		catch (error) {
-			console.log(error);
-		}
-	};
-	fetchTwoFAStatus();
-	}, []);
-
 	const [twoFAStatus, setTwoFAStatus] = useState(false);
-  
 	useEffect(() => {
-		const fetchTwoFAVerificatoin = async () => {
-		try {
-			const endpoint = 'http://localhost:3000/auth/2fa/get2FAstatus';
-			const response = await axios.get(endpoint, { withCredentials: true });
-			setTwoFAStatus(response.data);
-		}
-		catch (error) {
-			console.log(error);
-		}
-	};
-	fetchTwoFAVerificatoin();
-	}, []);
-  
-
-	console.log("2FA Status => ", twoFAStatus);
-	console.log("2FA Code => ", data);
-	console.log("JWT => ", jwt);
+		const cookies = new Cookies();
+		const jwt = cookies.get('jwt');
+		const token = jwt_decode(jwt);
+		const fetchData = async () => {
+			try {
+				const endpoint = 'http://localhost:3000/auth/2fa/get2FAstatus';
+				const endpoint1 = `http://localhost:3000/users/${token.id}`;
 	
-	if (jwt) {
+				const [response, response1] = await Promise.all([
+					axios.get(endpoint1, { withCredentials: true }),
+					axios.get(endpoint, { withCredentials: true })
+				]);
+				setData(response1.data);
+				setTwoFAStatus(response.data);
+			}
+			catch (error) {
+				console.log("Error" , error);
+			}};
+			fetchData();
+	}, []);
+
+	console.log("Status => ", twoFAStatus);
+
+	if (logged) {
+		console.log("2FA Enabled And Success")
 		return (
 		<BrowserRouter>
 			<Routes>
@@ -177,28 +165,65 @@ const RedirectToSettings = () => {
 				<Route path="profil/*"	Component={OtherUser}/>
 				<Route path="chat"		Component={ChatPage}/>
 				<Route path="/groups"	Component={ChatGroupsComponents}/>
+				<Route path="/*"			element={<h1>404</h1>}/>
 			</Routes>
 		</BrowserRouter>
-		);
-		
+	);
 	}
-	// else if (jwt && twoFAStatus && !data ){
+	else
+	{
+		console.log("Not Logged Yet")
+		return (
+			<BrowserRouter>
+				<Routes>
+					<Route path="welcome"	Component={welcomePage}/>
+					<Route path="private"	Component={HomeComponents}/>
+					<Route path="/"			Component={welcomePage}/>
+					<Route path="*"			Component={LogingPageComponents}/>
+				</Routes>
+			</BrowserRouter>
+		);
+	}
+
+	// if ((logged && twoFAStatus.twofa && twoFAStatus.authenticated) || (logged && !twoFAStatus.twofa)) {
+	// 	console.log("2FA Enabled And Success")
+	// 	return (
+	// 	<BrowserRouter>
+	// 		<Routes>
+	// 			<Route path="settings"	Component={ LoginSettingsComponents} />
+	// 			<Route path="home"		Component={HomeComponents}/>
+	// 			<Route path="profil/"	Component={ProfilComponents}/>
+	// 			<Route path="game"		Component={GameComponents}/>
+	// 			<Route path="profil/*"	Component={OtherUser}/>
+	// 			<Route path="chat"		Component={ChatPage}/>
+	// 			<Route path="/groups"	Component={ChatGroupsComponents}/>
+	// 			<Route path="*"			element={<h1>404</h1>}/>
+
+	// 		</Routes>
+	// 	</BrowserRouter>
+	// 	);
+	// }
+	// else if (logged && twoFAStatus.twofa){
+	// 	console.log("2FA Enabled")
 	// 	return (
 	// 		<BrowserRouter>
 	// 			<Routes>
-	// 				<Route path="*"	 element={<Navigate to="/two-factor-authentication"/>}/>
+	// 				<Route path="*"	 Component={twoFAComponents}/>
+	// 				<Route path="private"	 Component={HomeComponents}/>
 	// 			</Routes>
 	// 		</BrowserRouter>
 	// 	);	
 	// }
-	// else
+	// else if (!logged)
 	// {
+	// 	console.log("Not Logged Yet")
 	// 	return (
 	// 		<BrowserRouter>
 	// 			<Routes>
-	// 				<Route path="/"			element={<Navigate to="welcome"/>}/>
-	// 				<Route path="welcome"	element={<Navigate to="welcome"/>}/>
-	// 				<Route path="*"			element={<Navigate to="/login"/>}/>
+	// 				<Route path="welcome"	Component={welcomePage}/>
+	// 				<Route path="private"	Component={HomeComponents}/>
+	// 				<Route path="/"			Component={welcomePage}/>
+	// 				<Route path="*"			Component={LogingPageComponents}/>
 	// 			</Routes>
 	// 		</BrowserRouter>
 	// 	);
@@ -207,7 +232,7 @@ const RedirectToSettings = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-	<RedirectToSettings/>
+	<Routing/>
 	<BrowserRouter>
 		<Routes>
 			{["welcome", "/"].map((idx) => 

@@ -22,7 +22,7 @@ const Toasts = () => {
 }
 
 
-const renderer = ({ minutes, seconds, completed }) => {
+const renderer = ({seconds , completed }) => {
   if (completed) {
     return (
         <span>You are good to go!</span>
@@ -40,7 +40,6 @@ function TwoFa() {
     useEffect(() => {
         axios.get("http://localhost:3000/auth/2fa/set2fa", { withCredentials: true })
         .then((response) => {
-            console.log("Reponse GET -> ", response);
             updateQr(response.data);
         })
         .catch((error) => {

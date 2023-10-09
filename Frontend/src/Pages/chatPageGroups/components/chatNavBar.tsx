@@ -3,8 +3,8 @@ import ChatSearch from './chatSearch'
 import CreateGroup from './createGroup';
 import ManageGroup from './mangeGroup';
 import avatarGroup from '../assets/saka.jpeg'
-import publicGroup from '../assets/public.svg'
-import protectedGroup from '../assets/protected.svg'
+// import publicGroup from '../assets/public.svg'
+// import protectedGroup from '../assets/protected.svg'
 import privateGroup from '../assets/private.svg'
 import './chatNavBar.scss'
 import { useLocation } from 'react-router-dom';
@@ -63,10 +63,10 @@ const GroupsList = () => {
 		"Brick Kittens"
 	]
 	const setOpenBox = (groupName : string) => {
-		document.getElementById('groupJoin').showModal();
+		document.getElementById('groupJoin')?.showModal();
 		setGroupName(groupName);
 	}
-	let location = useLocation();
+	const location = useLocation();
 	console.log("Location => ", location);
 	const [joinGroup, setJoinGroup] = useState(true);
 	return (
@@ -77,9 +77,9 @@ const GroupsList = () => {
 				groups.map((name) => {
 					return (
 						<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} onClick={() => setOpenBox(name)} className="userChatGroup" key={name}>
-						<img src={avatarGroup} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
-						<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
-						<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }}></img>
+							<img src={avatarGroup} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
+							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
+							<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }}></img>
 						</div>
 				);})
 			}

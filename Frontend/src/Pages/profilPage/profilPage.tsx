@@ -162,9 +162,11 @@ const GroupsAndFriends = () => {
                         friends.map((friend, index) => (
                         <>
                             <div className='list'>
-                                <img className="avatar" src={Stausss.check ? token.image : Stausss.avatar} alt="avatar" />
-                                <span className='name' key={index}>{friend}</span>								
+                            <img  className="avatar" src={Stausss.check ? token.image : Stausss.avatar} alt="avatar" />
+                            <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
+                                <span className='name' key={index}>{friend}</span>
                                 <button style={{ marginLeft: '10px' }}>Exit</button>
+                                </div>
                             </div>
 
                         </>
@@ -173,10 +175,12 @@ const GroupsAndFriends = () => {
                         groups.map((group, index) => (
                             <>
                             <div className='list'>
-                                <img className="avatar" src={groupt} alt="avatar" />
+                                <img  className="avatar" src={groupt} alt="avatar" />
+                                <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
+
                                 <span className='name' key={index}>{group}</span>
-								<button style={{ marginLeft: '10px' }}>Mute</button>
 								<button style={{ marginLeft: '10px' }}>Unifriend</button>
+                                </div>
                             </div>
                             </>
                   ))
