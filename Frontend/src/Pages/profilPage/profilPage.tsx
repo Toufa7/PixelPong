@@ -97,98 +97,53 @@ const Profil = () => {
 }
 
 const GroupsAndFriends = () => {
-      const friends = [
-        "Helena Atkins",
-        "Cristina Singleton",
-        "Caleb Brady",
-        "Edward Colon",
-        "Saige Boyd",
-        "Damarion Wilkerson",
-        "Jaylah Nicholson",
-        "Jamir Escobar",
-        "Marissa Glass",
-        "Jaylen Goodwin",
-        "Akira Calderon"
-      ];
+    const cookie = new Cookies();
+    const token = jwt_decode(cookie.get('jwt'));
+    const [friendData, setFriendData] = useState<string[]>([]);
 
-      const groups = [
-        "Atkins",
-        "Wilkerson",
-        "Brady",
-        "Colon",
-        "Cristina",
-        "Saige"
-      ];
-      const [label, setlabel] = useState(true);
-      const [Stausss, setAvataStatus] = useState({
-          avatar: '',
-          check: true
-      });
-      const cookie = new Cookies();
-      const token = jwt_decode(cookie.get('jwt'));
-      //console.log("Token ", token);
-      useEffect(() => {
-          async function checking() {
-            await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
-            .then((response) => {
-                //console.log("Res ", response)
-                setAvataStatus(() => ({
-                    avatar: `http://localhost:3000/auth/avatar/${token.id}`,
-                    check: false
-                  }));
-            })
-            .catch(erro => {
-              //console.log(`Error ${erro}`);
-            })
-        }
-        checking(); 
-      }, []);
-      return (
-          <div className="gAndFBox">
+
+    useEffect(() => {
+    axios.get(`http://localhost:3000/users/${token.id}/Friends`, {withCredentials: true})
+    .then((response) => {
+        console.log("Friend List -> ",  response.data);
+        setFriendData(response.data);
+        console.log("(" , response.data);
+    })
+    },[])
+
+    const [label, setlabel] = useState(true);
+    return (
+        <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
             <div className="gAndFTabs">
-              <button className='A' onClick={() => {
-                    setlabel(true)
-                    //console.log("Groups")
-                }}>Groups</button>
-              <button className='B' onClick={() => {
-                setlabel(false)
-                //console.log("Friends")
-                }}>Friends</button>
+                <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
+                <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
             </div>
             <div className="gAndFContent">
                 <div className="listParent">
-                    {label ? (
-                        friends.map((friend, index) => (
+                {label ? (
+                        (
                         <>
-                            <div className='list'>
-                            <img  className="avatar" src={Stausss.check ? token.image : Stausss.avatar} alt="avatar" />
-                            <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
-                                <span className='name' key={index}>{friend}</span>
-                                <button style={{ marginLeft: '10px' }}>Exit</button>
-                                </div>
-                            </div>
-
                         </>
-                  ))
+                    )
                     ) : (
-                        groups.map((group, index) => (
+                        // Friends
+                        Object.keys(friendData).map((index) => (
                             <>
-                            <div className='list'>
-                                <img  className="avatar" src={groupt} alt="avatar" />
+                                <div className='list'>
+                                <img  className="avatar" src={friendData[index].profileImage} alt="avatar" />
                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
-
-                                <span className='name' key={index}>{group}</span>
-								<button style={{ marginLeft: '10px' }}>Unifriend</button>
+                                    <span className='name' key={index}>{friendData[index].username}</span>
+                                    <button style={{ marginLeft: '10px' }}>Unfriend</button>
+                                    </div>
                                 </div>
-                            </div>
-                            </>
-                  ))
-                )}
-                    </div>
-            </div>
-            </div>
 
+                            </>
+                    ))
+                )}
+                </div>
+            </div>
+        </div>
     );
 }
 
