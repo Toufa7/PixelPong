@@ -14,9 +14,12 @@ import { Ball } from './game-classes/Ball.class';
 
 import gifMatch from './assets/colors-ping.gif';
 import f from "./assets/cubecavern_memesbruh03.ttf";
+import jwt_decode from "jwt-decode";
 // import loading from "./assets/loading.gif";
 import over_g from "./assets/wdS.gif";
 import { Socket, io } from 'socket.io-client';
+import axios from 'axios';
+import { Cookies } from 'react-cookie';
 // import { socket } from './socket_setup/client-connect';
 // import { id_player } from './components/render_game_sketch_components';
 
@@ -106,39 +109,66 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
   });
 }
 
+// const GetUserInfo = async (token : any) =>{
+//   try{
+//     const Resp = await axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true });
+//     console.log(Resp);
+//   }catch (error){
+//     console.error(error);
+//   }
+// }
+
 export const Game_instance = () =>{
+
 
   // const [newsocket, setScoket] = useState<Socket>();
   // const [isConnected , setConnected] = useState<boolean>(false);
-
+  const [Infos, SetInfo] = useState({});
 
   socket = io("ws://localhost:3000/game" , { path : '/online' ,  withCredentials: true , transports: ["websocket"] });
   useEffect(()=>{
-      socket?.on("connect",() =>{
+    
+    const cookies = new Cookies();
+    const jwt = cookies.get('jwt');
+    const token = jwt_decode(jwt);
+
+    axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
+        .then(Resp => SetInfo(Resp.data))
+        .catch(error => console.error(error));
+
+    // console.log(Infos);
+    // console.log("token Game--->" + JSON.stringify(token));
+    // axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
+    // .then(response => console.log(response));
+    
+    
+    socket?.on("connect",() =>{
       id_player = socket.id;
       width = document.getElementById('child')?.offsetWidth;
       height = document.getElementById('child')?.offsetHeight;
       socket?.emit("PlayerEntered",{s_w : width , s_h : height});
-      });
-      return () => {
-        socket?.off("connect");
-        socket?.off("UpdatePlayerPos");
-        socket?.off("PlayerLeave");
-        socket?.off("PlayersOfRoom");
-        socket?.off("UpdateBallPos");
-        // setConnected(false);
-      }
-
-  },[]);
-
-
-const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
-      const Frontroom : any = {};
-      let MatchmakingPage : p5Types.Image;
-      let font : p5Types.Font;
-      let ovp : p5Types.Image;
-      let change_screen :boolean = false;
+    });
+    return () => {
+      socket?.off("connect");
+      socket?.off("UpdatePlayerPos");
+      socket?.off("PlayerLeave");
+      socket?.off("PlayersOfRoom");
+      socket?.off("UpdateBallPos");
+      // setConnected(false);
+    }
     
+  },[]);
+  
+  
+  
+  const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
+    const Frontroom : any = {};
+    let MatchmakingPage : p5Types.Image;
+    let font : p5Types.Font;
+    let ovp : p5Types.Image;
+    let change_screen :boolean = false;
+    
+    console.log(Infos);
     
     //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
         SettingUpBackWithFront(socket, Frontroom, p5_ob);
@@ -166,10 +196,10 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
           let reverse_ball_x = width - Backroom.GameBall?.x;
   
           for(const id in Frontroom){
-            if (socket.id == Frontroom[id].Player1?.id){
+            if (Frontroom[id].Player1 && socket.id == Frontroom[id].Player1?.id){
               Frontroom[id].Player1.Ball.pos.x = Backroom.GameBall?.x;
               Frontroom[id].Player1.Ball.pos.y = Backroom.GameBall?.y;
-            }else if (socket.id == Frontroom[id].Player2?.id){
+            }else if (Frontroom[id].Player2 && socket.id == Frontroom[id].Player2?.id){
               Frontroom[id].Player2.Ball.pos.x = reverse_ball_x;
               Frontroom[id].Player2.Ball.pos.y = Backroom.GameBall?.y;
             }

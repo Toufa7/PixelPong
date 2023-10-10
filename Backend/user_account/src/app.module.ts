@@ -8,10 +8,11 @@ import { CronService } from './game/cron/cron.service';
 import { BackendGatewayModule } from './game/backend-gateway/backend-gateway.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UsersService } from './users/users.service';
+import { PrismaService } from './auth/prisma.service';
 
 @Module({
   imports: [AuthModule, UsersModule, ChatModule, GateWayModule, BackendGatewayModule , ScheduleModule.forRoot()],
-  providers: [CronService , UsersService],
+  providers: [CronService , UsersService , PrismaService],
   controllers: [],
 })
 export class AppModule {}

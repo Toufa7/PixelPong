@@ -41,7 +41,6 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   
   handleConnection(Player: Socket , @Req() req : any) {
         Player.on("PlayerEntered",(screen)=> {
-          console.log(this.userService.findOne(req.user.id));
           this.screen_metrics.screen_width = screen.s_w;
           this.screen_metrics.screen_height = screen.s_h;
           console.log("---------------CONNECTION SECTION ------------------")

@@ -1,5 +1,6 @@
 
 #!/bin/bash
+# npm install axios --force
 npm install --force
 npm install nes.css --force
 npm install -D sass --force
