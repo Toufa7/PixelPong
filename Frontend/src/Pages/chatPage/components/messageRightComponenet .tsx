@@ -2,7 +2,6 @@
 //on the left side, with it's properties like picture, timestamps etc...
 
 const messageRightComponenet = (props: any) => {
-  console.log("Am here");
   return (
     <div className="messageRightComponent">
         <div className="messageRightInfo">

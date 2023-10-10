@@ -232,13 +232,21 @@ const Routing = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-	<Routing/>
+	{/* <Routing/> */}
 	<BrowserRouter>
 		<Routes>
 			{["welcome", "/"].map((idx) => 
 			<Route path={idx}	Component={welcomePage} key={""}/>
 			)}  
 			<Route path="login"	Component={LogingPageComponents}/>
+
+			<Route path="settings"	Component={ LoginSettingsComponents} />
+				<Route path="home"		Component={HomeComponents}/>
+				<Route path="profil/"	Component={ProfilComponents}/>
+				<Route path="game"		Component={GameComponents}/>
+				<Route path="profil/*"	Component={OtherUser}/>
+				<Route path="chat"		Component={ChatPage}/>
+				<Route path="/groups"	Component={ChatGroupsComponents}/>
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>

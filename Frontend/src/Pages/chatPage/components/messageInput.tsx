@@ -1,9 +1,21 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useContext } from 'react'
 import io from 'socket.io-client';
 import MessageComponent from './messageComponenet'
 import MessageRightComponenet from './messageRightComponenet ';
 import '../chatPage.scss'
 import Send from '../../../assets/images/send.svg'
+import { chatSocketContext } from './socketContext'
+
+//messageInput
+// const [input, setInput] = useState('');
+// const [messaging, setMessaging] = useState<string[]>([]);
+// if (inputMessage != '')
+// {
+//     // props.onMessageInput(message);
+//     firstRef.current.value = '';
+//     setMessaging(prevMessaging => [...prevMessaging, inputMessage]);
+// }
+
 
 // Class chatAgent responsible for defining the properties of each person onthe conversation
 interface chatAgent
@@ -19,63 +31,92 @@ interface chatAgent
 const Conversation = (props: any) =>
 {
     const mesaageEndRef = useRef(null);
-
+    
+    //Handle scroll to bottom
     useEffect(() => {
         mesaageEndRef.current?.scrollIntoView();
     }, [props.MessagesArr]);
-
+    
     //Side 0 (Right) for sender Side 1 (Left) for receiver
     return (
         <div className="conversationDiv">
             {
                 props.MessagesArr.map((message: chatAgent, index:number) => (
-                    message.side == 0   ? <MessageComponent key={index} content={message.message} pic={message.pic} />
-                                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} />
-                ))
-            }
+                    message.side == 1
+                        ? <MessageComponent key={index} content={message.message} pic={message.pic} />
+                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} />
+                    ))
+                }
             <div ref={mesaageEndRef}/>
         </div>
     );
-  }
+}
 
 const messageInput = (props: any) => {
-
-    const firstRef = useRef(null);
-    // const [input, setInput] = useState('');
-    // const [messaging, setMessaging] = useState<string[]>([]);
-
-    //Creating 
-    const [messagesArr, setNewMessage] = useState<chatAgent[]>([]);
-
-
-  const onSubmitHandler = (e: any) => {
-    e.preventDefault();
-    const inputMessage = document.querySelector('.messageInputBox')?.value;
     
-    // if (inputMessage != '')
-    // {
-    //     // props.onMessageInput(message);
-    //     firstRef.current.value = '';
-    //     setMessaging(prevMessaging => [...prevMessaging, inputMessage]);
-    // }
+    //Refering to the dummy div
+    const firstRef = useRef(null);
 
-    if (inputMessage != '')
-    {
+    //Our chat socket
+    const conversationsSocket = useContext(chatSocketContext);
+    
+    //Creating the messages array to be rendred
+    const [messagesArr, setNewMessage] = useState<chatAgent[]>([]);
+    
+    //Recieving message from socket
+    conversationsSocket.on('msgToClient', (payload: chatAgent) => {
+
+        console.log(payload);
+        receiveMessage(payload);
+    });
+    
+    //Handling newly received message 
+    const receiveMessage = (newMessage: chatAgent) => {
         const tmpMsgObj: chatAgent = {
-            id: props.Sender.id,
-            username: props.Sender.username,
-            pic: props.Sender.image,
+            id: newMessage.id,
+            username: newMessage.username,
+            pic: newMessage.pic,
             side: 1,
-            message: inputMessage,
-            timestamp: "",
+            message: newMessage.message,
+            timestamp: "n/a",
         }
-        firstRef.current.value = '';
         setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
     }
-    //N'oublier pas d'envoyer messagesArr a Conversation composant
-  }
 
-  return (
+    //On submit Handler adds the new message the messagesArr and 
+    //sends it to messagesArr 
+    const onSubmitHandler = (e: any) => {
+        
+        //Prevent browser from refreshing each time we hit enter on the from input
+        e.preventDefault();
+        
+        //Getting the message from input box
+        const inputMessage = document.querySelector('.messageInputBox')?.value;
+
+        //Emtting the newly typed message in the socket
+        const handleNewMessage = (newMessage: chatAgent) => {
+            conversationsSocket.emit('msgToServer', newMessage)
+        };
+        
+        if (inputMessage != '')
+        {
+            const tmpMsgObj: chatAgent = {
+                id: props.Receiver.id,
+                username: props.Receiver.username,
+                pic: props.Receiver.image,
+                side: 0,
+                message: inputMessage,
+                timestamp: "n/a",
+            }
+            console.log("id ===============================================>   " ,props.Receiver.id);
+            firstRef.current.value = '';
+            setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
+            handleNewMessage(tmpMsgObj);
+        }
+        //N'oublier pas d'envoyer messagesArr a Conversation composant
+    }
+
+    return (
     <>
         <Conversation MessagesArr={messagesArr}/>
         <div className="messageInput">
@@ -85,7 +126,7 @@ const messageInput = (props: any) => {
             </form>
         </div>
     </>
-  )
+    )
 }
 
 export default messageInput

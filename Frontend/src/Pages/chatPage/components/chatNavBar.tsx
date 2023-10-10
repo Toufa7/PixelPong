@@ -68,7 +68,7 @@ const Dms = (props:any) => {
     // let obj: chatUser = {userName: dataUser.userName, pic: dataUser.pic, id: dataUser.id};
     
     let usersArr: chatUser[] = [];
-    let user:chatUser = {userName: "mamella", pic: "https://cdn.intra.42.fr/users/197a70ba79da6fe509bf37fad4b0b0fb/mamellal.jpg", id: "cdb272fa-d1e9-4105-b2cf-eb23aa2f9fa0"}
+    let user:chatUser = {userName: "abensgui", pic: "https://cdn.intra.42.fr/users/197a70ba79da6fe509bf37fad4b0b0fb/abensgui.jpg", id: "dd97819f-a815-4f3e-959d-148b696d5ead"}
     let user1:chatUser = {userName: "ibnada", pic: "https://cdn.intra.42.fr/users/694c3817bb51281e259c9b77f2788851/ibnada.jpg", id: "32f775de-c030-49ba-bd79-276f7f56666c"}
     
     usersArr.push(user);
