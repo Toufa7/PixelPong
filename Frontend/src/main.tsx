@@ -21,7 +21,8 @@ import { socket, socketContext } from './Pages/socket-client';
 import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
 import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
 import ErrorPage from './Pages/errorPage/errorPage';
-import { Setup } from './Pages/GamePage/Setup_ comp';
+import { Setup } from './Pages/GamePage/Setup_Game_Front';
+
 
 export const OtherUser = () => {
 	return (
@@ -210,13 +211,20 @@ const RedirectToSettings = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-	<RedirectToSettings/>
+	{/* <RedirectToSettings/> */}
 	<BrowserRouter>
 		<Routes>
 			{["welcome", "/"].map((idx) => 
 			<Route path={idx}	Component={welcomePage} key={""}/>
 			)}  
 			<Route path="login"	Component={LogingPageComponents}/>
+			<Route path="settings"	Component={ LoginSettingsComponents} />
+			<Route path="home"		Component={HomeComponents}/>
+			<Route path="profil/"	Component={ProfilComponents}/>
+			<Route path="game"		Component={GameComponents}/>
+			<Route path="profil/*"	Component={OtherUser}/>
+			<Route path="chat"		Component={ChatPage}/>
+			<Route path="/groups"	Component={ChatGroupsComponents}/>
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>
