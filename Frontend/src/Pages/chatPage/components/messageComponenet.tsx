@@ -2,7 +2,10 @@
 //on the left side, with it's properties like picture, timestamps etc...
 
 const messageComponenet = (props: any) => {
-  return (
+  
+    console.log("PIC from props.pic", props.pic);
+
+    return (
     <div className="messageComponent">
         <div className="messageInfo">
             <img src={props.pic} alt="message-fromLeft" />
@@ -14,9 +17,7 @@ const messageComponenet = (props: any) => {
             </div>
         </div>
     </div>
-
-    
-  )
+    )
 }
 
 export default messageComponenet

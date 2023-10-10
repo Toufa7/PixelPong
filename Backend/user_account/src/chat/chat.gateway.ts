@@ -144,7 +144,7 @@ let map = new Map <any , any>();
     @SubscribeMessage('msgToServer')
     async handleMessage(client : Socket, body : any) {
 
-      console.log("id ===============>  " , body.id);
+      console.log("msgToServer");
         const user = await this.getUser(client);
         // console.log("body sub :: ", body.id);
         const idUs = map.get(body.id);
@@ -157,7 +157,7 @@ let map = new Map <any , any>();
                 messageDMs : body.message
               },
           });
-          console.log(idUs);
+          console.log("msgToClient");
             this.server.to(idUs).emit('msgToClient', 
             { id :body.id,
             username: body.username,
