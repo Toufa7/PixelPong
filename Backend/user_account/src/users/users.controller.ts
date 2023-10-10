@@ -92,8 +92,8 @@ export class UsersController {
   }
 
   @Get(':UserId/Friends')
-  async getFriends(@Param('id', ParseUUIDPipe) id: string) {
-    await this.usersService.getFriends(id);
+  async getFriends(@Param('UserId') id: string) {
+    return await this.usersService.getFriends(id);
   }
 
   @Post('sendFriendRequest')
