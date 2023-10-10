@@ -94,9 +94,8 @@ export default function LoginSettings() {
         const endpoint = isChecked ? "http://localhost:3000/auth/2fa/disable" : "http://localhost:3000/auth/2fa/enable";
         const status = isChecked ? 1 : 0;
         axios.put(endpoint, status, { withCredentials: true }) 
-        .then (() => {
-        }).catch(() => {
-        });
+        .then (() => {})
+        .catch(() => {});
     }   
 
 
@@ -106,6 +105,7 @@ export default function LoginSettings() {
     const cookie = new Cookies();
     const token : Token = jwtDecode(cookie.get('jwt'));
 	const [update , setUpdate] = useState("");
+    console.log(token)
 
       return (
         <div style={{height: '100vh'}}>
@@ -116,7 +116,7 @@ export default function LoginSettings() {
                 <div className="content">
                     <div>
                         <div className="nes-field">
-                            <input onChange={(e) => setUpdate(e.target.value)} type="text" name="nickname" className="nes-input" required placeholder='Choose Nickname'/>
+                            <input onChange={(e) => setUpdate(e.target.value)} type="text" name="nickname" className="nes-input" required placeholder={token.username}/>
                         </div>
                         <div className="choosingAvatarContainer">
                             <span className="is-primary">Choose Avatar</span>
@@ -146,7 +146,7 @@ export default function LoginSettings() {
                                 <p>Do you want to go with the default settings?</p>
                                 <Anime translateY={['-100%', '0%']} duration={3000}>
                                     <div>
-                                        <img style={{width: '100px', height: '100px', borderRadius: '50%', margin: '10px'}} src={myAvatar}></img>
+                                        <img style={{width: '100px', height: '100px', borderRadius: '50%', margin: '10px'}} src={token.image}></img>
                                         <a style={{fontWeight: "bold"}}>{token.username}</a>
                                     </div>
                                 </Anime>
