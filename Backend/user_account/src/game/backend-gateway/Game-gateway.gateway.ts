@@ -16,7 +16,7 @@ credentials: true , transports : 'websocket'
 },
 pingInterval: 1000,
 pingTimeout: 1000,
-path : '/online'
+// path : '/online'
 })
 export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
   constructor(private readonly Players: Players_Management,
@@ -39,10 +39,12 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
 
   
-  handleConnection(Player: Socket , @Req() req : any) {
-        Player.on("PlayerEntered",(screen)=> {
-          this.screen_metrics.screen_width = screen.s_w;
-          this.screen_metrics.screen_height = screen.s_h;
+  handleConnection(Player: Socket) {
+
+        Player.on("PlayerEntered",(Data)=> {
+          console.log("User --> ID " + Data.Player_user_id);
+          this.screen_metrics.screen_width = Data.s_w;
+          this.screen_metrics.screen_height = Data.s_h;
           console.log("---------------CONNECTION SECTION ------------------")
           console.log("new Player connected " + Player.id);
           this.Players.AddPlayer(Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95);
@@ -50,6 +52,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           console.log("---------------------CCCoooCCC--------------------------------\n")
           this.SendToPlayersinRoom(Player,this.Rooms);
           console.log("--->Players" + JSON.stringify(this.Players.players));
+
         })
   }
 

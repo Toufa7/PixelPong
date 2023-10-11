@@ -1,16 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BackendGatewayGateway } from './Game-gateway.gateway';
-import { BackendGatewayService } from './entities/players-management.service';
+import { GameBackGateWay } from './Game-gateway.gateway';
+// import { BackendGatewayGateway } from './Game-gateway.gateway';
+// import { BackendGatewayService } from './entities/players-management.service';
 
 describe('BackendGatewayGateway', () => {
-  let gateway: BackendGatewayGateway;
+  let gateway: GameBackGateWay;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [BackendGatewayGateway, BackendGatewayService],
+      providers: [GameBackGateWay, BackendGatewayService],
     }).compile();
 
-    gateway = module.get<BackendGatewayGateway>(BackendGatewayGateway);
+    gateway = module.get<GameBackGateWay>(BackendGatewayGateway);
   });
 
   it('should be defined', () => {
