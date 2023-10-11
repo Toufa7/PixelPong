@@ -25,6 +25,7 @@ import { Setup } from './Pages/GamePage/Setup_Game_Front';
 
 
 export const OtherUser = () => {
+	const socket = sock
 	return (
 		<>
 			<Stars/>

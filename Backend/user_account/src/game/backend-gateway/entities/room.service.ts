@@ -61,7 +61,7 @@ export class Rooms{
             }
             
         }
-        console.log("From Single Room Condition -->" + this.rooms);
+        console.log(this.rooms);
     }
 
     CheckForRooms(Room,Player : Socket , Players : Players_Management) : number{
@@ -72,7 +72,7 @@ export class Rooms{
                 Room.Player1.room_id = Room.id;
                 Room.client_count++;
                 Player.join(Room.id);
-                // console.log(this.rooms);
+                console.log(this.rooms);
                 return (1);
             }
             else if (!Room.Player2 && Players.players[Player.id]){
@@ -81,7 +81,7 @@ export class Rooms{
                 Room.Player2.room_id = Room.id;
                 Room.client_count++;
                 Player.join(Room.id);
-                // console.log(this.rooms);
+                console.log(this.rooms);
                 return (1);
             }
         }
@@ -92,7 +92,7 @@ export class Rooms{
                 Room.Player1.room_id = Room.id;
                 Room.client_count++;
                 Player.join(Room.id);
-                // console.log(this.rooms);
+                console.log(this.rooms);
                 return (1);
             }
             else if (!Room.Player2 && Players.players[Player.id]){
@@ -101,11 +101,12 @@ export class Rooms{
                 Room.Player2.room_id = Room.id;
                 Room.client_count++;
                 Player.join(Room.id);
-                // console.log(this.rooms);
+                console.log(this.rooms);
                 return (1);
             }
         }
-        console.log("From Many Rooms Condition --> " + this.rooms);
+        console.log("From Many Rooms Condition --> ");
+        console.log(this.rooms);
         return (0);
     }
 
