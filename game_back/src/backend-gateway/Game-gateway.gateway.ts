@@ -33,6 +33,11 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
     console.log("Server listening on port 8001");
   }
 
+  // this.server.to(Player.id).emit("UpdatePlayerPos",this.Players.players);
+  // console.log(this.Rooms);
+
+
+  
   handleConnection(Player: Socket) {
         Player.on("PlayerEntered",(screen)=> {
           this.screen_metrics.screen_width = screen.s_w;
@@ -42,8 +47,6 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           this.Players.AddPlayer(Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95);
           this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
           console.log("---------------------CCCoooCCC--------------------------------\n")
-          // this.server.to(Player.id).emit("UpdatePlayerPos",this.Players.players);
-          // console.log(this.Rooms);
           this.SendToPlayersinRoom(Player,this.Rooms);
           console.log("--->Players" + JSON.stringify(this.Players.players));
         })

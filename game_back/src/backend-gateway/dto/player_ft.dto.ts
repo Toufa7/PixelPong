@@ -4,6 +4,7 @@ export class PlayerDto{
     id : string;
     x : number;
     y : number;
+    user_id? : string;
     width : number;
     height : number;
     room_id?: string;
