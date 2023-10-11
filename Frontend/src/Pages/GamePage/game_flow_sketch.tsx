@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5";
 import { isConstructorDeclaration } from 'typescript';
@@ -12,7 +12,7 @@ import { Ball } from './game-classes/Ball.class';
 //h-             WORKING IMPORTS
 //y------------------------------------------
 
-import gifMatch from './assets/colors-ping.gif';
+import gifMatch from './assets/rescaled_tv.gif';
 import f from "./assets/cubecavern_memesbruh03.ttf";
 import jwt_decode from "jwt-decode";
 // import loading from "./assets/loading.gif";
@@ -123,30 +123,37 @@ export const Game_instance = () =>{
 
   // const [newsocket, setScoket] = useState<Socket>();
   // const [isConnected , setConnected] = useState<boolean>(false);
-  const [Infos, SetInfo] = useState({});
+  const [Infos, SetInfo] = useState<any>({});
 
-  socket = io("ws://localhost:3000/game" , { path : '/online' ,  withCredentials: true , transports: ["websocket"] });
+  // socket = io("ws://localhost:3000/game" , {withCredentials: true , transports: ["websocket"] });
+  const socketRef = useRef<Socket | null >(null);
+  const cookies = new Cookies();
+  const jwt = cookies.get('jwt');
+  const token : any = jwt_decode(jwt);
+
   useEffect(()=>{
-    
-    const cookies = new Cookies();
-    const jwt = cookies.get('jwt');
-    const token = jwt_decode(jwt);
+    if (socketRef.current == null){
+      socketRef.current = io("ws://localhost:3000/game", {withCredentials: true, transports: ["websocket"] });
+      socket = socketRef.current;
+    }
 
+    try{
     axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
         .then(Resp => SetInfo(Resp.data))
         .catch(error => console.error(error));
+    }catch(error){
+      console.error(error);
+    }
 
     // console.log(Infos);
     // console.log("token Game--->" + JSON.stringify(token));
     // axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
     // .then(response => console.log(response));
     
-    
     socket?.on("connect",() =>{
       id_player = socket.id;
       width = document.getElementById('child')?.offsetWidth;
       height = document.getElementById('child')?.offsetHeight;
-      socket?.emit("PlayerEntered",{s_w : width , s_h : height});
     });
     return () => {
       socket?.off("connect");
@@ -159,8 +166,6 @@ export const Game_instance = () =>{
     
   },[]);
   
-  
-  
   const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     const Frontroom : any = {};
     let MatchmakingPage : p5Types.Image;
@@ -168,7 +173,7 @@ export const Game_instance = () =>{
     let ovp : p5Types.Image;
     let change_screen :boolean = false;
     
-    console.log(Infos);
+    // console.log(Infos);
     
     //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
         SettingUpBackWithFront(socket, Frontroom, p5_ob);
@@ -211,6 +216,7 @@ export const Game_instance = () =>{
   
         //r- Loading Images
         p5_ob.preload = () =>{
+
           MatchmakingPage = p5_ob.loadImage(gifMatch);
           font = p5_ob.loadFont(f);
           ovp = p5_ob.loadImage(over_g);
@@ -227,6 +233,9 @@ export const Game_instance = () =>{
         });
   
         p5_ob.setup = () => {
+
+
+        socket?.emit("PlayerEntered",{s_w : width , s_h : height , Player_user_id : Infos.id , Player_user_name : Infos.username});
         p5_ob.frameRate(60);
         canvasDiv = document.getElementById('child');
         width = document.getElementById('child')?.offsetWidth;
@@ -234,6 +243,8 @@ export const Game_instance = () =>{
 
           console.log(width);
           console.log(height);
+          console.log("Player Database Id -->" + JSON.stringify(Infos.id) +"\n" 
+          + "Player Database username -->" + JSON.stringify(Infos.username));
 
         canvas = p5_ob.createCanvas(width,height).parent(canvasDiv);
 
@@ -298,8 +309,8 @@ export const Game_instance = () =>{
               // p5_ob.background("#fcba03");
               p5_ob.background(MatchmakingPage);
               // p5_ob.image(MatchmakingPage,170,0,750,550);
-              p5_ob.fill("#000000");
-              p5_ob.text("MatchMaking ...",width / 2,(height / 2) + 230);
+              p5_ob.fill("#e0e3ba");
+              p5_ob.text("MatchMaking ...",0 + 500,0 + 100);
         //       // p5_ob.text("...",190,100);
         //       // if (id_of_player1 == id_player){
         //       //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;

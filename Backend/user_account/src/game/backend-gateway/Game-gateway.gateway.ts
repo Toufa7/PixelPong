@@ -38,16 +38,18 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   // console.log(this.Rooms);
 
 
+
+  
+
   
   handleConnection(Player: Socket) {
 
         Player.on("PlayerEntered",(Data)=> {
-          console.log("User --> ID " + Data.Player_user_id);
           this.screen_metrics.screen_width = Data.s_w;
           this.screen_metrics.screen_height = Data.s_h;
           console.log("---------------CONNECTION SECTION ------------------")
           console.log("new Player connected " + Player.id);
-          this.Players.AddPlayer(Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95);
+          this.Players.AddPlayer(Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95,"",Data.Player_user_id,Data.Player_user_name);
           this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
           console.log("---------------------CCCoooCCC--------------------------------\n")
           this.SendToPlayersinRoom(Player,this.Rooms);

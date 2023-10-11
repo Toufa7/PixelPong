@@ -9,9 +9,31 @@ export class Players_Management {
   
   public players  = {};
 
-  public AddPlayer(player_id : string ,x : number , y : number , width : number , height : number, room_id? : string){
+  public SearchForExsitentUserID(user_id : string) : boolean{
+      for(const id in this.players){
+        const Player = this.players[id];
+        if (Player.user_id == user_id){
+          console.log("------------------You Are The Same Player !!--------------");
+          return (true);
+        }
+      }
+      return (false);
+  }
+
+  public AddPlayer(player_id : string ,x : number , y : number , width : number , height : number, room_id? : string , user_id? : string, username? : string){
     // this.players.push(new PlayerDto(id,x,y));
-    this.players[player_id] = new PlayerDto(player_id,x,y,width , height , room_id);
+    console.log("User Id --->" + user_id);
+    console.log("Player User Name -->" + username);
+    // console.log("Before -->" + Object.keys(this.players).length);
+    if (!this.SearchForExsitentUserID(user_id)){
+    this.players[player_id] = new PlayerDto(player_id,x,y,width , height , room_id,user_id,username);
+    }
+    console.log("Printing Players ....");
+    for(const id in this.players){
+      console.log(this.players[id]);
+    }
+    // console.log("After -->" + Object.keys(this.players).length);
+    // this.SearchForExsitentUserID(user_id);
     // console.log("Player added to players object");
   }
   
