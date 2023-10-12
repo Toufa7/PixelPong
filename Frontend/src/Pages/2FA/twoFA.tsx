@@ -10,22 +10,16 @@ const Toasts = () => {
         <Toaster
             reverseOrder={false}
             position='top-right'
-            toastOptions={{
-                style: {
-                    borderRadius: '8px',
-                    background: '#AC8FB4',
-                    color: '#fff',
-                },
-            }}
-        />
+            toastOptions={{style: {borderRadius: '8px',background: '#AC8FB4',color: '#fff'},
+        }}/>
     );
 }
 
 
-const renderer = ({seconds , completed }) => {
+const renderer = ({seconds , completed}) => {
   if (completed) {
     return (
-        <span>You are good to go!</span>
+        <span>Vamo!</span>
     );
   } else {
     return <span>00:{seconds}</span>;
@@ -42,9 +36,7 @@ function TwoFa() {
         .then((response) => {
             updateQr(response.data);
         })
-        .catch((error) => {
-            //console.log("Error: ", error);
-        });
+        .catch(() => {});
     }, []);
 
     const iClick = () =>  {
@@ -53,15 +45,9 @@ function TwoFa() {
         for (let index = 0; index < arr.length; index++) {
             a += arr[index].value;
         }
-        
-        const data = {
-            otp : a
-        }
-        //console.log("Code => ", a);
-        
+        const data = {otp : a}
         axios.post("http://localhost:3000/auth/2fa/validate", data, { withCredentials: true })
         .then((response) => {
-            //console.log("Reponse ", response);
             if (response.status != 400)
             {
                 toast.success("Success");
@@ -70,13 +56,13 @@ function TwoFa() {
             else
                 toast.error("Invalid Code");
         })
-        .catch((error) => {
-            //console.log("Error ", error)
+        .catch(() => {
             toast.error("Invalid Code");
         })
     }
     
     return (
+        <div style={{height: '100vh'}}>
         <div className="container">
             <div className="twoFaBox">
                 <div style={{height: '50px'}} className="header">2FA</div>
@@ -103,6 +89,7 @@ function TwoFa() {
                         <button onClick={iClick} className="nes-btn">Verificar</button>
                     </div>
             </div>
+        </div>
         </div>
         </div>
 

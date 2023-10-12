@@ -155,9 +155,11 @@ export class UsersService {
       })
       .friends({
         select: {
+          id: true,
           username: true,
           profileImage: true,
           status: true,
+          id: true, 
         },
       });
   }

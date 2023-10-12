@@ -6,17 +6,6 @@ import '../chatPage.scss'
 import Send from '../../../assets/images/send.svg'
 import { chatSocketContext } from './socketContext'
 
-//messageInput
-// const [input, setInput] = useState('');
-// const [messaging, setMessaging] = useState<string[]>([]);
-// if (inputMessage != '')
-// {
-//     // props.onMessageInput(message);
-//     firstRef.current.value = '';
-//     setMessaging(prevMessaging => [...prevMessaging, inputMessage]);
-// }
-
-
 // Class chatAgent responsible for defining the properties of each person onthe conversation
 interface chatAgent
 {
@@ -31,7 +20,7 @@ interface chatAgent
 const Conversation = (props: any) =>
 {
     const mesaageEndRef = useRef(null);
-    
+
     //Handle scroll to bottom
     useEffect(() => {
         mesaageEndRef.current?.scrollIntoView();
@@ -53,7 +42,7 @@ const Conversation = (props: any) =>
 }
 
 const messageInput = (props: any) => {
-    
+
     //Refering to the dummy div
     const firstRef = useRef(null);
 
@@ -63,15 +52,23 @@ const messageInput = (props: any) => {
     //Creating the messages array to be rendred
     const [messagesArr, setNewMessage] = useState<chatAgent[]>([]);
     
-    //Recieving message from socket
-    conversationsSocket.on('msgToClient', (payload: chatAgent) => {
+    useEffect(() => {
 
-        console.log(payload);
-        receiveMessage(payload);
-    });
-    
+        //Recieving message from socket
+        conversationsSocket.on('msgToClient', (payload: chatAgent) => {
+            receiveMessage(payload);
+        });
+
+        //cleanup function
+        return() => {
+            conversationsSocket.off('msgToClient');
+        }
+
+    }, [])
+
     //Handling newly received message 
     const receiveMessage = (newMessage: chatAgent) => {
+
         const tmpMsgObj: chatAgent = {
             id: newMessage.id,
             username: newMessage.username,
@@ -82,6 +79,7 @@ const messageInput = (props: any) => {
         }
         setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
     }
+    
 
     //On submit Handler adds the new message the messagesArr and 
     //sends it to messagesArr 
@@ -102,13 +100,12 @@ const messageInput = (props: any) => {
         {
             const tmpMsgObj: chatAgent = {
                 id: props.Receiver.id,
-                username: props.Receiver.username,
-                pic: props.Receiver.image,
+                username: props.Sender.username,
+                pic: props.Sender.image,
                 side: 0,
                 message: inputMessage,
                 timestamp: "n/a",
             }
-            console.log("id ===============================================>   " ,props.Receiver.id);
             firstRef.current.value = '';
             setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
             handleNewMessage(tmpMsgObj);

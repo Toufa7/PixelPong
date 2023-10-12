@@ -1,7 +1,7 @@
 #pageContainer
 {
   height: 100vh;
-  background: linear-gradient(to right ,#4F3997, #6E58B6);
+  background: linear-gradient(to right ,red, green);
 }
 
 #header

@@ -76,7 +76,6 @@ let map = new Map <any , any>();
     ///////////////get old convetation ///////////////////////
     @SubscribeMessage('getOldCnv')
     async getConv(client : Socket) {
-      console.log('Hello from Backend');
       const user = await this.getUser(client);
       const dMSChat1 =  await this.prisma.dmschat.findMany({
         where: {
@@ -92,7 +91,7 @@ let map = new Map <any , any>();
           tab.push(element.receiverId);
       });
       // console.log("dmschat :: ", tab);
-      this.server.emit('postOldCnv'  , tab );
+      this.server.to(map.get(user.id)).emit('postOldCnv'  , tab );
     }
     // how to use this in front end
     // emit using this event ('getOldCnv')
@@ -118,13 +117,30 @@ let map = new Map <any , any>();
                   ]
                 },
             });
-            this.server.to(map.get(user.id)).emit('postOldMsg'  , dMSChat);
+            // console.log("dmschat :: ", dMSChat);
+            // if (!dMSChat){
+            //     const dMSChat1 =  await this.prisma.dmschat.create({
+            //         data: {
+        
+            //           sender: {connect: {id: user.id}},
+            //           receiver: {connect: {id:id}},
+            //           messageDMs : ""
+            //         },
+            //     });
+            //     this.server.emit('msgToClient'  , dMSChat1 );
+            // }
+            // else{
+              this.server.to(map.get(user.id)).emit('postOldMsg'  , dMSChat);
+            // }
     }
+
+
+    
     //////////////////send messages ///////////////////////
     @SubscribeMessage('msgToServer')
     async handleMessage(client : Socket, body : any) {
 
-      console.log("id ===============>  " , body.id);
+      console.log("msgToServer");
         const user = await this.getUser(client);
         const idUs = map.get(body.id);
             const dMSChat1 =  await this.prisma.dmschat.create({
@@ -135,7 +151,7 @@ let map = new Map <any , any>();
                 messageDMs : body.message
               },
           });
-          console.log(idUs);
+          console.log("msgToClient");
             this.server.to(idUs).emit('msgToClient', 
             { id :body.id,
             username: body.username,

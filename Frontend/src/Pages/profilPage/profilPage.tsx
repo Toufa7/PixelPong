@@ -6,34 +6,44 @@ import Cookies from 'universal-cookie';
 import { useEffect, useState } from "react";
 import axios from "axios";
 /******************* Includes  *******************/
-import medaille from './assets/medaille.svg';
+import medal from './assets/medaille.svg';
 import savage from './assets/savage.svg';
-import siif from './assets/siif.svg';
-import endpoint from './assets/endpoint.svg';
+import knife from './assets/siif.svg';
+import flag from './assets/endpoint.svg';
 import key from './assets/key.svg';
-import message from './assets/msgLogo.svg';
-import groupt from './../otoufah.jpg'
+import dpad from './assets/d-pad.svg';
+import fire from './assets/firelogo.svg';
+import bomb from './assets/bomblogo.svg';
+import joystick from './assets/joystic.svg';
+import handshake from './assets/handshake.png';
+import box from './assets/box.svg';
+import shield from './assets/shield.svg';
+import mail from './assets/mail.svg';
+import caution from './assets/caution.svg';
+import folder from './assets/folder.svg';
 
-const States = () => {
+
+
+const States = (props : {winRate: number, wins: number, loses: number, streak: number}) => {
     return (
             <div className="headStatesBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
                 <div className="statesBoxContent">
                     <div>
                         <span className="key">Win Rate</span>
-                        <span className="value">X</span>
+                        <span className="value">{props.winRate}%</span>
                     </div>
                     <div>
                         <span className="key">Wins</span>
-                        <span className="value">X</span>
+                        <span className="value">{props.wins}</span>
                     </div>
                     <div>
                         <span className="key">Win Streak Record</span>
-                        <span className="value">X</span>
+                        <span className="value">{props.streak}</span>
                     </div>
                     <div>
                         <span className="key">Loses</span>
-                        <span className="value">X</span>
+                        <span className="value">{props.loses}</span>
                     </div>
                 </div>
             </div>
@@ -43,7 +53,7 @@ const States = () => {
 const Profil = () => {
 
     const cookie = new Cookies();
-    const token = jwt_decode(cookie.get('jwt'));
+    const token : string = jwt_decode(cookie.get('jwt'));
 
     const [userData, setUserData] = useState({
         avatar: '',
@@ -55,7 +65,7 @@ const Profil = () => {
         async function fetchData() {
             const cookie = new Cookies();
             const token = jwt_decode(cookie.get('jwt'));
-            let endpoints = [
+            const endpoints = [
                 `http://localhost:3000/auth/avatar/${token.id}`,
                 `http://localhost:3000/users/${token.id}`
             ]
@@ -65,7 +75,6 @@ const Profil = () => {
                 axios.get(idx, {withCredentials: true})))
                 .then(axios.spread((avatarRes, userRes) => 
                 {
-                    //console.log("AVATAR " ,avatarRes);
                     setUserData(() => ({
                         avatar: `http://localhost:3000/auth/avatar/${token.id}`,
                         username: userRes.data.username,
@@ -77,7 +86,6 @@ const Profil = () => {
         fetchData();
     }, [])
 
-    const [isFriend, setIsFriend] = useState(false);
     return (
             <div className="profilRectangle">
                 <div className="avatar">
@@ -88,7 +96,7 @@ const Profil = () => {
                     <div>
                         <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
                     </div>
-                        <span style={{textAlign: 'right'}}>78/100</span>
+                        <span style={{textAlign: 'right'}}>X/XXX</span>
                     </div>
                 </div>
             </div>
@@ -96,109 +104,139 @@ const Profil = () => {
     );
 }
 
-const GroupsAndFriends = () => {
-      const friends = [
-        "Helena Atkins",
-        "Cristina Singleton",
-        "Caleb Brady",
-        "Edward Colon",
-        "Saige Boyd",
-        "Damarion Wilkerson",
-        "Jaylah Nicholson",
-        "Jamir Escobar",
-        "Marissa Glass",
-        "Jaylen Goodwin",
-        "Akira Calderon"
-      ];
+// const GroupsAndFriends = () => {
+//     const cookie = new Cookies();
+//     const token = jwt_decode(cookie.get('jwt'));
+//     const [friendData, setFriendData] = useState<string[]>([]);
 
-      const groups = [
-        "Atkins",
-        "Wilkerson",
-        "Brady",
-        "Colon",
-        "Cristina",
-        "Saige"
-      ];
-      const [label, setlabel] = useState(true);
-      const [Stausss, setAvataStatus] = useState({
-          avatar: '',
-          check: true
-      });
-      const cookie = new Cookies();
-      const token = jwt_decode(cookie.get('jwt'));
-      //console.log("Token ", token);
-      useEffect(() => {
-          async function checking() {
-            await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
+//     useEffect(() => {
+//     axios.get(`http://localhost:3000/users/${token.id}/Friends`, {withCredentials: true})
+//     .then((response) => {
+//         console.log("Friend List -> ",  response.data);
+//         setFriendData(response.data);
+//     })
+//     },[])
+
+//     const removeFriend = (removeId : string) => {
+//         const local = token.id;
+//         const remote = removeId;
+//         const endpoint = `http://localhost:3000/users/${local}/remove/${remote}`
+//         axios.patch(endpoint, {}, {withCredentials: true})
+//         .then((reseponse) => {
+//             console.log("Removing Response" ,reseponse);
+//         })
+//     }
+    
+//     const [label, setlabel] = useState(true);
+//     return (
+//         <div className="gAndFBox">
+//             <div className="gAndFHeader">Groups & Friends</div>
+//             <div className="gAndFTabs">
+//                 <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
+//                 <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
+//             </div>
+//             <div className="gAndFContent">
+//                 <div className="listParent">
+//                 {label ? (
+//                         (
+//                         <></>)
+//                     ) : (
+//                         // Friends
+//                         Object.keys(friendData).map((idx) => (
+//                             <>
+//                                 <div className='list'>
+//                                 <img  className="avatar" src={friendData[idx].profileImage} alt="avatar" />
+//                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
+//                                     <span className='name' key={idx}>{friendData[idx].username}</span>
+//                                     <button style={{marginLeft: '10px'}} onClick={() => removeFriend(friendData[idx].id)}>Unfriend</button>
+//                                     </div>
+//                                 </div>
+//                             </>
+//                     ))
+//                 )}
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// }
+
+const GroupsAndFriends = () => {
+    interface friendInfo {
+        id: string, 
+        profileImage : string
+    }
+
+    const cookie = new Cookies();
+    const token = jwt_decode(cookie.get('jwt'));
+    const [friendData, setFriendData] = useState<string[]>([]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/${token.id}/Friends`, {withCredentials: true})
             .then((response) => {
-                //console.log("Res ", response)
-                setAvataStatus(() => ({
-                    avatar: `http://localhost:3000/auth/avatar/${token.id}`,
-                    check: false
-                  }));
-            })
-            .catch(erro => {
-              //console.log(`Error ${erro}`);
-            })
-        }
-        checking(); 
-      }, []);
-      return (
-          <div className="gAndFBox">
+                console.log("Friend List -> ", response.data);
+                setFriendData(response.data);
+            });
+    }, []);
+
+    const removeFriend = (removeId: string) => {
+        const local = token.id;
+        const remote = removeId;
+        const endpoint = `http://localhost:3000/users/${local}/remove/${remote}`;
+        axios.patch(endpoint, {}, {withCredentials: true})
+            .then((response) => {
+                console.log("Removing Response", response);
+                setFriendData(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
+            });
+    }
+
+    const [label, setlabel] = useState(true);
+    return (
+        <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
             <div className="gAndFTabs">
-              <button className='A' onClick={() => {
-                    setlabel(true)
-                    //console.log("Groups")
-                }}>Groups</button>
-              <button className='B' onClick={() => {
-                setlabel(false)
-                //console.log("Friends")
-                }}>Friends</button>
+                <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
+                <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
             </div>
             <div className="gAndFContent">
                 <div className="listParent">
                     {label ? (
-                        friends.map((friend, index) => (
-                        <>
-                            <div className='list'>
-                            <img  className="avatar" src={Stausss.check ? token.image : Stausss.avatar} alt="avatar" />
-                            <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
-                                <span className='name' key={index}>{friend}</span>
-                                <button style={{ marginLeft: '10px' }}>Exit</button>
-                                </div>
-                            </div>
-
-                        </>
-                  ))
+                        <></>
                     ) : (
-                        groups.map((group, index) => (
-                            <>
-                            <div className='list'>
-                                <img  className="avatar" src={groupt} alt="avatar" />
-                                <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
-
-                                <span className='name' key={index}>{group}</span>
-								<button style={{ marginLeft: '10px' }}>Unifriend</button>
+                        // Friends
+                        friendData.map((friend : string) => (
+                            <div className='list' key={friend.id}>
+                                <img className="avatar" src={friend.profileImage} alt="avatar" />
+                                <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
+                                    <span className='name'>{friend.username}</span>
+                                    <button style={{marginLeft: '10px'}} onClick={() => removeFriend(friend.id)}>Unfriend</button>
                                 </div>
                             </div>
-                            </>
-                  ))
-                )}
-                    </div>
+                        ))
+                    )}
+                </div>
             </div>
-            </div>
-
+        </div>
     );
 }
 
-const Achivements = () => {
 
-    const awards = [
-        "1st victory in a ping pong match",
-        "Remarkable score against a bot",
-        "Defeating a skilled opponent",
-    ]
+const Achivements = () => {
+    const achivements: Map<string, string> = new Map();
+    achivements.set(flag, "Win a match against different players");
+    achivements.set(key, "Unlock a feature in the game");
+    achivements.set(savage, "Win 5 games with confidence and flair");
+    achivements.set(medal, "Claim the top spot on the leaderboard");
+    achivements.set(knife, "Never conceding a damage in a full match");
+    achivements.set(dpad, "Win a match without losing a single point");
+    achivements.set(fire, "Score 10 consecutive points with powerful smashes");
+    achivements.set(bomb, "Perform a tricky serve that your opponent fails to return");
+    achivements.set(handshake, "Mer7ba");
+    achivements.set(joystick, "Reach a ranking of top 10 players");
+    achivements.set(shield, "Block 50 opponent shots with a perfect defensive block");
+    achivements.set(box, "Hit the ball with exceptional spin 50 times");
+    achivements.set(mail, "Chat with a friend");
+    achivements.set(caution, "Win a match without committing any fouls");
+    achivements.set(folder, "Unlock all hidden paddle designs");
 
     return (    
             <div className="fullAchivementsBox">
@@ -206,27 +244,17 @@ const Achivements = () => {
                 <div className="contentAchivementsBox">
                     <div className="icons">
                         <div>
-                            <img src={medaille} />
-                            <span>{awards[0]}</span>
-                        </div>
-                        <div>
-                            <img src={savage} />
-                            <span>{awards[1]}</span>
-                        </div>
-                        <div>
-                            <img src={siif} />
-                            <span>{awards[2]}</span>
-                        </div>
-                        <div>
-                            <img src={endpoint} />
-                            <span>{awards[2]}</span>
-                        </div>
-                        <div>
-                            <img style={{transform: 'rotate(45deg)'}} src={key} />
-                            <span>{awards[2]}</span>
-                        </div>
+                        {
+                            Array.from(achivements).map(([icon, achivText]) => (
+                            <div>
+                                <img src={icon} />
+                                <span>{achivText}</span>
+                            </div>
+                            ))
+                        }
                     </div>
                 </div>
+            </div>
             </div>
     );
 }   
@@ -237,7 +265,7 @@ function ProfilPage() {
     <>
         <div className="topContainer">
             <Profil/>
-            <States/>
+            <States winRate={0.00} wins={0} loses={0} streak={0}/>
         </div>
         <div className="downContainer">
             <GroupsAndFriends/>

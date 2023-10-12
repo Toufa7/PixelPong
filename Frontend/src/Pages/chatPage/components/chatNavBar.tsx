@@ -6,12 +6,16 @@ import ChatUser from '../components/ChatUser'
 import axios from 'axios'
 import { chatSocketContext } from '../components/socketContext'
 
+interface chatUser {
+    userName: string;
+    pic: string;
+    id: string;
+}
 
 const chatNavBar = () => {
 
     const [currentUserId, setCurrentUserId] = useState('');
-    
-    
+
     const getCurentUserDms = (data: any) => {
         setCurrentUserId(data);
     }
@@ -19,7 +23,7 @@ const chatNavBar = () => {
     return (
         <div className="chatMessage">
             <div className="chatNavBarDiv">
-                <ChatSearch/>
+                <ChatSearch userFound={getCurentUserDms} />
                 <div className="chatsContainer"><Dms cu={getCurentUserDms}/></div>
                 <div className="chatLowerRibbon"></div>
             </div>
@@ -28,53 +32,34 @@ const chatNavBar = () => {
   )
 }
 
-const Dms = (props:any) => {
-    
-    const conversationsSocket = useContext(chatSocketContext);
-    console.log(conversationsSocket);
-    
-    conversationsSocket.emit('getOldCnv');
-    conversationsSocket.on('postOldCnv', (conversations) => {
-        console.log("Dms -------->", conversationsSocket);
-        console.log("Mel3oba -->", conversations);
-    });
+const Dms = (props:any) => {    
 
-    interface chatUser {
-        userName: string;
-        pic: string;
-        id: string;
-    }
-
+    const conversationsSocket = useContext(chatSocketContext)
+    const [usersArr, setUsersArr] = useState<chatUser[]>([]);
     
-    // const fetchUserData = () => {
-    //     const [data, setData] = useState({})
-        
-    //     useEffect(() => {
-    //         function getInfo () {
-    //             axios.get("http://localhost:3000/users/5ec73896-c9f1-48cc-9f64-be90ace0ab55", {withCredentials: true})
-    //             .then((rese) => {
-    //                 setData(rese.data);
-    //             })
-    //             return (data);
-    //         }
-            
-    //         getInfo();
-    //     }, [])
-    // }
+    useEffect(() => {  
+        //Recieving message from socket
+        conversationsSocket.emit('getOldCnv');
+        conversationsSocket.on('postOldCnv', (conversations) => {
+            handleNewConversations(conversations);
+        });
 
-    // const dataUser = fetchUserData();
+        //cleanup function
+        return() => {
+            conversationsSocket.off('getOldCnv');
+            conversationsSocket.off('postOldCnv');
+        }
+    }, [])
 
-    // console.log("dataUser -> ", dataUser);
-    // let obj: chatUser = {userName: dataUser.userName, pic: dataUser.pic, id: dataUser.id};
-    
-    let usersArr: chatUser[] = [];
-    let user:chatUser = {userName: "abensgui", pic: "https://cdn.intra.42.fr/users/197a70ba79da6fe509bf37fad4b0b0fb/abensgui.jpg", id: "dd97819f-a815-4f3e-959d-148b696d5ead"}
-    let user1:chatUser = {userName: "ibnada", pic: "https://cdn.intra.42.fr/users/694c3817bb51281e259c9b77f2788851/ibnada.jpg", id: "32f775de-c030-49ba-bd79-276f7f56666c"}
-    
-    usersArr.push(user);
-    usersArr.push(user1);
+    const handleNewConversations = (conversations:any) => {
+        for (let i: number = 0; i < conversations.length; i++) {
+            const tmpObj:chatUser = {userName: "someUserName", pic: "somepic", id: conversations[i]}
+            setUsersArr(prevMessagesArr => [...prevMessagesArr, tmpObj]);
+        }   
+    };
 
-    const updateSharedString = (newString: string) => {
+    const updateSharedString = (newString: string) =>
+    {
         props.cu(newString);
     };
   
