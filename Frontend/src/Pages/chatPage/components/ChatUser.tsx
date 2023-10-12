@@ -24,7 +24,7 @@ const ChatUser = (props:any) => {
             }
         }
         fetchCurrentUserInfo(props.pcurrentUserId);
-    }, [props.pcurrentUserId]);
+    }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
 
     //Identifying local user (Sender)
     const cookieJwt = document.cookie;
