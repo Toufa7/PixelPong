@@ -7,27 +7,33 @@ import axios from "axios";
 import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
 import { Fade } from "react-awesome-reveal";
-import Anime from 'react-anime';
-import notification from './assets/notification.mp3';
+import toast, { Toaster } from "react-hot-toast";
+import { socket } from "../socket-client";
 
 /******************* Includes  *******************/
-import medaille from './assets/medaille.svg';
+import notification from './assets/notification.mp3';
+import medal from './assets/medaille.svg';
 import savage from './assets/savage.svg';
-import siif from './assets/siif.svg';
-import endpoint from './assets/endpoint.svg';
+import knife from './assets/siif.svg';
+import flag from './assets/endpoint.svg';
 import key from './assets/key.svg';
-import image from './assets/medaille.svg'
-import toast, { Toaster } from "react-hot-toast";
-import avatar from '../otoufah.jpg'
-import { socket } from "../socket-client";
+import dpad from './assets/d-pad.svg';
+import fire from './assets/firelogo.svg';
+import bomb from './assets/bomblogo.svg';
+import joystick from './assets/joystic.svg';
+import handshake from './assets/handshake.png';
+import box from './assets/box.svg';
+import shield from './assets/shield.svg';
+import mail from './assets/mail.svg';
+import caution from './assets/caution.svg';
+import folder from './assets/folder.svg';
 /*************************************************/
 
 const TopContainer = () => {
 	const textInfos = [
-		"Perfect your ping pong skills in our dedicated practice area",
-		"Challenge your friends to exciting ping pong matches."
+		"Perfecciona tus habilidades de ping pong en nuestra área de práctica exclusiva",
+		"Desafía a tus amigos a emocionantes partidos de ping pong"
 	];
-	
 	interface Token {
 		id : string
 	}
@@ -54,22 +60,22 @@ const TopContainer = () => {
 		<div className="topLoginBox">
 			<div className="loginBoxHeader">
 			<Fade>
-				<>Welcome {userData.username}</>
+				<>Bienvenido {userData.username}</>
 			</Fade>
 			</div>
 		<div className="loginBoxOutside">
 			<div className="playRaw">
-				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Friend">
+					<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Friend">
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[0]}
 					</AnimatedText>
-					<a style={{width: '100px', marginTop: '30px'}} className="nes-btn" href="/game">Vamos</a>
+					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="/game">Vamos</a>
 				</div>
 				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[1]}
 					</AnimatedText>
-					<a style={{width: '100px', marginTop: '30px'}} className="nes-btn" href="#">Vamos</a>
+					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="#">Arriba</a>
 				</div>
 			</div>
 		</div>
@@ -78,42 +84,31 @@ const TopContainer = () => {
 	);
 };
 
-// const testing = () => {
-// 	const socket = useContext(socketContext);
-// 	useEffect(()=>{
-// 		socket?.on("connect",()=>{
-// 			//console.log("im connected");
-// 	})
-// 	},[]);
-// }
-
-// testing();
-
 const TopLeft = () => {
 	return (
 	<div className="loginBox on-going-matches">
-		<div className="loginBoxHeader on-going-matches1">LEADERBOARD</div>
+		<div className="loginBoxHeader on-going-matches1">TABLA DE LIDERES</div>
 		<div className="loginBoxOutside on-going-matches2">
 			<div style={{background: "#FDD43B"}} className="match1">
 				<span className="position">1</span>
-				<AnimatedText duration={3} className="name" animationType="float" threshold={0.9} rootMargin="20%" >Martin Ødegaard</AnimatedText>
-				<span className="wins">95</span>
-				<span className="loses">10</span>
-				<span className="draw">12</span>
+				<AnimatedText duration={5} className="name" animationType="float" threshold={0.9} rootMargin="20%" >XX</AnimatedText>
+				<span className="wins">0</span>
+				<span className="loses">0</span>
+				<span className="draw">0</span>
 			</div>
 			<div style={{background: "#BFBFBF"}} className="match1">
 				<span className="position">2</span>
-				<AnimatedText duration={2} className="name" animationType="float">Bukayo Saka</AnimatedText>
-				<span className="wins">12</span>
-				<span className="loses">76</span>
-				<span className="draw">1</span>
+				<AnimatedText duration={2.5} className="name" animationType="float">XX</AnimatedText>
+				<span className="wins">0</span>
+				<span className="loses">0</span>
+				<span className="draw">0</span>
 			</div>
 			<div  style={{background: "#CA7E40"}} className="match1">
 				<span className="position">3</span>
-				<AnimatedText duration={1} className="name" animationType="float">William Saliba</AnimatedText>
-				<span className="wins">4</span>
+				<AnimatedText duration={1} className="name" animationType="float">XX</AnimatedText>
+				<span className="wins">0</span>
 				<span className="loses">0</span>
-				<span className="draw">1</span>
+				<span className="draw">0</span>
 			</div>
 			<div className="match1">
 				<span className="position">X</span>
@@ -127,10 +122,10 @@ const TopLeft = () => {
 	);
 }
 
-const TopRight = () => {
+const TopRight = (props : {winRate: number, wins: number, loses: number}) => {
 	return (
 		<div className="loginBox states">
-			<div className="loginBoxHeader states1">STATES</div>
+			<div className="loginBoxHeader states1">ESTADOS</div>
 			<div style={{fontSize: 'x-large', display: "flex", justifyContent: 'center', alignItems: 'center'}} className="loginBoxOutside">
 				<div style={{textShadow: ' 0.1em 0.1em #FA005E'}} className="statesValues" >
 					<span style={{color: "orange"}}>
@@ -139,34 +134,34 @@ const TopRight = () => {
 						</AnimatedText>
 					</span>
 					<span style={{color: "orange"}}>
-					<AnimatedText duration={1} className="name" animationType="bounce">
-						72.2%
+						<AnimatedText duration={1} className="name" animationType="bounce">
+							{props.winRate}
 						</AnimatedText>
-						</span>
+					</span>
 				</div>
 				<div style={{textShadow: ' 0.1em 0.1em #1f596b'}} className="statesValues">
 					<span style={{color: "#009e73"}}>
-					<AnimatedText duration={2} className="name" animationType="bounce">
-						Wins
-					</AnimatedText>
-						</span>
+						<AnimatedText duration={2} className="name" animationType="bounce">
+							Gana
+						</AnimatedText>
+					</span>
 					<span style={{color: "#009e73"}}>
-					<AnimatedText duration={2} className="name" animationType="bounce">
-						75
-					</AnimatedText>
-						</span>
+						<AnimatedText duration={2} className="name" animationType="bounce">
+							{props.wins}
+						</AnimatedText>
+					</span>
 				</div>
 				<div style={{textShadow: ' 0.1em 0.1em #FA005E'}} className="statesValues">
 					<span style={{color: "#ff7670"}}>
-					<AnimatedText duration={3} className="name" animationType="bounce">
-						Loses
-					</AnimatedText>
-						</span>
+						<AnimatedText duration={3} className="name" animationType="bounce">
+							Pierde
+						</AnimatedText>
+					</span>
 					<span style={{color: "#ff7670"}}>
-					<AnimatedText duration={3} className="name" animationType="bounce">
-						21
-					</AnimatedText>
-						</span>
+						<AnimatedText duration={3} className="name" animationType="bounce">
+							{props.loses}
+						</AnimatedText>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -174,17 +169,18 @@ const TopRight = () => {
 }
 
 const BottomLeft = () => {
+	const achivements = [bomb,joystick,dpad,handshake,box,shield,mail,caution,medal,savage,knife,flag,key,fire,folder];
 	return (
 		<div className="loginBox achievements">
-			<div className="loginBoxHeader achievements1">ACHIEVEMENTS</div>
+			<div className="loginBoxHeader achievements1">LOGROS</div>
 			<div className="loginBoxOutside achievements2">
 			<HorizontalScroll>
-				<img src={medaille}/>
-				<img src={savage}/>
-				<img src={endpoint}/>
-				<img src={key}/>
-				<img src={siif}/>
-				<img src={medaille}/>
+				{
+					achivements.map((key, idx) => {
+						return (
+							<img src={key} key={idx}/>
+						)})
+				}
 			</HorizontalScroll>
 			</div>
 		</div>
@@ -192,19 +188,20 @@ const BottomLeft = () => {
 }
 
 
-const MatchResult = (props: {player1 : string,  player2 : string, color : string, rslt1 : number, rslt2 : number }) => {
+const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 : string, color : string, rslt : string}) => {
   return (
 	<div className="match1" style={{background: props.color, border: '1px solid black'}}>
 		<div className="left">
-		<img src={image} style={{width: '40px', height: '40px', marginRight: '10px', marginLeft: '10px'}} className="player1"/>
+		<img style={{width: '50px', height: '50px', borderRadius: '50%', margin: '10px'}} src={props.player1Avatar} className="player1"></img>
+
 		<span>{props.player1}</span>
 		</div>
 	<div className="result">
-		<span>{props.rslt1} : {props.rslt2}</span>
+		<span>{props.rslt}</span>
 	</div>
 	<div className="right">
 		<span>{props.player2}</span>
-		<img src={endpoint} style={{width: '40px', height: '40px', marginLeft: '10px'}} className="player2"/>
+			<img style={{width: '50px', height: '50px', borderRadius: '50%', margin: '10px'}} src={props.player1Avatar} className="player2"></img>
 		</div>
 	</div>
   );
@@ -215,7 +212,8 @@ interface Token {
 }
 const BottomRight= () => {
 	const [userData, setUserData] = useState({
-		username : ""
+		username : "",
+		avatar : ""
 	});
 	useEffect(() => {
 		async function fetchData () {
@@ -224,86 +222,87 @@ const BottomRight= () => {
 			if (token) {
 				const endpoint = 'http://localhost:3000/users/' + token.id;
 				const response = await axios.get(endpoint, { withCredentials: true });
-				setUserData(response.data);
+				setUserData({
+						username: response.data.username,
+						avatar: response.data.profileImage
+				});
 			}
 		}
 		fetchData();
 	}, []);
-
-	//console.log("userData ", userData)
-
 	const win = "#ff7670";
 	const lose = "#009e73";
 	const draw = "#178ee1";
 	return (
 	<div className="loginBox latest-matches">
-		<div className="loginBoxHeader latest-matches1">LATEST MATCHES</div>
+		<div className="loginBoxHeader latest-matches1">ULTIMOS PARTIDOS</div>
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={win}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={lose}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={draw}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={win}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={lose}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={draw}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={lose}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={lose}/>
-				<MatchResult player1={userData.username} player2="Oppenent" rslt1={1} rslt2={1} color={lose}/>
+				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"win"} color={win}/>
+				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"lose"} color={lose}/>
+				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"draw"} color={draw}/>
+				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"win"} color={win}/>
+				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"lose"} color={lose}/>
 			</div>
 			</div>
 	</div>
   );
 }
 
-
-
-
-export default function Home() {
-
-	
-	
+function Notification () {
 	useEffect(() => {
-		socket.on('notification', (data) => {
-			console.log('Received notification:', data);
-			const AcceptFriend = async () =>  {
-				await axios.patch("http://localhost:3000/users/acceptFriendRequest", data,{withCredentials : true})
-				.then((rese) => {
-					console.log("Notifcation Accept ", rese);
-				})
-		
-			}
-		
-			const RefuseFriend = async () => {
-				await axios.patch("http://localhost:3000/users/refuseFriendRequest", data,{withCredentials : true})
-				.then((rese) => {
-					console.log("Notifcation Accept ", rese);
-				})
-			}
-		const audio = new Audio(notification);
-		audio.play();
-		toast.custom(
-			<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1',}}>
-				<div style={{ width: '400px', height: '120px' }} className="nes-container with-title is-centered">
-					<p style={{ background: '#ffeeca', border: '2px solid black' }} className="title">Invitation Request</p>
-				<div style={{ display: 'flex', alignItems: 'center' }}>
-					<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
-				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>
-				<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
-				<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
-				</div>
-				</div>
-			</div>,
-			{ duration: 5000, position: 'top-right' });
-		});
-	}, []);
+	socket.on('notification', (data) => {
+	console.log('Received notification:', data);
+	const AcceptFriend = async () =>  {
+		try {
+			await axios.patch("http://localhost:3000/users/acceptFriendRequest", data,{withCredentials : true})
+			.then((rese) => {
+				console.log("Notifcation Accept ", rese);
+			})
+		}
+		catch (error) {
+			console.log("Error Catched ", error);
+		}
+	}
+	const RefuseFriend = async () => {
 
+		try {
+			await axios.patch("http://localhost:3000/users/refuseFriendRequest", data,{withCredentials : true})
+			.then((rese) => {
+				console.log("Notifcation Accept ", rese);
+			})
+		} catch (error) {
+			console.log("Error Catched ", error);
+		}
+	}
+	const audio = new Audio(notification);
+	audio.play();
+	toast.custom(
+		<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1',}}>
+			<div style={{ width: '400px', height: '120px' }} className="nes-container with-title is-centered">
+				<p style={{ background: '#ffeeca', border: '2px solid black'}} className="title">Invitation Request</p>
+			<div style={{ display: 'flex', alignItems: 'center' }}>
+				<img src={data.photo} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>
+			<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
+			<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
+			</div>
+			</div>
+		</div>,
+		{ duration: 5000, position: 'top-right' });
+	});
+	}, []);
+}
+
+export default function Home() {	
+	Notification();
   return (
     <div style={{ height: '100vh' }}>
 		<Toaster/>
         <TopContainer />
       <div className="top-containers">
           <TopLeft />
-          <TopRight />
+          <TopRight winRate={0.01} wins={0} loses={0}/>
       </div>
       <div className="bottom-containers">
 		<BottomLeft />

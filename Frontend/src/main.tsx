@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
 /******************* Packages  *******************/
-
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
 import jwt_decode from "jwt-decode";
@@ -30,17 +29,6 @@ export const OtherUser = () => {
 		</>
 	);
 }
-
-export const LogingPageComponents = () => {
-	return (
-		<>
-			
-			<Stars/>
-			<LoginPage/>
-		</>
-	);
-}
-
 export const ChatComponents = () => {
 	return (
 		<>
@@ -53,7 +41,7 @@ export const ChatComponents = () => {
 export const ChatGroupsComponents = () => {
 	return (
 		<>
-			{/* <Stars/> */}
+			<Stars/>
 			<ChatPageGroup/>
 		</>
 	);
@@ -74,9 +62,9 @@ const ProfilComponents = () => {
 const LoginSettingsComponents = () => {
 	return (
 		<>
+			<Stars/>
 			<NavBar/>
 			<LoginSettings/>
-			<Stars/>
 		</>
 	);
 }
@@ -101,14 +89,14 @@ const HomeComponents = () => {
 	);
 }
 
-const GameComponents = () => {
-	return (
-		<>
-		<Stars/>
-		{/* <Setup/> */}
-		</>
-	);
-}
+// const GameComponents = () => {
+// 	return (
+// 		<>
+// 			<Stars/>
+// 			<Setup/>
+// 		</>
+// 	);
+// }
 
 const ErrorTextPage = () => {
 	return (
@@ -124,6 +112,7 @@ const Routing = () => {
 		twofaStatus: false,
 		isAuthenticated : false
 	});
+	const [twoFAStatuss, setTwoFAStatus] = useState(false);
 	if (logged){
 		const token = jwt_decode(logged);
 		useEffect(() => {
@@ -133,39 +122,59 @@ const Routing = () => {
 				setUserData({
 					twofaStatus: response.data.twofa,
 					isAuthenticated: response.data.authenticated
-				})
+			})})
+			.catch((error) => {
+				console.log(error)
 			})
-		}, [])
+		}, [token.id])
+
+  
+		useEffect(() => {
+			const fetchTwoFAVerificatoin = async () => {
+			try {
+				const endpoint = 'http://localhost:3000/auth/2fa/get2FAstatus';
+				const response = await axios.get(endpoint, { withCredentials: true });
+				setTwoFAStatus(response.data);
+			}
+			catch (error) {
+				console.log(error);
+			}
+		};
+		fetchTwoFAVerificatoin();
+		}, []);
+
 	}
-	console.log("User Data " , userData)
+	console.log("User Logged and 2FA Disabled -> ", logged && !userData.twofaStatus)
+	console.log("User Logged and 2FA Enabled -> ", logged && userData.twofaStatus)
+	console.log("User is not Logged in -> ", !logged )
 	return (
 		<BrowserRouter>
 		<Routes>
 			{/* User Logged and 2FA Disabled */}
 			{logged && !userData.twofaStatus && (
 				<>
-					<Route path="/settings" element={<LoginSettingsComponents />} />
-					<Route path="/home" 	element={<HomeComponents />} />
-					<Route path="/profil/*"	element={<OtherUser />} />
-					<Route path="/game" 	element={<GameComponents />} />
-					<Route path="/chat" 	element={<ChatPage />} />
-					<Route path="/groups" 	element={<ChatGroupsComponents />} />
-					<Route path="/profil" 	element={<ProfilComponents />} />
-					<Route path="/*" 		element={<ErrorTextPage />} />
+					<Route path="/settings" element={<LoginSettingsComponents/>}/>
+					<Route path="/home" 	element={<HomeComponents/>}/>
+					<Route path="/profil/*"	element={<OtherUser/>}/>
+					{/* <Route path="/game" 	element={<GameComponents/>}/> */}
+					<Route path="/chat" 	element={<ChatPage/>}/>
+					<Route path="/groups" 	element={<ChatGroupsComponents/>}/>
+					<Route path="/profil" 	element={<ProfilComponents/>}/>
+					<Route path="/*" 		element={<ErrorTextPage/>}/>
 				</>
 			)}
-			{/* User Logged and 2FA Enabled*/}
+			{/* User Logged and 2FA Enabled */}
 			{logged && userData.twofaStatus && (
 				<>
-					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>} />
+					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
 				</>
 			)}
 			{/* User is not logged in */}
 			{!logged && (
 				<>
-					<Route path="/welcome" element={<WelcomePage/>} />
-					<Route path="/login" element={<LogingPageComponents />} />
-					<Route path="/*" element={<Navigate to="/login" />} />
+					<Route path="/welcome"	element={<WelcomePage/>}/>
+					<Route path="/login"	element={<LoginPage/>}/>
+					<Route path="/*"		element={<Navigate to="/login"/>}/>
 				</>
 			)}
 			</Routes>
@@ -181,7 +190,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 			{["/welcome", "/"].map((idx) => 
 			<Route path={idx}	Component={WelcomePage} key={""}/>
 			)}  
-			<Route path="/login"	Component={LogingPageComponents}/>
+			<Route path="/login"	Component={LoginPage}/>
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>

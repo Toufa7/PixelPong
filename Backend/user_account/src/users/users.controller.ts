@@ -45,7 +45,7 @@ export class UsersController {
     }
     return user;
   }
-
+  
   @Patch(':userId/remove/:friendId')
   async removeFriend(
     @Param('userId', ParseUUIDPipe) userId: string,

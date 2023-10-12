@@ -25,7 +25,7 @@ const Toasts = () => {
 const renderer = ({seconds , completed }) => {
   if (completed) {
     return (
-        <span>You are good to go!</span>
+        <span>Vamo!</span>
     );
   } else {
     return <span>00:{seconds}</span>;
@@ -77,6 +77,7 @@ function TwoFa() {
     }
     
     return (
+        <div style={{height: '100vh'}}>
         <div className="container">
             <div className="twoFaBox">
                 <div style={{height: '50px'}} className="header">2FA</div>
@@ -103,6 +104,7 @@ function TwoFa() {
                         <button onClick={iClick} className="nes-btn">Verificar</button>
                     </div>
             </div>
+        </div>
         </div>
         </div>
 
