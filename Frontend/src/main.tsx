@@ -25,8 +25,6 @@ import { Setup } from './Pages/GamePage/Setup_Game_Front';
 import { Socket } from 'socket.io-client';
 import { socket_gm }from './Pages/GamePage/game_flow_sketch';
 
-let InGame : boolean;
-let user_id : string;
 
 
 export const OtherUser = () => {

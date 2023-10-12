@@ -65,8 +65,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
     //Changin State Of In Game
 
-    this.server.to(Player.id).emit("IminGame",{InGame : false , user_id :this.Players.players[Player.id]?.user_id});
-    console.log("!!!!!Changing State For this Player ---> " + this.Players.players[Player.id]?.user_id);
+    
 
     //--------------------------//
 

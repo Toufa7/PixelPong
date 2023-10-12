@@ -31,10 +31,10 @@ export class Players_Management {
     if (!this.SearchForExsitentUserID(user_id)){
       this.players[player_id] = new PlayerDto(player_id,x,y,width , height , room_id,user_id,username);
       console.log("Player In game Setting up stats ...");
-      this.Player_Game_Info.inGame = true;
-      this.Player_Game_Info.userId = user_id;
+      // this.Player_Game_Info.inGame = true;
+      // this.Player_Game_Info.userId = user_id;
       console.log(" " + this.Player_Game_Info.inGame + " " + this.Player_Game_Info.userId);
-      server.to(Player.id).emit("IminGame",{inGame : this.Player_Game_Info.inGame , user_id : this.Player_Game_Info.userId});
+      // server.to(Player.id).emit("IminGame",{inGame : this.Player_Game_Info.inGame , user_id : this.Player_Game_Info.userId});
     }
     else{
       console.log("------- Player in Game Disconecting the Lazy socket  !! ------");
