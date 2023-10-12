@@ -1,4 +1,3 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
@@ -6,6 +5,7 @@ import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
 import jwt_decode from "jwt-decode";
 import { socket, socketContext } from './Pages/socket-client';
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 import axios from 'axios';
 /******************* Includes  *******************/
 const NavBar = lazy(() => import('./Pages/addons/NavBar'));
@@ -19,6 +19,7 @@ const ProfilPage = lazy(() => import('./Pages/profilPage/profilPage'));
 const ChatPage = lazy(() => import('./Pages/chatPage/chatPage'));
 const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'));
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
+import { Setup } from './Pages/GamePage/Setup_ comp';
 
 export const OtherUser = () => {
 	return (
@@ -89,14 +90,14 @@ const HomeComponents = () => {
 	);
 }
 
-// const GameComponents = () => {
-// 	return (
-// 		<>
-// 			<Stars/>
-// 			<Setup/>
-// 		</>
-// 	);
-// }
+const GameComponents = () => {
+	return (
+		<>
+			<Stars/>
+			<Setup/>
+		</>
+	);
+}
 
 const ErrorTextPage = () => {
 	return (
