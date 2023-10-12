@@ -249,4 +249,16 @@ async findFriendRequestIdBySenderReceiver(senderId: string, receiverId: string):
 
   return friendrequest?.id || null;
 }
+
+async ChangeStateInGame(id: string, ingame: boolean)  //Chaning The State of Player in Game
+{
+  await this.prisma.user.update({
+    where: {
+      id,
+    },
+    data:{
+      ingame: ingame,
+    }
+  })
+}
 }

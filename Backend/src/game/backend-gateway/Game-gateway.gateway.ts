@@ -5,6 +5,9 @@ import { Players_Management } from './entities/players-management.service';
 import { Rooms } from './entities/room.service';
 import { Interval, Timeout } from '@nestjs/schedule';
 import { UsersService } from 'src/users/users.service';
+import { JwtGuard, WSGuard } from 'src/guards/jwt.guards';
+import { JwtService } from '@nestjs/jwt';
+import { decode } from 'jsonwebtoken';
 
 
 @WebSocketGateway({
@@ -20,7 +23,9 @@ pingTimeout: 1000,
 })
 export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
   constructor(private readonly Players: Players_Management,
-      private readonly Rooms : Rooms , private readonly userService : UsersService) {}
+      private readonly Rooms : Rooms ,
+      private readonly userService : UsersService,
+      private readonly jwt : JwtService) {}
 
   @WebSocketServer()
   public server : Server;
@@ -28,6 +33,8 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   public screen_metrics : {screen_width : number , screen_height : number} = {screen_width : 0, screen_height : 0};
 
   public Room_dl;
+
+  public User;
 
   afterInit(server: Server) {
     this.server = server;
@@ -37,23 +44,47 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   // this.server.to(Player.id).emit("UpdatePlayerPos",this.Players.players);
   // console.log(this.Rooms);
 
-  handleConnection(Player: Socket) {
-
-        Player.on("PlayerEntered",(Data)=> {
+  async handleConnection(Player: Socket) {
+        this.User = await this.getUser(Player);
+        console.log("i am a, : ", this.User);
+        Player.on("PlayerEntered",async (Data)=> {
           this.screen_metrics.screen_width = Data.s_w;
           this.screen_metrics.screen_height = Data.s_h;
           console.log("---------------CONNECTION SECTION ------------------")
           console.log("new Player connected " + Player.id);
-          this.Players.AddPlayer(this.server,Player , Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95,"",Data.Player_user_id,Data.Player_user_name);
-          this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
-          console.log("---------------------CCCoooCCC--------------------------------\n")
-          this.SendToPlayersinRoom(Player,this.Rooms);
+          await this.Players.AddPlayer(Player , Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95,"",this.User.id,this.User.username);
+          console.log("Can i set Rooms --> " + this.Players.SetRoom);
+          if (this.Players.SetRoom){
+            this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+            this.SendToPlayersinRoom(Player,this.Rooms);
+          }
           console.log("--->Players" + JSON.stringify(this.Players.players));
+          console.log("---------------------CCCoooCCC--------------------------------\n")
 
         })
   }
 
-  handleDisconnect(Player: Socket) {
+  async getUser(client: Socket)  {
+    const session = client.handshake.headers.cookie;
+    if (session) {
+      const jwt = session.split('=')[1];
+      const t = decode(jwt);
+      console.log("************",t?.['id'],"************"); 
+      if (session && jwt) {
+        try{
+          const user = await this.jwt.verifyAsync(jwt,{secret:'THISISMYJWTSECRET'});
+          // console.log('=================================> ',user);
+          return user;
+        }catch(err){
+          return null; 
+        }
+      }
+    }
+    return null;
+  }
+
+
+async handleDisconnect(Player: Socket) {
     let Player_deleted = Player.id;
     for(const id in this.Rooms.rooms){
       const Room = this.Rooms.rooms[id];
@@ -62,26 +93,28 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         break;
       }
     }
-
-    //Changin State Of In Game
-
     
+    if (this.Players.players[Player.id]?.user_id == this.User.id){
+      console.log("Im Player with username --> " + this.User.username);
+      await this.userService.ChangeStateInGame(this.User.id,false);
+    }
 
-    //--------------------------//
 
-        this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
-        if (this.Room_dl?.client_count > 0){
+    this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+    if (this.Room_dl?.client_count > 0){
           console.log("-------------There still another Player in the room!!-------------");
           this.server.to(this.Room_dl.id).emit("PlayerLeave");
-        }
 
+    }
+        
     if (!this.Room_dl?.Player1 || !this.Room_dl?.Player2){
-      console.log("ENTERED !!");
-      console.log(this.Room_dl?.id);
-      this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
+          console.log("ENTERED !!");
+          console.log(this.Room_dl?.id);
+          this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
     }
     console.log(this.Players.players);
-  }
+
+}
 
 
   

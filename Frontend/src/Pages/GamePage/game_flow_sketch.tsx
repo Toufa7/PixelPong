@@ -112,15 +112,6 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
   });
 }
 
-// const GetUserInfo = async (token : any) =>{
-//   try{
-//     const Resp = await axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true });
-//     console.log(Resp);
-//   }catch (error){
-//     console.error(error);
-//   }
-// }
-
 export const Game_instance = () =>{
 
 
@@ -129,34 +120,22 @@ export const Game_instance = () =>{
   const [Infos, SetInfo] = useState<any>({});
 
   // socket = io("ws://localhost:3000/game" , {withCredentials: true , transports: ["websocket"] });
+
   const socketRef = useRef<Socket | null >(null);
-  const cookies = new Cookies();
-  const jwt = cookies.get('jwt');
-  const token : any = jwt_decode(jwt);
+
 
   useEffect(()=>{
     if (socketRef.current == null){
       socketRef.current = io("ws://localhost:3000/game", {withCredentials: true, transports: ["websocket"] });
       socket_gm = socketRef.current;
     }
-
-    try{
-    axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
-        .then(Resp => SetInfo(Resp.data))
-        .catch(error => console.error(error));
-    }catch(error){
-      console.error(error);
-    }
-
-    // console.log(Infos);
-    // console.log("token Game--->" + JSON.stringify(token));
-    // axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
-    // .then(response => console.log(response));
     
     socket_gm?.on("connect",() =>{
       id_player = socket_gm.id;
       width = document.getElementById('child')?.offsetWidth;
       height = document.getElementById('child')?.offsetHeight;
+
+      
     });
     return () => {
       socket_gm?.off("connect");
@@ -228,8 +207,15 @@ export const Game_instance = () =>{
   
   
         socket_gm?.on("PlayerLeave",()=>{
+          // try{
+          //   axios.patch(`http://localhost:3000/users/statingame`,{ingame : false},{ withCredentials: true })
+          //   .then(Resp => console.log("Patched"))
+          //   .catch(error => console.error(error));
+          // }catch(error){
+          //   console.log(error);
+          // }
           console.log("You won by Forfait --->" + socket_gm?.id);
-          socket_gm.disconnect();
+          socket_gm?.disconnect();
           change_screen = true;
           // p5_ob.background("#000000");
           // p5_ob.image(ovp,170,0,750,550);
@@ -429,3 +415,43 @@ export const Game_instance = () =>{
   //   // console.log(socket.id);
   //   // console.log(frontendPlayers[socket.id]);
   // })
+
+
+
+
+  // try{
+      //   axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
+      //       .then(Resp => SetInfo(Resp.data))
+      //       .catch(error => console.error(error));
+      //   }catch(error){
+      //     console.error(error);
+      //   }
+        
+      // try{
+      //   axios.patch(`http://localhost:3000/users/statingame`,{ingame : true},{ withCredentials: true })
+      //   .then(Resp => console.log("Patched"))
+      //   .catch(error => console.error(error));
+      // }catch(error){
+      //   console.log(error);
+      // }
+
+
+      // const GetUserInfo = async (token : any) =>{
+//   try{
+//     const Resp = await axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true });
+//     console.log(Resp);
+//   }catch (error){
+//     console.error(error);
+//   }
+// }
+
+
+  // const cookies = new Cookies();
+  // const jwt = cookies.get('jwt');
+  // const token : any = jwt_decode(jwt);
+
+
+      // console.log(Infos);
+    // console.log("token Game--->" + JSON.stringify(token));
+    // axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
+    // .then(response => console.log(response));

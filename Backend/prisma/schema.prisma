@@ -20,6 +20,7 @@ datasource db {
     twofasecret String? @unique
     twofatoken String?
     profileImage String?
+    ingame     Boolean?  @default(false)
     twofa       Boolean? @default(false)
     stats     Stats[]  @relation("stats")
     status    UserStatus?
