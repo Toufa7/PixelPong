@@ -22,7 +22,6 @@ let map = new Map <any , any>();
     },
     namespace: 'chat',
   })
-  
 
   // @UseGuards(JwtGuard)
   export class ChatGateway implements OnGatewayInit , OnGatewayConnection, OnGatewayDisconnect{
@@ -39,11 +38,9 @@ let map = new Map <any , any>();
       if (session) {
         const jwt = session.split('=')[1];
         const t = decode(jwt);
-        console.log("************",t?.['id'],"************"); 
         if (session && jwt) {
           try{
             const user = await this.Jwt.verifyAsync(jwt,{secret:'THISISMYJWTSECRET'});
-            // console.log('=================================> ',user);
             return user;
           }catch(err){
             return null; 
@@ -56,7 +53,6 @@ let map = new Map <any , any>();
     async handleConnection(client: Socket, ...args: any[]) {
       console.log("Im hererererererere");
       this.logger.log(`connected : ${client.id}`  );
-      
       const user = await this.getUser(client);
       console.log(user);
       if(user){
@@ -98,15 +94,13 @@ let map = new Map <any , any>();
       // console.log("dmschat :: ", tab);
       this.server.emit('postOldCnv'  , tab );
     }
-
-
     // how to use this in front end
     // emit using this event ('getOldCnv')
     // receive on ('postOldCnv')
 
 
 
-    //////////////////get messages ///////////////////////
+    //////////////////get old messages ///////////////////////
     @SubscribeMessage('getOldMsg')
     async getMsg(client : Socket, id : any) {
       const user = await this.getUser(client);
@@ -124,21 +118,7 @@ let map = new Map <any , any>();
                   ]
                 },
             });
-            // console.log("dmschat :: ", dMSChat);
-            // if (!dMSChat){
-            //     const dMSChat1 =  await this.prisma.dmschat.create({
-            //         data: {
-        
-            //           sender: {connect: {id: user.id}},
-            //           receiver: {connect: {id:id}},
-            //           messageDMs : ""
-            //         },
-            //     });
-            //     this.server.emit('msgToClient'  , dMSChat1 );
-            // }
-            // else{
-              this.server.emit('postOldMsg'  , dMSChat);
-            // }
+            this.server.to(map.get(user.id)).emit('postOldMsg'  , dMSChat);
     }
     //////////////////send messages ///////////////////////
     @SubscribeMessage('msgToServer')
@@ -146,9 +126,7 @@ let map = new Map <any , any>();
 
       console.log("id ===============>  " , body.id);
         const user = await this.getUser(client);
-        // console.log("body sub :: ", body.id);
         const idUs = map.get(body.id);
-        // if(client.id == idUs){
             const dMSChat1 =  await this.prisma.dmschat.create({
               data: {
 

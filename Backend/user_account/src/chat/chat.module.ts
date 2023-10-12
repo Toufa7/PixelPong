@@ -5,6 +5,7 @@ import { JwtGuard } from 'src/guards/jwt.guards';
 import { PrismaService } from 'src/auth/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ChatGateway } from './chat.gateway';
+import { ChatService } from './chat.service';
 
 @Module({
   controllers: [],
