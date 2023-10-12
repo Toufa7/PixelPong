@@ -2,7 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { convertTypeAcquisitionFromJson, isConstructorDeclaration } from 'typescript';
-import {height, socket, width} from '../game_flow_sketch';
+import {height, socket_gm, width} from '../game_flow_sketch';
 // import { socket } from '../socket_setup/client-connect';
 import { Paddle } from './paddle.class';
 // import { socket } from '../socket_setup/client-connect';
@@ -229,7 +229,7 @@ import { Paddle } from './paddle.class';
             // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
             // this.pos.x = this.pos.x + this.ball_speed_x;
             // this.pos.y = this.pos.y + this.ball_speed_y;
-            socket?.emit("Ball_movement");
+            socket_gm?.emit("Ball_movement");
 
             this.draw_the_ball("#e9ed09");
         }

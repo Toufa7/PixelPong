@@ -44,7 +44,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           this.screen_metrics.screen_height = Data.s_h;
           console.log("---------------CONNECTION SECTION ------------------")
           console.log("new Player connected " + Player.id);
-          this.Players.AddPlayer(Player , Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95,"",Data.Player_user_id,Data.Player_user_name);
+          this.Players.AddPlayer(this.server,Player , Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95,"",Data.Player_user_id,Data.Player_user_name);
           this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
           console.log("---------------------CCCoooCCC--------------------------------\n")
           this.SendToPlayersinRoom(Player,this.Rooms);
@@ -62,6 +62,14 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         break;
       }
     }
+
+    //Changin State Of In Game
+
+    this.server.to(Player.id).emit("IminGame",{InGame : false , user_id :this.Players.players[Player.id]?.user_id});
+    console.log("!!!!!Changing State For this Player ---> " + this.Players.players[Player.id]?.user_id);
+
+    //--------------------------//
+
         this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
         if (this.Room_dl?.client_count > 0){
           console.log("-------------There still another Player in the room!!-------------");

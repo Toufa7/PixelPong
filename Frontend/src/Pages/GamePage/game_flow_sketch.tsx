@@ -32,10 +32,13 @@ let canvas : p5Types.Renderer;
 // export let screen_width = 1050;
 // export let screen_height = 500;
 let id_player : any;
-export let socket : Socket;
+export let socket_gm : Socket;
 let canvasDiv : any;
 export let width : any;
 export let height : any;
+
+// export let inGame : boolean;
+// export let user_id : string;
 
 
 
@@ -134,7 +137,7 @@ export const Game_instance = () =>{
   useEffect(()=>{
     if (socketRef.current == null){
       socketRef.current = io("ws://localhost:3000/game", {withCredentials: true, transports: ["websocket"] });
-      socket = socketRef.current;
+      socket_gm = socketRef.current;
     }
 
     try{
@@ -150,17 +153,17 @@ export const Game_instance = () =>{
     // axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
     // .then(response => console.log(response));
     
-    socket?.on("connect",() =>{
-      id_player = socket.id;
+    socket_gm?.on("connect",() =>{
+      id_player = socket_gm.id;
       width = document.getElementById('child')?.offsetWidth;
       height = document.getElementById('child')?.offsetHeight;
     });
     return () => {
-      socket?.off("connect");
-      socket?.off("UpdatePlayerPos");
-      socket?.off("PlayerLeave");
-      socket?.off("PlayersOfRoom");
-      socket?.off("UpdateBallPos");
+      socket_gm?.off("connect");
+      socket_gm?.off("UpdatePlayerPos");
+      socket_gm?.off("PlayerLeave");
+      socket_gm?.off("PlayersOfRoom");
+      socket_gm?.off("UpdateBallPos");
       // setConnected(false);
     }
     
@@ -176,12 +179,12 @@ export const Game_instance = () =>{
     // console.log(Infos);
     
     //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
-        SettingUpBackWithFront(socket, Frontroom, p5_ob);
+        SettingUpBackWithFront(socket_gm, Frontroom, p5_ob);
     //o--------------------------------------------------------------------------
   
         //r- Getting Position of player form Backend
   
-        socket?.on("UpdatePlayerPos",(Backroom : any)=>{
+        socket_gm?.on("UpdatePlayerPos",(Backroom : any)=>{
             for(const id in Frontroom){
               if(Frontroom[id].Player1){
                   Frontroom[id].Player1.Paddle.pos.x = Backroom.Player1?.x;
@@ -197,14 +200,14 @@ export const Game_instance = () =>{
   
         //r- Getting Position of Ball from Backend
   
-        socket?.on("UpdateBallPos",(Backroom : any)=> {
+        socket_gm?.on("UpdateBallPos",(Backroom : any)=> {
           let reverse_ball_x = width - Backroom.GameBall?.x;
   
           for(const id in Frontroom){
-            if (Frontroom[id].Player1 && socket.id == Frontroom[id].Player1?.id){
+            if (Frontroom[id].Player1 && socket_gm.id == Frontroom[id].Player1?.id){
               Frontroom[id].Player1.Ball.pos.x = Backroom.GameBall?.x;
               Frontroom[id].Player1.Ball.pos.y = Backroom.GameBall?.y;
-            }else if (Frontroom[id].Player2 && socket.id == Frontroom[id].Player2?.id){
+            }else if (Frontroom[id].Player2 && socket_gm.id == Frontroom[id].Player2?.id){
               Frontroom[id].Player2.Ball.pos.x = reverse_ball_x;
               Frontroom[id].Player2.Ball.pos.y = Backroom.GameBall?.y;
             }
@@ -224,9 +227,9 @@ export const Game_instance = () =>{
         //r------------------
   
   
-        socket?.on("PlayerLeave",()=>{
-          console.log("You won by Forfait --->" + socket?.id);
-          socket.disconnect();
+        socket_gm?.on("PlayerLeave",()=>{
+          console.log("You won by Forfait --->" + socket_gm?.id);
+          socket_gm.disconnect();
           change_screen = true;
           // p5_ob.background("#000000");
           // p5_ob.image(ovp,170,0,750,550);
@@ -234,8 +237,12 @@ export const Game_instance = () =>{
   
         p5_ob.setup = () => {
 
+        // socket_gm?.on("IminGame",(Player_Info) => {
+        //     inGame = Player_Info?.inGame;
+        //     user_id = Player_Info?.user_id;
+        // });
 
-        socket?.emit("PlayerEntered",{s_w : width , s_h : height , Player_user_id : Infos.id , Player_user_name : Infos.username});
+        socket_gm?.emit("PlayerEntered",{s_w : width , s_h : height , Player_user_id : Infos.id , Player_user_name : Infos.username});
         p5_ob.frameRate(60);
         canvasDiv = document.getElementById('child');
         width = document.getElementById('child')?.offsetWidth;
@@ -345,7 +352,7 @@ export const Game_instance = () =>{
       // console.log("resize--> " + width);
       // console.log("resize--> " + height);
       if (p5_ob){
-        socket?.emit("UpdateScreenmetrics",{s_w : width , s_h : height});
+        socket_gm?.emit("UpdateScreenmetrics",{s_w : width , s_h : height});
         p5_ob.resizeCanvas(width,height);
         canvas = p5_ob.createCanvas(width,height).parent(canvasDiv);
         const canvas_x = (p5_ob.windowWidth - p5_ob.width) / 2;

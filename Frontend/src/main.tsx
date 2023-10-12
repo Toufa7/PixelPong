@@ -22,10 +22,14 @@ import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
 import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
 import ErrorPage from './Pages/errorPage/errorPage';
 import { Setup } from './Pages/GamePage/Setup_Game_Front';
+import { Socket } from 'socket.io-client';
+import { socket_gm }from './Pages/GamePage/game_flow_sketch';
+
+let InGame : boolean;
+let user_id : string;
 
 
 export const OtherUser = () => {
-	const socket = sock
 	return (
 		<>
 			<Stars/>
@@ -98,13 +102,8 @@ const twoFAComponents = () => {
 }
 const HomeComponents = () => {
 	// const socket = useContext(socketContext);
-	// //console.log("yaaaaaaaaaaaaaaaaaaaaaaaaaaa wld nas ")
-	// useEffect(()=>{
-	// 	socket?.on("connect",()=>{
-	// 		//console.log("im connected");
-	// 	socket.close()
-	// })
-	// },[]);
+
+
 	
 	return (
 		<>
@@ -130,7 +129,7 @@ const GameComponents = () => {
 const RedirectToSettings = () => {
 	const cookies = new Cookies();
 	const jwt = cookies.get('jwt');
-	const token = jwt_decode(jwt);
+	const token : any = jwt_decode(jwt);
 	console.log("A")
 	const [data, setData] = useState(false);
 	useEffect(() => {
