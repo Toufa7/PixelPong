@@ -13,7 +13,7 @@ import 'nes.css/css/nes.min.css';
 import { useNavigate } from 'react-router-dom';
 import letsPlay from './assets/success.mp3';
 
-function welcomePage() {
+function WelcomePage() {
   function playing () {
     new Audio(letsPlay).play();
   }
@@ -72,4 +72,4 @@ function welcomePage() {
   );
 }
 
-export default welcomePage;
+export default WelcomePage;

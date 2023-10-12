@@ -47,12 +47,8 @@ const Profil = () => {
     useEffect(() => {
         async function fetchData() {
             const endpoint = `http://localhost:3000/users${location.pathname}`;
-            // try {
                 const response = await axios.get(endpoint, { withCredentials: true });
-                //console.log("User ID ", response.data.id);
-                
                 const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
-                //console.log("Avatar URL  alocodee  ", avatarURL);
                 try {
                     await axios.get(avatarURL, { withCredentials: true });
                     setUserData(() => ({

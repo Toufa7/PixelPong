@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
-
+import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
 import jwt_decode from "jwt-decode";
-/******************* Includes  *******************/
-import NavBar from './Pages/addons/NavBar';
-import Stars from './Pages/addons/Stars';
-import LoginSettings from './Pages/loginSettings/LoginSettings';
-import LoginPage from './Pages/loginPage/LoginPage';
-import WelcomePage from './Pages/welcomePage/welcomePage';
-import TwoFa from './Pages/2FA/twoFA';
-import Home from './Pages/HomePage/Home';
-import ProfilPage from './Pages/profilPage/profilPage';
-import axios from 'axios';
-import ChatPage from './Pages/chatPage/chatPage'
 import { socket, socketContext } from './Pages/socket-client';
-import ChatPageGroup from './Pages/chatPageGroups/chatPageGroup';
-import OtherProfilPage from './Pages/userProfilPage/userProfilPage'
+import axios from 'axios';
+/******************* Includes  *******************/
+const NavBar = lazy(() => import('./Pages/addons/NavBar'));
+const Stars = lazy(() => import('./Pages/addons/Stars'));
+const LoginSettings = lazy(() => import('./Pages/loginSettings/LoginSettings'));
+const LoginPage = lazy(() => import('./Pages/loginPage/LoginPage'));
+const WelcomePage = lazy(() => import('./Pages/welcomePage/welcomePage'));
+const TwoFa = lazy(() => import('./Pages/2FA/twoFA'));
+const Home = lazy(() => import('./Pages/HomePage/Home'));
+const ProfilPage = lazy(() => import('./Pages/profilPage/profilPage'));
+const ChatPage = lazy(() => import('./Pages/chatPage/chatPage'));
+const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'));
+const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
 
 export const OtherUser = () => {
 	return (
@@ -149,6 +149,8 @@ const Routing = () => {
 	console.log("User is not Logged in -> ", !logged )
 	return (
 		<BrowserRouter>
+		<Suspense fallback={<div>Loading...</div>}>
+
 		<Routes>
 			{/* User Logged and 2FA Disabled */}
 			{logged && !userData.twofaStatus && (
@@ -178,6 +180,7 @@ const Routing = () => {
 				</>
 			)}
 			</Routes>
+			</Suspense>
 		</BrowserRouter>
 	);
 };
