@@ -59,12 +59,16 @@ const messageInput = (props: any) => {
             receiveMessage(payload);
         });
 
+        //cleanup function
+        return() => {
+            conversationsSocket.off('msgToClient');
+        }
+
     }, [])
 
     //Handling newly received message 
     const receiveMessage = (newMessage: chatAgent) => {
 
-        console.log("New message is --->", newMessage);
         const tmpMsgObj: chatAgent = {
             id: newMessage.id,
             username: newMessage.username,
