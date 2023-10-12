@@ -3,22 +3,25 @@ import "./LoginSettings.scss"
 /******************* Packages  *******************/
 import {Toaster, toast } from 'react-hot-toast';
 import axios from "axios";
-import { useState } from "react";
-import Anime, { anime } from 'react-anime';
-import { Navigate } from "react-router-dom";
-/******************* Includes  *******************/
-import img3 from './assets/FarmerBoy.png';
-import img2 from './assets/Detective.png';
-import img1 from './assets/Glasses.png';
-import img4 from './assets/Lady.png';
-import img5 from './assets/old_man.png';
-import img6 from './assets/Girl2.png';
-import myAvatar from '../otoufah.jpg';
-import { BrowserRouter, Router, Routes, useNavigate, useParams, useRouteError } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Anime from 'react-anime';
 import { Cookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
+import jwt_decode from "jwt-decode";
 
-const RetrieveCheckSendData = () => {
+/******************* Includes  *******************/
+
+const RetrieveCheckSendData =  () => {
+    // const [firstTimeLogin, setFristTimeLogin] = useState(false);
+    // const cookie = new Cookies();
+    // const token = jwt_decode(cookie.get('jwt'));
+    // axios.get(`http://localhost:3000/users/${token.id}`, {withCredentials: true})
+    // .then((Resepone) => {
+    //     setFristTimeLogin(Resepone.data.firstlogin)
+    // })
+    // .catch((bad )=> {
+    //     console.log("first ==+> ", bad);
+    // })
+
 
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
@@ -27,63 +30,72 @@ const RetrieveCheckSendData = () => {
      * TODO: it's optionnaly either nickname or avatar or both
     */
 //    const navigate = useNavigate();
-   if (avatar && usernameCheck.test(nicknameInput)) {
+   if (avatar) {
        const data = new FormData();
        data.append('file', avatar);
        toast.promise(
            axios.all([
-               axios.post('http://localhost:3000/auth/signup-success', { username: nicknameInput }, { withCredentials: true }),
                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
-            ]).then(axios.spread((responseNickname, responseAvatar) => {
-                //console.log(responseNickname, responseAvatar);
+            ]).then(axios.spread((responseNickname) => {
+                console.log(responseNickname);
             })),
             {
                 loading: "Sending data...",
                 success: "Success Settings!",
                 error: "An error occurred",
             }
-            );
-            /**
-             * TODO: Need to redirect to home
-            */                
+            ,{ duration: 5000, position: 'top-right' });           
     }
-        else if (!avatar && nicknameInput.length == 0)
-        {
-            //console.log("No Data Need to be Shown")
-            document.getElementById('warning')?.showModal();
-        }
-        else if (!nicknameInput){
-            toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
-        }
-        else if (!usernameCheck.test(nicknameInput))
-        {
-            toast.error("Invalid Username", { style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
-        }
-        else {
-            toast("Choose an avatar", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
-        }
+    else if (usernameCheck.test(nicknameInput)) {
+        toast.promise(
+            axios.all([
+                axios.post('http://localhost:3000/auth/signup-success', { username: nicknameInput }, { withCredentials: true }),
+             ]).then(axios.spread((responseNickname) => {
+                 console.log(responseNickname);
+             })),
+             {
+                 loading: "Sending data...",
+                 success: "Success Settings!",
+                 error: "An error occurred",
+             }
+             ,{ duration: 5000, position: 'top-right' });           
+    }
+    else if (!avatar && nicknameInput.length)
+    {
+        document.getElementById('warning')?.showModal();
+    }
+    else if (!nicknameInput){
+        toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
+    }
+    else if (!usernameCheck.test(nicknameInput))
+    {
+        toast.error("Invalid Username", { style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
+    }
+    else {
+        toast("Choose an avatar", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
+    }
 }
 
 const Avatars = () => {
-    const handleClick = (idx : number) => {
-        const avatars = [{img1}.img1,{img2}.img2,{img3}.img3,{img4}.img4,{img5}.img5,{img6}.img6];
-        //console.log("Avatar Seleted: " , avatars[idx])
+    const cookies = new Cookies();
+    const logged = cookies.get('jwt');
+    const [userData, setUserData] = useState({});
+    if (logged)
+    {
+        const token = jwt_decode(logged);
+        useEffect(() => {
+            try {
+                axios.get(`http://localhost:3000/users/${token.id}`, {withCredentials : true})
+                .then((rese) => {
+                    console.log("user Data =>  ", rese);
+                    setUserData(rese.data)
+                })
+            }
+            catch (error) {
+                console.log("Error Catched ", error);
+            }
+        },[])
     }
-
-    return (
-        <>  
-        <div className="avatars">
-            <img onClick={() => handleClick(0)} src={img1}/>
-            <img onClick={() => handleClick(1)} src={img2} />
-            <img onClick={() => handleClick(2)} src={img3} />
-        </div>
-        <div className="avatars">
-            <img onClick={() => handleClick(3)} src={img4} />
-            <img onClick={() => handleClick(4)} src={img5} />
-            <img onClick={() => handleClick(5)} src={img6} />
-        </div>
-        </>
-    );
 };
 
 
@@ -96,18 +108,14 @@ export default function LoginSettings() {
         axios.put(endpoint, status, { withCredentials: true }) 
         .then (() => {})
         .catch(() => {});
-    }   
-
-
+    }
     interface Token {
         username : string
     }
     const cookie = new Cookies();
-    const token : Token = jwtDecode(cookie.get('jwt'));
+    const token : Token = jwt_decode(cookie.get('jwt'));
 	const [update , setUpdate] = useState("");
-    console.log(token)
-
-      return (
+    return (
         <div style={{height: '100vh'}}>
             <Toaster/>
           <div className="container">
@@ -116,7 +124,7 @@ export default function LoginSettings() {
                 <div className="content">
                     <div>
                         <div className="nes-field">
-                            <input onChange={(e) => setUpdate(e.target.value)} type="text" name="nickname" className="nes-input" required placeholder={token.username}/>
+                            <input onChange={(e) => setUpdate(e.target.value)} type="text" name="nickname" className="nes-input" required placeholder="Choose a nickname"/>
                         </div>
                         <div className="choosingAvatarContainer">
                             <span className="is-primary">Choose Avatar</span>
@@ -124,7 +132,7 @@ export default function LoginSettings() {
                             {/* <Avatars /> */}
                         <div className="uploadContainer">
                             <label className="nes-btn">
-                                <input formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
+                                <input onChange={(e) => setUpdate(e.target.value)} formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
                                 <span>Upload your avatar</span>
                             </label>
                         </div>
@@ -139,6 +147,7 @@ export default function LoginSettings() {
                             <button style={{width: 'fit-content'}} onClick={RetrieveCheckSendData} type="button" className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update</button>
                         </div>
                     </div>
+                    {/* A dialog show up for the 1st time and ask the user if he want to go with the default username & avatar */}
                     <section>
                         <dialog style={{background: '#DDFFFF', width: '600px'}} className="nes-dialog is-rounded" id="warning">
                             <form method="dialog">
