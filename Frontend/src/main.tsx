@@ -184,6 +184,20 @@ const Routing = () => {
 	);
 };
 
+
+// const router = createBrowserRouter([
+// 	{path: "settings",element: <LoginSettingsComponents/>},
+// 	{path: "profil/:",element: <HomeComponents/>},
+// 	{path: "chat",element: <LoginSettingsComponents/>},
+// 	{path: "groups",element: <HomeComponents/>},
+// 	{path: "profil",element: <LoginSettingsComponents/>},
+// 	{path: "home",element: <HomeComponents/>},
+// 	{path: "settings",element: <LoginSettingsComponents/>},
+// ])
+
+// <RouterProvider router={router} />
+
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 	<Routing/>
