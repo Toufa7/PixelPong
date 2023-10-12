@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import Anime from 'react-anime';
 import { Cookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
-import Stars from "../addons/Stars";
 
 /******************* Includes  *******************/
 

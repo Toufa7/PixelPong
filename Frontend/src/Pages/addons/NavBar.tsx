@@ -29,12 +29,12 @@ const NavBarBody = () => {
 			</a>
 		</div>
 		<div className="nav-item">
-			<a href="chat" title="Chat">
+			<a href="/chat" title="Chat">
 				<img src={msgLogo}/>
 			</a>
 		</div>
 		<div className="nav-item">
-			<a href="settings" title="Settings">
+			<a href="/settings" title="Settings">
 				<img src={settingsLogo}/>
 			</a>
 		</div>

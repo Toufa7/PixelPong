@@ -6,14 +6,8 @@ import Cookies from 'universal-cookie';
 import { useEffect, useState } from "react";
 import axios from "axios";
 /******************* Includes  *******************/
-import medaille from './assets/medaille.svg';
-import savage from './assets/savage.svg';
-import siif from './assets/siif.svg';
-import endpoint from './assets/endpoint.svg';
-import key from './assets/key.svg';
-import message from './assets/msgLogo.svg';
-import myAvatar from './../otoufah.jpg'
 import { useLocation } from 'react-router-dom';
+
 
 const States = () => {
     return (
@@ -92,7 +86,7 @@ const Profil = () => {
                     <div>
                         <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
                     </div>
-                        <span style={{textAlign: 'right'}}>78/100</span>
+                        <span style={{textAlign: 'right'}}>XX/XXX</span>
                     </div>
                 </div>
             </div>
@@ -111,8 +105,8 @@ const Profil = () => {
                                     .then(() => {})
                                     .catch(() => {})
                                 }
-                            }>Add Friend</a>
-                            )}
+                            }>Add Friend</a>)
+                        }
                 </a>
                 </div>
             </div>
@@ -196,11 +190,6 @@ const GroupsAndFriends = () => {
 }
 
 const Achivements = () => {
-    const awards = [
-        "1st victory in a ping pong match",
-        "Remarkable score against a bot",
-        "Defeating a skilled opponent",
-    ]
 
     return (    
             <div className="fullAchivementsBox">
@@ -208,8 +197,8 @@ const Achivements = () => {
                 <div className="contentAchivementsBox">
                     <div className="icons">
                         <div>
-                            <img src={medaille} />
-                            <span>{awards[0]}</span>
+                            <img src="image" />
+                            <span>text</span>
                         </div>
                     </div>
                 </div>

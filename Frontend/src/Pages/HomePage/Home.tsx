@@ -29,11 +29,7 @@ import caution from './assets/caution.svg';
 import folder from './assets/folder.svg';
 /*************************************************/
 
-const TopContainer = () => {
-	const textInfos = [
-		"Perfecciona tus habilidades de ping pong en nuestra área de práctica exclusiva",
-		"Desafía a tus amigos a emocionantes partidos de ping pong"
-	];
+const GetUserData = () => {
 	interface Token {
 		id : string
 	}
@@ -53,8 +49,15 @@ const TopContainer = () => {
 		}
 		fetchData();
 	}, []);
-	
+	return (userData);
+}
 
+const TopContainer = () => {
+	const userData = GetUserData();
+	const textInfos = [
+		"Perfecciona tus habilidades en nuestra área de práctica exclusiva",
+		"Desafía a tus amigos a emocionantes partidos de ping pong"
+	];
 	return (
 		<div className="headerBox">
 		<div className="topLoginBox">
@@ -177,9 +180,9 @@ const BottomLeft = () => {
 			<HorizontalScroll>
 				{
 					achivements.map((key, idx) => {
-						return (
-							<img src={key} key={idx}/>
-						)})
+					return (
+						<img src={key} key={idx}/>
+					)})
 				}
 			</HorizontalScroll>
 			</div>
@@ -207,29 +210,10 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 
   );
 }
 
-interface Token {
-	id : string
-}
+
+
 const BottomRight= () => {
-	const [userData, setUserData] = useState({
-		username : "",
-		avatar : ""
-	});
-	useEffect(() => {
-		async function fetchData () {
-			const cookie = new Cookies();
-			const token : Token = jwt_decode(cookie.get('jwt'));
-			if (token) {
-				const endpoint = 'http://localhost:3000/users/' + token.id;
-				const response = await axios.get(endpoint, { withCredentials: true });
-				setUserData({
-						username: response.data.username,
-						avatar: response.data.profileImage
-				});
-			}
-		}
-		fetchData();
-	}, []);
+	const userData = GetUserData();
 	const win = "#ff7670";
 	const lose = "#009e73";
 	const draw = "#178ee1";
@@ -241,8 +225,6 @@ const BottomRight= () => {
 				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"win"} color={win}/>
 				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"lose"} color={lose}/>
 				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"draw"} color={draw}/>
-				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"win"} color={win}/>
-				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"lose"} color={lose}/>
 			</div>
 			</div>
 	</div>
@@ -250,14 +232,18 @@ const BottomRight= () => {
 }
 
 function Notification () {
+	const [isFriend, setIsFriend] = useState(true);
+	const [friendStatus, setFriendStatus] = useState(false);
 	useEffect(() => {
 	socket.on('notification', (data) => {
 	console.log('Received notification:', data);
+
 	const AcceptFriend = async () =>  {
 		try {
 			await axios.patch("http://localhost:3000/users/acceptFriendRequest", data,{withCredentials : true})
 			.then((rese) => {
 				console.log("Notifcation Accept ", rese);
+				setFriendStatus(friendStatus)
 			})
 		}
 		catch (error) {
@@ -265,16 +251,18 @@ function Notification () {
 		}
 	}
 	const RefuseFriend = async () => {
-
 		try {
 			await axios.patch("http://localhost:3000/users/refuseFriendRequest", data,{withCredentials : true})
 			.then((rese) => {
-				console.log("Notifcation Accept ", rese);
+				console.log("Notifcation Refuse ", rese);
+				setFriendStatus(friendStatus)
+
 			})
 		} catch (error) {
 			console.log("Error Catched ", error);
 		}
 	}
+
 	const audio = new Audio(notification);
 	audio.play();
 	toast.custom(
@@ -283,9 +271,18 @@ function Notification () {
 				<p style={{ background: '#ffeeca', border: '2px solid black'}} className="title">Invitation Request</p>
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<img src={data.photo} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
-				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>
-			<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
-			<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
+				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>	
+				{ isFriend ?
+					(
+						<>
+							<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
+							<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
+						</>
+					) : 
+					(
+						<button style={{ marginLeft: '10px' }} onClick={() => setIsFriend(true)}>Accepted</button>
+					)				
+				}
 			</div>
 			</div>
 		</div>,

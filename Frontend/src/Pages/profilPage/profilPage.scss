@@ -10,7 +10,7 @@ body {
     justify-content:space-evenly;
 	align-items: center;
 	.fullAchivementsBox {
-		width: 652px; height: 302px;
+		width: 700px; height: 400px;
 		background: #BFB3E1;
 		border-bottom: 8px solid #7C6E6E;
 		border-left: 8px solid #7C6E6E;
@@ -43,6 +43,7 @@ body {
 				}
 				.icons span {
 					opacity: 0.35;
+					font-size:16px;
 				}
 			}
 		}
