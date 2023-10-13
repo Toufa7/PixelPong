@@ -42,6 +42,7 @@ CREATE TABLE "Dmschat" (
 CREATE TABLE "Groupchat" (
     "id" TEXT NOT NULL,
     "namegb" TEXT NOT NULL,
+    "idsuperadmin" TEXT NOT NULL,
     "grouptype" "Grouptype" NOT NULL,
     "password" TEXT,
     "image" TEXT,
@@ -183,6 +184,9 @@ ALTER TABLE "Dmschat" ADD CONSTRAINT "Dmschat_senderId_fkey" FOREIGN KEY ("sende
 
 -- AddForeignKey
 ALTER TABLE "Dmschat" ADD CONSTRAINT "Dmschat_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Groupchat" ADD CONSTRAINT "Groupchat_idsuperadmin_fkey" FOREIGN KEY ("idsuperadmin") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_SenderId_fkey" FOREIGN KEY ("SenderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

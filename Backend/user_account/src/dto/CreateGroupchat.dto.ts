@@ -7,5 +7,4 @@ export class CreateGroupchatDto {
     admins : string;
     grouptype: string;
     password? : string;
-    image : string;
 }

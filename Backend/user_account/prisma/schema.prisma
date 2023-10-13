@@ -43,6 +43,7 @@ datasource db {
   messageGB    Messagegb[] @relation("UGBMessage")
   usersgroupe  Groupchat[] @relation("GroupChat")
   admingroupe      Groupchat[] @relation("adminsGroupChat")
+  superadmin Groupchat[] @relation("superadmin")
 }
 
 model Dmschat {
@@ -60,6 +61,8 @@ model Groupchat{
     namegb     String
     usersgb     User[] @relation("GroupChat")
     admins   User[] @relation("adminsGroupChat")
+    idsuperadmin String
+    superadmin User @relation("superadmin", fields: [idsuperadmin], references: [id])
     grouptype  Grouptype
     password String?
     image String?

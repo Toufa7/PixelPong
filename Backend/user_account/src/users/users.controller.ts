@@ -98,9 +98,6 @@ export class UsersController {
 
   @Post('sendFriendRequest')
   async sendFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
-    //console.log("im here", req.user['id']);
-    //console.log("im here", body.userId);
-
     const notification = await this.usersService.sendFriendRequest(
       req.user.id,
       body.userId,

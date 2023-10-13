@@ -1,13 +1,19 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { ChatService } from './chat.service';
+import { JwtGuard } from 'src/guards/jwt.guards';
 
-import { PrismaService } from 'src/auth/prisma.service';
-import { User } from '@prisma/client';
 
+@UseGuards(JwtGuard)
 @Controller('chat')
 export class ChatController {
-    constructor(private readonly prisma: PrismaService) {}
 
-    //get old messages between two users
-    @Get(':id')
-    
+    constructor(private readonly ChatService: ChatService ) {}
+
+    //get old messages from dmschat
+    @Get('getOldMessages/:idrecever')
+    async getOldMessages(@Req() req: any ,@Param('idrecever') idrecever: string) {
+        return await this.ChatService.getOldMessages(req.user.id, idrecever);
+    }
+
+
 }

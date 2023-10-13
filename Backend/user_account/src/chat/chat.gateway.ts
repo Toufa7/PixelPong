@@ -100,39 +100,39 @@ let map = new Map <any , any>();
 
 
     //////////////////get old messages ///////////////////////
-    @SubscribeMessage('getOldMsg')
-    async getMsg(client : Socket, id : any) {
-      const user = await this.getUser(client);
-      const dMSChat =  await this.prisma.dmschat.findMany({
-                where: {
-                  OR: [
-                    {
-                      senderId: user.id,
-                      receiverId: id
-                    },
-                    {
-                      senderId: id,
-                      receiverId: user.id
-                    } 
-                  ]
-                },
-            });
-            // console.log("dmschat :: ", dMSChat);
-            // if (!dMSChat){
-            //     const dMSChat1 =  await this.prisma.dmschat.create({
-            //         data: {
+    // @SubscribeMessage('getOldMsg')
+    // async getMsg(client : Socket, id : any) {
+    //   const user = await this.getUser(client);
+    //   const dMSChat =  await this.prisma.dmschat.findMany({
+    //             where: {
+    //               OR: [
+    //                 {
+    //                   senderId: user.id,
+    //                   receiverId: id
+    //                 },
+    //                 {
+    //                   senderId: id,
+    //                   receiverId: user.id
+    //                 } 
+    //               ]
+    //             },
+    //         });
+    //         // console.log("dmschat :: ", dMSChat);
+    //         // if (!dMSChat){
+    //         //     const dMSChat1 =  await this.prisma.dmschat.create({
+    //         //         data: {
         
-            //           sender: {connect: {id: user.id}},
-            //           receiver: {connect: {id:id}},
-            //           messageDMs : ""
-            //         },
-            //     });
-            //     this.server.emit('msgToClient'  , dMSChat1 );
-            // }
-            // else{
-              this.server.to(map.get(user.id)).emit('postOldMsg'  , dMSChat);
-            // }
-    }
+    //         //           sender: {connect: {id: user.id}},
+    //         //           receiver: {connect: {id:id}},
+    //         //           messageDMs : ""
+    //         //         },
+    //         //     });
+    //         //     this.server.emit('msgToClient'  , dMSChat1 );
+    //         // }
+    //         // else{
+    //           this.server.to(map.get(user.id)).emit('postOldMsg'  , dMSChat);
+    //         // }
+    // }
 
 
     
@@ -185,7 +185,7 @@ let map = new Map <any , any>();
     }
 
 
-
+    // convert getoldmessage from socket to api
 
     // @WebSocketServer()
 
