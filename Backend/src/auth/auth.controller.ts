@@ -97,6 +97,7 @@ export class AuthController {
     const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
     const qr = await qrcode.toDataURL(otpauth);
     await this.authService.set2Fasecret(req.user.id, secret, otpauth);
+    await this.usersService.isauthenticated(req.user.id, false);
     return qr;
     }
     catch(error){
@@ -166,7 +167,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
     const user = await this.usersService.findOne(req.user.id);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
-      user.authenticated = true;
+      await this.usersService.isauthenticated(req.user.id, true);
       return res
         .status(200)
         .json({ message: 'OTP is valid. Allow the user to log in.' });

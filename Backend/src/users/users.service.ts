@@ -261,4 +261,12 @@ async ChangeStateInGame(id: string, ingame: boolean)  //Chaning The State of Pla
     }
   })
 }
+
+async isauthenticated(id: string, isauth: boolean)
+{
+  await this.prisma.user.update({
+    where:{id : id},
+    data:{authenticated: isauth}
+  })
+}
 }
