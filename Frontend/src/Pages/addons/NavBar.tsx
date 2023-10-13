@@ -104,7 +104,7 @@ const NavBarFooter = () => {
 			</Link>
 		</div>
 		<div className="nav-item">
-			<Link to="/#" title="Logout">
+			<Link to="/login" title="Logout">
 				<img onClick={logout} src={logoutLogo} alt="Logout" />
 			</Link>
 		</div>

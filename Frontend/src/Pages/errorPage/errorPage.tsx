@@ -2,7 +2,7 @@ import './errorPage.scss'
 import "xp.css/dist/XP.css";
 import ErrorIcon from './assets/error_icon.png'
 import Draggable from 'react-draggable';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 
 const ErrorPage = () => {
@@ -34,7 +34,9 @@ const ErrorPage = () => {
                 </div>
                 <div className="directionButtons">
                     <div className="homeButton">
-                        <button onClick={() => navigate('/home')}>Home Page</button>
+                    <Link to="/home">
+                        <button >Home Page</button>
+        			</Link>
                     </div>
                     <div className="preButton">
                         <button onClick={() => navigate(-1)}>Previous Page</button>

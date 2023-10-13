@@ -8,6 +8,8 @@ import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from "../socket-client";
+// import Anime, { anime } from 'react-anime';
+import Anime, { anime } from 'react-anime';
 /******************* Includes  *******************/
 import notification from './assets/notification.mp3';
 import medal from './assets/medaille.svg';
@@ -210,6 +212,36 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 
 
 const BottomRight= () => {
 	const userData = GetUserData();
+
+    const [check, setUserData] = useState(false);
+	const cookie = new Cookies();
+	const token = jwt_decode(cookie.get('jwt'));
+    useEffect(() => {
+        async function fetchData() {
+            const cookie = new Cookies();
+            const token = jwt_decode(cookie.get('jwt'));
+            if (token) {
+				try {
+					await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
+					.then(() => 
+					{
+						setUserData(true)
+					})
+					.catch(((error) => {
+						console.log("Error in NavBar " ,error);
+					}))
+					
+				} catch (error) {
+					console.log("Error in NavBar " ,error);
+				}
+            }
+        }
+		fetchData();
+    }, [])
+
+	const avatarIs = check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image;
+
+
 	const win = "#ff7670";
 	const lose = "#009e73";
 	const draw = "#178ee1";
@@ -218,9 +250,9 @@ const BottomRight= () => {
 		<div className="loginBoxHeader latest-matches1">ULTIMOS PARTIDOS</div>
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
-				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"win"} color={win}/>
-				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"lose"} color={lose}/>
-				<MatchResult player1={userData.username}  player1Avatar={userData.avatar} player2="Oppenent" rslt={"draw"} color={draw}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"win"} color={win}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"lose"} color={lose}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"draw"} color={draw}/>
 			</div>
 			</div>
 	</div>
@@ -288,19 +320,47 @@ function Notification () {
 }
 
 export default function Home() {	
-	Notification();
 	return (
 		<div style={{ height: '100vh' }}>
 			<Toaster/>
-			<TopContainer />
+			<Anime
+			translateY={['-100%', '0%']}
+			duration={1000}
+			easing="steps(5)">
+			<TopContainer/>
+			</Anime>
+			<Anime  delay={anime.stagger(1000)} scale={[ 0.1, 1 ]}>
 			<div className="top-containers">
-				<TopLeft />
-				<TopRight winRate={0.01} wins={0} loses={0}/>
+			<TopLeft/>
+			<TopRight winRate={0.01} wins={0} loses={0}/>
 			</div>
-			<div className="bottom-containers">
-			<BottomLeft />
-			<BottomRight />
+			</Anime>
+			<Anime translateY={['100%', '0%']} duration={2000} easing="steps(5)">
+				<div className="bottom-containers">
+					<BottomLeft/>
+					<BottomRight/>
+				</div>
+			</Anime>
 			</div>
-		</div>
 	);
 }
+
+// export default function Home() {
+// 	Notification();
+// 	return (
+// 	  <div style={{ height: '100vh' }}>
+// 		<Anime translateY={['-100%', '0%']} duration={2000}>
+// 		  <TopContainer />
+// 		</Anime>
+// 		<div className="top-containers">
+// 		  <Anime translateX={['-100%', '0%']} duration={2000}>
+// 			<TopLeft />
+// 		  </Anime>
+// 		  <Anime translateX={['100%', '0%']} duration={2000}>
+// 		  	<TopRight winRate={0.01} wins={0} loses={0}/>
+// 		  </Anime>
+// 		</div>
+
+// 	  </div>
+// 	);
+//   }
