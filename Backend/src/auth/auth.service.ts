@@ -66,26 +66,37 @@ export class AuthService {
     return user;
   }
 
-  async updateinfo(id, username) {
-    const user = await this.prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: {
-        username: username,
-      },
-    });
-    return user;
+  async updateinfo(id: string, username: string): Promise<User | null> {
+    try {
+      const user = await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          username: username,
+        },
+      });
+      return user;
+    } catch (error) {
+      console.error(error); 
+      return null; 
+    }
   }
-  async changetwofastatus(id: string) {
-    await this.prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: {
-        twofa: true,
-      },
-    });
+  
+  async change2FAStatus(id: string): Promise<void> {
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          twofa: true,
+        },
+      });
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      throw new Error('Failed to change 2FA');
+    }
   }
   // async set2Fastatus(id: string, secret: string, token: string){
   //     await this.prisma.user.update({
@@ -99,40 +110,55 @@ export class AuthService {
 
   // }
 
-  async disabletwofastatus(username: string) {
-    await this.prisma.user.update({
-      where: {
-        username,
-      },
-      data: {
-        twofa: false,
-        twofasecret: null,
-        twofatoken: null,
-      },
-    });
+  async disable2FAStatus(username: string): Promise<void> {
+    try {
+      await this.prisma.user.update({
+        where: {
+          username,
+        },
+        data: {
+          twofa: false,
+          twofasecret: null,
+          twofatoken: null,
+        },
+      });
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      throw new Error('Failed to disable 2FA');
+    }
   }
-
-  async set2Fasecret(id, secret, token) {
-    await this.prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: {
-        twofasecret: secret,
-        twofatoken: token,
-      },
-    });
+  
+  async set2Fasecret(id: string, secret: string, token: string): Promise<void> {
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          twofasecret: secret,
+          twofatoken: token,
+        },
+      });
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      throw new Error('Failed to set 2FA');
+    }
   }
-  async updateimage(image: string, id: string) {
-    await this.prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: {
-        profileImage: image,
-      },
-    });
+  
+  async updateimage(image: string, id: string): Promise<void> {
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          profileImage: image,
+        },
+      });
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      throw new Error('Failed to update image');
+    }
   }
 }
-
 //add profile
