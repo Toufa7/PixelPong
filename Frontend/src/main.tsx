@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, RouterProvider, createBrowserRouter} from "react-router-dom";
 import Cookies from 'universal-cookie';
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
@@ -107,7 +107,7 @@ const ErrorTextPage = () => {
 
 const AlreadyInGame = () => {
 	return (
-		<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '200px'}}>Already In Game</h1>
+		<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '200px', color: "white"}}>Already In Game</h1>
 	);
 }
 
@@ -167,7 +167,7 @@ const Routing = () => {
 				<>
 					<Route path="/settings" element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 	element={<HomeComponents/>}/>
-					<Route path="/profil/*"	element={<OtherUser/>}/>
+						<Route path="/profil/*"	element={<OtherUser/>}/>
 					{!userData.ingame ? (<Route path="/game" 	element={<GameComponents/>}/>) : (<Route path="/*" 		element={<AlreadyInGame/>}/>)}
 					<Route path="/chat" 	element={<ChatPage/>}/>
 					<Route path="/groups" 	element={<ChatGroupsComponents/>}/>
@@ -196,20 +196,43 @@ const Routing = () => {
 
 
 // const router = createBrowserRouter([
-// 	{path: "settings",element: <LoginSettingsComponents/>},
-// 	{path: "profil/:",element: <HomeComponents/>},
-// 	{path: "chat",element: <LoginSettingsComponents/>},
-// 	{path: "groups",element: <HomeComponents/>},
-// 	{path: "profil",element: <LoginSettingsComponents/>},
-// 	{path: "home",element: <HomeComponents/>},
-// 	{path: "settings",element: <LoginSettingsComponents/>},
+// 	{
+// 		path: '/',
+// 		element: <HomeComponents/>,
+// 		children :[
+// 					{path: "settings",element: <LoginSettingsComponents/>},
+// 					// {path: "profil/:",element: <OtherUser/>},
+// 					{path: "chat",element: <ChatPage/>},
+// 					{path: "groups",element: <ChatGroupsComponents/>},
+// 					{path: "profil",element: <ProfilComponents/>},
+// 					{path: "home",element: <HomeComponents/>},
+// 					{path: "welcome",element: <WelcomePage/>},
+// 					{path: "login", element: <LoginPage/>}
+// 		],
+// 	}
 // ])
 
-// <RouterProvider router={router} />
 
+
+// const router = createBrowserRouter([
+// 	{path: "settings",element: <LoginSettingsComponents/>},
+// 	{path: "profil/:",element: <OtherUser/>},
+// 	{path: "home",element: <HomeComponents/>},
+// 	{path: "chat",element: <ChatPage/>},
+// 	{path: "groups",element: <ChatGroupsComponents/>},
+// 	{path: "profil",element: <ProfilComponents/>},
+// 	{path: "welcome",element: <WelcomePage/>},
+// 	{path: "login", element: <LoginPage/>}
+// ])
+	
+	
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
+		<Suspense>
+
+		{/* <RouterProvider router={router} /> */}
 		<Routing/>
+		</Suspense>
 	</React.StrictMode>
 )
