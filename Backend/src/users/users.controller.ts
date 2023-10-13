@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from '../guards/jwt.guards';
-import { UserDto } from 'src/dto/user.dto';
-import { FriendrequestDto } from 'src/dto/relation.dto';
+import { UserDto } from 'src/authdto/user.dto';
+import { FriendrequestDto } from 'src/authdto/relation.dto';
 import { SocketGateway } from 'src/socket/socket.gateway';
 import { User } from '@prisma/client';
 // import { User } from '@prisma/client';

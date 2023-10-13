@@ -25,9 +25,9 @@ import { createReadStream, promises as fsPromises } from 'fs';
 import * as qrcode from 'qrcode';
 
 import { join } from 'path';
-import { UserDto } from 'src/dto/user.dto';
+import { UserDto } from 'src/authdto/user.dto';
 import { PrismaService } from './prisma.service';
-import { inputDto } from 'src/dto/input.dto';
+import { inputDto } from 'src/authdto/input.dto';
  
 @Controller('auth')
 export class AuthController {

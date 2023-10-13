@@ -1,41 +1,19 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { ChatService } from './chat.service';
+import { JwtGuard } from 'src/guards/jwt.guards';
 
-import { PrismaService } from 'src/auth/prisma.service';
-import { User } from '@prisma/client';
 
+@UseGuards(JwtGuard)
 @Controller('chat')
 export class ChatController {
-    constructor(private readonly prisma: PrismaService) {}
 
-    // @Get(':id')
-    // async getMessages(@Param('id') id: string) {
-    //     const dMSChat =  await this.prisma.DMschat.findMany({
-    //         where: {
-    //             SenderId: "34",
-    //             ReceiverId: id,
-    //         },
-    //     });
-    //     if (dMSChat)
-    //         return dMSChat;
-    //     else
-    //     {  
-    //         const dMSChat =  await this.prisma.DMschat.create({
-    //             date : {
-    //                 SenderId: "34",
-    //                 ReceiverId: id,
-    //             },
-    //         });
-    //         return dMSChat;
-    //     }
-    // }
+    constructor(private readonly ChatService: ChatService ) {}
 
-    // @Get('friends')
-    // async getFriends(@Param('id') id: string) {
-    //     const friends = await this.prisma.DMschat.findMany({
-    //         where: {
-    //             SenderId : id
-    //         }
-    //     });
-    //     return friends;
-    // }
+    //get old messages from dmschat
+    @Get('getOldMessages/:idrecever')
+    async getOldMessages(@Req() req: any ,@Param('idrecever') idrecever: string) {
+        return await this.ChatService.getOldMessages(req.user.id, idrecever);
+    }
+
+
 }
