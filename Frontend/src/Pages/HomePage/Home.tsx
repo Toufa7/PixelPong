@@ -40,7 +40,7 @@ const GetUserData = () => {
 			const cookie = new Cookies();
 			const token : Token = jwt_decode(cookie.get('jwt'));
 			if (token) {
-				const endpoint = "http://localhost:3000/users/" + token.id;
+				const endpoint = "http://localhost:3000/users/profil"
 				const response = await axios.get(endpoint, { withCredentials: true });
 				setUserData(response.data);
 			}

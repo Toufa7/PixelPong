@@ -90,14 +90,14 @@ const HomeComponents = () => {
 	);
 }
 
-const GameComponents = () => {
-	return (
-		<>
-			<Stars/>
-			<Setup/>
-		</>
-	);
-}
+// const GameComponents = () => {
+// 	return (
+// 		<>
+// 			<Stars/>
+// 			<Setup/>
+// 		</>
+// 	);
+// }
 
 const ErrorTextPage = () => {
 	return (
@@ -115,9 +115,9 @@ const Routing = () => {
 	});
 	const [twoFAStatuss, setTwoFAStatus] = useState(false);
 	if (logged){
-		const token = jwt_decode(logged);
+		// const token = jwt_decode(logged);
 		useEffect(() => {
-			const endpoint = `http://localhost:3000/users/${token.id}`;
+			const endpoint = `http://localhost:3000/users/profil`;
 			axios.get(endpoint, {withCredentials: true})
 			.then((response) => {
 				setUserData({
@@ -127,7 +127,7 @@ const Routing = () => {
 			.catch((error) => {
 				console.log(error)
 			})
-		}, [token.id])
+		}, [])
 
   
 		useEffect(() => {
