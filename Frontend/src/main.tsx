@@ -107,7 +107,7 @@ const ErrorTextPage = () => {
 
 const AlreadyInGame = () => {
 	return (
-		<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '200px'}}>Already In Game</h1>
+		<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '200px', color: "white"}}>Already In Game</h1>
 	);
 }
 
