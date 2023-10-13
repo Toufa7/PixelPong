@@ -159,7 +159,6 @@ export class UsersService {
           username: true,
           profileImage: true,
           status: true,
-          id: true, 
         },
       });
   }

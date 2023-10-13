@@ -19,7 +19,7 @@ const ProfilPage = lazy(() => import('./Pages/profilPage/profilPage'));
 const ChatPage = lazy(() => import('./Pages/chatPage/chatPage'));
 const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'));
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
-import { Setup } from './Pages/GamePage/Setup_ comp';
+// import { Setup } from './Pages/GamePage/Setup_ comp';
 
 export const OtherUser = () => {
 	return (
