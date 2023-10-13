@@ -12,7 +12,7 @@ export default function Setup(){
   return (
     <div id = 'child'>
       <Game_instance/>
-       {/* <ContextSocket.Provider value={socket}>
+      {/* <ContextSocket.Provider value={socket}>
       <Websocket_render/>
       </ContextSocket.Provider> */}
     </div>

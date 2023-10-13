@@ -20,6 +20,7 @@ const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'))
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
 const Setup = lazy(() => import('./Pages/GamePage/Setup_Game_Front'));
 // import Setup from './Pages/GamePage/Setup_Game_Front';
+import Dogo from "./Pages/dogo.gif";
 
 export const OtherUser = () => {
 	return (
@@ -107,7 +108,10 @@ const ErrorTextPage = () => {
 
 const AlreadyInGame = () => {
 	return (
-		<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '200px'}}>Already In Game</h1>
+		<div>
+			<img style={{width: '600px', height: '600px', borderRadius: '50%'}} src={Dogo} alt='Already In Game'/>
+			<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '50px', color: 'white'}}>Already In Game</h1>
+		</div>
 	);
 }
 
