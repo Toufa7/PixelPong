@@ -120,7 +120,7 @@ const GroupsAndFriends = () => {
     })
     const [friendData, setFriendData] = useState<string[]>([]);
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/${thisId}/Friends`, {withCredentials: true})
+        axios.get(`http://localhost:3000/users/friends/${thisId}`, {withCredentials: true})
         .then((response) => {
             console.log("Friend List -> ",  response.data);
             setFriendData(response.data);

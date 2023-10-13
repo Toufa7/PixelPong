@@ -35,7 +35,7 @@ const chatSearch = (props: any) => {
         async function fetchCurrentUserInfo(id: any) {
             try
             {
-                const response = await axios.get(`http://localhost:3000/users/${id}/Friends`, { withCredentials: true });
+                const response = await axios.get(`http://localhost:3000/users/Friends`, { withCredentials: true });
                 setFriendsIds(response.data)
             }
             catch (error) {

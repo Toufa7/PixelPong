@@ -4,24 +4,41 @@ import crown from '../assets/crown.svg';
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
+
+/*
+	TODO: Receiving the ID of the Selected Group to be updated
+    namegb : string;
+    usersgb : string;
+    admins : string;
+    grouptype: string;
+    password? : string;
+    image : string;
+*/
+
 const UpdateGroup = () => {
 	const choice	= document.getElementById("default_select")?.value;
 	const groupName	= document.getElementById('name_field')?.value;
 	const groupAvatar	= document.querySelector('[name="avatarUpload"]')?.files[0];
 	const password	= document.getElementById("password_field")?.value;
 	const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
-	const endpoint = "";
+	const endpoint = "http://localhost:3000/groupchat";
+	// const endpoint = `http://localhost:3000/groupchat/${groupId}`;
 	if (usernameCheck.test(groupName) || groupAvatar || choice || password)
 	{
 		const avatar = new FormData();
 		avatar.append('files', groupAvatar);
 		if (choice == 0) {
-			axios.put(endpoint, {groupname: groupName, avatar: groupAvatar, privacy: "public"}, {withCredentials: true})
-			
+			axios.patch(endpoint, {groupname: groupName, avatar: groupAvatar, privacy: "PUBLIC"}, {withCredentials: true})
+			.then((response) => {
+				console.log(" Updating Group " ,response);
+			})
+			.catch((erro) => {
+				console.log(" Updating Group " ,erro);
+			})
 		}
 		else if (choice == 1)
 		{
-			axios.put(endpoint, {groupname: groupName, avatar: groupAvatar,  privacy: "private"}, {withCredentials: true})
+			axios.patch(endpoint, {groupname: groupName, avatar: groupAvatar,  privacy: "PRIVATE"}, {withCredentials: true})
 		}
 		else if (choice == 2 || password)
 		{
@@ -29,7 +46,7 @@ const UpdateGroup = () => {
 				toast.error("Password Missed", {position: "top-right"})
 			else if (password.length < 8)
 				toast.error("Password Length", {position: "top-right"})
-			axios.put(endpoint, {groupname: groupName, avatar: groupAvatar, groupPassword: password, privacy: "protected"}, {withCredentials: true})
+			axios.patch(endpoint, {groupname: groupName, avatar: groupAvatar, groupPassword: password, privacy: "PROTECTED"}, {withCredentials: true})
 		}
 	}
 	else if (!usernameCheck.test(groupName))
@@ -72,6 +89,14 @@ const ListFriends = () => {
 			isMember((prevMember) => {
 				const updateMember = [...prevMember];
 				updateMember.splice(index, 1);
+				const endpoint = `http://localhost:3000/groupchat/${groupID}/${userId}`;
+				axios.delete(endpoint, {withCredentials: true})
+				.then((response) => {
+					console.log("Respone Deleting Member -> ", response);
+				})
+				.catch((error) => {
+					console.log("Error Deleting Member -> ", error);
+				})
 				return (updateMember);
 			});
 		}
@@ -152,7 +177,7 @@ const ManageGroup = () => {
 			<select required id="default_select"  onChange={(e) => {
 				setProtected(e.target.value == "2")
 				setUpdate(e.target.value)
-			}}> 
+			}}>
 				<option value="" disabled selected hidden>Change Privacy</option>
 				<option value="0" title={privacy[0]}>Public</option>
 				<option value="1" title={privacy[1]}>Private</option>

@@ -3,7 +3,7 @@ import "./NavBar.scss";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 /******************* Images  *******************/
 import msgLogo from './assets/msgLogo.svg';
@@ -19,9 +19,9 @@ const NavBarBody = () => {
 	return (
 	<div className="nav-content">
 		<div className="nav-item">
-			<a href="/groups" title="Groups">
+			<Link to="/groups" title="Groups">
 				<img src={groups}/>
-			</a>
+			</Link>
 		</div>
 		<div className="nav-item" >
 			<a className="noti" href="#" title="Notifications">
@@ -29,14 +29,14 @@ const NavBarBody = () => {
 			</a>
 		</div>
 		<div className="nav-item">
-			<a href="/chat" title="Chat">
+			<Link to="/chat" title="Chat">
 				<img src={msgLogo}/>
-			</a>
+			</Link>
 		</div>
 		<div className="nav-item">
-			<a href="/settings" title="Settings">
+			<Link to="/settings" title="Settings">
 				<img src={settingsLogo}/>
-			</a>
+			</Link>
 		</div>
 
 	</div>
@@ -48,9 +48,9 @@ const NavBarHeader = () => {
 	return (
 		<div className="nav-header">
 			<div className="nav-item">
-				<a href="/home" title="Home">
+				<Link to="/home" title="Home">
 					<img src={randomLogo}/>
-				</a>
+				</Link>
 			</div>
 		</div>
   );
@@ -96,18 +96,17 @@ const NavBarFooter = () => {
     }, [])
 
 	const avatarIs = check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image;
-
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
-			<a href="/profil" title="Profile">
-			<img src={avatarIs} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
-			</a>
+			<Link to="/profil" title="Profil">
+				<img src={avatarIs} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+			</Link>
 		</div>
 		<div className="nav-item">
-			<a href="#" title="Logout">
+			<Link to="/login" title="Logout">
 				<img onClick={logout} src={logoutLogo} alt="Logout" />
-			</a>
+			</Link>
 		</div>
 		</div>
 	);
