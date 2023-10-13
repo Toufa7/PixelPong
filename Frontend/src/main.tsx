@@ -165,13 +165,13 @@ const Routing = () => {
 	return (
 		<BrowserRouter>
 		<Suspense fallback={<div>Loading...</div>}>
-
 		<Routes>
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
 			{logged && !userData.twofaStatus && (
 				<>
 					<Route path="/settings" element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 	element={<HomeComponents/>}/>
+					<Route path="/" 	element={<HomeComponents/>}/>
 					<Route path="/profil/*"	element={<OtherUser/>}/>
 					{!userData.ingame ? (<Route path="/game" 	element={<GameComponents/>}/>) : (<Route path="/*" 		element={<AlreadyInGame/>}/>)}
 					<Route path="/chat" 	element={<ChatPage/>}/>
@@ -191,7 +191,7 @@ const Routing = () => {
 				<>
 					<Route path="/welcome"	element={<WelcomePage/>}/>
 					<Route path="/login"	element={<LoginPage/>}/>
-					<Route path="*"			element={<Navigate to="/login"/>}/>
+					<Route path="*"			element={<Navigate to="/login" replace/>}/>
 				</>
 			)}
 			</Routes>

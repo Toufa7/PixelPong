@@ -41,7 +41,6 @@ const ChatNavBar = () => {
 
 const GroupsList = () => {
 	const [groupName, setGroupName] = useState('Group Name');
-
 	axios.get("http://localhost:3000/groupchat/", {withCredentials: true})
 	.then((response) => {
 		console.log("Reseponse List Groups -> ", response.data);
@@ -50,30 +49,11 @@ const GroupsList = () => {
 		console.log("Error List Groups -> ", erro);
 	})
 
-
-
-
-
 	const groups = [
 		"Pesky InnerCity",
 		"Orange Tractors",
 		"The Sprinters",
 		"Brown Razors",
-		"El Grass Sensation",
-		"Pesky InnerCity",
-		"Orange Tractors",
-		"The Sprinters",
-		"Brown Razors",
-		"El Grass Sensation",
-		"Orange Tractors",
-		"The Sprinters",
-		"Brown Razors",
-		"El Grass Sensation",
-		"Pesky InnerCity",
-		"Orange Tractors",
-		"The Sprinters",
-		"Brown Razors",
-		"El Grass Sensation",
 		"Brick Kittens"
 	]
 	const setOpenBox = (groupName : string) => {

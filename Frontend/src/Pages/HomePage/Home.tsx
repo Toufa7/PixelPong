@@ -8,7 +8,6 @@ import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from "../socket-client";
-// import Anime, { anime } from 'react-anime';
 import Anime, { anime } from 'react-anime';
 /******************* Includes  *******************/
 import notification from './assets/notification.mp3';
@@ -240,8 +239,6 @@ const BottomRight= () => {
     }, [])
 
 	const avatarIs = check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image;
-
-
 	const win = "#ff7670";
 	const lose = "#009e73";
 	const draw = "#178ee1";
@@ -294,13 +291,13 @@ function Notification () {
 	const audio = new Audio(notification);
 	audio.play();
 	toast.custom(
-		<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1',}}>
+		<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1'}}>
 			<div style={{ width: '400px', height: '120px' }} className="nes-container with-title is-centered">
 				<p style={{ background: '#ffeeca', border: '2px solid black'}} className="title">Invitation Request</p>
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<img src={data.photo} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>	
-				{ isFriend ?
+				{isFriend ?
 					(
 						<>
 							<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
@@ -319,48 +316,20 @@ function Notification () {
 	}, []);
 }
 
-export default function Home() {	
+export default function Home() {
+	Notification();	
 	return (
 		<div style={{ height: '100vh' }}>
 			<Toaster/>
-			<Anime
-			translateY={['-100%', '0%']}
-			duration={1000}
-			easing="steps(5)">
-			<TopContainer/>
-			</Anime>
-			<Anime  delay={anime.stagger(1000)} scale={[ 0.1, 1 ]}>
-			<div className="top-containers">
-			<TopLeft/>
-			<TopRight winRate={0.01} wins={0} loses={0}/>
-			</div>
-			</Anime>
-			<Anime translateY={['100%', '0%']} duration={2000} easing="steps(5)">
+				<TopContainer/>
+				<div className="top-containers">
+					<TopLeft/>
+					<TopRight winRate={0.01} wins={0} loses={0}/>
+				</div>
 				<div className="bottom-containers">
 					<BottomLeft/>
 					<BottomRight/>
 				</div>
-			</Anime>
 			</div>
 	);
 }
-
-// export default function Home() {
-// 	Notification();
-// 	return (
-// 	  <div style={{ height: '100vh' }}>
-// 		<Anime translateY={['-100%', '0%']} duration={2000}>
-// 		  <TopContainer />
-// 		</Anime>
-// 		<div className="top-containers">
-// 		  <Anime translateX={['-100%', '0%']} duration={2000}>
-// 			<TopLeft />
-// 		  </Anime>
-// 		  <Anime translateX={['100%', '0%']} duration={2000}>
-// 		  	<TopRight winRate={0.01} wins={0} loses={0}/>
-// 		  </Anime>
-// 		</div>
-
-// 	  </div>
-// 	);
-//   }
