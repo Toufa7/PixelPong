@@ -22,14 +22,13 @@ import { authenticator } from 'otplib';
 import { diskStorage } from 'multer';
 import { User, UserStatus } from '@prisma/client';
 import { createReadStream, promises as fsPromises } from 'fs';
-
 import * as qrcode from 'qrcode';
 
 import { join } from 'path';
 import { UserDto } from 'src/dto/user.dto';
 import { PrismaService } from './prisma.service';
 import { inputDto } from 'src/dto/input.dto';
-
+ 
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -41,7 +40,7 @@ export class AuthController {
   @Get('google')
   @UseGuards(AuthGuard('google'))
   googlelogin() {}
-  @Get('google/redirect')
+  @Get('google/redirect') 
   @UseGuards(AuthGuard('google'))
   async googleLogin(@Req() req: any, @Res() res: any) {
     try {
