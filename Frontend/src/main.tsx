@@ -19,13 +19,8 @@ const ChatPage = lazy(() => import('./Pages/chatPage/chatPage'));
 const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'));
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
 const Setup = lazy(() => import('./Pages/GamePage/Setup_Game_Front'));
-<<<<<<< HEAD
 const Error = lazy(() => import('./Pages/errorPage/errorPage'));
 
-=======
-// import Setup from './Pages/GamePage/Setup_Game_Front';
-import Dogo from "./Pages/dogo.gif";
->>>>>>> 2c51043ce5e7d16f1170ed07823b5450ff82cd00
 
 export const OtherUser = () => {
 	return (
