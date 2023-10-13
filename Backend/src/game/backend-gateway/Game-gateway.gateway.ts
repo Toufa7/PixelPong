@@ -57,9 +57,9 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
           if (this.Players.SetRoom){
             this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
             this.SendToPlayersinRoom(Player,this.Rooms);
+            console.log("--->Players" + JSON.stringify(this.Players.players));
+            console.log("---------------------CCCoooCCC--------------------------------\n")
           }
-          console.log("--->Players" + JSON.stringify(this.Players.players));
-          console.log("---------------------CCCoooCCC--------------------------------\n")
 
         })
   }

@@ -7,6 +7,7 @@ import jwt_decode from "jwt-decode";
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import axios from 'axios';
+import { Setup } from './Pages/GamePage/Setup_Game_Front';
 /******************* Includes  *******************/
 const NavBar = lazy(() => import('./Pages/addons/NavBar'));
 const Stars = lazy(() => import('./Pages/addons/Stars'));
@@ -90,14 +91,14 @@ const HomeComponents = () => {
 	);
 }
 
-// const GameComponents = () => {
-// 	return (
-// 		<>
-// 			<Stars/>
-// 			<Setup/>
-// 		</>
-// 	);
-// }
+const GameComponents = () => {
+	return (
+		<>
+			<Stars/>
+			<Setup/>
+		</>
+	);
+}
 
 const ErrorTextPage = () => {
 	return (
@@ -111,7 +112,8 @@ const Routing = () => {
 	const logged = cookies.get('jwt');
 	const [userData, setUserData] = useState({
 		twofaStatus: false,
-		isAuthenticated : false
+		isAuthenticated : false,
+		ingame : false
 	});
 	const [twoFAStatuss, setTwoFAStatus] = useState(false);
 	if (logged){
@@ -120,10 +122,12 @@ const Routing = () => {
 			const endpoint = `http://localhost:3000/users/profil`;
 			axios.get(endpoint, {withCredentials: true})
 			.then((response) => {
+				console.log("Response Is Routing ", response);
 				setUserData({
 					twofaStatus: response.data.twofa,
-					isAuthenticated: response.data.authenticated
-			})})
+					isAuthenticated: response.data.authenticated,
+					ingame: response.data.ingame
+				})})
 			.catch((error) => {
 				console.log(error)
 			})
@@ -154,12 +158,13 @@ const Routing = () => {
 
 		<Routes>
 			{/* User Logged and 2FA Disabled */}
+			
 			{logged && !userData.twofaStatus && (
 				<>
 					<Route path="/settings" element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 	element={<HomeComponents/>}/>
 					<Route path="/profil/*"	element={<OtherUser/>}/>
-					{/* <Route path="/game" 	element={<GameComponents/>}/> */}
+					<Route path="/game" 	element={<GameComponents/>}/>
 					<Route path="/chat" 	element={<ChatPage/>}/>
 					<Route path="/groups" 	element={<ChatGroupsComponents/>}/>
 					<Route path="/profil" 	element={<ProfilComponents/>}/>
@@ -197,7 +202,6 @@ const Routing = () => {
 // ])
 
 // <RouterProvider router={router} />
-
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>

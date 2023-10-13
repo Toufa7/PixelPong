@@ -2,8 +2,9 @@
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { convertTypeAcquisitionFromJson, isConstructorDeclaration } from 'typescript';
-import { screen_height , screen_width } from '../game_flow_sketch';
-import { socket } from '../socket_setup/client-connect';
+import { height, socket_gm } from '../game_flow_sketch';
+// import { socket } from '../socket_setup/client-connect';
+// import { socket } from '../socket_setup/client-connect';
 
 
 type coordinates = {
@@ -60,8 +61,8 @@ export class Paddle {
         if (this.pos.y < 0){
           this.pos.y = 0;
         }
-        if (this.pos.y > screen_height - this.paddle_height){
-            this.pos.y = screen_height - this.paddle_height;
+        if (this.pos.y > height - this.paddle_height){
+            this.pos.y = height - this.paddle_height;
         }
 
         //p- rect parameters
@@ -93,13 +94,13 @@ export class Paddle {
           if (this.paddle_obj.keyCode === (this.paddle_obj.DOWN_ARROW)){
             key_code = this.paddle_obj.keyCode;
             key_pressed = this.paddle_obj.DOWN_ARROW;
-            socket.emit("Player_movement",{sig : "DOWN" , Key : key_code , key_check : key_pressed});
+            socket_gm?.emit("Player_movement",{sig : "DOWN" , Key : key_code , key_check : key_pressed});
             // this.pos.y += this.dy;
           }
           else if (this.paddle_obj.keyCode === (this.paddle_obj.UP_ARROW)){
             key_code = this.paddle_obj.keyCode;
             key_pressed = this.paddle_obj.UP_ARROW;
-            socket.emit("Player_movement",{sig : "UP" , Key : key_code , key_check : key_pressed});
+            socket_gm?.emit("Player_movement",{sig : "UP" , Key : key_code , key_check : key_pressed});
             // this.pos.y -= this.dy;
           }
         }
@@ -107,10 +108,10 @@ export class Paddle {
           // this.ms_y = event.layerY;
           // this.pos.y = this.ms_y;
           mouse_y = event.layerY;
-          socket.emit("Player_movement",{sig:"MOUSE",mouse_coord:mouse_y});
+          socket_gm?.emit("Player_movement",{sig:"MOUSE",mouse_coord:mouse_y});
         })
         
-        // //console.log("[ x : " + this.pos.x + " , " + " y : " + this.pos.y + " ] ");
+        // console.log("[ x : " + this.pos.x + " , " + " y : " + this.pos.y + " ] ");
 
         this.draw_paddle(this.color);
       }

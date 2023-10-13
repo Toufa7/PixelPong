@@ -1,0 +1,42 @@
+$orange : rgb(56, 53, 53);
+$Border_option : solid 4px black;
+$child_width : 1400px;
+$child_height : 700px;
+$gap : 4vh;
+$padding : 4vh;
+$color : #48CAE4;
+body {
+    background: $orange;
+}
+
+#root{
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+#child{
+    // background-color: rebeccapurple;
+    // padding: 5px;
+    width: $child_width;
+    height: $child_height;
+    // margin: 15em;
+    line-height: 20px;
+    // border: $Border_option;
+    text-align: center;
+    }
+
+}
+
+@media (max-width: 800px) {
+    #root{
+        #child{
+            line-height: 20px;
+            // border: $Border_option;
+            text-align: center;
+            // background-color: green;
+        }
+    }
+}
