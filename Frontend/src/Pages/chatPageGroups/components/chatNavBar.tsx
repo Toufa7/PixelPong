@@ -8,6 +8,7 @@ import avatarGroup from '../assets/saka.jpeg'
 import privateGroup from '../assets/private.svg'
 import './chatNavBar.scss'
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 const ChatNavBar = () => {
   const [data, setLabel] = useState({
 		label : false,
@@ -39,7 +40,20 @@ const ChatNavBar = () => {
 
 
 const GroupsList = () => {
-	const [groupName, setGroupName] = useState('Group Name')
+	const [groupName, setGroupName] = useState('Group Name');
+
+	axios.get("http://localhost:3000/groupchat/", {withCredentials: true})
+	.then((response) => {
+		console.log("Reseponse List Groups -> ", response.data);
+	})
+	.catch((erro) => {
+		console.log("Error List Groups -> ", erro);
+	})
+
+
+
+
+
 	const groups = [
 		"Pesky InnerCity",
 		"Orange Tractors",

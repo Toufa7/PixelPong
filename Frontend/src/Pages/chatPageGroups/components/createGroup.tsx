@@ -12,7 +12,7 @@ const CreatingGroup = () => {
 	/**
 	 * TODO: Need en endpoint for creating group
 	*/
-	const endpoint = "";
+	const endpoint = "http://localhost:3000/groupchat";
 	// const myStyle = {
 	// 	textAlign: "center",
 	// 	width: '300px',
@@ -23,16 +23,34 @@ const CreatingGroup = () => {
 		const data = new FormData();
 		data.append('files', groupAvatar);
 		if (choice == 0) {
-			//console.log(`Group Name ${groupName} | Privacy Public`)
-			axios.post(endpoint, {groupname: groupName, avatar: groupAvatar,  privacy: "public"}, {withCredentials: true});
+			console.log(`Group Name ${groupName} | Privacy Public | Group Avatar ${groupAvatar}`)
+			axios.post(endpoint, {namegb: groupName, image: groupAvatar,  grouptype: "PUBLIC"}, {withCredentials: true})
+			.then((rese) => {
+				console.log("Respone Cereating Grups -> ", rese.data)
+			})
+			.catch((err) => {
+				console.log("Error Public Cereating Grups -> ", err)
+			})
 		}
 		else if (choice == 1) {
 			//console.log(`Group Name ${groupName} | Privacy Private`)
-			axios.post(endpoint, {groupname: groupName, avatar: groupAvatar,  privacy: "private"}, {withCredentials: true});
+			axios.post(endpoint, {namegb: groupName, image: groupAvatar,  grouptype: "private"}, {withCredentials: true})
+			.then((rese) => {
+				console.log("Respone Cereating Grups -> ", rese)
+			})
+			.catch((err) => {
+				console.log("Error Cereating Grups -> ", err)
+			})
 		}
 		else {
 			//console.log(`Group Name ${groupName} | Group Password ${password} | Privacy Protected`)			
-			axios.post(endpoint, {groupname: groupName, groupPassword: password, avatar: groupAvatar, privacy: "protected"}, {withCredentials: true});
+			axios.post(endpoint, {namegb: groupName, password: password, image: groupAvatar, grouptype: "protected"}, {withCredentials: true})
+			.then((rese) => {
+				console.log("Respone Cereating Grups -> ", rese)
+			})
+			.catch((err) => {
+				console.log("Error Cereating Grups -> ", err)
+			})
 		}
 	}
 	else if (!regEx.test(groupName))
@@ -100,7 +118,7 @@ const CreateGroup = () => {
 				<label style={{marginTop: '10px'}}>Group Avatar</label>
 				<label style={{marginBottom: '10px'}} className="nes-btn">
 					<span >click to upload</span>
-					<input formMethod="post" type="file" name="avatarUpload" accept=".png .jpg .jpeg"/>
+					<input formMethod="post" type="file" name="avatarUpload" accept=".*"/>
 				</label>
 			<a onClick={CreatingGroup} className='nes-btn' href="#">Create</a>
 			<Toaster/>

@@ -49,7 +49,7 @@ const RetrieveCheckSendData =  () => {
     else if (usernameCheck.test(nicknameInput)) {
         toast.promise(
             axios.all([
-                axios.post('http://localhost:3000/auth/signup-success', { username: nicknameInput }, { withCredentials: true }),
+                axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true }),
              ]).then(axios.spread((responseNickname) => {
                  console.log(responseNickname);
              })),
@@ -85,7 +85,7 @@ const Avatars = () => {
         const token = jwt_decode(logged);
         useEffect(() => {
             try {
-                axios.get(`http://localhost:3000/users/${token.id}`, {withCredentials : true})
+                axios.get(`http://localhost:3000/users/profil`, {withCredentials : true})
                 .then((rese) => {
                     console.log("user Data =>  ", rese);
                     setUserData(rese.data)

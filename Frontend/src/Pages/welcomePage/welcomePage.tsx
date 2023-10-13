@@ -1,4 +1,5 @@
 import './welcomePage.css';
+import 'nes.css/css/nes.min.css';
 import sun from './assets/pixelPongSun.svg';
 import bigCloud from './assets/bigCloud.svg';
 import smallCloud from './assets/smallCloud.svg'
@@ -9,11 +10,10 @@ import light from './assets/light.svg';
 import clickImg from './assets/clickMe.gif';
 import sprinkle from './assets/sprinkle.svg';
 import sparkles from './assets/sparkles.gif';
-import 'nes.css/css/nes.min.css';
 import { useNavigate } from 'react-router-dom';
 import letsPlay from './assets/success.mp3';
 
-function welcomePage() {
+function WelcomePage() {
   function playing () {
     new Audio(letsPlay).play();
   }
@@ -72,4 +72,4 @@ function welcomePage() {
   );
 }
 
-export default welcomePage;
+export default WelcomePage;

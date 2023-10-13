@@ -67,7 +67,7 @@ const Profil = () => {
             const token = jwt_decode(cookie.get('jwt'));
             const endpoints = [
                 `http://localhost:3000/auth/avatar/${token.id}`,
-                `http://localhost:3000/users/${token.id}`
+                `http://localhost:3000/users/profil`
             ]
             if (token) {
 
@@ -171,7 +171,7 @@ const GroupsAndFriends = () => {
     const [friendData, setFriendData] = useState<string[]>([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/${token.id}/Friends`, {withCredentials: true})
+        axios.get(`http://localhost:3000/users/Friends`, {withCredentials: true})
             .then((response) => {
                 console.log("Friend List -> ", response.data);
                 setFriendData(response.data);
@@ -179,10 +179,10 @@ const GroupsAndFriends = () => {
     }, []);
 
     const removeFriend = (removeId: string) => {
-        const local = token.id;
+        // const local = token.id;
         const remote = removeId;
-        const endpoint = `http://localhost:3000/users/${local}/remove/${remote}`;
-        axios.patch(endpoint, {}, {withCredentials: true})
+        const endpoint = `http://localhost:3000/users/remove/`;
+        axios.patch(endpoint, {friendId: remote}, {withCredentials: true})
             .then((response) => {
                 console.log("Removing Response", response);
                 setFriendData(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
