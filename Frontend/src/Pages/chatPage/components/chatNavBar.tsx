@@ -53,7 +53,6 @@ const Dms = (props:any) => {
             conversationsSocket.off('getOldCnv');
             conversationsSocket.off('postOldCnv');
         }
-
     }, [])
 
 
@@ -64,18 +63,17 @@ const Dms = (props:any) => {
         for (let i: number = 0; i < conversations.length; i++)
         {
             axios
-                .get(`http://localhost:3000/users/${conversations[i]}`, { withCredentials: true })
+                .get(`http://localhost:3000/users/profile/${conversations[i]}`, { withCredentials: true })
                 .then((res) => {
                     
                     tmpObj = {userName: res.data.username, pic: res.data.profileImage, id: conversations[i]}
                     setUsersArr(prevMessagesArr => [...prevMessagesArr, tmpObj]);
                     
                     // myMap.set(conversations[i], tmpObj);
-                    console.log("TmpObg -->", tmpObj);
                     setMapState(mapState.set(conversations[i], tmpObj));
                 })
                 .catch(Error)
-                console.log('%cAn error happened in : ', 'color: red', '%cDms: handleNewConversations ');
+                console.log('%cAn error happened in : ', 'color: red', '%cDms: handleNewConversations', 'color: cyan');
         }   
         };
         

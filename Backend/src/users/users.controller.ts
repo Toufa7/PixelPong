@@ -37,11 +37,12 @@ export class UsersController {
     return users;
   }
 
-  @Get('/profil')
+  @Get('profil')
   async findOne(@Req() req) {
+    console.log("wtf : ",req.user.id) 
     const user = await this.usersService.findOne(req.user.id);
-    console.log(user.authenticated) 
     if (!user) {
+      console.log("im herererererer 3678")
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     return user;
@@ -101,6 +102,20 @@ async blockFriend(
 async findOneByUsername(@Param('username') username: string){
   try {
     const user = await this.usersService.findByName(username);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    throw new HttpException('Failed to fetch user', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
+@Get('profile/:id')
+async findOneByid(@Param('id') id: string){
+  try {
+    const user = await this.usersService.findById(id);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }

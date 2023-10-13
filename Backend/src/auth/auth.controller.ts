@@ -111,7 +111,7 @@ export class AuthController {
   async gettwofastatus(@Req() req: any): Promise<boolean>{
     try {
       const user = await this.usersService.findOne(req.user.id);
-      return user.twofa;
+      return user?.twofa;
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

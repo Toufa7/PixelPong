@@ -16,7 +16,7 @@ const ChatUser = (props:any) => {
         async function fetchCurrentUserInfo(id: any) {
             try
             {
-                const response = await axios.get(`http://localhost:3000/users/profil`, { withCredentials: true });
+                const response = await axios.get(`http://localhost:3000/users/profile/${id}`, { withCredentials: true });
                 setRemoteUser(response.data);
             }
             catch (error) {
@@ -66,23 +66,3 @@ const MessagingBody = (props: any) => {
 }
 
 export default ChatUser
-
-    // // .get(`http://localhost:3000/users/${id}`, { withCredentials: true });
-
-    // const handleNewConversations = (conversations:any) => {
-        
-    //     let tmpObj: chatUser;
-
-    //     for (let i: number = 0; i < conversations.length; i++)
-    //     {
-    //         axios
-    //             .get(`http://localhost:3000/users/${conversations[i]}`, { withCredentials: true })
-    //             .then((res) => {
-    //                 tmpObj.id = res.data.id
-    //                 tmpObj.userName = res.data.username
-    //                 tmpObj.pic = res.data.profileImage
-    //                 console.log("==========>", tmpObj);
-    //                 setUsersArr(prevMessagesArr => [...prevMessagesArr, tmpObj]);
-    //             })
-    //     }   
-    // };
