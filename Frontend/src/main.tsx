@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, RouterProvider, createBrowserRouter, Navigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
@@ -19,7 +19,7 @@ const ChatPage = lazy(() => import('./Pages/chatPage/chatPage'));
 const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'));
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
 const Setup = lazy(() => import('./Pages/GamePage/Setup_Game_Front'));
-// import Setup from './Pages/GamePage/Setup_Game_Front';
+const Error = lazy(() => import('./Pages/errorPage/errorPage'));
 import Dogo from "./Pages/dogo.gif";
 
 export const OtherUser = () => {
@@ -110,11 +110,11 @@ const AlreadyInGame = () => {
 	return (
 		<div>
 			<img style={{display:'flex', alignItems: 'center', width: '600px', height: '600px', borderRadius: '50%' , padding:'50px'}} src={Dogo} alt='Already In Game'/>
+			<img style={{width: '600px', height: '600px', borderRadius: '50%'}} src="./Pages/dogo.gif" alt='Already In Game'/>
 			<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '50px', color: 'white'}}>Already In Game</h1>
 		</div>
 	);
 }
-
 
 
 const Routing = () => {
@@ -160,13 +160,15 @@ const Routing = () => {
 	}
 	console.log("User Logged and 2FA Disabled -> ", logged && !userData.twofaStatus)
 	console.log("User Logged and 2FA Enabled -> ", logged && userData.twofaStatus)
+	console.log("User Logged and 2FA Enabled And Code Valid -> ", logged && userData.twofaStatus && twoFAStatuss)
 	console.log("User is not Logged in -> ", !logged )
+	
 	return (
 		<BrowserRouter>
 		<Suspense fallback={<div>Loading...</div>}>
 
 		<Routes>
-			{/* User Logged and 2FA Disabled */}
+			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
 			{logged && !userData.twofaStatus && (
 				<>
 					<Route path="/settings" element={<LoginSettingsComponents/>}/>
@@ -176,7 +178,7 @@ const Routing = () => {
 					<Route path="/chat" 	element={<ChatPage/>}/>
 					<Route path="/groups" 	element={<ChatGroupsComponents/>}/>
 					<Route path="/profil" 	element={<ProfilComponents/>}/>
-					<Route path="/*" 		element={<ErrorTextPage/>}/>
+					<Route path="/*" 		element={<Error/>}/>
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}
@@ -190,6 +192,7 @@ const Routing = () => {
 				<>
 					<Route path="/welcome"	element={<WelcomePage/>}/>
 					<Route path="/login"	element={<LoginPage/>}/>
+					<Route path="*"			element={<Navigate to="/login"/>}/>
 				</>
 			)}
 			</Routes>
@@ -200,20 +203,43 @@ const Routing = () => {
 
 
 // const router = createBrowserRouter([
-// 	{path: "settings",element: <LoginSettingsComponents/>},
-// 	{path: "profil/:",element: <HomeComponents/>},
-// 	{path: "chat",element: <LoginSettingsComponents/>},
-// 	{path: "groups",element: <HomeComponents/>},
-// 	{path: "profil",element: <LoginSettingsComponents/>},
-// 	{path: "home",element: <HomeComponents/>},
-// 	{path: "settings",element: <LoginSettingsComponents/>},
+// 	{
+// 		path: '/',
+// 		element: <HomeComponents/>,
+// 		children :[
+// 					{path: "settings",element: <LoginSettingsComponents/>},
+// 					// {path: "profil/:",element: <OtherUser/>},
+// 					{path: "chat",element: <ChatPage/>},
+// 					{path: "groups",element: <ChatGroupsComponents/>},
+// 					{path: "profil",element: <ProfilComponents/>},
+// 					{path: "home",element: <HomeComponents/>},
+// 					{path: "welcome",element: <WelcomePage/>},
+// 					{path: "login", element: <LoginPage/>}
+// 		],
+// 	}
 // ])
 
-// <RouterProvider router={router} />
 
+
+// const router = createBrowserRouter([
+// 	{path: "settings",element: <LoginSettingsComponents/>},
+// 	{path: "profil/:",element: <OtherUser/>},
+// 	{path: "home",element: <HomeComponents/>},
+// 	{path: "chat",element: <ChatPage/>},
+// 	{path: "groups",element: <ChatGroupsComponents/>},
+// 	{path: "profil",element: <ProfilComponents/>},
+// 	{path: "welcome",element: <WelcomePage/>},
+// 	{path: "login", element: <LoginPage/>}
+// ])
+	
+	
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
+		<Suspense>
+
+		{/* <RouterProvider router={router} /> */}
 		<Routing/>
+		</Suspense>
 	</React.StrictMode>
 )

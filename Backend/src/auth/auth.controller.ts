@@ -25,9 +25,9 @@ import { createReadStream, promises as fsPromises } from 'fs';
 import * as qrcode from 'qrcode';
 
 import { join } from 'path';
-import { UserDto } from 'src/dto/user.dto';
+import { UserDto } from 'src/authdto/user.dto';
 import { PrismaService } from './prisma.service';
-import { inputDto } from 'src/dto/input.dto';
+import { inputDto } from 'src/authdto/input.dto';
  
 @Controller('auth')
 export class AuthController {
@@ -111,7 +111,7 @@ export class AuthController {
   async gettwofastatus(@Req() req: any): Promise<boolean>{
     try {
       const user = await this.usersService.findOne(req.user.id);
-      return user.twofa;
+      return user?.twofa;
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

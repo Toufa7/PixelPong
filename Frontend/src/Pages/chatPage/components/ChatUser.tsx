@@ -16,7 +16,7 @@ const ChatUser = (props:any) => {
         async function fetchCurrentUserInfo(id: any) {
             try
             {
-                const response = await axios.get(`http://localhost:3000/users/profil`, { withCredentials: true });
+                const response = await axios.get(`http://localhost:3000/users/profile/${id}`, { withCredentials: true });
                 setRemoteUser(response.data);
             }
             catch (error) {
