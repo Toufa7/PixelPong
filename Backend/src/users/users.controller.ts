@@ -12,6 +12,7 @@ import {
   HttpStatus,
   Post,
   Req,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from '../guards/jwt.guards';
@@ -46,7 +47,6 @@ export class UsersController {
   async findOne(@Req() req) {
     try
     {
-    console.log("wtf : ",req.user.id) 
     const user = await this.usersService.findOne(req.user.id);
     if (!user) {
       console.log("im herererererer 3678")
@@ -106,8 +106,9 @@ async blockFriend(
 }
 
 @Get('profil/:username')
-async findOneByUsername(@Param('username') username: string){
+async findOneByUsername(@Param('username') username: string, @Req() req, @Res() res){
   try {
+    console.log("i am here ? !")
     const user = await this.usersService.findByName(username);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
