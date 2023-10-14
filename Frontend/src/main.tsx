@@ -109,7 +109,7 @@ const ErrorTextPage = () => {
 const AlreadyInGame = () => {
 	return (
 		<div>
-			<img style={{width: '600px', height: '600px', borderRadius: '50%'}} src={Dogo} alt='Already In Game'/>
+			<img style={{display:'flex', alignItems: 'center', width: '600px', height: '600px', borderRadius: '50%' , padding:'50px'}} src={Dogo} alt='Already In Game'/>
 			<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '50px', color: 'white'}}>Already In Game</h1>
 		</div>
 	);
