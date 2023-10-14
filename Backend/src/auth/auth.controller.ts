@@ -80,7 +80,6 @@ export class AuthController {
       }
     } catch (err) {
       console.log(err);
-      res.status(HttpStatus.BAD_REQUEST).json({ error: 'Something went wrong' });
     }
   }
   private setResandCookie(res : any, id: string, accessToken: string) {
@@ -101,8 +100,7 @@ export class AuthController {
     return qr;
     }
     catch(error){
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
+      console.log(error.message);
     }
   }
 
@@ -114,17 +112,15 @@ export class AuthController {
       return user?.twofa;
     } catch (error) {
       console.error(error);
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+  @Put('2fa/enable')
 async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
   try {
     await this.authService.change2FAStatus(req.user.id);
     return { status: true };
   } catch (error) {
     console.error(error);
-    throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
   @Put('2fa/disable')
@@ -135,7 +131,6 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return { status: false };
     } catch (error) {
       console.error(error); 
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   @Post('uploads')
@@ -158,7 +153,6 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return { image: file };
     } catch (error) {
       console.error(error); // Log the error for debugging
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   @Post('2fa/validate')
@@ -178,7 +172,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
 
   @Get('avatar/:id')
   @UseGuards(JwtGuard)
-  async getImage(@Param('id') id: string, @Res() res) {
+  async getImage(@Param('id') id: string, @Res() res, @Req() req) {
     try {
       const { profileImage } = await this.usersService.findOne(id);
       const path = join('./uploads/', profileImage);
@@ -189,7 +183,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return file.pipe(res);
     } catch (err) {
       res.setHeader('Content-Type', 'application/json');
-      res.status(HttpStatus.NOT_FOUND).json('file not found');
+      return req.user.image;
     }
   }
 

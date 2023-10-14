@@ -30,15 +30,22 @@ export class UsersController {
   ) {}
   @Get('all')
   findAll() {
+    try{
     const users = this.usersService.findAll();
     if (!users) {
       throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
     }
     return users;
   }
+  catch(error){
+    console.log(error.message)
+  }
+  }
 
   @Get('profil')
   async findOne(@Req() req) {
+    try
+    {
     console.log("wtf : ",req.user.id) 
     const user = await this.usersService.findOne(req.user.id);
     if (!user) {
@@ -46,6 +53,10 @@ export class UsersController {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     return user;
+  }
+  catch(error){
+    console.log(error.message);
+  }
   }
 
  @Patch('remove')
@@ -56,8 +67,7 @@ async removeFriend(
   try {
     await this.usersService.removefriend(req.user.id, body.from);
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to remove friend', HttpStatus.INTERNAL_SERVER_ERROR);
+    console.error(error.message); // Log the error for debugging
   }
 }
 
@@ -69,8 +79,7 @@ async deleteOne(@Req() req: any): Promise<void> {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to delete user', HttpStatus.INTERNAL_SERVER_ERROR);
+    console.error(error.message);
   }
 }
 
@@ -80,8 +89,7 @@ async updateOne(@Req() req: any, @Body() body: UserDto): Promise<User | null> {
     const { username } = body;
     return await this.usersService.UpdateforOne(req.user.id, username);
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to update user', HttpStatus.INTERNAL_SERVER_ERROR);
+    console.error(error.message); // Log the error for debugging
   }
 }
 
@@ -93,8 +101,7 @@ async blockFriend(
   try {
     await this.usersService.blockfriend(req.user.id, body.from);
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to block friend', HttpStatus.INTERNAL_SERVER_ERROR);
+    console.error(error.message); // Log the error for debuggin
   }
 }
 
@@ -107,8 +114,7 @@ async findOneByUsername(@Param('username') username: string){
     }
     return user;
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to fetch user', HttpStatus.INTERNAL_SERVER_ERROR);
+    console.error(error.message); // Log the error for debugging
   }
 }
 
@@ -121,8 +127,8 @@ async findOneByid(@Param('id') id: string){
     }
     return user;
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to fetch user', HttpStatus.INTERNAL_SERVER_ERROR);
+    console.error(error.message); // Log the error for debugging
+    // throw new HttpException('Failed to fetch user', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -135,7 +141,6 @@ async unblockFriend(
     await this.usersService.unblockfriend(req.user.id, body.from);
   } catch (error) {
     console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to unblock friend', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -145,7 +150,6 @@ async getFriends(@Req() req: any) {
     return await this.usersService.getFriends(req.user.id);
   } catch (error) {
     console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to get friends', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -155,7 +159,6 @@ async getFriendsOfOther(@Param('id') id: string) {
     return await this.usersService.getFriends(id);
   } catch (error) {
     console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to get friends', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -188,7 +191,6 @@ async acceptFriendRequest(@Body() body: FriendrequestDto) {
     return find;
   } catch (error) {
     console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to accept friend request', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -199,7 +201,6 @@ async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
     return await this.usersService.refuseFriendRequest(friendrequest);
   } catch (error) {
     console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to refuse friend request', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
