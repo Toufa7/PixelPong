@@ -22,12 +22,12 @@ export class AuthService {
   ) {}
   private generatePayload(user: User) {
     const payload: Payload = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      token: user.token,
+      id: user?.id,
+      username: user?.username,
+      email: user?.email,
+      token: user?.token,
+      image : user?.profileImage,
     };
-    if (user.profileImage) payload.image = user.profileImage;
     return payload;
   }
   googleLogin(user: User) {
@@ -95,7 +95,6 @@ export class AuthService {
       });
     } catch (error) {
       console.error(error); // Log the error for debugging
-      throw new Error('Failed to change 2FA');
     }
   }
   // async set2Fastatus(id: string, secret: string, token: string){
@@ -124,7 +123,6 @@ export class AuthService {
       });
     } catch (error) {
       console.error(error); // Log the error for debugging
-      throw new Error('Failed to disable 2FA');
     }
   }
   
@@ -141,7 +139,6 @@ export class AuthService {
       });
     } catch (error) {
       console.error(error); // Log the error for debugging
-      throw new Error('Failed to set 2FA');
     }
   }
   
@@ -157,7 +154,6 @@ export class AuthService {
       });
     } catch (error) {
       console.error(error); // Log the error for debugging
-      throw new Error('Failed to update image');
     }
   }
 }

@@ -80,7 +80,6 @@ export class AuthController {
       }
     } catch (err) {
       console.log(err);
-      res.status(HttpStatus.BAD_REQUEST).json({ error: 'Something went wrong' });
     }
   }
   private setResandCookie(res : any, id: string, accessToken: string) {
@@ -101,8 +100,7 @@ export class AuthController {
     return qr;
     }
     catch(error){
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
+      console.log(error.message);
     }
   }
 
@@ -111,20 +109,18 @@ export class AuthController {
   async gettwofastatus(@Req() req: any): Promise<boolean>{
     try {
       const user = await this.usersService.findOne(req.user.id);
-      return user.twofa;
+      return user?.twofa;
     } catch (error) {
       console.error(error);
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+  @Put('2fa/enable')
 async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
   try {
     await this.authService.change2FAStatus(req.user.id);
     return { status: true };
   } catch (error) {
     console.error(error);
-    throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
   @Put('2fa/disable')
@@ -135,7 +131,6 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return { status: false };
     } catch (error) {
       console.error(error); 
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   @Post('uploads')
@@ -158,7 +153,6 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return { image: file };
     } catch (error) {
       console.error(error); // Log the error for debugging
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   @Post('2fa/validate')
@@ -178,9 +172,10 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
 
   @Get('avatar/:id')
   @UseGuards(JwtGuard)
-  async getImage(@Param('id') id: string, @Res() res) {
+  async getImage(@Param('id') id: string, @Res() res, @Req() req) {
+    const { profileImage } = await this.usersService.findOne(id);
     try {
-      const { profileImage } = await this.usersService.findOne(id);
+      console.log("id",id);
       const path = join('./uploads/', profileImage);
       await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
@@ -188,8 +183,9 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       res.setHeader('Content-Type', 'image/' + extension);
       return file.pipe(res);
     } catch (err) {
+      console.log(profileImage);
       res.setHeader('Content-Type', 'application/json');
-      res.status(HttpStatus.NOT_FOUND).json('file not found');
+      return await profileImage;
     }
   }
 
@@ -205,5 +201,13 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
     } else {
       return res.status(HttpStatus.BAD_REQUEST).json({ message: 'User not updated' });
     }
+  }
+  @Post('logout')
+  @UseGuards(JwtGuard)
+  async logout(@Req() req, @Res() res) {
+    res.clearCookie('jwt');
+    const status = UserStatus.OFFLINE;
+    await this.usersService.updatestatus(req.user, status);
+    return res.status(200).json({ message: 'User logged out' });
   }
 }

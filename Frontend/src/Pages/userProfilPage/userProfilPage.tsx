@@ -4,10 +4,10 @@ import './userProfilPage.scss'
 import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
 import { useEffect, useState } from "react";
+import { useLocation, useParams } from 'react-router-dom';
 import axios from "axios";
 /******************* Includes  *******************/
-import { useLocation, useParams } from 'react-router-dom';
-
+import NavBar from '../addons/NavBar';
 
 const States = () => {
     return (
@@ -203,23 +203,21 @@ const Achivements = () => {
 
 function OtherProfilPage() {
     const params = useParams();
-    console.log("ID -> ", params.userId);
     const [info, setInfo] = useState();
-    try {
-        axios.get("http://localhost:3000/users/profil", {withCredentials: true})
-        .then((response) => {
-            setInfo(response.data);
-        })
-    } catch (error) {
-        console.log(error);
-    }
-    console.log(info);
-
+    axios.get("http://localhost:3000/users/profil", {withCredentials: true})
+    .then((response) => {
+        setInfo(response.data);
+    })
     if (params.userId == info?.username)
-        return (<></>)
+        return (
+            <div style={{height: '100vh'}}>
+                <h1>***** Test cannot see ur profil****</h1>
+            </div>
+        )
     else
     return (
         <div style={{height: '100vh'}}>
+            <NavBar/>
             <div className="topContainer">
                 <Profil/>
                 <States/>

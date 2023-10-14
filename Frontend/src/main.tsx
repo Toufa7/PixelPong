@@ -20,13 +20,13 @@ const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'))
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
 const Setup = lazy(() => import('./Pages/GamePage/Setup_Game_Front'));
 const Error = lazy(() => import('./Pages/errorPage/errorPage'));
-
+import Dogo from "./Pages/dogo.gif";
 
 export const OtherUser = () => {
 	return (
 		<>
 			<Stars/>
-			<NavBar/>
+			{/* <NavBar/> */}
 			<OtherProfilPage/>
 		</>
 	);
@@ -109,6 +109,7 @@ const ErrorTextPage = () => {
 const AlreadyInGame = () => {
 	return (
 		<div>
+			<img style={{display:'flex', alignItems: 'center', width: '600px', height: '600px', borderRadius: '50%' , padding:'50px'}} src={Dogo} alt='Already In Game'/>
 			<img style={{width: '600px', height: '600px', borderRadius: '50%'}} src="./Pages/dogo.gif" alt='Already In Game'/>
 			<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '50px', color: 'white'}}>Already In Game</h1>
 		</div>

@@ -51,10 +51,8 @@ const States = (props : {winRate: number, wins: number, loses: number, streak: n
 }
 
 const Profil = () => {
-
     const cookie = new Cookies();
-    const token : string = jwt_decode(cookie.get('jwt'));
-
+    const token  = jwt_decode(cookie.get('jwt'));
     const [userData, setUserData] = useState({
         avatar: '',
         username: token.username,
@@ -65,12 +63,9 @@ const Profil = () => {
         async function fetchData() {
             const cookie = new Cookies();
             const token = jwt_decode(cookie.get('jwt'));
-            const endpoints = [
-                `http://localhost:3000/auth/avatar/${token.id}`,
-                `http://localhost:3000/users/profil`
-            ]
+            const endpoints = [`http://localhost:3000/auth/avatar/${token.id}`,
+                                `http://localhost:3000/users/profil`]
             if (token) {
-
                 await axios.all(endpoints.map((idx) =>
                 axios.get(idx, {withCredentials: true})))
                 .then(axios.spread((avatarRes, userRes) => 
@@ -90,7 +85,7 @@ const Profil = () => {
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img  src={userData.check ? token.image : userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img  src={userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>
@@ -103,62 +98,6 @@ const Profil = () => {
             </div>
     );
 }
-
-// const GroupsAndFriends = () => {
-//     const cookie = new Cookies();
-//     const token = jwt_decode(cookie.get('jwt'));
-//     const [friendData, setFriendData] = useState<string[]>([]);
-
-//     useEffect(() => {
-//     axios.get(`http://localhost:3000/users/${token.id}/Friends`, {withCredentials: true})
-//     .then((response) => {
-//         console.log("Friend List -> ",  response.data);
-//         setFriendData(response.data);
-//     })
-//     },[])
-
-//     const removeFriend = (removeId : string) => {
-//         const local = token.id;
-//         const remote = removeId;
-//         const endpoint = `http://localhost:3000/users/${local}/remove/${remote}`
-//         axios.patch(endpoint, {}, {withCredentials: true})
-//         .then((reseponse) => {
-//             console.log("Removing Response" ,reseponse);
-//         })
-//     }
-    
-//     const [label, setlabel] = useState(true);
-//     return (
-//         <div className="gAndFBox">
-//             <div className="gAndFHeader">Groups & Friends</div>
-//             <div className="gAndFTabs">
-//                 <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
-//                 <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
-//             </div>
-//             <div className="gAndFContent">
-//                 <div className="listParent">
-//                 {label ? (
-//                         (
-//                         <></>)
-//                     ) : (
-//                         // Friends
-//                         Object.keys(friendData).map((idx) => (
-//                             <>
-//                                 <div className='list'>
-//                                 <img  className="avatar" src={friendData[idx].profileImage} alt="avatar" />
-//                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
-//                                     <span className='name' key={idx}>{friendData[idx].username}</span>
-//                                     <button style={{marginLeft: '10px'}} onClick={() => removeFriend(friendData[idx].id)}>Unfriend</button>
-//                                     </div>
-//                                 </div>
-//                             </>
-//                     ))
-//                 )}
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
 
 const GroupsAndFriends = () => {
     const [friendData, setFriendData] = useState<string[]>([]);
@@ -174,12 +113,12 @@ const GroupsAndFriends = () => {
         const remote = removeId;
         const endpoint = `http://localhost:3000/users/remove/`;
         axios.patch(endpoint, {friendId: remote}, {withCredentials: true})
-            .then((response) => {
-                console.log("Removing Response", response);
-                setFriendData(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
-            });
+        .then((response) => {
+            console.log("Removing Response", response);
+            setFriendData(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
+        });
     }
-
+    
     const [label, setlabel] = useState(true);
     return (
         <div className="gAndFBox">
@@ -191,10 +130,11 @@ const GroupsAndFriends = () => {
             <div className="gAndFContent">
                 <div className="listParent">
                     {label ? (
+                        // Groups
                         <></>
                     ) : (
                         // Friends
-                        friendData.map((friend : string) => (
+                        friendData.map((friend : any) => (
                             <div className='list' key={friend.id}>
                                 <img className="avatar" src={friend.profileImage} alt="avatar" />
                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>

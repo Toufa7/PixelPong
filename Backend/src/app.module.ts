@@ -12,7 +12,7 @@ import { PrismaService } from './auth/prisma.service';
 import { GroupchatModule } from './groupchat/groupchat.module';
 
 @Module({
-  imports: [GroupchatModule, AuthModule, UsersModule, ChatModule, GateWayModule, BackendGatewayModule , ScheduleModule.forRoot()],
+  imports: [  GroupchatModule, AuthModule, UsersModule, ChatModule, GateWayModule, BackendGatewayModule , ScheduleModule.forRoot()],
   providers: [CronService , UsersService , PrismaService],
   controllers: [],
 })

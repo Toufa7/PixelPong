@@ -56,6 +56,7 @@ const messageInput = (props: any) => {
 
         //Recieving message from socket
         conversationsSocket.on('msgToClient', (payload: chatAgent) => {
+            conversationsSocket.emit('getOldCnv')
             receiveMessage(payload);
         });
 
@@ -94,6 +95,7 @@ const messageInput = (props: any) => {
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
             conversationsSocket.emit('msgToServer', newMessage)
+            conversationsSocket.emit('getOldCnv')
         };
         
         if (inputMessage != '')

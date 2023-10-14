@@ -238,7 +238,9 @@ const BottomRight= () => {
 		fetchData();
     }, [])
 
-	const avatarIs = check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image;
+	const avatarIs = /*check ?*/ `http://localhost:3000/auth/avatar/${token.id}` /*: token.image;*/;
+
+
 	const win = "#ff7670";
 	const lose = "#009e73";
 	const draw = "#178ee1";

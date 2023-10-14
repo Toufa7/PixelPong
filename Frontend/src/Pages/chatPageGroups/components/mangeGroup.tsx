@@ -4,7 +4,6 @@ import crown from '../assets/crown.svg';
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
-
 /*
 	TODO: Receiving the ID of the Selected Group to be updated
     namegb : string;
@@ -102,12 +101,12 @@ const ListFriends = () => {
 		}
 	} 
 	
-	const openDialog = () => {
+	const openMembersDialog = () => {
 		document.getElementById('dialog-default')?.showModal();
 	} 
 	return (
 		<section>
-		<button style={{marginTop: '20px'}} type="button" className="nes-btn" onClick={openDialog}>Manage Members</button>
+		<button style={{marginTop: '20px'}} type="button" className="nes-btn" onClick={openMembersDialog}>Manage Members</button>
 		<dialog style={{height: "600px", width: "600px", background: "#e4f0ff"}} className="nes-dialog" id="dialog-default">
 			<form method="dialog">
 				<menu className="dialog-menu">

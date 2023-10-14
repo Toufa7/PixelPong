@@ -123,6 +123,8 @@ https://howtodoinjava.com/typescript/maps/
 
 ## Errors :
 
+https://sentry.io/answers/how-do-i-resolve-cannot-find-module-error-using-node-js/
+
 https://stackoverflow.com/questions/62185425/why-is-console-log-logging-twice-in-react-js
 
 ## Typescript :

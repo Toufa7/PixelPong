@@ -55,6 +55,7 @@ export class GroupchatController {
     //crear a groupchat
     @Post()
     create(@Body() createGroupchatDto: CreateGroupchatDto , @Req() req : any): any {
+        console.log("create group ::::: ", createGroupchatDto);
         return this.GroupchatService.create(createGroupchatDto, req.user.id);
     }
 

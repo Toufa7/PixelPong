@@ -9,9 +9,10 @@ const chatPageGroup = () => {
 		<div className="chatGroupPage">
 			<MainNavBar/>
 			<ChatNavBar/>
-			{/* <MessagesBox name="Arsenal Supporters" avatar={arsenal}/> */}
+			<MessagesBox name="Arsenal Supporters" avatar={arsenal}/>
 		</div>
 	)
 }
 
 export default chatPageGroup 
+

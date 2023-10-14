@@ -2,28 +2,44 @@ import axios from "axios";
 import { useState } from "react"
 import toast, { Toaster } from "react-hot-toast";
 
+/*
+	TODO: Receiving the ID of the Selected Group to be updated
+    namegb : string;
+    usersgb : string;
+    admins : string;
+    grouptype: string;
+    password? : string;
+    image : string;
+*/
+
+
 const CreatingGroup = () => {
 	const groupName : string	= document.getElementById('name_field')?.value;
 	const choice : number		= document.getElementById("default_select")?.value;
 	const password : string		= document.getElementById("password_field")?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload1"]').files[0];
 	const regEx = /^[A-Za-z0-9_ ]{5,15}$/;
+	
 	if (regEx.test(groupName) && groupAvatar && choice) {
 		const data = new FormData();
 		data.append('file', groupAvatar);
 		let groupType = "PUBLIC";
-		if (choice === 1) { groupType = "PRIVATE";}
-		else if (choice === 2) {groupType = "PROTECTED";}
+		if (choice == 1) {groupType = "PRIVATE";}
+		else if (choice == 2) {groupType = "PROTECTED";}
 		const groupData = {
 			namegb: groupName,
-			image: data,
 			grouptype: groupType,
-			password: (choice === 2) ? password : undefined
+			password: (choice == 2) ? password : undefined
 		};
+		console.log("----> ", groupData);
 		toast.promise(
 			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
-			.then((responseNickname) => {
-				console.log(responseNickname);
+			.then((response) => {	
+				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
+				.then((res) => {
+					console.log("Res ", res);
+				})
+				.catch((ero) => {console.log(ero)})
 			}),
 			{
 				loading: "Sending data...",

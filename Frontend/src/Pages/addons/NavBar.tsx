@@ -118,7 +118,7 @@ const NavBarFooter = () => {
 		fetchData();
     }, [])
 
-	const avatarIs = check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image;
+	const avatarIs = /*check ? */`http://localhost:3000/auth/avatar/${token.id}`/* : token.image*/;
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
