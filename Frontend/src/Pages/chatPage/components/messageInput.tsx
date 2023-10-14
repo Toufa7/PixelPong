@@ -5,6 +5,7 @@ import MessageRightComponenet from './messageRightComponenet ';
 import '../chatPage.scss'
 import Send from '../../../assets/images/send.svg'
 import { chatSocketContext } from './socketContext'
+import axios from 'axios';
 
 // Class chatAgent responsible for defining the properties of each person onthe conversation
 interface chatAgent
@@ -45,13 +46,80 @@ const messageInput = (props: any) => {
 
     //Refering to the dummy div
     const firstRef = useRef(null);
-
+    
     //Our chat socket
     const conversationsSocket = useContext(chatSocketContext);
     
     //Creating the messages array to be rendred
     const [messagesArr, setNewMessage] = useState<chatAgent[]>([]);
+    const [oldMessages, setOldMessages] = useState(new Map<string, chatAgent>());
     
+    useEffect(() => {
+        axios
+            .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
+        
+            .then((res) => {
+                fillMap(res.data);
+            })
+            .catch(Error)
+                console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+    }, [props.Receiver.id])
+    
+    
+    const fillMap = (axiosResponse: any) => {
+        
+        let molLmessageId: any = 'n/a';
+        let molLmessage: any = 'n/a';
+        let molMsgPic: any = 'n/a';
+        let molMsgSide: number = 0;
+
+
+        for (let i: number = 0; i < axiosResponse.length; i++)
+        {
+
+            if (axiosResponse[i].senderId == props.Sender.id)
+            {
+                molLmessageId = axiosResponse[i].senderId;
+                molLmessage = props.Sender.username;
+                molMsgPic = props.Sender.image;
+                molMsgSide = 0;
+            }
+            else
+            {
+                molLmessageId = axiosResponse[i].receiverId;
+                molLmessage = props.Receiver.username;
+                molMsgPic = props.Receiver.profileImage;
+                molMsgSide = 1;
+            }
+            
+            const tmpMsgObj: chatAgent = {
+                id: molLmessageId,
+                username: molLmessage,
+                pic: molMsgPic,
+                side: molMsgSide,
+                message: axiosResponse[i].messageDMs,
+                timestamp: axiosResponse[i].createdAt,
+            }
+
+            setOldMessages(oldMessages.set(axiosResponse[i].id, tmpMsgObj));
+            setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
+        }
+        
+    };
+    
+    function makeid(length: number) {
+        
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < length) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          counter += 1;
+        }
+        return result;
+    }
+
     useEffect(() => {
 
         //Recieving message from socket
@@ -64,7 +132,6 @@ const messageInput = (props: any) => {
         return() => {
             conversationsSocket.off('msgToClient');
         }
-
     }, [])
 
     //Handling newly received message 

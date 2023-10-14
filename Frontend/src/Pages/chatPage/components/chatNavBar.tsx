@@ -73,7 +73,8 @@ const Dms = (props:any) => {
                     setMapState(mapState.set(conversations[i], tmpObj));
                 })
                 .catch(Error)
-                console.log('%cAn error happened in : ', 'color: red', '%cDms: handleNewConversations', 'color: cyan');
+                console.log('%cAn error happened in : ', 'color: red')
+                console.log('%cDms: Dms:handleNewConversations', 'color: blue');
         }   
         };
         

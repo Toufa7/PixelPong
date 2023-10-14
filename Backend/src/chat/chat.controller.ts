@@ -15,5 +15,5 @@ export class ChatController {
         return await this.ChatService.getOldMessages(req.user.id, idrecever);
     }
 
-
+    
 }
