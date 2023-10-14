@@ -85,36 +85,38 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
 
 async handleDisconnect(Player: Socket) {
+  let client_count_before : number;
+  let Player_deleted = Player.id;
+  
+  for(const id in this.Rooms.rooms){
+    const Room = this.Rooms.rooms[id];
+    if (Room.Player1?.id == Player_deleted  || Room.Player2?.id == Player_deleted){
+      this.Room_dl = this.Rooms.rooms[id];
+      client_count_before = this.Room_dl.client_count;
+      break;
+    }
+  }
+  console.log("CLIENT COUNT BEFORE ----> " + client_count_before);
+  // if (this.Players.players[Player.id]?.user_id == this.User.id){
+    console.log("Im Player with username --> " + this.User.username);
+    console.log("Im in Room --> " + this.Players.players[Player.id]?.room_id);
+    console.log("IDDDDDD ---> " + this.Players.players[Player.id]?.user_id); 
+    await this.userService.ChangeStateInGame(this.Players.players[Player.id]?.user_id ,false);
+  // }
 
-    let client_count_before : number;
-    let Player_deleted = Player.id;
-    for(const id in this.Rooms.rooms){
-      const Room = this.Rooms.rooms[id];
-      if (Room.Player1?.id == Player_deleted  || Room.Player2?.id == Player_deleted){
-        this.Room_dl = this.Rooms.rooms[id];
-        client_count_before = this.Room_dl.client_count;
-        break;
-      }
-    }
-    console.log("CLIENT COUNT BEFORE ----> " + client_count_before);
-    if (this.Players.players[Player.id]?.user_id == this.User.id){
-      console.log("Im Player with username --> " + this.User.username);
-      await this.userService.ChangeStateInGame(this.User.id,false);
-    }
 
-
-    this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
-    if (this.Room_dl?.client_count > 0 && client_count_before > 1){
-          console.log("-------------There still another Player in the room!!-------------");
-          this.server.to(this.Room_dl.id).emit("PlayerLeave");
-    }
-        
-    if (!this.Room_dl?.Player1 || !this.Room_dl?.Player2){
-          console.log("ENTERED !!");
-          console.log(this.Room_dl?.id);
-          this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
-    }
-    console.log(this.Players.players);
+  this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+  if (this.Room_dl?.client_count > 0 && client_count_before > 1){
+        console.log("-------------There still another Player in the room!!-------------");
+        this.server.to(this.Room_dl.id).emit("PlayerLeave");
+  }
+      
+  if (!this.Room_dl?.Player1 || !this.Room_dl?.Player2){
+        console.log("ENTERED !!");
+        console.log(this.Room_dl?.id);
+        this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
+  }
+  console.log(this.Players.players);
 
 }
 
