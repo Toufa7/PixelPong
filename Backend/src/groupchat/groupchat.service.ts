@@ -84,7 +84,7 @@ export class GroupchatService {
     }
 
     //create a groupchat
-    async create(filename : string, createGroupchatDto: any, iduser : string) {
+    async create(createGroupchatDto: any, iduser : string) {
         return await this.prisma.groupchat.create({
             data:{
                 namegb : createGroupchatDto.namegb,
@@ -93,11 +93,37 @@ export class GroupchatService {
                 superadmin : {connect : {id : iduser} },
                 grouptype : createGroupchatDto.grouptype,
                 password : createGroupchatDto.password,
-                image : filename,
             },
         });
     }
 
+    //upload a image to a groupchat
+    async uploadimage(filename : string, id: string, iduserconnected : string) {
+        //get sueperadmin of the groupchat
+        const superadmin = await this.prisma.groupchat.findUnique({
+            where: {
+                id: id,
+            },
+            select: {
+                superadmin: true,
+            },
+        });
+        if (superadmin.superadmin.id == iduserconnected)
+        {
+            return await this.prisma.groupchat.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    image : filename,
+                },
+            });
+        }
+        else{
+            return "You are not the superadmin of this groupchat";
+        }
+    }
+    
     //update a groupchat
     async update(filename : string, id: string, updateGroupchatDto: any, iduserconnected : string) {
 
