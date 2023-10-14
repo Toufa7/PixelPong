@@ -161,15 +161,7 @@ const Profil = () => {
 // }
 
 const GroupsAndFriends = () => {
-    interface friendInfo {
-        id: string, 
-        profileImage : string
-    }
-
-    const cookie = new Cookies();
-    const token = jwt_decode(cookie.get('jwt'));
     const [friendData, setFriendData] = useState<string[]>([]);
-
     useEffect(() => {
         axios.get(`http://localhost:3000/users/Friends`, {withCredentials: true})
             .then((response) => {
@@ -179,7 +171,6 @@ const GroupsAndFriends = () => {
     }, []);
 
     const removeFriend = (removeId: string) => {
-        // const local = token.id;
         const remote = removeId;
         const endpoint = `http://localhost:3000/users/remove/`;
         axios.patch(endpoint, {friendId: remote}, {withCredentials: true})

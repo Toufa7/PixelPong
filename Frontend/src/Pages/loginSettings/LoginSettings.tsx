@@ -11,26 +11,10 @@ import jwt_decode from "jwt-decode";
 /******************* Includes  *******************/
 
 const RetrieveCheckSendData =  () => {
-    // const [firstTimeLogin, setFristTimeLogin] = useState(false);
-    // const cookie = new Cookies();
-    // const token = jwt_decode(cookie.get('jwt'));
-    // axios.get(`http://localhost:3000/users/${token.id}`, {withCredentials: true})
-    // .then((Resepone) => {
-    //     setFristTimeLogin(Resepone.data.firstlogin)
-    // })
-    // .catch((bad )=> {
-    //     console.log("first ==+> ", bad);
-    // })
-
-
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
-    /**
-     * TODO: it's optionnaly either nickname or avatar or both
-    */
-//    const navigate = useNavigate();
-   if (avatar) {
+    if (avatar) {
        const data = new FormData();
        data.append('file', avatar);
        toast.promise(

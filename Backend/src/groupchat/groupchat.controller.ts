@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { GroupchatService } from './groupchat.service';
 import { updateGroupchatDto } from 'src/dto/UpdateGroupchat.dto';
 import { CreateGroupchatDto } from 'src/dto/CreateGroupchat.dto';
@@ -6,6 +6,9 @@ import { UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/guards/jwt.guards';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { diskStorage } from 'multer';
+import { join } from 'path';
+import { createReadStream } from 'fs';
+import { promises as fsPromises } from 'fs';
 
 @UseGuards(JwtGuard)
 @Controller('groupchat')
@@ -49,8 +52,36 @@ export class GroupchatController {
         return this.GroupchatService.findSuperUser(id);
     }
 
-    //create a groupchat
+    //crear a groupchat
     @Post()
+    create(@Body() createGroupchatDto: CreateGroupchatDto , @Req() req : any): any {
+        return this.GroupchatService.create(createGroupchatDto, req.user.id);
+    }
+
+    
+    //get image of a groupchat
+  @Get('getimage/:id')
+  @UseGuards(JwtGuard)
+  async getImage(@Param('id') id: string, @Res() res) {
+    try {
+      const { image } = await this.GroupchatService.findOne(id);
+      const path = join('./uploads/', image);
+      await fsPromises.access(path, fsPromises.constants.F_OK);
+      const file = createReadStream(path);
+      const extension = image.split('.')[1];
+      res.setHeader('Content-Type', 'image/' + extension);
+      console.log(file.pipe(res));
+      return file.pipe(res);
+
+    } catch (err) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(HttpStatus.NOT_FOUND).json('file not found');
+    }
+  }
+
+
+    //upload a image to a groupchat
+    @Post(":id/uploadimage")
     @UseInterceptors(
         FileInterceptor('file', {
           storage: diskStorage({
@@ -63,10 +94,9 @@ export class GroupchatController {
           }),
         }),
       )
-    create(@UploadedFile() file: Express.Multer.File, @Body() createGroupchatDto: CreateGroupchatDto , @Req() req : any): any {
-        return this.GroupchatService.create(file.filename ,createGroupchatDto, req.user.id);
+    uploadimage(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Req() req : any): any {
+        return this.GroupchatService.uploadimage(file.filename ,id, req.user.id);
     }
-
 
     //update a groupchat
     @Patch(":id")

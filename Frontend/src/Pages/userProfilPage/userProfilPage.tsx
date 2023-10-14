@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 import { useEffect, useState } from "react";
 import axios from "axios";
 /******************* Includes  *******************/
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 
 const States = () => {
@@ -42,7 +42,6 @@ const Profil = () => {
         check: true,
         userId: ''
     });
-    // const path = window.location.pathname;
     const location = useLocation();
     useEffect(() => {
         async function fetchData() {
@@ -110,10 +109,16 @@ const Profil = () => {
 }
 
 const GroupsAndFriends = () => {
-
     const info = useLocation();
     const [thisId, setId] = useState();
+    const [label, setlabel] = useState(true);
     const endpoint = `http://localhost:3000/users${info.pathname}`;
+    const [userData, setAvataStatus] = useState({
+        avatar: '',
+        check: true
+    });
+
+    
     axios.get(endpoint, {withCredentials: true})
     .then((res) => {
         setId(res.data.id);
@@ -122,17 +127,10 @@ const GroupsAndFriends = () => {
     useEffect(() => {
         axios.get(`http://localhost:3000/users/friends/${thisId}`, {withCredentials: true})
         .then((response) => {
-            console.log("Friend List -> ",  response.data);
             setFriendData(response.data);
-            console.log(" => " , response.data);
         })
     },[])
 
-    const [label, setlabel] = useState(true);
-    const [userData, setAvataStatus] = useState({
-        avatar: '',
-        check: true
-    });
     const cookie = new Cookies();
     const token = jwt_decode(cookie.get('jwt'));
     useEffect(() => {
@@ -204,18 +202,34 @@ const Achivements = () => {
 
 
 function OtherProfilPage() {
-  return (
-    <div style={{height: '100vh'}}>
-        <div className="topContainer">
-            <Profil/>
-            <States/>
+    const params = useParams();
+    console.log("ID -> ", params.userId);
+    const [info, setInfo] = useState();
+    try {
+        axios.get("http://localhost:3000/users/profil", {withCredentials: true})
+        .then((response) => {
+            setInfo(response.data);
+        })
+    } catch (error) {
+        console.log(error);
+    }
+    console.log(info);
+
+    if (params.userId == info?.username)
+        return (<></>)
+    else
+    return (
+        <div style={{height: '100vh'}}>
+            <div className="topContainer">
+                <Profil/>
+                <States/>
+            </div>
+            <div className="downContainer">
+                <GroupsAndFriends/>
+                <Achivements/>
+            </div>
         </div>
-        <div className="downContainer">
-            <GroupsAndFriends/>
-            <Achivements/>
-        </div>
-    </div>
-  )
+    )
 }
 
 export default OtherProfilPage

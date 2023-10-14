@@ -16,6 +16,12 @@ import randomLogo from './assets/logo.svg'
 
 
 const NavBarBody = () => {
+	const [showNotification, setShowNotification] = useState(false);
+
+	const toggleNotification = () => {
+	  setShowNotification(!showNotification);
+	};
+
 	return (
 	<div className="nav-content">
 		<div className="nav-item">
@@ -23,11 +29,30 @@ const NavBarBody = () => {
 				<img src={groups}/>
 			</Link>
 		</div>
-		<div className="nav-item" >
-			<a className="noti" href="#" title="Notifications">
-				<img src={notificationLogo}/>
-			</a>
-		</div>
+
+		<div className="nav-item">
+      <div className="noti" onClick={toggleNotification}>
+        <img src={notificationLogo} alt="Notification Icon" />
+      </div>
+
+      {showNotification && (
+        <div className="notification-container" style={{flexDirection: 'column'}}>
+          <h3>New Notification</h3>
+          <span>Hello World</span>
+          <span>Hello World</span>
+          <span>Hello World</span>
+          <span>Hello World</span>
+          <span>Hello World</span>
+          <span>Hello World</span>
+          <span>Hello World</span>
+          
+          <button onClick={toggleNotification}>Close</button>
+        </div>
+      )}
+    </div>
+
+
+
 		<div className="nav-item">
 			<Link to="/chat" title="Chat">
 				<img src={msgLogo}/>
@@ -38,9 +63,7 @@ const NavBarBody = () => {
 				<img src={settingsLogo}/>
 			</Link>
 		</div>
-
 	</div>
-
 	);
 };
 

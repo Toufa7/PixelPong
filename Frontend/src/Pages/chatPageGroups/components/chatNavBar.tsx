@@ -1,21 +1,23 @@
+import './chatNavBar.scss'
+/******************* Packages  *******************/
 import { useState } from 'react';
+import axios from 'axios';
+/******************* Includes  *******************/
+import avatarGroup from '../assets/saka.jpeg'
+import publicGroup from '../assets/public.svg'
+import protectedGroup from '../assets/protected.svg'
+import privateGroup from '../assets/private.svg'
 import ChatSearch from './chatSearch'
 import CreateGroup from './createGroup';
 import ManageGroup from './mangeGroup';
-import avatarGroup from '../assets/saka.jpeg'
-// import publicGroup from '../assets/public.svg'
-// import protectedGroup from '../assets/protected.svg'
-import privateGroup from '../assets/private.svg'
-import './chatNavBar.scss'
-import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+
+
 const ChatNavBar = () => {
   const [data, setLabel] = useState({
 		label : false,
 		createOrmanage : false
 	}
   );
-
   return (
 	<div className="chatNavBarDivGroup">
 		<ChatSearch/>
@@ -29,9 +31,13 @@ const ChatNavBar = () => {
 					data.createOrmanage ?
 					(<ManageGroup/>)
 					:
-					(<CreateGroup/>)) : ""
+					(<CreateGroup/>)
+				)
+				:
+				""
 			}
-			<GroupsList />
+			{/* Listing the groups your in or own */}
+			{/* <GroupsList /> */}
 		</div>
 		<div className="chatLowerRibbonGroup"></div>
 	</div>
@@ -40,29 +46,16 @@ const ChatNavBar = () => {
 
 
 const GroupsList = () => {
-	const [groupName, setGroupName] = useState('Group Name');
+	const [groups, getGroups] = useState([]);
 	axios.get("http://localhost:3000/groupchat/", {withCredentials: true})
 	.then((response) => {
-		console.log("Reseponse List Groups -> ", response.data);
+		console.log("Response User Groups -> ", response.data);
+		getGroups(response.data);
 	})
 	.catch((erro) => {
-		console.log("Error List Groups -> ", erro);
+		console.log("Error User Groups -> ", erro);
 	})
 
-	const groups = [
-		"Pesky InnerCity",
-		"Orange Tractors",
-		"The Sprinters",
-		"Brown Razors",
-		"Brick Kittens"
-	]
-	const setOpenBox = (groupName : string) => {
-		document.getElementById('groupJoin')?.showModal();
-		setGroupName(groupName);
-	}
-	const location = useLocation();
-	console.log("Location => ", location);
-	const [joinGroup, setJoinGroup] = useState(true);
 	return (
 		<div className="chatGroupesDiv">
 		<i>GROUPES</i>
@@ -70,14 +63,30 @@ const GroupsList = () => {
 			{
 				groups.map((name) => {
 					return (
-						<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} onClick={() => setOpenBox(name)} className="userChatGroup" key={name}>
+						<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} className="userChatGroup" key={name}>
 							<img src={avatarGroup} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
 							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
 							<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }}></img>
 						</div>
 				);})
 			}
-			<dialog className="nes-container" id="groupJoin">
+		</div>
+		</div>
+	);
+}
+
+export default ChatNavBar
+
+
+
+// {
+
+	// const [groupName, setGroupName] = useState('Group Name');
+	// const setOpenBox = (groupName : string) => {
+	// 	document.getElementById('groupJoin')?.showModal();
+	// 	setGroupName(groupName);
+	// }
+				{/* <dialog className="nes-container" id="groupJoin">
 				<h2 className="groupName">{groupName}</h2>
 				<img className="groupAvatar" src={avatarGroup} />
 				<p className="group-members">Total Members: 245</p>
@@ -96,10 +105,5 @@ const GroupsList = () => {
 						)
 					)
 				}
-			</dialog>
-		</div>
-		</div>
-	);
-}
-
-export default ChatNavBar
+			</dialog> */}
+// }
