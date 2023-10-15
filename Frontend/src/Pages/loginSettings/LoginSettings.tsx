@@ -41,7 +41,7 @@ const RetrieveCheckSendData =  () => {
             })),
             {
                 loading: "Sending data...",
-                success: "Success Settings!",
+                success: "Success Settings!", 
                 error: "An error occurred",
             }
             ,{ duration: 5000, position: 'top-right' });           
