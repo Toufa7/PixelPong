@@ -51,12 +51,12 @@ const GroupsList = () => {
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
             .then((response) => {
-				console.log("Rsoine ----> " ,response.data);
+				console.log("Groups List " ,response.data);
 				setGroupsList(response.data);
 				const endpoint = `http://localhost:3000/groupchat/getimage/${group.id}`;
 				axios.get(endpoint, {withCredentials: true})
 				.then((response) => {
-					console.log("Success Image  Groups -> ", response.data);
+					console.log("Success Image Groups -> ", response.data);
 				})
 				.catch((erro) => {
 					console.log("Error Image -> ", erro);

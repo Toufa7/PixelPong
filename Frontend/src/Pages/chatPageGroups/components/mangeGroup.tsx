@@ -125,7 +125,9 @@ const ListFriends = () => {
 							<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
 							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
 							<button style={{ marginLeft: '10px' }}>Mute</button>
-							<button style={{ marginLeft: '10px' }} onClick={() => kickMember(true, index)}>Kick</button>									</div>
+							<button style={{ marginLeft: '10px' }}>Ban</button>
+							<button style={{ marginLeft: '10px' }} onClick={() => kickMember(true, index)}>Kick</button>
+						</div>
 						)
 					;})
 				}
@@ -143,6 +145,7 @@ const ListFriends = () => {
 									<img src={avatar} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
 									<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
 									<button style={{ marginLeft: '10px' }}>Mute</button>
+									<button style={{ marginLeft: '10px' }}>Ban</button>
 									<button style={{ marginLeft: '10px' }} onClick={() => kickMember(true, index)}>Kick</button>
 								</div>
 							)

@@ -22,8 +22,6 @@ import mail from './assets/mail.svg';
 import caution from './assets/caution.svg';
 import folder from './assets/folder.svg';
 
-
-
 const States = (props : {winRate: number, wins: number, loses: number, streak: number}) => {
     return (
             <div className="headStatesBox">
@@ -51,8 +49,10 @@ const States = (props : {winRate: number, wins: number, loses: number, streak: n
 }
 
 const Profil = () => {
+
     const cookie = new Cookies();
-    const token  = jwt_decode(cookie.get('jwt'));
+    const token : string = jwt_decode(cookie.get('jwt'));
+
     const [userData, setUserData] = useState({
         avatar: '',
         username: token.username,
@@ -63,9 +63,12 @@ const Profil = () => {
         async function fetchData() {
             const cookie = new Cookies();
             const token = jwt_decode(cookie.get('jwt'));
-            const endpoints = [`http://localhost:3000/auth/avatar/${token.id}`,
-                                `http://localhost:3000/users/profil`]
+            const endpoints = [
+                `http://localhost:3000/auth/avatar/${token.id}`,
+                `http://localhost:3000/users/profil`
+            ]
             if (token) {
+
                 await axios.all(endpoints.map((idx) =>
                 axios.get(idx, {withCredentials: true})))
                 .then(axios.spread((avatarRes, userRes) => 
@@ -85,7 +88,7 @@ const Profil = () => {
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img  src={userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img  src={userData.check ? token.image : userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>
@@ -100,7 +103,14 @@ const Profil = () => {
 }
 
 const GroupsAndFriends = () => {
+    interface friendInfo {
+        id: string, 
+        profileImage : string
+    }
+    const cookie = new Cookies();
+    const token = jwt_decode(cookie.get('jwt'));
     const [friendData, setFriendData] = useState<string[]>([]);
+
     useEffect(() => {
         axios.get(`http://localhost:3000/users/Friends`, {withCredentials: true})
             .then((response) => {
@@ -113,12 +123,12 @@ const GroupsAndFriends = () => {
         const remote = removeId;
         const endpoint = `http://localhost:3000/users/remove/`;
         axios.patch(endpoint, {friendId: remote}, {withCredentials: true})
-        .then((response) => {
-            console.log("Removing Response", response);
-            setFriendData(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
-        });
+            .then((response) => {
+                console.log("Removing Response", response);
+                setFriendData(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
+            });
     }
-    
+
     const [label, setlabel] = useState(true);
     return (
         <div className="gAndFBox">
@@ -130,11 +140,10 @@ const GroupsAndFriends = () => {
             <div className="gAndFContent">
                 <div className="listParent">
                     {label ? (
-                        // Groups
                         <></>
                     ) : (
                         // Friends
-                        friendData.map((friend : any) => (
+                        friendData.map((friend : string) => (
                             <div className='list' key={friend.id}>
                                 <img className="avatar" src={friend.profileImage} alt="avatar" />
                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
