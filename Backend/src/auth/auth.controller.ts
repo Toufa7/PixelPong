@@ -182,9 +182,8 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       res.setHeader('Content-Type', 'image/' + extension);
       return file.pipe(res);
     } catch (err) {
-      console.log(req.user.image)
       res.setHeader('Content-Type', 'application/json');
-      return req.user.image;
+      return res.status(201);
     }
   }
 

@@ -143,6 +143,7 @@ export class AuthService {
   }
   
   async updateimage(image: string, id: string): Promise<void> {
+    console.log("id  + + + +", id)
     try {
       await this.prisma.user.update({
         where: {

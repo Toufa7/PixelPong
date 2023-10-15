@@ -250,9 +250,9 @@ const BottomRight= () => {
 		<div className="loginBoxHeader latest-matches1">ULTIMOS PARTIDOS</div>
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"win"} color={win}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"lose"} color={lose}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"draw"} color={draw}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"win"} color={win}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"lose"} color={lose}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"draw"} color={draw}/>
 			</div>
 			</div>
 	</div>
