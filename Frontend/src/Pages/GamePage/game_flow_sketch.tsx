@@ -236,8 +236,8 @@ export const Game_instance = () =>{
 
           console.log(width);
           console.log(height);
-          console.log("Player Database Id -->" + JSON.stringify(Infos.id) +"\n" 
-          + "Player Database username -->" + JSON.stringify(Infos.username));
+          // console.log("Player Database Id -->" + JSON.stringify(Infos.id) +"\n" 
+          // + "Player Database username -->" + JSON.stringify(Infos.username));
 
         canvas = p5_ob.createCanvas(width,height).parent(canvasDiv);
 

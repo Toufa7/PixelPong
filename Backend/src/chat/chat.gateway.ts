@@ -63,8 +63,14 @@ let map = new Map <any , any>();
 
 
 
-    handleDisconnect(client: Socket, ...args: any[]) {
+    async handleDisconnect(client: Socket, ...args: any[]) {
         this.logger.log(`Disconnect : ${client.id}`  );
+        const user = await this.getUser(client);
+        console.log(user);
+        if(user){
+          map.delete(user.id);
+          console.log(map);
+        }
         
     }
 
@@ -158,6 +164,7 @@ let map = new Map <any , any>();
             pic: body.pic,
             side: body.side,
             message: body.message,
+            idsender : user.id,
             timestamp: body.timestamp});
         // }
     }
