@@ -239,7 +239,7 @@ const BottomRight= () => {
 		fetchData();
     }, [])
 
-	const avatarIs = check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image;
+	const avatarIs = /*check ?*/ `http://localhost:3000/auth/avatar/${token.id}` /*: token.image;*/;
 
 
 	const win = "#ff7670";
@@ -250,9 +250,9 @@ const BottomRight= () => {
 		<div className="loginBoxHeader latest-matches1">ULTIMOS PARTIDOS</div>
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"win"} color={win}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"lose"} color={lose}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"draw"} color={draw}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"win"} color={win}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"lose"} color={lose}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"draw"} color={draw}/>
 			</div>
 			</div>
 	</div>
@@ -265,7 +265,7 @@ function Notification () {
 	useEffect(() => {
 	socket.on('notification', (data) => {
 	console.log('Received notification:', data);
-
+	
 	const AcceptFriend = async () =>  {
 		try {
 			await axios.patch("http://localhost:3000/users/acceptFriendRequest", data,{withCredentials : true})
@@ -284,13 +284,13 @@ function Notification () {
 			.then((rese) => {
 				console.log("Notifcation Refuse ", rese);
 				setFriendStatus(friendStatus)
-
+				
 			})
 		} catch (error) {
 			console.log("Error Catched ", error);
 		}
 	}
-
+	
 	const audio = new Audio(notification);
 	audio.play();
 	toast.custom(
@@ -309,14 +309,18 @@ function Notification () {
 					) : 
 					(
 						<button style={{ marginLeft: '10px' }} onClick={() => setIsFriend(true)}>Accepted</button>
-					)				
-				}
+						)				
+					}
 			</div>
 			</div>
 		</div>,
 		{ duration: 5000, position: 'top-right' });
 	});
-	}, []);
+	return() => {
+		socket.off('notification')
+	}
+}, []);
+
 }
 
 export default function Home() {	

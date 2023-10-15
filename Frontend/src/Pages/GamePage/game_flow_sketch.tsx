@@ -117,7 +117,7 @@ export const Game_instance = () =>{
 
   // const [newsocket, setScoket] = useState<Socket>();
   // const [isConnected , setConnected] = useState<boolean>(false);
-  const [Infos, SetInfo] = useState<any>({});
+  // const [Infos, SetInfo] = useState<any>({});
 
   // socket = io("ws://localhost:3000/game" , {withCredentials: true , transports: ["websocket"] });
 
@@ -228,7 +228,7 @@ export const Game_instance = () =>{
         //     user_id = Player_Info?.user_id;
         // });
 
-        socket_gm?.emit("PlayerEntered",{s_w : width , s_h : height , Player_user_id : Infos.id , Player_user_name : Infos.username});
+        socket_gm?.emit("PlayerEntered",{s_w : width , s_h : height});
         p5_ob.frameRate(60);
         canvasDiv = document.getElementById('child');
         width = document.getElementById('child')?.offsetWidth;
@@ -303,7 +303,7 @@ export const Game_instance = () =>{
               p5_ob.background(MatchmakingPage);
               // p5_ob.image(MatchmakingPage,170,0,750,550);
               p5_ob.fill("#e0e3ba");
-              p5_ob.text("MatchMaking ...",0 + 500,0 + 100);
+              p5_ob.text("MatchMaking ...",width - 500,(height / 2)  - 300);
         //       // p5_ob.text("...",190,100);
         //       // if (id_of_player1 == id_player){
         //       //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;

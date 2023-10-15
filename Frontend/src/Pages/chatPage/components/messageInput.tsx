@@ -145,7 +145,7 @@ const messageInput = (props: any) => {
         });
 
         //cleanup function
-        return() => {
+        return () => {
             conversationsSocket.off('msgToClient');
         }
     }, [])
