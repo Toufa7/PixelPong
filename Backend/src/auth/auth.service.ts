@@ -95,6 +95,7 @@ export class AuthService {
       });
     } catch (error) {
       console.error(error); // Log the error for debugging
+      throw new Error('Failed to change 2FA');
     }
   }
   // async set2Fastatus(id: string, secret: string, token: string){
@@ -123,6 +124,7 @@ export class AuthService {
       });
     } catch (error) {
       console.error(error); // Log the error for debugging
+      throw new Error('Failed to disable 2FA');
     }
   }
   
@@ -139,11 +141,11 @@ export class AuthService {
       });
     } catch (error) {
       console.error(error); // Log the error for debugging
+      throw new Error('Failed to set 2FA');
     }
   }
   
   async updateimage(image: string, id: string): Promise<void> {
-    console.log("id  + + + +", id)
     try {
       await this.prisma.user.update({
         where: {
@@ -155,6 +157,7 @@ export class AuthService {
       });
     } catch (error) {
       console.error(error); // Log the error for debugging
+      throw new Error('Failed to update image');
     }
   }
 }

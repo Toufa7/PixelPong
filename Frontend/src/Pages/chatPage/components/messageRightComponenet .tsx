@@ -6,7 +6,7 @@ const messageRightComponenet = (props: any) => {
     <div className="messageRightComponent">
         <div className="messageRightInfo">
             <img src={props.pic} alt="message-fromRight" />
-            <span>10:30</span>
+            <span>10:30 AM</span>
         </div>
         <div className="messageRightContent">
             <div className="nes-balloon from-right">

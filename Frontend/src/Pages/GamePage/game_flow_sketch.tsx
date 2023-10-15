@@ -14,12 +14,14 @@ import { Ball } from './game-classes/Ball.class';
 
 import gifMatch from './assets/rescaled_tv.gif';
 import f from "./assets/cubecavern_memesbruh03.ttf";
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
 // import loading from "./assets/loading.gif";
 import over_g from "./assets/wdS.gif";
+import Win from "./assets/Win.png";
+import Lose from "./assets/Lose.jpeg";
 import { Socket, io } from 'socket.io-client';
-import axios from 'axios';
-import { Cookies } from 'react-cookie';
+// import axios from 'axios';
+// import { Cookies } from 'react-cookie';
 // import { socket } from './socket_setup/client-connect';
 // import { id_player } from './components/render_game_sketch_components';
 
@@ -49,12 +51,14 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
     
     if (!Frontroom[Backroom.id]){
       console.log("creating room ...!!");
-      Frontroom[Backroom.id] = {client_count : "",Player1:{Paddle:"",Ball:""},Player2:{Paddle:"",Ball:""},GameBall:""};
+      Frontroom[Backroom.id] = {client_count : "",Player1:{Paddle:"",Ball:"",Health_points:0,username:""},Player2:{Paddle:"",Ball:"",Health_points:0,username:""},GameBall:""};
       Frontroom[Backroom.id].GameBall = Backroom.GameBall;
       Frontroom[Backroom.id].client_count = Backroom.client_count;
 
       if (Backroom.Player1){
       Frontroom[Backroom.id].Player1 = Backroom.Player1;
+      Frontroom[Backroom.id].Player1.Health_points = Backroom.Player1.Health_points;
+      Frontroom[Backroom.id].Player1.username = Backroom.Player1.username;
       Frontroom[Backroom.id].Player1.Paddle = new Paddle(Frontroom[Backroom.id].Player1.x,Frontroom[Backroom.id].Player1.y,
         Frontroom[Backroom.id].Player1.width,Frontroom[Backroom.id].Player1.height,p5_ob,"#FFFA37");
       
@@ -63,6 +67,8 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
       }
       if (Backroom.Player2){
         Frontroom[Backroom.id].Player2 = Backroom.Player2;
+        Frontroom[Backroom.id].Player2.Health_points = Backroom.Player2.Health_points;
+        Frontroom[Backroom.id].Player2.username = Backroom.Player2.username;
         Frontroom[Backroom.id].Player2.Paddle = new Paddle(Frontroom[Backroom.id].Player2.x,Frontroom[Backroom.id].Player2.y,
           Frontroom[Backroom.id].Player2.width,Frontroom[Backroom.id].Player2.height,p5_ob,"#FFFA37");
 
@@ -74,6 +80,8 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
       Frontroom[Backroom.id].client_count = Backroom.client_count;
       if (!Frontroom[Backroom.id].Player1 && Backroom.Player1){
         Frontroom[Backroom.id].Player1 = Backroom.Player1;
+        Frontroom[Backroom.id].Player1.Health_points = Backroom.Player1.Health_points;
+        Frontroom[Backroom.id].Player1.username = Backroom.Player1.username;
         Frontroom[Backroom.id].Player1.Paddle = new Paddle(Frontroom[Backroom.id].Player1.x,Frontroom[Backroom.id].Player1.y,
           Frontroom[Backroom.id].Player1.width,Frontroom[Backroom.id].Player1.height,p5_ob,"#FFFA37");
 
@@ -82,6 +90,8 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any)
         }
         if (!Frontroom[Backroom.id].Player2 && Backroom.Player2){
           Frontroom[Backroom.id].Player2 = Backroom.Player2;
+          Frontroom[Backroom.id].Player2.Health_points = Backroom.Player2.Health_points;
+          Frontroom[Backroom.id].Player2.username = Backroom.Player2.username;
           Frontroom[Backroom.id].Player2.Paddle = new Paddle(Frontroom[Backroom.id].Player2.x,Frontroom[Backroom.id].Player2.y,
             Frontroom[Backroom.id].Player2.width,Frontroom[Backroom.id].Player2.height,p5_ob,"#FFFA37");
 
@@ -134,8 +144,7 @@ export const Game_instance = () =>{
       id_player = socket_gm.id;
       width = document.getElementById('child')?.offsetWidth;
       height = document.getElementById('child')?.offsetHeight;
-
-      
+      socket_gm?.emit("PlayerEntered",{s_w : width , s_h : height});
     });
     return () => {
       socket_gm?.off("connect");
@@ -148,12 +157,15 @@ export const Game_instance = () =>{
     
   },[]);
   
-  const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
+const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     const Frontroom : any = {};
     let MatchmakingPage : p5Types.Image;
     let font : p5Types.Font;
     let ovp : p5Types.Image;
-    let change_screen :boolean = false;
+    let win : p5Types.Image;
+    let lose : p5Types.Image;
+    let Screen_display :string = "on_going";
+    let FrontCountDown : number = 6;
     
     // console.log(Infos);
     
@@ -168,10 +180,14 @@ export const Game_instance = () =>{
               if(Frontroom[id].Player1){
                   Frontroom[id].Player1.Paddle.pos.x = Backroom.Player1?.x;
                   Frontroom[id].Player1.Paddle.pos.y = Backroom.Player1?.y;
+                  Frontroom[id].Player1.Health_points = Backroom.Player1?.Health_points;
+                  Frontroom[Backroom.id].Player1.username = Backroom.Player1.username;
               }
               if (Frontroom[id].Player2){
                 Frontroom[id].Player2.Paddle.pos.x = Backroom.Player2?.x;
                 Frontroom[id].Player2.Paddle.pos.y = Backroom.Player2?.y;
+                Frontroom[id].Player2.Health_points = Backroom.Player2?.Health_points;
+                Frontroom[Backroom.id].Player2.username = Backroom.Player2.username;
               }
             }
         });
@@ -197,38 +213,40 @@ export const Game_instance = () =>{
         //r--------------------------------------------
   
         //r- Loading Images
-        p5_ob.preload = () =>{
+p5_ob.preload = () =>{
 
           MatchmakingPage = p5_ob.loadImage(gifMatch);
           font = p5_ob.loadFont(f);
           ovp = p5_ob.loadImage(over_g);
+          win = p5_ob.loadImage(Win);
+          lose = p5_ob.loadImage(Lose);
         }
         //r------------------
   
   
-        socket_gm?.on("PlayerLeave",()=>{
-          // try{
-          //   axios.patch(`http://localhost:3000/users/statingame`,{ingame : false},{ withCredentials: true })
-          //   .then(Resp => console.log("Patched"))
-          //   .catch(error => console.error(error));
-          // }catch(error){
-          //   console.log(error);
-          // }
+        socket_gm?.on("PlayerLeave",(Result)=>{
           console.log("You won by Forfait --->" + socket_gm?.id);
           socket_gm?.disconnect();
-          change_screen = true;
+          Screen_display = Result.Result;
           // p5_ob.background("#000000");
           // p5_ob.image(ovp,170,0,750,550);
         });
+
+        socket_gm?.on("MatchEnded",(Result)=>{
+          console.log("Match Ended By --->" + Result.Result);
+          socket_gm?.disconnect();
+          Screen_display = Result.Result;
+          // p5_ob.background("#000000");
+          // p5_ob.image(ovp,170,0,750,550);
+        })
   
-        p5_ob.setup = () => {
+p5_ob.setup = () => {
 
         // socket_gm?.on("IminGame",(Player_Info) => {
         //     inGame = Player_Info?.inGame;
         //     user_id = Player_Info?.user_id;
         // });
 
-        socket_gm?.emit("PlayerEntered",{s_w : width , s_h : height});
         p5_ob.frameRate(60);
         canvasDiv = document.getElementById('child');
         width = document.getElementById('child')?.offsetWidth;
@@ -236,8 +254,8 @@ export const Game_instance = () =>{
 
           console.log(width);
           console.log(height);
-          console.log("Player Database Id -->" + JSON.stringify(Infos.id) +"\n" 
-          + "Player Database username -->" + JSON.stringify(Infos.username));
+          // console.log("Player Database Id -->" + JSON.stringify(Infos.id) +"\n" 
+          // + "Player Database username -->" + JSON.stringify(Infos.username));
 
         canvas = p5_ob.createCanvas(width,height).parent(canvasDiv);
 
@@ -251,85 +269,80 @@ export const Game_instance = () =>{
         p5_ob.textAlign(p5_ob.CENTER, p5_ob.CENTER);
       }
       
-      p5_ob.draw = () =>{
-        // canvasDiv = document.querySelector('#child_canvas');
-      // width = canvasDiv?.offsetWidth;
-      //- height = canvasDiv?.offsetHeight;
-        if (!change_screen){
+p5_ob.draw = () =>{
+
+        socket_gm?.on("CountDown",(C_T)=>{
+        
+        FrontCountDown = C_T.CountDown;
+        console.log("Counting From Frontend -->" + C_T.CountDown);
+        })
+        console.log("FrontCountDown -->" + FrontCountDown);
+
+        if (Screen_display == "Win"){
+          p5_ob.background(win);
+          console.log("You Won");
+        }
+        else if (Screen_display == "Lose"){
+          p5_ob.background(lose);
+          console.log("You Lost");
+        }
+        else{
+        if (Screen_display === "on_going"){
+
           for(const id in Frontroom){
             p5_ob.background("#FA9200");
             const id_of_player1 = Frontroom[id].Player1?.id;
             const id_of_player2 = Frontroom[id].Player2?.id;
             const Player1 = Frontroom[id].Player1?.Paddle;
             const Player2 = Frontroom[id].Player2?.Paddle;
-            
-            if (id_of_player1 == id_player){
-              Player1?.update_Player_pos(canvas);
-              if (Player2 && id_of_player2 != id_player){
-                Player2.pos.x = width - Player2.paddle_width;
-                Player2?.update_Player_pos(canvas);
-              }
-            }
-            else if (id_of_player2 == id_player){
-              Player2?.update_Player_pos(canvas);
-              if (Player1 && id_of_player1 != id_player){
-                Player1.pos.x = width - Player1.paddle_width;
-                Player1?.update_Player_pos(canvas);
-              }
-            }
+            console.log(Frontroom[id].Player1?.username + ": My Health points are ---> " + Frontroom[id].Player1?.Health_points);
+            console.log(Frontroom[id].Player2?.username + ": My Health points are ---> " + Frontroom[id].Player2?.Health_points);
       
-        //     //y- LOADING PAGE FOR PLAYERS
-      
-            
-        //     //   //r- CODE FOR DRAWING THE BALL
-            if (Frontroom[id].Player1 && Frontroom[id].Player2){
-                // console.log(Player1.pos.x);
-              if (id_of_player1 == id_player)
-                Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
-              else if (id_of_player2 == id_player)
-              Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+        if (Frontroom[id].Player1 && Frontroom[id].Player2){
+          if (FrontCountDown > 0){
+              p5_ob.fill("#e0e3ba");
+              p5_ob.textSize(150);
+              p5_ob.text(FrontCountDown, width / 2, height / 2);
             }
-        //     //   //r----------------------------
-      
-            
-        //     //   //b- LOADING PAGE CODE
-          else{
-        //       console.log("A player is missing");
-        //       // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
-        //       // p5_ob.image(load,0,0);
-              // p5_ob.strokeWeight(4);
-              // p5_ob.stroke(51);
-              // p5_ob.background("#fcba03");
+            else{
+                    if (id_of_player1 == id_player){
+                      Player1?.update_Player_pos(canvas);
+                      if (Player2 && id_of_player2 != id_player){
+                        Player2.pos.x = width - Player2.paddle_width;
+                        Player2?.update_Player_pos(canvas);
+                      }
+                    }
+                    else if (id_of_player2 == id_player){
+                      
+                      Player2?.update_Player_pos(canvas);
+                      if (Player1 && id_of_player1 != id_player){
+                        Player1.pos.x = width - Player1.paddle_width;
+                        Player1?.update_Player_pos(canvas);
+                      }
+                    }
+    
+                    if (id_of_player1 == id_player)
+                      Frontroom[id].Player1?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+                    else if (id_of_player2 == id_player)
+                    Frontroom[id].Player2?.Ball.update_pos(Frontroom[id].Player1?.Paddle,Frontroom[id].Player2?.Paddle);
+                    // console.log(Player1.pos.x); 
+            }
+        }
+        else{
               p5_ob.background(MatchmakingPage);
               // p5_ob.image(MatchmakingPage,170,0,750,550);
               p5_ob.fill("#e0e3ba");
-              p5_ob.text("MatchMaking ...",width - 500,(height / 2)  - 300);
-        //       // p5_ob.text("...",190,100);
-        //       // if (id_of_player1 == id_player){
-        //       //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-        //       //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-        //       //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
-        //       }
-              
-        //     //   //b- ----------------------
-      
-        //     //   // else if (id_of_player2 == id_player)
-        //     //   //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
-        //     //   //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
-        //     //   //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
-        //     // }
-      
-        //     //y----------------------------------
-            
+              p5_ob.text("MatchMaking ...",0 + 500,0 + 100);
           }
         }
       }
-      else{
+      else if (Screen_display == "Forfait"){
           console.log("Game  Over someone forfaited");
           p5_ob.background(ovp);
           // p5_ob.image(ovp,250,0,600,550);
       }
     }
+}
   
     p5_ob.windowResized = () =>{
       canvasDiv = document.getElementById('child');
@@ -366,6 +379,55 @@ export const Game_instance = () =>{
 
 
 
+
+
+
+
+        // canvasDiv = document.querySelector('#child_canvas');
+      // width = canvasDiv?.offsetWidth;
+      //- height = canvasDiv?.offsetHeight;
+
+
+
+
+
+
+
+
+
+
+
+
+        //       console.log("A player is missing");
+        //       // image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);
+        //       // p5_ob.image(load,0,0);
+              // p5_ob.strokeWeight(4);
+              // p5_ob.stroke(51);
+              // p5_ob.background("#fcba03");
+
+
+
+
+
+
+
+
+        //       // p5_ob.text("...",190,100);
+        //       // if (id_of_player1 == id_player){
+        //       //   // Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+        //       //   // Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+        //       //   // Frontroom[id].Player1.Ball.draw_the_ball("#e9ed09");
+        //       }
+              
+        //     //   //b- ----------------------
+      
+        //     //   // else if (id_of_player2 == id_player)
+        //     //   //   Frontroom[id].Player1.Ball.pos.x = screen_width / 2;
+        //     //   //   Frontroom[id].Player1.Ball.pos.y = screen_height / 2;
+        //     //   //   Frontroom[id].Player2.Ball.draw_the_ball("#e9ed09");
+        //     // }
+      
+        //     //y----------------------------------
 
 
 
@@ -455,3 +517,12 @@ export const Game_instance = () =>{
     // console.log("token Game--->" + JSON.stringify(token));
     // axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
     // .then(response => console.log(response));
+
+
+              // try{
+          //   axios.patch(`http://localhost:3000/users/statingame`,{ingame : false},{ withCredentials: true })
+          //   .then(Resp => console.log("Patched"))
+          //   .catch(error => console.error(error));
+          // }catch(error){
+          //   console.log(error);
+          // }

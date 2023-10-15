@@ -58,7 +58,6 @@ const Profil = () => {
                         userId : response.data.id
                     }));
                 } catch (avatarError) {
-                    console.log("data of user please : :: : :",userData)
                     setUserData(() => ({
                         avatar: response.data.profileImage,
                         username: response.data.username,

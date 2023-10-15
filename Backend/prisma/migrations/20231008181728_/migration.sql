@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Grouptype" AS ENUM ('PUBLIC', 'PRIVATE', 'PROTECTED');
+CREATE TYPE "GroupType" AS ENUM ('PUBLIC', 'PRIVATE', 'PROTECTED');
 
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('ACCEPTED', 'PENDING', 'DECLINED');
@@ -19,11 +19,12 @@ CREATE TABLE "User" (
     "twofasecret" TEXT,
     "twofatoken" TEXT,
     "profileImage" TEXT,
-    "ingame" BOOLEAN DEFAULT false,
     "twofa" BOOLEAN DEFAULT false,
     "status" "UserStatus",
     "authenticated" BOOLEAN NOT NULL DEFAULT false,
     "firstlogin" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -42,22 +43,20 @@ CREATE TABLE "Dmschat" (
 -- CreateTable
 CREATE TABLE "Groupchat" (
     "id" TEXT NOT NULL,
-    "namegb" TEXT NOT NULL,
-    "idsuperadmin" TEXT NOT NULL,
-    "grouptype" "Grouptype" NOT NULL,
-    "password" TEXT,
-    "image" TEXT,
+    "SenderId" TEXT NOT NULL,
+    "GroupType" "GroupType" NOT NULL,
+    "Password" TEXT,
 
     CONSTRAINT "Groupchat_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Messagegb" (
+CREATE TABLE "MessageGB" (
     "id" TEXT NOT NULL,
     "SenderId" TEXT NOT NULL,
     "Message" TEXT NOT NULL,
 
-    CONSTRAINT "Messagegb_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "MessageGB_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -111,18 +110,6 @@ CREATE TABLE "_block" (
     "B" TEXT NOT NULL
 );
 
--- CreateTable
-CREATE TABLE "_GroupChat" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_adminsGroupChat" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
 
@@ -145,7 +132,7 @@ CREATE UNIQUE INDEX "Dmschat_id_key" ON "Dmschat"("id");
 CREATE UNIQUE INDEX "Groupchat_id_key" ON "Groupchat"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Messagegb_id_key" ON "Messagegb"("id");
+CREATE UNIQUE INDEX "MessageGB_id_key" ON "MessageGB"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Stats_userId_key" ON "Stats"("userId");
@@ -168,18 +155,6 @@ CREATE UNIQUE INDEX "_block_AB_unique" ON "_block"("A", "B");
 -- CreateIndex
 CREATE INDEX "_block_B_index" ON "_block"("B");
 
--- CreateIndex
-CREATE UNIQUE INDEX "_GroupChat_AB_unique" ON "_GroupChat"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_GroupChat_B_index" ON "_GroupChat"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_adminsGroupChat_AB_unique" ON "_adminsGroupChat"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_adminsGroupChat_B_index" ON "_adminsGroupChat"("B");
-
 -- AddForeignKey
 ALTER TABLE "Dmschat" ADD CONSTRAINT "Dmschat_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -187,13 +162,13 @@ ALTER TABLE "Dmschat" ADD CONSTRAINT "Dmschat_senderId_fkey" FOREIGN KEY ("sende
 ALTER TABLE "Dmschat" ADD CONSTRAINT "Dmschat_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Groupchat" ADD CONSTRAINT "Groupchat_idsuperadmin_fkey" FOREIGN KEY ("idsuperadmin") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Groupchat" ADD CONSTRAINT "Groupchat_SenderId_fkey" FOREIGN KEY ("SenderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_SenderId_fkey" FOREIGN KEY ("SenderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MessageGB" ADD CONSTRAINT "MessageGB_SenderId_fkey" FOREIGN KEY ("SenderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_id_fkey" FOREIGN KEY ("id") REFERENCES "Groupchat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MessageGB" ADD CONSTRAINT "MessageGB_id_fkey" FOREIGN KEY ("id") REFERENCES "Groupchat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Friendrequest" ADD CONSTRAINT "Friendrequest_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -221,15 +196,3 @@ ALTER TABLE "_block" ADD CONSTRAINT "_block_A_fkey" FOREIGN KEY ("A") REFERENCES
 
 -- AddForeignKey
 ALTER TABLE "_block" ADD CONSTRAINT "_block_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_GroupChat" ADD CONSTRAINT "_GroupChat_A_fkey" FOREIGN KEY ("A") REFERENCES "Groupchat"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_GroupChat" ADD CONSTRAINT "_GroupChat_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_adminsGroupChat" ADD CONSTRAINT "_adminsGroupChat_A_fkey" FOREIGN KEY ("A") REFERENCES "Groupchat"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_adminsGroupChat" ADD CONSTRAINT "_adminsGroupChat_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

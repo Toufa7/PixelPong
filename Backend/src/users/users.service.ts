@@ -119,24 +119,6 @@ export class UsersService {
     return user;
   }
 
-  async findById(id: string) {
-    // //console.log(username);
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-      select: {
-        id: true,
-        username: true,
-        profileImage: true,
-        achievements: true,
-        stats: true,
-        status: true,
-      },
-    });
-    return user;
-  }
-
   async search(query: string) {
     const users = await this.prisma.user.findMany({
       where: {
@@ -173,7 +155,6 @@ export class UsersService {
       })
       .friends({
         select: {
-          id: true,
           username: true,
           profileImage: true,
           status: true,
@@ -278,14 +259,6 @@ async ChangeStateInGame(id: string, ingame: boolean)  //Chaning The State of Pla
     data:{
       ingame: ingame,
     }
-  })
-}
-
-async isauthenticated(id: string, isauth: boolean)
-{
-  await this.prisma.user.update({
-    where:{id : id},
-    data:{authenticated: isauth}
   })
 }
 }

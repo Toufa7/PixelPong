@@ -25,9 +25,9 @@ import { createReadStream, promises as fsPromises } from 'fs';
 import * as qrcode from 'qrcode';
 
 import { join } from 'path';
-import { UserDto } from 'src/authdto/user.dto';
+import { UserDto } from 'src/dto/user.dto';
 import { PrismaService } from './prisma.service';
-import { inputDto } from 'src/authdto/input.dto';
+import { inputDto } from 'src/dto/input.dto';
  
 @Controller('auth')
 export class AuthController {
@@ -80,6 +80,7 @@ export class AuthController {
       }
     } catch (err) {
       console.log(err);
+      res.status(HttpStatus.BAD_REQUEST).json({ error: 'Something went wrong' });
     }
   }
   private setResandCookie(res : any, id: string, accessToken: string) {
@@ -96,11 +97,11 @@ export class AuthController {
     const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
     const qr = await qrcode.toDataURL(otpauth);
     await this.authService.set2Fasecret(req.user.id, secret, otpauth);
-    await this.usersService.isauthenticated(req.user.id, false);
     return qr;
     }
     catch(error){
-      console.log(error.message);
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
     }
   }
 
@@ -109,18 +110,20 @@ export class AuthController {
   async gettwofastatus(@Req() req: any): Promise<boolean>{
     try {
       const user = await this.usersService.findOne(req.user.id);
-      return user?.twofa;
+      return user.twofa;
     } catch (error) {
       console.error(error);
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  @Put('2fa/enable')
+
 async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
   try {
     await this.authService.change2FAStatus(req.user.id);
     return { status: true };
   } catch (error) {
     console.error(error);
+    throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
   @Put('2fa/disable')
@@ -131,6 +134,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return { status: false };
     } catch (error) {
       console.error(error); 
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   @Post('uploads')
@@ -153,6 +157,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return { image: file };
     } catch (error) {
       console.error(error); // Log the error for debugging
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   @Post('2fa/validate')
@@ -161,7 +166,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
     const user = await this.usersService.findOne(req.user.id);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
-      await this.usersService.isauthenticated(req.user.id, true);
+      user.authenticated = true;
       return res
         .status(200)
         .json({ message: 'OTP is valid. Allow the user to log in.' });
@@ -172,7 +177,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
 
   @Get('avatar/:id')
   @UseGuards(JwtGuard)
-  async getImage(@Param('id') id: string, @Res() res, @Req() req) {
+  async getImage(@Param('id') id: string, @Res() res) {
     try {
       const { profileImage } = await this.usersService.findOne(id);
       const path = join('./uploads/', profileImage);
@@ -183,7 +188,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return file.pipe(res);
     } catch (err) {
       res.setHeader('Content-Type', 'application/json');
-      return res.status(201);
+      res.status(HttpStatus.NOT_FOUND).json('file not found');
     }
   }
 

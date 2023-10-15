@@ -3,7 +3,7 @@ import "./NavBar.scss";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 /******************* Images  *******************/
 import msgLogo from './assets/msgLogo.svg';
@@ -19,9 +19,9 @@ const NavBarBody = () => {
 	return (
 	<div className="nav-content">
 		<div className="nav-item">
-			<Link to="/groups" title="Groups">
+			<a href="/groups" title="Groups">
 				<img src={groups}/>
-			</Link>
+			</a>
 		</div>
 		<div className="nav-item" >
 			<a className="noti" href="#" title="Notifications">
@@ -29,14 +29,14 @@ const NavBarBody = () => {
 			</a>
 		</div>
 		<div className="nav-item">
-			<Link to="/chat" title="Chat">
+			<a href="/chat" title="Chat">
 				<img src={msgLogo}/>
-			</Link>
+			</a>
 		</div>
 		<div className="nav-item">
-			<Link to="/settings" title="Settings">
+			<a href="/settings" title="Settings">
 				<img src={settingsLogo}/>
-			</Link>
+			</a>
 		</div>
 
 	</div>
@@ -48,9 +48,9 @@ const NavBarHeader = () => {
 	return (
 		<div className="nav-header">
 			<div className="nav-item">
-				<Link to="/home" title="Home">
+				<a href="/home" title="Home">
 					<img src={randomLogo}/>
-				</Link>
+				</a>
 			</div>
 		</div>
   );
@@ -95,18 +95,19 @@ const NavBarFooter = () => {
 		fetchData();
     }, [])
 
-	const avatarIs = /*check ? */`http://localhost:3000/auth/avatar/${token.id}`/* : token.image*/;
+	const avatarIs = check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image;
+
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
-			<Link to="/profil" title="Profil">
-				<img src={avatarIs ? avatarIs: '/public/profile-default.png'} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
-			</Link>
+			<a href="/profil" title="Profile">
+			<img src={avatarIs} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+			</a>
 		</div>
 		<div className="nav-item">
-			<Link to="/login" title="Logout">
+			<a href="#" title="Logout">
 				<img onClick={logout} src={logoutLogo} alt="Logout" />
-			</Link>
+			</a>
 		</div>
 		</div>
 	);

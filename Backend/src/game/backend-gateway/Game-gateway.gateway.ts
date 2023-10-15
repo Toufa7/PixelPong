@@ -36,6 +36,9 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
   public User;
 
+  
+  public CountDown : number = 6;
+
   afterInit(server: Server) {
     this.server = server;
     console.log("Server listening on port 3000");
@@ -47,6 +50,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   async handleConnection(Player: Socket) {
         this.User = await this.getUser(Player);
         console.log("i am a, : ", this.User);
+        console.log("First----> " + JSON.stringify(this.Players.players));
         Player.on("PlayerEntered",async (Data)=> {
           this.screen_metrics.screen_width = Data.s_w;
           this.screen_metrics.screen_height = Data.s_h;
@@ -85,38 +89,44 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
 
 async handleDisconnect(Player: Socket) {
-  let client_count_before : number;
-  let Player_deleted = Player.id;
-  
-  for(const id in this.Rooms.rooms){
-    const Room = this.Rooms.rooms[id];
-    if (Room.Player1?.id == Player_deleted  || Room.Player2?.id == Player_deleted){
-      this.Room_dl = this.Rooms.rooms[id];
-      client_count_before = this.Room_dl.client_count;
-      break;
+  this.User = await this.getUser(Player);
+    let client_count_before : number;
+    let Player_deleted = Player.id;
+    let user_id : string;
+    let Room_for_pair : number;
+    for(const id in this.Rooms.rooms){
+      const Room = this.Rooms.rooms[id];
+      if (Room.Player1?.id == Player_deleted  || Room.Player2?.id == Player_deleted){
+        this.Room_dl = this.Rooms.rooms[id];
+        client_count_before = this.Room_dl.client_count;
+        break;
+      }
     }
-  }
-  console.log("CLIENT COUNT BEFORE ----> " + client_count_before);
-  // if (this.Players.players[Player.id]?.user_id == this.User.id){
-    console.log("Im Player with username --> " + this.User.username);
-    console.log("Im in Room --> " + this.Players.players[Player.id]?.room_id);
-    console.log("IDDDDDD ---> " + this.Players.players[Player.id]?.user_id); 
-    await this.userService.ChangeStateInGame(this.Players.players[Player.id]?.user_id ,false);
-  // }
+    console.log("CLIENT COUNT BEFORE ----> " + client_count_before);
+    if (this.Players.players[Player.id]?.user_id == this.User.id){
+      console.log("Im Player with username --> " + this.User.username);
+      console.log("Im in Room --> " + this.Players.players[Player.id]?.room_id);
+      console.log("IDDDDDD ---> " + this.Players.players[Player.id]?.user_id,false);
+      await this.userService.ChangeStateInGame(this.Players.players[Player.id]?.user_id,false);
+    }else{
+      // await this.userService.ChangeStateInGame(this.User.id ,false);
+      console.log("Disconnection of Dangling Socket");
+    }
 
-
-  this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
-  if (this.Room_dl?.client_count > 0 && client_count_before > 1){
-        console.log("-------------There still another Player in the room!!-------------");
-        this.server.to(this.Room_dl.id).emit("PlayerLeave");
-  }
-      
-  if (!this.Room_dl?.Player1 || !this.Room_dl?.Player2){
-        console.log("ENTERED !!");
-        console.log(this.Room_dl?.id);
-        this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
-  }
-  console.log(this.Players.players);
+    if(this.Players.players[Player.id])
+      this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+    if (this.Room_dl?.client_count > 0 && client_count_before > 1){
+          console.log("-------------There still another Player in the room!!-------------");
+          this.Room_dl.CountDown = 6;
+          this.server.to(this.Room_dl.id).emit("PlayerLeave",{Result:"Forfait"});
+    }
+        
+    if (!this.Room_dl?.Player1 || !this.Room_dl?.Player2){
+          console.log("ENTERED !!");
+          console.log(this.Room_dl?.id);
+          this.server.to(this.Room_dl?.id).emit("PlayersOfRoom",this.Room_dl);
+    }
+    console.log(this.Players.players);
 
 }
 
@@ -187,6 +197,11 @@ async handleDisconnect(Player: Socket) {
               Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
               break;
             }
+
+            if (this.Manage_Game_Hit_Or_Reset(Player,Room)){
+              break;
+            }
+
             else{
               if(top < 0){
                 Room.GameBall.x = Room.GameBall.x + 8;
@@ -196,14 +211,6 @@ async handleDisconnect(Player: Socket) {
               Room.GameBall.x = Room.GameBall.x - 8;
               Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
             }
-            // if (right > this.screen_metrics.screen_width){
-            //   // Room.GameBall.y = Room.GameBall.y - 8;
-            //   Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-            // }
-            // if (left < 0){
-            //   // Room.GameBall.y = Room.GameBall.y - 8;
-            //   Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-            // }
             Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
             Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
             break;
@@ -211,6 +218,59 @@ async handleDisconnect(Player: Socket) {
         }
       }
     }
+
+
+    // if (right > this.screen_metrics.screen_width){
+
+    // }
+    // if (left < 0){
+
+    // }
+  ManageWinLost(Player : Socket , Room : any) : boolean{
+    let Ball_x = Room.GameBall.x;
+    let Ball_reverse_x = this.screen_metrics.screen_width - Room.GameBall.x;
+
+    if (Room.Player1.id == Player.id){
+      return (this.Check_point_lost_for_players(Ball_x,Room.GameBall.diameter / 2,Room.Player1));
+    }
+    else if (Room.Player2.id == Player.id){
+      return (this.Check_point_lost_for_players(Ball_reverse_x,Room.GameBall.diameter / 2,Room.Player2));
+    }
+  }
+
+  Check_point_lost_for_players(Ball_x,diameter,Player) : boolean{
+    let left = Ball_x - diameter;
+    if (left < 0){
+      Player.Health_points--;
+      console.log("I got Hit --->" + Player.username);
+      return(true);
+    }
+    return (false);
+  }
+
+  Manage_Game_Hit_Or_Reset(Player : Socket , Room : any){
+    if (this.ManageWinLost(Player,Room)){
+      if (Room.Player1.Health_points == 0){
+          this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Lose"});
+          this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Win"});
+      }else if (Room.Player2.Health_points == 0){
+          this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Win"});
+          this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Lose"});
+      }
+      Room.GameBall.x = this.screen_metrics.screen_width / 2;
+      Room.GameBall.y = this.screen_metrics.screen_height / 2;
+      Room.GameBall.ball_speed_x = -4;
+      Room.GameBall.ball_speed_y = 2;
+      Room.Player1.x = 0;
+      Room.Player1.y = (this.screen_metrics.screen_height / 2) - (95 / 2);
+
+      Room.Player2.x = 0;
+      Room.Player2.y = (this.screen_metrics.screen_height / 2) - (95 / 2);
+
+      return (true);
+    }
+    return(false);
+  }
 
     check_collision_Ball_with_players(Ball_data,Player : Socket) : boolean{
       for(const id in this.Rooms.rooms){
@@ -259,20 +319,43 @@ async handleDisconnect(Player: Socket) {
     }
 
 
+    @SubscribeMessage("UpdateScreenmetrics")
+        FillScreenMetrics(@MessageBody() screen , @ConnectedSocket() Player : Socket){
+        this.screen_metrics.screen_width = screen.s_w;
+        this.screen_metrics.screen_height = screen.s_h;
+      }
+
+
     @Interval(15)
     handleevent(){
       for(const id in this.Rooms.rooms){
         const Room = this.Rooms.rooms[id];
         this.server.to(Room.id).emit("UpdatePlayerPos",Room);
         this.server.to(Room.id).emit("UpdateBallPos",Room);
+        
       }
     }
 
-@SubscribeMessage("UpdateScreenmetrics")
-    FillScreenMetrics(@MessageBody() screen , @ConnectedSocket() Player : Socket){
-    this.screen_metrics.screen_width = screen.s_w;
-    this.screen_metrics.screen_height = screen.s_h;
-  }
+    @Interval(3000)
+    SetCountDown(){
+      // if (this.CountDown > 0)
+      // console.log("Count Down ---> " +  this.CountDown--);
+      // else
+      // console.log("Fight !!");
+      for(const id in this.Rooms.rooms){
+        const Room = this.Rooms.rooms[id];
+        if (Room.Player1 && Room.Player2){
+          // console.log("There no Room or There No two Players in Room");
+          if (Room.CountDown >= 0)   
+            this.server.to(Room.id).emit("CountDown",{CountDown : Room.CountDown--});
+        }
+        else if (!Room.Player1 || !Room.Player2){
+          Room.CountDown = 6;
+          this.server.to(Room.id).emit("CountDown",{CountDown : Room.CountDown--});
+        }
+      }
+    }
+
 }
 
 
@@ -338,7 +421,6 @@ async handleDisconnect(Player: Socket) {
 
 
 
-Timeout
 
 
 

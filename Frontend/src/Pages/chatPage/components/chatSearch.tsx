@@ -35,9 +35,8 @@ const chatSearch = (props: any) => {
         async function fetchCurrentUserInfo(id: any) {
             try
             {
-                const response = await axios.get(`http://localhost:3000/users/Friends/`, { withCredentials: true });
+                const response = await axios.get(`http://localhost:3000/users/Friends`, { withCredentials: true });
                 setFriendsIds(response.data)
-                console.log("fetchCurrentUserInfo() : ", response.data);
             }
             catch (error) {
                 console.log("ERROR : fetchCurrentUserInfo[Search Component]() : ", error);
@@ -67,12 +66,11 @@ const chatSearch = (props: any) => {
         {
             notFoundState(true);
             FoundState(false);
-        }
+        }    
     }
 
     const updateSharedString = (newString: string) =>
     {
-        console.log("new str is : " , newString)
         props.userFound(newString);
     };
 

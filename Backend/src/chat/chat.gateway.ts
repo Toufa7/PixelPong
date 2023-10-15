@@ -17,11 +17,12 @@ let map = new Map <any , any>();
 
 @WebSocketGateway({
     cors: {
-      origin: ['http://localhost:3000', 'http://localhost:5173'],
+      origin: ['http://localhost:5173'],
       credentials: true,
     },
     namespace: 'chat',
   })
+  
 
   // @UseGuards(JwtGuard)
   export class ChatGateway implements OnGatewayInit , OnGatewayConnection, OnGatewayDisconnect{
@@ -38,9 +39,11 @@ let map = new Map <any , any>();
       if (session) {
         const jwt = session.split('=')[1];
         const t = decode(jwt);
+        console.log("************",t?.['id'],"************"); 
         if (session && jwt) {
           try{
             const user = await this.Jwt.verifyAsync(jwt,{secret:'THISISMYJWTSECRET'});
+            // console.log('=================================> ',user);
             return user;
           }catch(err){
             return null; 
@@ -53,6 +56,7 @@ let map = new Map <any , any>();
     async handleConnection(client: Socket, ...args: any[]) {
       console.log("Im hererererererere");
       this.logger.log(`connected : ${client.id}`  );
+      
       const user = await this.getUser(client);
       console.log(user);
       if(user){
@@ -76,6 +80,7 @@ let map = new Map <any , any>();
     ///////////////get old convetation ///////////////////////
     @SubscribeMessage('getOldCnv')
     async getConv(client : Socket) {
+      console.log('Hello from Backend');
       const user = await this.getUser(client);
       const dMSChat1 =  await this.prisma.dmschat.findMany({
         where: {
@@ -91,74 +96,69 @@ let map = new Map <any , any>();
           tab.push(element.receiverId);
       });
       // console.log("dmschat :: ", tab);
-      this.server.to(map.get(user.id)).emit('postOldCnv'  , tab );
+      this.server.emit('postOldCnv'  , tab );
     }
+
+
     // how to use this in front end
     // emit using this event ('getOldCnv')
     // receive on ('postOldCnv')
 
 
 
-    //////////////////get old messages ///////////////////////
-    // @SubscribeMessage('getOldMsg')
-    // async getMsg(client : Socket, id : any) {
-    //   const user = await this.getUser(client);
-    //   const dMSChat =  await this.prisma.dmschat.findMany({
-    //             where: {
-    //               OR: [
-    //                 {
-    //                   senderId: user.id,
-    //                   receiverId: id
-    //                 },
-    //                 {
-    //                   senderId: id,
-    //                   receiverId: user.id
-    //                 } 
-    //               ]
-    //             },
-    //         });
-    //         // console.log("dmschat :: ", dMSChat);
-    //         // if (!dMSChat){
-    //         //     const dMSChat1 =  await this.prisma.dmschat.create({
-    //         //         data: {
+    //////////////////get messages ///////////////////////
+    @SubscribeMessage('getOldMsg')
+    async getMsg(client : Socket, id : any) {
+      const user = await this.getUser(client);
+      const dMSChat =  await this.prisma.dmschat.findMany({
+                where: {
+                  OR: [
+                    {
+                      senderId: user.id,
+                      receiverId: id
+                    },
+                    {
+                      senderId: id,
+                      receiverId: user.id
+                    } 
+                  ]
+                },
+            });
+            // console.log("dmschat :: ", dMSChat);
+            // if (!dMSChat){
+            //     const dMSChat1 =  await this.prisma.dmschat.create({
+            //         data: {
         
-    //         //           sender: {connect: {id: user.id}},
-    //         //           receiver: {connect: {id:id}},
-    //         //           messageDMs : ""
-    //         //         },
-    //         //     });
-    //         //     this.server.emit('msgToClient'  , dMSChat1 );
-    //         // }
-    //         // else{
-    //           this.server.to(map.get(user.id)).emit('postOldMsg'  , dMSChat);
-    //         // }
-    // }
-
-
-    
+            //           sender: {connect: {id: user.id}},
+            //           receiver: {connect: {id:id}},
+            //           messageDMs : ""
+            //         },
+            //     });
+            //     this.server.emit('msgToClient'  , dMSChat1 );
+            // }
+            // else{
+              this.server.emit('postOldMsg'  , dMSChat);
+            // }
+    }
     //////////////////send messages ///////////////////////
     @SubscribeMessage('msgToServer')
     async handleMessage(client : Socket, body : any) {
-
-      console.log("msgToServer");
+      console.log("Im hererererererere" , body);
         const user = await this.getUser(client);
+        console.log("=================> ",user);
+        // console.log("body sub :: ", body.id);
         const idUs = map.get(body.id);
+        // if(client.id == idUs){
             const dMSChat1 =  await this.prisma.dmschat.create({
               data: {
 
                 sender: {connect: {id: user.id}},
                 receiver: {connect: {id: body.id}},
-                messageDMs : body.message
+                messageDMs : body.msg
               },
           });
-          console.log("msgToClient");
-            this.server.to(idUs).emit('msgToClient', 
-            { id :body.id,
-            username: body.username,
-            pic: body.pic,
-            side: body.side,
-            message: body.message,
-            timestamp: body.timestamp});
+          console.log(idUs);
+            this.server.to(idUs).emit('msgToClient', body.msg);
         // }
     }
 
@@ -185,7 +185,7 @@ let map = new Map <any , any>();
     }
 
 
-    // convert getoldmessage from socket to api
+
 
     // @WebSocketServer()
 

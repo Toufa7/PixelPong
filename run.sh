@@ -1,13 +1,13 @@
 #!/bin/bash
 open -a Docker
-docker-compose -f ./Backend/docker-compose.yml --env-file ./Backend/.env up -d
+docker-compose -f ./Backend/user_account/docker-compose.yml --env-file ./Backend/user_account/.env up -d
 cd Frontend
 (npm run dev&)
 if [[ $? == 0 ]]; then
   echo "FrontEnd is running"
 fi
 cd $OLDPWD
-cd Backend
+cd Backend/user_account
 echo 
 (npm run start:dev&)
 if [[ $? == 0 ]]; then

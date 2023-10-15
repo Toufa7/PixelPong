@@ -1,64 +1,100 @@
 import axios from "axios";
 import { useState } from "react"
 import toast, { Toaster } from "react-hot-toast";
-
+import publicGroup from '../assets/public.svg'
 const CreatingGroup = () => {
 	const groupName : string	= document.getElementById('name_field')?.value;
 	const choice : number		= document.getElementById("default_select")?.value;
 	const password : string		= document.getElementById("password_field")?.value;
-	const groupAvatar : string	= document.querySelector('[name="avatarUpload1"]').files[0];
-	const regEx = /^[A-Za-z0-9_ ]{5,15}$/;
-	
-	console.log("==> ", groupAvatar);
-	if (regEx.test(groupName) && groupAvatar && choice) {
+	const groupAvatar : string	= document.querySelector('[name="avatarUpload"]')?.files[0];
+	const regEx 				= /^[A-Za-z0-9_]{5,15}$/;
+	//console.log("Choice => ", choice)
+	/**
+	 * TODO: Need en endpoint for creating group
+	*/
+	const endpoint = "http://localhost:3000/groupchat";
+	// const myStyle = {
+	// 	textAlign: "center",
+	// 	width: '300px',
+	// }
+	//console.log("Privacy -> ", choice)
+	if (regEx.test(groupName) && groupAvatar && choice)
+	{
 		const data = new FormData();
-		data.append('file', groupAvatar);
-		let groupType = "PUBLIC";
-		if (choice === 1) { groupType = "PRIVATE";}
-		else if (choice === 2) {groupType = "PROTECTED";}
-		const groupData = {
-			namegb: groupName,
-			image: data,
-			grouptype: groupType,
-			password: (choice === 2) ? password : undefined
-		};
-		toast.promise(
-			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
-			.then((responseNickname) => {
-				console.log(responseNickname);
-			}),
-			{
-				loading: "Sending data...",
-				success: "Success Settings!",
-				error: "An error occurred",
-			}
-			,{ duration: 5000, position: 'top-right' });    
+		data.append('files', groupAvatar);
+		if (choice == 0) {
+			console.log(`Group Name ${groupName} | Privacy Public | Group Avatar ${groupAvatar}`)
+			axios.post(endpoint, {namegb: groupName, image: groupAvatar,  grouptype: "PUBLIC"}, {withCredentials: true})
+			.then((rese) => {
+				console.log("Respone Cereating Grups -> ", rese.data)
+			})
+			.catch((err) => {
+				console.log("Error Public Cereating Grups -> ", err)
+			})
+		}
+		else if (choice == 1) {
+			//console.log(`Group Name ${groupName} | Privacy Private`)
+			axios.post(endpoint, {namegb: groupName, image: groupAvatar,  grouptype: "private"}, {withCredentials: true})
+			.then((rese) => {
+				console.log("Respone Cereating Grups -> ", rese)
+			})
+			.catch((err) => {
+				console.log("Error Cereating Grups -> ", err)
+			})
+		}
+		else {
+			//console.log(`Group Name ${groupName} | Group Password ${password} | Privacy Protected`)			
+			axios.post(endpoint, {namegb: groupName, password: password, image: groupAvatar, grouptype: "protected"}, {withCredentials: true})
+			.then((rese) => {
+				console.log("Respone Cereating Grups -> ", rese)
+			})
+			.catch((err) => {
+				console.log("Error Cereating Grups -> ", err)
+			})
+		}
 	}
-	else if (!regEx.test(groupName)) {
+	else if (!regEx.test(groupName))
+	{
 		if (!groupName)
 			toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
 		else
-			toast.error("Invalid Group Name", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
+			toast.error("Invalid Group Name", { style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 	}
-	else if (!choice) {
+	else if (!choice)
+	{
 		toast("Please Choose Privacy", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
 	}
-	else if (choice == 2 && !password) {
+	else if (choice == 2 && !password)
+	{
 		toast("Password Missed", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
 	}
-	else if (!groupAvatar) {
+	else if (!groupAvatar)
+	{
 		toast.error("Please Upload Avatar", { style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 	}
 }
 
 const CreateGroup = () => {
-	const privacy = ["Limited to Members","Only Members Allowed","Password-Protected Group"]
+	const privacy = [
+		"Group Chat Visibility: Limited to Members",
+		"Exclusive Access: Only Members Allowed",
+		"Enhanced Security: Password-Protected Group"
+	]
+
+	const [password, setPassword] = useState('');
+
+	const handlePasswordChange = (event : string) => {
+		//console.log("Event ", event);
+		const maskedValue = event.replace(/./g, '*');
+		setPassword(maskedValue);
+	};
+
 	const [groupName , setGroupName] = useState("");
+
 	const [isProtected , setProtected] = useState(false);
 	const isCreateDisabled = groupName === "";
 	return (
 		<div className="chatDmDiv">
-			<Toaster/>
 			<div className="groupSettings">
 				<div  className="nes-field">
 					<input style={{background: '#E9E9ED'}}	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
@@ -67,6 +103,7 @@ const CreateGroup = () => {
 				<div className="nes-select">
 					<select  required id="default_select" onChange={(e) => setProtected(e.target.value == "2")} >
 						<option value="" disabled selected hidden>Choose Privacy</option>
+
 						<option value="0" title={privacy[0]}>Public</option>
 						<option value="1" title={privacy[1]}>Private</option>
 						<option value="2" title={privacy[2]}>Protected</option>
@@ -75,15 +112,16 @@ const CreateGroup = () => {
 
 				{isProtected && (
 					<div style={{marginTop: '10px'}} className="nes-field">
-						<input  style={{background: '#E9E9ED'}} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" />
+						<input  style={{background: '#E9E9ED'}} type="password" value={password} onChange={(e) => handlePasswordChange(e.target.value)} id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" />
 					</div>
 				)}
 				<label style={{marginTop: '10px'}}>Group Avatar</label>
 				<label style={{marginBottom: '10px'}} className="nes-btn">
-					<span>Click to upload</span>
-					<input formMethod="post" type="file" name="avatarUpload1" accept=".png, .jpg, .jpeg"/>
+					<span >click to upload</span>
+					<input formMethod="post" type="file" name="avatarUpload" accept=".*"/>
 				</label>
 			<a onClick={CreatingGroup} className='nes-btn' href="#">Create</a>
+			<Toaster/>
 			</div>
 		</div>
 	)
