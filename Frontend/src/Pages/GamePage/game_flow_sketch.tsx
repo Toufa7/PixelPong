@@ -117,7 +117,7 @@ export const Game_instance = () =>{
 
   // const [newsocket, setScoket] = useState<Socket>();
   // const [isConnected , setConnected] = useState<boolean>(false);
-  const [Infos, SetInfo] = useState<any>({});
+  // const [Infos, SetInfo] = useState<any>({});
 
   // socket = io("ws://localhost:3000/game" , {withCredentials: true , transports: ["websocket"] });
 
@@ -228,7 +228,7 @@ export const Game_instance = () =>{
         //     user_id = Player_Info?.user_id;
         // });
 
-        socket_gm?.emit("PlayerEntered",{s_w : width , s_h : height , Player_user_id : Infos.id , Player_user_name : Infos.username});
+        socket_gm?.emit("PlayerEntered",{s_w : width , s_h : height});
         p5_ob.frameRate(60);
         canvasDiv = document.getElementById('child');
         width = document.getElementById('child')?.offsetWidth;

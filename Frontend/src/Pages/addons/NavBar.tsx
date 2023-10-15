@@ -95,12 +95,12 @@ const NavBarFooter = () => {
 		fetchData();
     }, [])
 
-	const avatarIs = check ? `http://localhost:3000/auth/avatar/${token.id}` : token.image;
+	const avatarIs = /*check ? */`http://localhost:3000/auth/avatar/${token.id}`/* : token.image*/;
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<Link to="/profil" title="Profil">
-				<img src={avatarIs} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+				<img src={avatarIs ? avatarIs: '/public/profile-default.png'} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</Link>
 		</div>
 		<div className="nav-item">
