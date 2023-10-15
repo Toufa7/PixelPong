@@ -23,7 +23,6 @@ interface chatAgent
 //This componenet is responsible for displaying a conversation, it take an array of messages  
 const Conversation = (props: any) =>
 {
-
     const mesaageEndRef = useRef(null);
 
     //Handle scroll to bottom
@@ -48,10 +47,8 @@ const Conversation = (props: any) =>
 
 //<*-----------------------------------------------------------------------------------------------------------------------------------*>
 
-
 //This componenet is responsible for getting a sending a message
 //getting old messages, and preparing messages array to be displayed
-
 const messageInput = (props: any) => {
 
     //Refering to the dummy div
@@ -60,9 +57,7 @@ const messageInput = (props: any) => {
     //Our chat socket
     const conversationsSocket = useContext(chatSocketContext);
     
-    //Creating the messages array to be rendred
-    const [messagesArr, setNewMessage] = useState<chatAgent[]>([]);
-    const [oldMessages, setOldMessages] = useState(new Map<string, chatAgent>());
+    //Creating the messages map to be rendred
     let map = useMap();
 
     useEffect(() => {
@@ -114,15 +109,12 @@ const messageInput = (props: any) => {
                 timestamp: axiosResponse[i].createdAt,
             }
 
-            // setOldMessages(oldMessages.set(axiosResponse[i].id, tmpMsgObj));
             map.set(axiosResponse[i].id, tmpMsgObj);
-            // setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
         }
         
     };
-
-    // console.log("use hook map is : ", map)
     
+    //function to generate message id in the map
     function makeid(length: number) :string {
         
         let result: string = '';
@@ -137,7 +129,6 @@ const messageInput = (props: any) => {
     }
 
     useEffect(() => {
-
         //Recieving message from socket
         conversationsSocket.on('msgToClient', (payload: chatAgent) => {
             conversationsSocket.emit('getOldCnv')
@@ -148,7 +139,7 @@ const messageInput = (props: any) => {
         return () => {
             conversationsSocket.off('msgToClient');
         }
-    }, [])
+    }, [props.Receiver.username])
 
     //Handling newly received message 
     const receiveMessage = (newMessage: chatAgent) => {
@@ -161,10 +152,12 @@ const messageInput = (props: any) => {
             message: newMessage.message,
             timestamp: "n/a",
         }
-        // setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
-        // setOldMessages(oldMessages.set(makeid(37), tmpMsgObj));
-        map.set(makeid(37), tmpMsgObj);
 
+        //Don't forget to replace username with id
+        if (props.Receiver.username == tmpMsgObj.username)
+        {
+            map.set(makeid(37), tmpMsgObj);
+        }
     }
     
 
@@ -195,15 +188,10 @@ const messageInput = (props: any) => {
                 timestamp: "n/a",
             }
             firstRef.current.value = '';
-            // setOldMessages(oldMessages.set(makeid(37), tmpMsgObj));
-            map.set(makeid(37), tmpMsgObj);
             handleNewMessage(tmpMsgObj);
-            // setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
+            map.set(makeid(37), tmpMsgObj);
         }
-        //N'oublier pas d'envoyer messagesArr a Conversation composant
     }
-
-    // console.log("Map is : ", map)
 
     return (
     <>

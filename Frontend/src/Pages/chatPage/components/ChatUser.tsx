@@ -7,7 +7,7 @@ import block from '../assets/images/block.svg'
 import jwtDecode from 'jwt-decode'
 import info from '../assets/info.svg'
 import oldcomputer from '../assets/oldComputer.png'
-import { height } from '../../GamePage/game_flow_sketch'
+import popCat from '../assets/pop-cat.gif'
 
 
 const ChatUser = (props:any) => {
@@ -85,7 +85,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
             props.remoteUser.profileImage   ? (<MessageInput Sender={props.localUser} Receiver={props.remoteUser}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-10%'}} src={oldcomputer} width={600} height={600} alt="user-photo" />
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-10%'}} src={popCat} width={600} height={600} alt="user-photo" />
         }
     </div>
     )
