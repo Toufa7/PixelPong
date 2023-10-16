@@ -64,7 +64,7 @@ const FriendRequest = (props: { name: string, userAvatar: string }) => {
 
     return (
       <div style={{ padding: '5px' }}>
-        <div className="nes-container with-title is-centered">
+        <div className="nes-container with-title">
           <p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black'}} className="title">Invitation Request</p>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>

@@ -184,13 +184,13 @@ const Routing = () => {
 						(<Route path="/*" 			element={<AlreadyInGame/>}/>)}
 					<Route path="/chat" 			element={<ChatPage/>}/>
 					<Route path="/notifications" 	element={<NotificationComponents/>}/>
-
-
 					<Route path="/groups" 			element={<ChatGroupsComponents/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/*" 				element={<Error/>}/>
+					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
+
 
 				</>
 			)}
