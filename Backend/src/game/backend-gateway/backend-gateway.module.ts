@@ -5,9 +5,10 @@ import { Rooms } from './entities/room.service';
 import { UsersModule } from 'src/users/users.module';
 import { PrismaService } from 'src/auth/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { HistoryService } from 'src/users/gamedata/history.service';
 
 @Module({
   imports : [UsersModule],
-  providers: [BackendGateway, Players_Management , Rooms , PrismaService , JwtService],
+  providers: [BackendGateway, Players_Management , Rooms , PrismaService , JwtService,HistoryService],
 })
 export class BackendGatewayModule {}

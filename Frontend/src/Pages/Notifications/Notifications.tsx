@@ -3,6 +3,7 @@ import otoufah from '../otoufah.jpg';
 import { useState } from "react";
 import NavBar from "../addons/NavBar";
 import Stars from "../addons/Stars";
+import axios from "axios";
 
 const GroupRequest =  (props: {name: string, userAvatar: string, groupName : string}) =>{
     return (
@@ -58,9 +59,32 @@ const GameRequest =  (props: {name: string, userAvatar: string}) =>{
 
 
 const FriendRequest = (props: { name: string, userAvatar: string }) => {
-
-    const acceptFriend = () => {};
-    const denyFriend = () => {};
+    const [isFriend, setIsFriend] = useState(true);
+	const [friendStatus, setFriendStatus] = useState(false);
+    const AcceptFriend = async () =>  {
+		try {
+			await axios.patch("http://localhost:3000/users/acceptFriendRequest", data,{withCredentials : true})
+			.then((rese) => {
+				console.log("Notifcation Accept ", rese);
+				setFriendStatus(friendStatus)
+			})
+		}
+		catch (error) {
+			console.log("Error Catched ", error);
+		}
+	}
+	const RefuseFriend = async () => {
+		try {
+			await axios.patch("http://localhost:3000/users/refuseFriendRequest", data,{withCredentials : true})
+			.then((rese) => {
+				console.log("Notifcation Refuse ", rese);
+				setFriendStatus(friendStatus)
+				
+			})
+		} catch (error) {
+			console.log("Error Catched ", error);
+		}
+	}
 
     return (
       <div style={{ padding: '5px' }}>
@@ -72,8 +96,8 @@ const FriendRequest = (props: { name: string, userAvatar: string }) => {
               <span style={{ marginLeft: '20px' }}>{props.name}</span>
             </div>
             <div>
-              <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small'}} className="nes-btn is-success" onClick={acceptFriend}>Accept</button>
-              <button style={{ marginLeft: '20px',height: '40px',  width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={denyFriend}>Deny</button>
+              <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small'}} className="nes-btn is-success" onClick={AcceptFriend}>Accept</button>
+              <button style={{ marginLeft: '20px',height: '40px',  width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={RefuseFriend}>Deny</button>
             </div>
           </div>
         </div>
