@@ -9,22 +9,23 @@ body {
     display: flex;
     justify-content: center;
 	align-items: center;
+    transform: translateY(50%);
 
     .notificationBox {
-		background: #008f9e;
-        width: fit-content;
-        height: fit-content;
-        border-bottom: 8px solid #EBD9F0;
-        border-right: 8px solid #EBD9F0;
-        border-left: 8px solid #000000;
-        border-top: 8px solid #000000;
+		background: #C1C1C1;
+        width: 600px;
+        height: 560px;
+        border-bottom: 8px solid #ffe7e1;
+        border-right: 8px solid #ffe7e1;
+        border-left: 8px solid #3a3645;
+        border-top: 8px solid #3a3645;
         z-index: 0;
 		
 		
         .loginBoxHeader {
-			background: peru;
+            height: 10%;            
+			background: #5970E4;
             font-size:x-large;
-            height: 20%;
             border-bottom: 8px solid #7C6E6E;
             border-right: 8px solid #7C6E6E;
             display: flex;
@@ -33,10 +34,16 @@ body {
         }
 		
         .loginBoxOutside {
-			height: 80%;
-            border-top: 8px solid #EBD9F0;
+            overflow: scroll;
+			height: 90%;
+            border-top: 8px solid #ffe7e1;
             border-bottom: 8px solid #7C6E6E;
             border-right: 8px solid #7C6E6E;
+
+
+            .nes-container {
+                background: #f2ecff;
+            }
 		}
     }
 }
@@ -44,5 +51,6 @@ body {
 
 @media only screen and (max-width: 600px) {
     .notification {
+        margin-top: 80px;
     }
 }
