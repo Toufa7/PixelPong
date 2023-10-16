@@ -1,17 +1,15 @@
-import './chatSearch.scss';
-import search from '../assets/search.svg'
-import DmChatUser from './dmChatUser'
-import img from "../assets/images/ibnada.jpg"
 import { useEffect, useState, useRef } from 'react';
-import { Component } from 'react'
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
+import './chatSearch.scss';
+import DmChatUser from './dmChatUser'
+import search from '../assets/search.svg'
 
-interface friend {
-    userName: string;
-    pic: string;
-    id: string;
-}
+// interface friend {
+//     userName: string;
+//     pic: string;
+//     id: string;
+// }
 
 const chatSearch = (props: any) => {
 
@@ -35,7 +33,6 @@ const chatSearch = (props: any) => {
             {
                 const response = await axios.get(`http://localhost:3000/users/Friends/`, { withCredentials: true });
                 setFriendsIds(response.data)
-                console.log("fetchCurrentUserInfo() : ", response.data);
             }
             catch (error) {
                 console.log("ERROR : fetchCurrentUserInfo[Search Component]() : ", error);
@@ -67,12 +64,11 @@ const chatSearch = (props: any) => {
             FoundState(false);
         }
         firstRef.current.value = '';
-
     }
 
+    //Sending found user to parent conponenet (using this callback function)
     const updateSharedString = (newString: string) =>
     {
-        console.log("new str is : " , newString)
         props.userFound(newString);
     };
 

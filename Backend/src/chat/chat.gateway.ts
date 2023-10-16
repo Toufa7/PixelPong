@@ -82,6 +82,7 @@ let map = new Map <any , any>();
     ///////////////get old convetation ///////////////////////
     @SubscribeMessage('getOldCnv')
     async getConv(client : Socket) {
+      console.log("getoldcnv");
       const user = await this.getUser(client);
       const dMSChat1 =  await this.prisma.dmschat.findMany({
         where: {
@@ -157,16 +158,36 @@ let map = new Map <any , any>();
                 messageDMs : body.message
               },
           });
-          console.log("msgToClient");
-            this.server.to(idUs).emit('msgToClient', 
-            { id :body.id,
-            username: body.username,
-            pic: body.pic,
-            side: body.side,
-            message: body.message,
-            idsender : user.id,
-            timestamp: body.timestamp});
-        // }
+            this.server.to(idUs).emit('msgToClient', {
+              id :body.id,
+              username: body.username,
+              pic: body.pic,
+              side: body.side,
+              message: body.message,
+              idsender : user.id,
+              timestamp: body.timestamp
+            });
+
+
+
+            ////////////////////
+            console.log("getoldcnv");
+            const user1 = await this.getUser(client);
+            const dMSChat11 =  await this.prisma.dmschat.findMany({
+              where: {
+                senderId: user1.id,
+              },
+              orderBy: {
+                createdAt: 'desc'
+              },
+            });
+            let tab : string[] = [];
+            dMSChat11.forEach(element => {
+              if(tab.filter(e => e == element.receiverId).length == 0)
+                tab.push(element.receiverId);
+            });
+            // console.log("dmschat :: ", tab);
+            this.server.to(map.get(user.id)).emit('postOldCnv'  , tab );
     }
 
 
