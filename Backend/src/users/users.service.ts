@@ -4,6 +4,9 @@ import { Status, Type, User, UserStatus } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
+  addMatchHistory(id: any, from: string) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private prisma: PrismaService) {}
   async findAll() {
     const users = await this.prisma.user.findMany();
@@ -192,6 +195,8 @@ export class UsersService {
     });
   }
   async sendFriendRequest(senderId: string, recieverId: string) {
+
+    console.log(senderId +"         "+"    " +recieverId)
     return await this.prisma.friendrequest.create({
       data: {
         sender: { connect: { id: senderId } },

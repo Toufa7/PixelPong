@@ -28,7 +28,8 @@ datasource db {
 
   // game
   achievements Achievements[] @relation("achievements")
-  matchhistory MatchHistory[] @relation("matchhistory")
+  matchhistory MatchHistory[] @relation("matchhistory") 
+  matchhistoryloser MatchHistory[] @relation("matchhistoryloser") 
 
   //relations
   friends   User [] @relation("friends")
@@ -111,6 +112,7 @@ enum  UserStatus {
   BUSY
 } 
 model Stats{
+  id       Int    @id @default(autoincrement()) @unique
   level    Int  @default(0)
   user     User     @relation("stats", fields: [userId], references: [id])
   userId   String     
@@ -124,6 +126,7 @@ model Stats{
 
 
 model Achievements{
+  id        Int    @id @default(autoincrement()) @unique
   name      String
   achievementType    Type
   user      User     @relation("achievements", fields: [userId], references: [id])
@@ -146,11 +149,14 @@ enum Type {
 }
 
 model MatchHistory {
+  id        Int    @id @default(autoincrement()) @unique
+  message      String
   numberOfMatches        Int      @default(0)
   user      User     @relation("matchhistory", fields: [userId], references: [id])
-  userId    String     
+  userId    String
+  loser      User     @relation("matchhistoryloser", fields: [loserId], references: [id])
+  loserId    String      
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId])
 }

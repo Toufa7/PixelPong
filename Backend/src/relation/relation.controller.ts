@@ -8,7 +8,7 @@ import {
   UseGuards,
   Get,
 } from '@nestjs/common';
-import { RelationService } from './relation.service';
+// import { RelationService } from './relation.service';
 import { FriendrequestDto } from 'src/authdto/relation.dto';
 import { SocketGateway } from 'src/socket/socket.gateway';
 import { JwtGuard } from 'src/guards/jwt.guards';
@@ -17,7 +17,7 @@ import { JwtGuard } from 'src/guards/jwt.guards';
 @UseGuards(JwtGuard)
 export class RelationController {
   constructor(
-    private Relationservice: RelationService,
+    // private Relationservice: RelationService,
     private readonly socket: SocketGateway,
   ) {}
   @Get('a')
