@@ -45,7 +45,7 @@ datasource db {
   usersgroupe  Groupchat[] @relation("GroupChat")
   admingroupe      Groupchat[] @relation("adminsGroupChat")
   superadmin Groupchat[] @relation("superadmin")
-  mute Groupchat[] @relation("mute")
+  mute usermute[] @relation("mute")
   block Groupchat[] @relation("block")
 }
 
@@ -66,12 +66,22 @@ model Groupchat{
     admins   User[] @relation("adminsGroupChat")
     idsuperadmin String
     superadmin User @relation("superadmin", fields: [idsuperadmin], references: [id])
-    usersmute User[] @relation("mute")
+    usersmute usermute[] @relation("mute")
     usersblock User[] @relation("block")
     grouptype  Grouptype
     password String?
     image String?
     messagesgb Messagegb[] @relation("GBMessage")
+    }
+
+model  usermute{
+  id        Int     @id @default(autoincrement())
+  user      User     @relation("mute", fields: [userId], references: [id])
+  userId    String     
+  groupchat Groupchat @relation("mute", fields: [groupchatId], references: [id])
+  groupchatId String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }
 model Messagegb {
   id        String      @id @default(uuid()) @unique

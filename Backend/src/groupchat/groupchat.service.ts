@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/auth/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import {Cron} from '@nestjs/schedule';
 
 @Injectable()
 export class GroupchatService {
@@ -255,12 +256,11 @@ export class GroupchatService {
         });
         if (admin)
         {
-            return await this.prisma.groupchat.update({
-                where: {
-                    id: id,
-                },
+            return await this.prisma.usermute.create({
                 data: {
-                    usersmute : {connect : [{id : iduser} ]},
+                    user : {connect : {id : iduser} },
+                    groupchat : {connect : {id : id} },
+                    expiresAt : new Date(Date.now() + 1000),
                 },
             });
         }
@@ -427,6 +427,25 @@ export class GroupchatService {
         else{
             return "You are not the superadmin of this groupchat";
         }
+    }
+
+    
+    //////check if user is expired mute ///////
+
+    @Cron('*/5 * * * * *')
+    async expiremute() {
+        const usermute = await this.prisma.usermute.findMany({
+            where: {
+                expiresAt : {lte : new Date(Date.now())},
+            },
+        });
+        usermute.forEach(element => {
+            this.prisma.usermute.delete({
+                where: {
+                    id: element.id,
+                },
+            });
+        });
     }
 }
 

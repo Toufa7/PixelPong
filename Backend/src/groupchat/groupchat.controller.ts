@@ -133,7 +133,7 @@ export class GroupchatController {
     }
 
     // mute a user from a groupchat
-    @Patch(":id/:iduser/mute")
+    @Post(":id/:iduser/mute")
     mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any): any {
         return this.GroupchatService.muteuser(id, iduser, req.user.id);
     }
