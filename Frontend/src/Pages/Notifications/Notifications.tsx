@@ -1,134 +1,99 @@
 import "./Notifications.scss"
 import otoufah from '../otoufah.jpg';
-import { useState } from "react";
-import NavBar from "../addons/NavBar";
-import Stars from "../addons/Stars";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import {socket} from '../../Pages/socket-client'
 
-const GroupRequest =  (props: {name: string, userAvatar: string, groupName : string}) =>{
+
+
+const FriendRequest = ({ myData }) => {
+    const [friendStatus, setFriendStatus] = useState(false);
+    const [showInvitation, setShowInvitation] = useState(true);
+    
+    if (!showInvitation) {
+    return null;
+    }
+
+    const acceptFriend = async () => {
+        setShowInvitation(false);
+
+      try {
+        await axios
+          .patch("http://localhost:3000/users/acceptFriendRequest", myData, { withCredentials: true })
+          .then((rese) => {
+            console.log("Notification Accept ", rese);
+            setFriendStatus(friendStatus);
+          });
+      } catch (error) {
+        console.log("Error Caught ", error);
+      }
+    };
+  
+    const refuseFriend = async () => {
+        setShowInvitation
+      try {
+        await axios
+          .patch("http://localhost:3000/users/refuseFriendRequest", myData, { withCredentials: true })
+          .then((rese) => {
+            console.log("Notification Refuse ", rese);
+            setFriendStatus(friendStatus);
+          });
+      } catch (error) {
+        console.log("Error Caught ", error);
+      }
+    };
+  
     return (
-        <div style={{padding: '5px'}}>
-            <div className="nes-container with-title is-centered">
-                <p style={{ background: '#ffeeca', transform: 'translateY(-5px)'}} className="title">Group Request</p>
-                <div style={{display: 'flex', alignItems: 'center',  justifyContent: 'space-between'}}>
-                <div>
-
-                    <img src={props.userAvatar} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-                    <span style={{marginLeft: '20px'}}>{props.name} want to join</span>
-                </div>
-                <div>
-                <div>
-
-                <span style={{marginLeft: '20px', fontWeight: '900'}}>{props.groupName}</span>
-                </div>
-                </div>
-                <div>
-
-                <div>
-              <button style={{ marginLeft: '20px', width: '120px' }} className="nes-btn is-success">Accept</button>
-              <button style={{ marginLeft: '20px',  width: '120px' }} className="nes-btn is-error">Deny</button>
+        <div style={{ padding: '5px' }}>
+          <div className="nes-container with-title">
+            <p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Invitation Request</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <img src={myData.photo} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+                <span style={{ marginLeft: '20px' }}>{myData.username}</span>
+              </div>
+              <div>
+                <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={acceptFriend}>Accept</button>
+                <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={refuseFriend}>Deny</button>
+              </div>
             </div>
-                </div>
-                </div>
-            </div>
+          </div>
         </div>
-    )
-}
+      );
+};
 
-const GameRequest =  (props: {name: string, userAvatar: string}) =>{
+function Notifications() {
+    const [myData, setmyData] = useState(null);
+
+
+
+    const [friendRequests, setFriendRequests] = useState([]);
+    useEffect(() => {
+      socket.on("notification", (data) => {
+        console.log("Received notification:", data);
+        setFriendRequests((prevRequests) => [...prevRequests, data]);
+        setmyData(data);
+      });
+    }, []);
+  
+
+
+
+    console.log("My Data", myData);
+  
     return (
-        <div style={{padding: '5px'}}>
-            <div className="nes-container with-title is-centered">
-            <p style={{ background: '#ffeeca', transform: 'translateY(-5px)', border: '2px solid black'}} className="title">Game Request</p>
-                <div style={{display: 'flex', alignItems: 'center',  justifyContent: 'space-between'}}>
-                <div>
-                
-                    <img src={props.userAvatar} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-                    <span style={{marginLeft: '20px'}}>{props.name} wanna play</span>
-                </div>
-                
-                <div>
-                <button style={{ marginLeft: '20px', width: '120px' }} className="nes-btn is-success">Accept</button>
-                <button style={{ marginLeft: '20px',  width: '120px' }} className="nes-btn is-error">Deny</button>
-            </div>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-
-const FriendRequest = (props: { name: string, userAvatar: string }) => {
-    const [isFriend, setIsFriend] = useState(true);
-	const [friendStatus, setFriendStatus] = useState(false);
-    const AcceptFriend = async () =>  {
-		try {
-			await axios.patch("http://localhost:3000/users/acceptFriendRequest", data,{withCredentials : true})
-			.then((rese) => {
-				console.log("Notifcation Accept ", rese);
-				setFriendStatus(friendStatus)
-			})
-		}
-		catch (error) {
-			console.log("Error Catched ", error);
-		}
-	}
-	const RefuseFriend = async () => {
-		try {
-			await axios.patch("http://localhost:3000/users/refuseFriendRequest", data,{withCredentials : true})
-			.then((rese) => {
-				console.log("Notifcation Refuse ", rese);
-				setFriendStatus(friendStatus)
-				
-			})
-		} catch (error) {
-			console.log("Error Catched ", error);
-		}
-	}
-
-    return (
-      <div style={{ padding: '5px' }}>
-        <div className="nes-container with-title">
-          <p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black'}} className="title">Invitation Request</p>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <img src={props.userAvatar} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-              <span style={{ marginLeft: '20px' }}>{props.name}</span>
-            </div>
-            <div>
-              <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small'}} className="nes-btn is-success" onClick={AcceptFriend}>Accept</button>
-              <button style={{ marginLeft: '20px',height: '40px',  width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={RefuseFriend}>Deny</button>
+      <div style={{ height: '100vh', justifyContent: 'center' }}>
+        <div className="notification">
+          <div className="notificationBox">
+            <div className="loginBoxHeader">Notifications</div>
+            <div className="loginBoxOutside">
+            {friendRequests.map(() => (
+                <FriendRequest myData={myData}/>
+            ))}
             </div>
           </div>
         </div>
       </div>
     );
 }
-
-
-  
-function Notifications() {
-	return (
-      <div style={{height: '100vh', justifyContent: 'center'}}>
-		<div className="notification">
-		    <div className="notificationBox">
-			<div className="loginBoxHeader">Notifications</div>
-			<div className="loginBoxOutside">
-                <FriendRequest name="Toufa7" userAvatar={otoufah}/>
-                <FriendRequest name="Toufa7" userAvatar={otoufah}/>
-                <FriendRequest name="Toufa7" userAvatar={otoufah}/>
-                <FriendRequest name="Toufa7" userAvatar={otoufah}/>
-                <FriendRequest name="Toufa7" userAvatar={otoufah}/>
-                <FriendRequest name="Toufa7" userAvatar={otoufah}/>
-                {/* <FriendRequest name="Santi" userAvatar={otoufah}/>
-                <FriendRequest name="SamiNassir" userAvatar={otoufah}/> */}
-                {/* <GameRequest name="Toufa7" userAvatar={otoufah}/> */}
-                {/* <GroupRequest name="Toufa7" groupName="Suporteer dsasdasd" userAvatar={otoufah}/> */}
-            </div>
-			</div>
-		</div>
-        </div>
-	);
-}
-
 export default Notifications

@@ -44,6 +44,7 @@ const Profil = () => {
     });
     // const path = window.location.pathname;
     const location = useLocation();
+    console.log("Endpit => ", `http://localhost:3000/users${location.pathname}`)
     useEffect(() => {
         async function fetchData() {
             const endpoint = `http://localhost:3000/users${location.pathname}`;
@@ -73,7 +74,7 @@ const Profil = () => {
         fetchData();
     }, []);
 
-
+    console.log("user Data ----> ", userData);
     const [isFriend, setIsFriend] = useState(false);
     return (
             <div className="profilRectangle">
@@ -94,7 +95,6 @@ const Profil = () => {
                     {isFriend ? (
                         <>
                             <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
-                            <a  href="/chat" className="nes-btn">Chat</a>
                         </>
                         ) : (
                             <a className="nes-btn" href="#" onClick={() => 

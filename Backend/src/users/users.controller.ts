@@ -113,7 +113,8 @@ async findOneByUsername(@Param('username') username: string, @Req() req){
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    console.log("user am i", user)
+    console.log("im herererererer 3678", user)
+
     return user;
   } catch (error) {
     console.error(error.message); // Log the error for debugging
@@ -167,12 +168,14 @@ async getFriendsOfOther(@Param('id') id: string) {
 @Post('sendFriendRequest')
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
   try {
+    const notification = await this.usersService.sendFriendRequest(req.user.id, body.userId);
     const user = await this.usersService.findOne(req.user.id);
-    const notification = await this.usersService.sendFriendRequest(req.user.id, body.userId,{
+    this.socket.hanldleSendNotification(body.userId, req.user.id, {
       userId: req.user.id,
       type: 'friendrequestreceived',
       photo: user.profileImage,
       message: `${req.user.username} sent you a friend request`,
+      from: body.userId,
       username: user.username,
     });
     return notification;
@@ -186,8 +189,7 @@ async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
 async acceptFriendRequest(@Body() body: FriendrequestDto) {
   try {
     const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
-    if(friendrequest)
-      throw new HttpException('Friend request not found', HttpStatus.NOT_FOUND);
+    console.log('Bodyyyy', body);
     const find = await this.usersService.acceptFriendRequest(friendrequest, body.userId, body.from);
     return find;
   } catch (error) {
@@ -204,5 +206,5 @@ async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
     console.error(error); // Log the error for debugging
   }
 }
-//create endpoint for match history and stats
+
 }

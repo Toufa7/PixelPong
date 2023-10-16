@@ -1,7 +1,7 @@
 import "./Home.scss";
 /******************* Packages  *******************/
 import jwt_decode from 'jwt-decode';
-import {useEffect, useState } from "react";
+import {useEffect, useRef, useState } from "react";
 import { Cookies } from "react-cookie";
 import axios from "axios";
 import HorizontalScroll from 'react-scroll-horizontal'
@@ -27,6 +27,7 @@ import shield from './assets/shield.svg';
 import mail from './assets/mail.svg';
 import caution from './assets/caution.svg';
 import folder from './assets/folder.svg';
+import { Link } from "react-router-dom";
 /*************************************************/
 
 const GetUserData = () => {
@@ -52,16 +53,108 @@ const GetUserData = () => {
 	return (userData);
 }
 
+// const TopContainer = () => {
+// 	const userData = GetUserData();
+// 	const textInfos = [
+// 	  "Perfecciona tus habilidades en nuestra área de práctica exclusiva",
+// 	  "Desafía a tus amigos a emocionantes partidos de ping pong"
+// 	];
+	
+// 	const [friends, setFriends] = useState({}); // Move the useState hook outside of the event handler
+  
+// 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+// 	  e.preventDefault();
+// 	  const searchValue = document.querySelector('.nes-input')?.value;
+// 	  console.log(searchValue);
+  
+// 	  axios.get(`http://localhost:3000/users/Friends/`, { withCredentials: true })
+// 		.then((rese) => {
+// 		  setFriends(rese.data);
+// 		})
+// 		.catch((error) => {
+// 		  console.log(error);
+// 		});
+// 	};
+  
+// 	return (
+// 	  <div className="search">
+// 		<form onSubmit={handleSubmit}>
+// 		  <input type="text" id="name_field" placeholder='Search for a group or user' className="nes-input"/>
+// 		</form>
+// 	  </div>
+// 	);
+//   };
+
+
+
+
 const TopContainer = () => {
+
 	const userData = GetUserData();
 	const textInfos = [
 		"Perfecciona tus habilidades en nuestra área de práctica exclusiva",
 		"Desafía a tus amigos a emocionantes partidos de ping pong"
 	];
+
+	const [friends, setFriends] = useState([]);
+	const [theOne, setTheOne] = useState([]);
+	const [isFound, setFound] = useState(false);
+	const firstRef = useRef(null);
+	const [visibility, setVisibility] = useState(true);
+  
+	const handleSubmit = (e: any) => {
+	  e.preventDefault();
+	  const searchValue = firstRef.current.value;
+	  console.log(searchValue);
+  
+	  axios
+		.get(`http://localhost:3000/users/Friends/`, { withCredentials: true })
+		.then((response) => {
+		  setFriends(response.data);
+		  let isFound = false;
+		  for (let index = 0; index < response.data.length; index++) {
+			if (searchValue === response.data[index].username) {
+			  console.log("Found It");
+			  isFound = true;
+			  setTheOne(response.data[index]);
+			  firstRef.current.value = '';
+			  break;
+			}
+		  }
+		  setFound(isFound);
+		  setVisibility(false);
+		})
+		.catch((error) => {
+		  console.log(error);
+		});
+	};
+
+	console.log("first", theOne);
+  
+	const removeElement = () => {
+	  setVisibility(true);
+	  setFound(false);
+	};
 	return (
 		<>
 		<div className="search">
-		<input type="text" id="name_field" placeholder='Search for a group or user' className="nes-input"/>
+		<form onSubmit={handleSubmit}>
+			<input ref={firstRef} type="text" id="name_field" placeholder='Search for a group or user' className="nes-input" />
+			{!visibility && (
+			<div onClick={removeElement} className="nes-container" style={{height: 'fitContent', padding: '5px', background: "#EDF2FA"}}>
+				{isFound ? (
+				<Link to={`/profil/${theOne.username}`}>
+					<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around',}}>
+						<div>
+							<img src={theOne.profileImage} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+							<span span style={{ marginLeft: '20px' }}>{theOne.username}</span>
+						</div>
+					</div>
+				</Link>) :
+				('0 results matched')}
+			</div>
+			)}
+		</form>
 		</div>
 		<div className="headerBox">
 		<div className="topLoginBox">
@@ -273,7 +366,7 @@ function Notification () {
 	
 	const AcceptFriend = async () =>  {
 		try {
-			await axios.patch("http://localhost:3000/users/acceptFriendRequest", data,{withCredentials : true})
+			await axios.patch("http://localhost:3000/users/acceptFriendRequest", data, {withCredentials : true})
 			.then((rese) => {
 				console.log("Notifcation Accept ", rese);
 				setFriendStatus(friendStatus)
@@ -285,7 +378,7 @@ function Notification () {
 	}
 	const RefuseFriend = async () => {
 		try {
-			await axios.patch("http://localhost:3000/users/refuseFriendRequest", data,{withCredentials : true})
+			await axios.patch("http://localhost:3000/users/refuseFriendRequest", data, {withCredentials : true})
 			.then((rese) => {
 				console.log("Notifcation Refuse ", rese);
 				setFriendStatus(friendStatus)
