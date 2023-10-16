@@ -12,13 +12,24 @@ export class HistoryService {
     constructor(private readonly prisma: PrismaService){
     }
 
-async addMatchHistory(userId:string, loserId:string){
+async addMatchHistory(winnerId:string, loserId:string){
+    const loser = await this.prisma.user.findUnique({
+        where: {
+            id: loserId,
+        },
+    })
+    const winner = await this.prisma.user.findUnique({
+        where: {
+            id: winnerId,
+        },
+    })
 
+    console.log("userid " + winnerId, " loserid" + loserId);
     const newMatchHistory = await this.prisma.matchHistory.create({
         data: {
             user: {
                 connect: {
-                    id: userId,
+                    id: winnerId,
                 },
             },
             loser: {
@@ -26,7 +37,7 @@ async addMatchHistory(userId:string, loserId:string){
                     id: loserId,
                 },
             },
-            message: `${userId  } won against ${  loserId}}`
+            message: `${winner.username  } won against ${  loser.username}}`
         },
     });
     return newMatchHistory;
