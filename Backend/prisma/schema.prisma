@@ -107,6 +107,9 @@ model Friendrequest{
   senderId  String
   receiver  User        @relation("friendreqreceived", fields: [receiverId], references: [id])
   receiverId  String
+  message String?
+  image String?
+  username String?
   status    Status     @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

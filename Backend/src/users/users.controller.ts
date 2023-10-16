@@ -167,14 +167,12 @@ async getFriendsOfOther(@Param('id') id: string) {
 @Post('sendFriendRequest')
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
   try {
-    const notification = await this.usersService.sendFriendRequest(req.user.id, body.userId);
     const user = await this.usersService.findOne(req.user.id);
-    this.socket.hanldleSendNotification(body.userId, req.user.id, {
+    const notification = await this.usersService.sendFriendRequest(req.user.id, body.userId,{
       userId: req.user.id,
       type: 'friendrequestreceived',
       photo: user.profileImage,
       message: `${req.user.username} sent you a friend request`,
-      from: body.userId,
       username: user.username,
     });
     return notification;
