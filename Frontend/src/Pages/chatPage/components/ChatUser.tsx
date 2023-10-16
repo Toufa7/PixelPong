@@ -8,6 +8,7 @@ import jwtDecode from 'jwt-decode'
 import info from '../assets/info.svg'
 import oldcomputer from '../assets/oldComputer.png'
 import popCat from '../assets/pop-cat.gif'
+import dogo from '../assets/dogo.gif'
 
 
 const ChatUser = (props:any) => {
@@ -85,7 +86,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
             props.remoteUser.profileImage   ? (<MessageInput Sender={props.localUser} Receiver={props.remoteUser}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-10%'}} src={popCat} width={600} height={600} alt="user-photo" />
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="user-photo" />
         }
     </div>
     )

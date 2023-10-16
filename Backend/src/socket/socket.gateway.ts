@@ -16,7 +16,7 @@ import { UsersService } from 'src/users/users.service';
 import { UserStatus } from '@prisma/client';
 // import { WSGuard } from 'src/guards/jwt.guards';
 import { decode } from 'jsonwebtoken';
-import { RelationService } from 'src/relation/relation.service';
+// import { RelationService } from 'src/relation/relation.service';
 import { io } from 'socket.io-client';
 import { GateWayService } from './socket.service';
 

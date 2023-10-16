@@ -85,6 +85,7 @@ let map = new Map <any , any>();
     ///////////////   -----get old convetation----- ///////////////////////
     @SubscribeMessage('getOldCnv')
     async getConv(client : Socket) {
+      console.log("getoldcnv");
       const user = await this.getUser(client);
       const dMSChat1 =  await this.prisma.dmschat.findMany({
         where: {
@@ -132,17 +133,16 @@ let map = new Map <any , any>();
                 messageDMs : body.message
               },
           });
-          console.log("msgToClient");
-            this.server.to(idUs).emit('msgToClient', { 
+            this.server.to(idUs).emit('msgToClient', {
               id :body.id,
-              idsender : user.id ,
               username: body.username,
               pic: body.pic,
               side: body.side,
               message: body.message,
+              idsender : user.id,
               timestamp: body.timestamp
             });
-            this.server.emit('getOldCnv');
+            this.getConv(client);
         // }
     }
 
