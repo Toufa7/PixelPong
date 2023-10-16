@@ -31,27 +31,10 @@ const NavBarBody = () => {
 		</div>
 
 		<div className="nav-item">
-      <div className="noti" onClick={toggleNotification}>
-        <img src={notificationLogo} alt="Notification Icon" />
-      </div>
-
-      {showNotification && (
-        <div className="notification-container" style={{flexDirection: 'column'}}>
-          <h3>New Notification</h3>
-          <span>Hello World</span>
-          <span>Hello World</span>
-          <span>Hello World</span>
-          <span>Hello World</span>
-          <span>Hello World</span>
-          <span>Hello World</span>
-          <span>Hello World</span>
-          
-          <button onClick={toggleNotification}>Close</button>
-        </div>
-      )}
-    </div>
-
-
+		<Link to="/notifications" title="Notifications">
+				<img src={notificationLogo}/>
+		</Link>
+		</div>
 
 		<div className="nav-item">
 			<Link to="/chat" title="Chat">
@@ -118,12 +101,11 @@ const NavBarFooter = () => {
 		fetchData();
     }, [])
 
-	const avatarIs = /*check ? */`http://localhost:3000/auth/avatar/${token.id}`/* : token.image*/;
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<Link to="/profil" title="Profil">
-				<img src={avatarIs} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+				<img src={check ? `http://localhost:3000/auth/avatar/${token.id}` : '/public/profile-default.png'} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</Link>
 		</div>
 		<div className="nav-item">

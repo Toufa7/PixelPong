@@ -20,6 +20,7 @@ const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'))
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
 const Setup = lazy(() => import('./Pages/GamePage/Setup_Game_Front'));
 const Error = lazy(() => import('./Pages/errorPage/errorPage'));
+const Notification = lazy(() => import('./Pages/Notifications/Notifications'));
 import Dogo from "./Pages/dogo.gif";
 
 export const OtherUser = () => {
@@ -31,6 +32,16 @@ export const OtherUser = () => {
 		</>
 	);
 }
+export const NotificationComponents = () => {
+	return (
+		<>
+        <NavBar/>
+        <Stars/>
+		<Notification/>
+		</>
+	);
+}
+
 export const ChatComponents = () => {
 	return (
 		<>
@@ -172,11 +183,15 @@ const Routing = () => {
 							:
 						(<Route path="/*" 			element={<AlreadyInGame/>}/>)}
 					<Route path="/chat" 			element={<ChatPage/>}/>
+					<Route path="/notifications" 	element={<NotificationComponents/>}/>
+
+
 					<Route path="/groups" 			element={<ChatGroupsComponents/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/*" 				element={<Error/>}/>
+
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}

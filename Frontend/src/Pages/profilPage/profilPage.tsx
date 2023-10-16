@@ -88,7 +88,7 @@ const Profil = () => {
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img  src={userData.check ? token.image : userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img src={userData.avatar ? userData.avatar : '/public/profile-default.png'} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>

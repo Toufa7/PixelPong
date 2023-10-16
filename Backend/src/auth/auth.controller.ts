@@ -173,19 +173,20 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
   @Get('avatar/:id')
   @UseGuards(JwtGuard)
   async getImage(@Param('id') id: string, @Res() res, @Req() req) {
-    const { profileImage } = await this.usersService.findOne(id);
+    const user = await this.usersService.findOne(id);
+    console.log("user",user)
     try {
       console.log("id",id);
-      const path = join('./uploads/', profileImage);
+      const path = join('./uploads/', user.profileImage);
+      console.log("path"+path);
       await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
-      const extension = profileImage.split('.')[1];
+      const extension = user.profileImage.split('.')[1];
       res.setHeader('Content-Type', 'image/' + extension);
       return file.pipe(res);
     } catch (err) {
-      console.log(req.user.image)
       res.setHeader('Content-Type', 'application/json');
-      return await profileImage;
+      return res.status(400);
     }
   }
 

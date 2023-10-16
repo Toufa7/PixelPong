@@ -9,6 +9,7 @@ import AnimatedText from 'react-animated-text-content';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from "../socket-client";
 import Anime, { anime } from 'react-anime';
+import { Search } from "./search";
 /******************* Includes  *******************/
 import notification from './assets/notification.mp3';
 import medal from './assets/medaille.svg';
@@ -58,6 +59,10 @@ const TopContainer = () => {
 		"Desafía a tus amigos a emocionantes partidos de ping pong"
 	];
 	return (
+		<>
+		<div className="search">
+		<input type="text" id="name_field" placeholder='Search for a group or user' className="nes-input"/>
+		</div>
 		<div className="headerBox">
 		<div className="topLoginBox">
 			<div className="loginBoxHeader">
@@ -81,6 +86,7 @@ const TopContainer = () => {
 		</div>
 		</div>
 		</div>
+		</>
 	);
 };
 
@@ -249,9 +255,9 @@ const BottomRight= () => {
 		<div className="loginBoxHeader latest-matches1">ULTIMOS PARTIDOS</div>
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"win"} color={win}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"lose"} color={lose}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs} player2="Oppenent" rslt={"draw"} color={draw}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"win"} color={win}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"lose"} color={lose}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"draw"} color={draw}/>
 			</div>
 			</div>
 	</div>

@@ -113,6 +113,8 @@ async findOneByUsername(@Param('username') username: string, @Req() req, @Res() 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
+    console.log("im herererererer 3678", user)
+
     return user;
   } catch (error) {
     console.error(error.message); // Log the error for debugging
