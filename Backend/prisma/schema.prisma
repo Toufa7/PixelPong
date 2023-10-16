@@ -46,6 +46,8 @@ datasource db {
   usersgroupe  Groupchat[] @relation("GroupChat")
   admingroupe      Groupchat[] @relation("adminsGroupChat")
   superadmin Groupchat[] @relation("superadmin")
+  mute Groupchat[] @relation("mute")
+  block Groupchat[] @relation("block")
 }
 
 model Dmschat {
@@ -65,6 +67,8 @@ model Groupchat{
     admins   User[] @relation("adminsGroupChat")
     idsuperadmin String
     superadmin User @relation("superadmin", fields: [idsuperadmin], references: [id])
+    usersmute User[] @relation("mute")
+    usersblock User[] @relation("block")
     grouptype  Grouptype
     password String?
     image String?
@@ -72,10 +76,10 @@ model Groupchat{
 }
 model Messagegb {
   id        String      @id @default(uuid()) @unique
-  SenderId  String
-  Sender    User     @relation("UGBMessage", fields: [SenderId], references: [id])
-  Message String
-  GroupChat Groupchat @relation("GBMessage", fields: [id], references: [id])
+  senderid  String
+  sender    User     @relation("UGBMessage", fields: [senderid], references: [id])
+  message String
+  groupchat Groupchat @relation("GBMessage", fields: [id], references: [id])
 }
 
 enum Grouptype{

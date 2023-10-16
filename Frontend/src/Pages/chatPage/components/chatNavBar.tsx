@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import ChatSearch from './chatSearch'
-import DmChatUser from './dmChatUser'
-import uknownUser from '../assets/images/nonprofile.png'
-import ChatUser from '../components/ChatUser'
-import axios from 'axios'
 import { chatSocketContext } from '../components/socketContext'
 import { useMap } from "@uidotdev/usehooks";
+import axios from 'axios'
+import ChatUser from '../components/ChatUser'
+import uknownUser from '../assets/images/nonprofile.png'
+import DmChatUser from './dmChatUser'
+import ChatSearch from './chatSearch'
 
 interface chatUser {
     userName: string;
@@ -73,7 +73,8 @@ const Dms = (props:any) => {
                     setMapState(mapState.set(conversations[i], tmpObj));
                 })
                 .catch(Error)
-                console.log('%cAn error happened in : ', 'color: red', '%cDms: handleNewConversations', 'color: cyan');
+                    console.log('%cAn error happened in : ', 'color: red')
+                    console.log('%cDms: Dms:handleNewConversations', 'color: blue');
         }   
         };
         
@@ -89,13 +90,6 @@ const Dms = (props:any) => {
         <i>CHATS</i>
         <div className="userDms">
             {
-                // usersArr.map((user, index) => (
-                //     <DmChatUser
-                //         key={index}
-                //         userName={user.userName}
-                //         pic={user.pic}
-                //         userId={updateSharedString}
-                //         id={user.id}
                 Array.from(mapState.values()).map((user, index) => (
                     <DmChatUser
                         key={index}

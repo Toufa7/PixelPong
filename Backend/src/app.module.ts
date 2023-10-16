@@ -9,9 +9,10 @@ import { BackendGatewayModule } from './game/backend-gateway/backend-gateway.mod
 import { ScheduleModule } from '@nestjs/schedule';
 import { UsersService } from './users/users.service';
 import { PrismaService } from './auth/prisma.service';
+import { GroupchatModule } from './groupchat/groupchat.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, ChatModule, GateWayModule, BackendGatewayModule , ScheduleModule.forRoot()],
+  imports: [GroupchatModule, AuthModule, UsersModule, ChatModule, GateWayModule, BackendGatewayModule , ScheduleModule.forRoot()],
   providers: [CronService , UsersService , PrismaService],
   controllers: [],
 })
