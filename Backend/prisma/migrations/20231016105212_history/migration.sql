@@ -52,17 +52,6 @@ CREATE TABLE "Groupchat" (
 );
 
 -- CreateTable
-CREATE TABLE "usermute" (
-    "id" SERIAL NOT NULL,
-    "userId" TEXT NOT NULL,
-    "groupchatId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "expiresAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "usermute_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Messagegb" (
     "id" TEXT NOT NULL,
     "senderid" TEXT NOT NULL,
@@ -85,29 +74,40 @@ CREATE TABLE "Friendrequest" (
 
 -- CreateTable
 CREATE TABLE "Stats" (
+    "id" SERIAL NOT NULL,
     "level" INTEGER NOT NULL DEFAULT 0,
     "userId" TEXT NOT NULL,
     "wins" INTEGER NOT NULL DEFAULT 0,
     "loses" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Stats_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Achievements" (
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "achievementType" "Type" NOT NULL,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Achievements_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "MatchHistory" (
+    "id" SERIAL NOT NULL,
+    "message" TEXT NOT NULL,
     "numberOfMatches" INTEGER NOT NULL DEFAULT 0,
     "userId" TEXT NOT NULL,
+    "loserId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "MatchHistory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -124,6 +124,12 @@ CREATE TABLE "_GroupChat" (
 
 -- CreateTable
 CREATE TABLE "_adminsGroupChat" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_mute" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -159,13 +165,19 @@ CREATE UNIQUE INDEX "Groupchat_id_key" ON "Groupchat"("id");
 CREATE UNIQUE INDEX "Messagegb_id_key" ON "Messagegb"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Stats_id_key" ON "Stats"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Stats_userId_key" ON "Stats"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Achievements_id_key" ON "Achievements"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Achievements_userId_achievementType_key" ON "Achievements"("userId", "achievementType");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "MatchHistory_userId_key" ON "MatchHistory"("userId");
+CREATE UNIQUE INDEX "MatchHistory_id_key" ON "MatchHistory"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_friends_AB_unique" ON "_friends"("A", "B");
@@ -186,6 +198,12 @@ CREATE UNIQUE INDEX "_adminsGroupChat_AB_unique" ON "_adminsGroupChat"("A", "B")
 CREATE INDEX "_adminsGroupChat_B_index" ON "_adminsGroupChat"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_mute_AB_unique" ON "_mute"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_mute_B_index" ON "_mute"("B");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_block_AB_unique" ON "_block"("A", "B");
 
 -- CreateIndex
@@ -199,12 +217,6 @@ ALTER TABLE "Dmschat" ADD CONSTRAINT "Dmschat_receiverId_fkey" FOREIGN KEY ("rec
 
 -- AddForeignKey
 ALTER TABLE "Groupchat" ADD CONSTRAINT "Groupchat_idsuperadmin_fkey" FOREIGN KEY ("idsuperadmin") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "usermute" ADD CONSTRAINT "usermute_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "usermute" ADD CONSTRAINT "usermute_groupchatId_fkey" FOREIGN KEY ("groupchatId") REFERENCES "Groupchat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_senderid_fkey" FOREIGN KEY ("senderid") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -228,6 +240,9 @@ ALTER TABLE "Achievements" ADD CONSTRAINT "Achievements_userId_fkey" FOREIGN KEY
 ALTER TABLE "MatchHistory" ADD CONSTRAINT "MatchHistory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "MatchHistory" ADD CONSTRAINT "MatchHistory_loserId_fkey" FOREIGN KEY ("loserId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "_friends" ADD CONSTRAINT "_friends_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -244,6 +259,12 @@ ALTER TABLE "_adminsGroupChat" ADD CONSTRAINT "_adminsGroupChat_A_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "_adminsGroupChat" ADD CONSTRAINT "_adminsGroupChat_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_mute" ADD CONSTRAINT "_mute_A_fkey" FOREIGN KEY ("A") REFERENCES "Groupchat"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_mute" ADD CONSTRAINT "_mute_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_block" ADD CONSTRAINT "_block_A_fkey" FOREIGN KEY ("A") REFERENCES "Groupchat"("id") ON DELETE CASCADE ON UPDATE CASCADE;

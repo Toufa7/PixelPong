@@ -94,20 +94,9 @@ export class AuthService {
         },
       });
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error);
     }
   }
-  // async set2Fastatus(id: string, secret: string, token: string){
-  //     await this.prisma.user.update({
-  //     where:{
-  //         id: id
-  //     },
-  //     data:{
-  //         twofa: true,
-  //     }
-  // })
-
-  // }
 
   async disable2FAStatus(username: string): Promise<void> {
     try {
@@ -122,7 +111,7 @@ export class AuthService {
         },
       });
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error);
     }
   }
   
@@ -138,7 +127,7 @@ export class AuthService {
         },
       });
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error);
     }
   }
   
@@ -154,8 +143,8 @@ export class AuthService {
         },
       });
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error);
     }
   }
 }
-//add profile
+

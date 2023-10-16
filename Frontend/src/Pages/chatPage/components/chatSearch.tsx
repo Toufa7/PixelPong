@@ -1,17 +1,15 @@
-import './chatSearch.scss';
-import search from '../assets/search.svg'
-import DmChatUser from './dmChatUser'
-import img from "../assets/images/ibnada.jpg"
-import { useEffect, useState } from 'react';
-import { Component } from 'react'
+import { useEffect, useState, useRef } from 'react';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
+import './chatSearch.scss';
+import DmChatUser from './dmChatUser'
+import search from '../assets/search.svg'
 
-interface friend {
-    userName: string;
-    pic: string;
-    id: string;
-}
+// interface friend {
+//     userName: string;
+//     pic: string;
+//     id: string;
+// }
 
 const chatSearch = (props: any) => {
 
@@ -21,9 +19,7 @@ const chatSearch = (props: any) => {
     const [friendsIds, setFriendsIds] = useState<any[]>();
     const [friendFound, setFriendFound] = useState('');
 
-    //Our user friend list
-    let friends: friend[] = [];
-    // let friendFound: any;
+    const firstRef = useRef(null);
 
     //Identifying local users
     const cookieJwt = document.cookie;
@@ -37,7 +33,6 @@ const chatSearch = (props: any) => {
             {
                 const response = await axios.get(`http://localhost:3000/users/Friends/`, { withCredentials: true });
                 setFriendsIds(response.data)
-                console.log("fetchCurrentUserInfo() : ", response.data);
             }
             catch (error) {
                 console.log("ERROR : fetchCurrentUserInfo[Search Component]() : ", error);
@@ -68,11 +63,12 @@ const chatSearch = (props: any) => {
             notFoundState(true);
             FoundState(false);
         }
+        firstRef.current.value = '';
     }
 
+    //Sending found user to parent conponenet (using this callback function)
     const updateSharedString = (newString: string) =>
     {
-        console.log("new str is : " , newString)
         props.userFound(newString);
     };
 
@@ -81,7 +77,7 @@ const chatSearch = (props: any) => {
             <span>CHAT</span>
             <div className="searchForm">
                 <form className="fromClass" onSubmit={onSubmitHandler}>
-                    <input type='text' placeholder='Search' className='searchBar'/>
+                    <input type='text' ref={firstRef} placeholder='Search' className='searchBar'/>
                 </form>
             </div>
             <div className="userChat">

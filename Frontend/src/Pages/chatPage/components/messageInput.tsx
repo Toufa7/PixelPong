@@ -1,15 +1,17 @@
-import { useState, useRef, useEffect, useContext } from 'react'
-import io from 'socket.io-client';
+import '../chatPage.scss'
+import { useRef, useEffect, useContext } from 'react'
+import { chatSocketContext } from './socketContext'
+import { useMap } from "@uidotdev/usehooks";
+import Send from '../../../assets/images/send.svg'
+import axios from 'axios';
 import MessageComponent from './messageComponenet'
 import MessageRightComponenet from './messageRightComponenet ';
-import '../chatPage.scss'
-import Send from '../../../assets/images/send.svg'
-import { chatSocketContext } from './socketContext'
 
 // Class chatAgent responsible for defining the properties of each person onthe conversation
 interface chatAgent
 {
     id: string;
+    senderid:string;
     username: string;
     pic: string;
     side: number;
@@ -17,6 +19,9 @@ interface chatAgent
     timestamp: string;
 }
 
+//<*-----------------------------------------------------------------------------------------------------------------------------------*>
+
+//This componenet is responsible for displaying a conversation, it take an array of messages  
 const Conversation = (props: any) =>
 {
     const mesaageEndRef = useRef(null);
@@ -41,44 +46,126 @@ const Conversation = (props: any) =>
     );
 }
 
+//<*-----------------------------------------------------------------------------------------------------------------------------------*>
+
+//This componenet is responsible for getting a sending a message
+//getting old messages, and preparing messages array to be displayed
 const messageInput = (props: any) => {
 
     //Refering to the dummy div
     const firstRef = useRef(null);
-
+    
     //Our chat socket
     const conversationsSocket = useContext(chatSocketContext);
     
-    //Creating the messages array to be rendred
-    const [messagesArr, setNewMessage] = useState<chatAgent[]>([]);
-    
-    useEffect(() => {
+    //Creating the messages map to be rendred
+    let map = useMap();
 
+    useEffect(() => {
+        axios
+            .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
+        
+            .then((res) => {
+                fillMap(res.data);
+            })
+            .catch(Error)
+                console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+    }, [props.Receiver.id])
+    
+    
+    const fillMap = (axiosResponse: any) => {
+
+        map.clear();
+        
+        let molLmessageId: any = 'n/a';
+        let molLmessage: any = 'n/a';
+        let molMsgPic: any = 'n/a';
+        let molMsgSide: number = 0;
+        
+        
+        for (let i: number = 0; i < axiosResponse.length; i++)
+        {
+
+            if (axiosResponse[i].senderId == props.Sender.id)
+            {
+                molLmessageId = axiosResponse[i].senderId;
+                molLmessage = props.Sender.username;
+                molMsgPic = props.Sender.image;
+                molMsgSide = 0;
+            }
+            else
+            {
+                molLmessageId = axiosResponse[i].receiverId;
+                molLmessage = props.Receiver.username;
+                molMsgPic = props.Receiver.profileImage;
+                molMsgSide = 1;
+            }
+            
+            const tmpMsgObj: chatAgent = {
+                id: molLmessageId,
+                senderid: axiosResponse[i].senderId, 
+                username: molLmessage,
+                pic: molMsgPic,
+                side: molMsgSide,
+                message: axiosResponse[i].messageDMs,
+                timestamp: axiosResponse[i].createdAt,
+            }
+
+            map.set(axiosResponse[i].id, tmpMsgObj);
+        }
+        
+    };
+    
+    //function to generate message id in the map
+    function makeid(length: number) :string {
+        
+        let result: string = '';
+        const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength: number = characters.length;
+        let counter = 0;
+        while (counter < length) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          counter += 1;
+        }
+        return result;
+    }
+
+    useEffect(() => {
         //Recieving message from socket
         conversationsSocket.on('msgToClient', (payload: chatAgent) => {
-            conversationsSocket.emit('getOldCnv')
+            // conversationsSocket.emit('getOldCnv')
             receiveMessage(payload);
         });
 
         //cleanup function
-        return() => {
+        return () => {
             conversationsSocket.off('msgToClient');
         }
-
-    }, [])
+    }, [props.Receiver.username])
 
     //Handling newly received message 
-    const receiveMessage = (newMessage: chatAgent) => {
+    const receiveMessage = (newMessage: any) => {
 
         const tmpMsgObj: chatAgent = {
             id: newMessage.id,
+            senderid: newMessage.idsender,
             username: newMessage.username,
             pic: newMessage.pic,
             side: 1,
             message: newMessage.message,
             timestamp: "n/a",
         }
-        setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
+
+        //Don't forget to replace username with id
+        // if (props.Receiver.username == tmpMsgObj.username)
+        // {
+        //     map.set(makeid(37), tmpMsgObj);
+        // }
+
+        if (props.Receiver.id == tmpMsgObj.senderid)
+        {
+            map.set(makeid(37), tmpMsgObj);
+        }
     }
     
 
@@ -95,13 +182,14 @@ const messageInput = (props: any) => {
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
             conversationsSocket.emit('msgToServer', newMessage)
-            conversationsSocket.emit('getOldCnv')
+            // conversationsSocket.emit('getOldCnv')
         };
         
         if (inputMessage != '')
         {
             const tmpMsgObj: chatAgent = {
                 id: props.Receiver.id,
+                senderid: props.Sender.id,
                 username: props.Sender.username,
                 pic: props.Sender.image,
                 side: 0,
@@ -109,15 +197,14 @@ const messageInput = (props: any) => {
                 timestamp: "n/a",
             }
             firstRef.current.value = '';
-            setNewMessage(prevMessagesArr => [...prevMessagesArr, tmpMsgObj]);
             handleNewMessage(tmpMsgObj);
+            map.set(makeid(37), tmpMsgObj);
         }
-        //N'oublier pas d'envoyer messagesArr a Conversation composant
     }
 
     return (
     <>
-        <Conversation MessagesArr={messagesArr}/>
+        <Conversation MessagesArr={Array.from(map.values())}/>
         <div className="messageInput">
             <form className='messageform' onSubmit={onSubmitHandler}>
                 <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>

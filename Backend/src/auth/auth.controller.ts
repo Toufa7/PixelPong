@@ -67,7 +67,6 @@ export class AuthController {
   @Get('42/redirect')
   @UseGuards(AuthGuard('42'))
   async fourtwoLogin(@Req() req: any, @Res() res: any) {
-    try {
       const acces_token = this.authService.fourtwoLogin(req.user);
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
@@ -78,41 +77,31 @@ export class AuthController {
           return res.redirect('http://localhost:5173/two-factor-authentication');
         return res.redirect('http://localhost:5173/home');
       }
-    } catch (err) {
-      console.log(err);
-    }
   }
   private setResandCookie(res : any, id: string, accessToken: string) {
     res
       .cookie('jwt', accessToken, { maxage: 3854654684, secure: false })
       .status(200)
-      // .json({ message: 'Cookie set successfully' });
   }
   @Get('2fa/set2fa')
   @UseGuards(JwtGuard)
   async setTwoFA(@Req() req: any) : Promise<string> {
-    try{
     const secret = authenticator.generateSecret();
     const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
     const qr = await qrcode.toDataURL(otpauth);
     await this.authService.set2Fasecret(req.user.id, secret, otpauth);
     await this.usersService.isauthenticated(req.user.id, false);
     return qr;
-    }
-    catch(error){
-      console.log(error.message);
-    }
   }
 
   @Get('2fa/get2FAstatus')
   @UseGuards(JwtGuard)
-  async gettwofastatus(@Req() req: any): Promise<boolean>{
-    try {
+  async gettwofastatus(@Req() req: any): Promise<boolean>{ 
       const user = await this.usersService.findOne(req.user.id);
+      if(!user)
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       return user?.twofa;
-    } catch (error) {
-      console.error(error);
-    }
+
   }
   @Put('2fa/enable')
 async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
@@ -149,10 +138,10 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
   )
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: any): Promise<{ image: Express.Multer.File }> {
     try {
-      this.authService.updateimage(file.filename, req.user.id);
+      await this.authService.updateimage(file.filename, req.user.id);
       return { image: file };
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error);
     }
   }
   @Post('2fa/validate')
@@ -172,9 +161,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
 
   @Get('avatar/:id')
   @UseGuards(JwtGuard)
-  async getImage(@Param('id') id: string, @Res() res, @Req() req) {
-    const user = await this.usersService.findOne(id);
-    console.log("user",user)
+  async getImage(@Param('id') id: string, @Res() res) {
     try {
       console.log("id",id);
       const path = join('./uploads/', user.profileImage);
@@ -185,8 +172,12 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       res.setHeader('Content-Type', 'image/' + extension);
       return file.pipe(res);
     } catch (err) {
-      res.setHeader('Content-Type', 'application/json');
-      return res.status(400);
+      const path = '../Frontend/public/profile-default.png'
+      await fsPromises.access(path, fsPromises.constants.F_OK);
+      const file = createReadStream(path);
+      const extension = 'png';
+      res.setHeader('Content-Type', 'image/' + extension);
+      return file.pipe(res);
     }
   }
 
@@ -203,7 +194,6 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return res.status(HttpStatus.BAD_REQUEST).json({ message: 'User not updated' });
     }
   }
-  @Post('logout')
   @UseGuards(JwtGuard)
   async logout(@Req() req, @Res() res) {
     res.clearCookie('jwt');

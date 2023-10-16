@@ -106,15 +106,14 @@ async blockFriend(
 }
 
 @Get('profil/:username')
-async findOneByUsername(@Param('username') username: string, @Req() req, @Res() res){
+async findOneByUsername(@Param('username') username: string, @Req() req){
   try {
     console.log("i am here ? !")
     const user = await this.usersService.findByName(username);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    console.log("im herererererer 3678", user)
-
+    console.log("user am i", user)
     return user;
   } catch (error) {
     console.error(error.message); // Log the error for debugging
@@ -189,7 +188,8 @@ async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
 async acceptFriendRequest(@Body() body: FriendrequestDto) {
   try {
     const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
-    console.log('Bodyyyy', body);
+    if(friendrequest)
+      throw new HttpException('Friend request not found', HttpStatus.NOT_FOUND);
     const find = await this.usersService.acceptFriendRequest(friendrequest, body.userId, body.from);
     return find;
   } catch (error) {
@@ -206,5 +206,5 @@ async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
     console.error(error); // Log the error for debugging
   }
 }
-
+//create endpoint for match history and stats
 }

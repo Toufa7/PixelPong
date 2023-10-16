@@ -19,7 +19,6 @@ const CreatingGroup = () => {
 	const password : string		= document.getElementById("password_field")?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload1"]').files[0];
 	const regEx = /^[A-Za-z0-9_ ]{5,15}$/;
-	
 	if (regEx.test(groupName) && groupAvatar && choice) {
 		const data = new FormData();
 		data.append('file', groupAvatar);
@@ -34,19 +33,20 @@ const CreatingGroup = () => {
 		console.log("----> ", groupData);
 		toast.promise(
 			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
-			.then((response) => {	
+			.then((response) => {
 				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
-				.then((res) => {
-					console.log("Res ", res);
+				.then((response) => {
+					console.log("Creating Group Response -> ", response);
 				})
-				.catch((ero) => {console.log(ero)})
+				console.log("Creating Group Response -> ", response);
 			}),
 			{
 				loading: "Sending data...",
 				success: "Success Settings!",
 				error: "An error occurred",
 			}
-			,{ duration: 5000, position: 'top-right' });    
+			,{ duration: 5000, position: 'top-right' });
+
 	}
 	else if (!regEx.test(groupName)) {
 		if (!groupName)
