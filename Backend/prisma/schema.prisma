@@ -28,7 +28,8 @@ datasource db {
 
   // game
   achievements Achievements[] @relation("achievements")
-  matchhistory MatchHistory[] @relation("matchhistory")
+  matchhistory MatchHistory[] @relation("matchhistory") 
+  matchhistoryloser MatchHistory[] @relation("matchhistoryloser") 
 
   //relations
   friends   User [] @relation("friends")
@@ -45,6 +46,8 @@ datasource db {
   usersgroupe  Groupchat[] @relation("GroupChat")
   admingroupe      Groupchat[] @relation("adminsGroupChat")
   superadmin Groupchat[] @relation("superadmin")
+  mute Groupchat[] @relation("mute")
+  block Groupchat[] @relation("block")
 }
 
 model Dmschat {
@@ -64,6 +67,8 @@ model Groupchat{
     admins   User[] @relation("adminsGroupChat")
     idsuperadmin String
     superadmin User @relation("superadmin", fields: [idsuperadmin], references: [id])
+    usersmute User[] @relation("mute")
+    usersblock User[] @relation("block")
     grouptype  Grouptype
     password String?
     image String?
@@ -71,10 +76,10 @@ model Groupchat{
 }
 model Messagegb {
   id        String      @id @default(uuid()) @unique
-  SenderId  String
-  Sender    User     @relation("UGBMessage", fields: [SenderId], references: [id])
-  Message String
-  GroupChat Groupchat @relation("GBMessage", fields: [id], references: [id])
+  senderid  String
+  sender    User     @relation("UGBMessage", fields: [senderid], references: [id])
+  message String
+  groupchat Groupchat @relation("GBMessage", fields: [id], references: [id])
 }
 
 enum Grouptype{
@@ -111,6 +116,7 @@ enum  UserStatus {
   BUSY
 } 
 model Stats{
+  id       Int    @id @default(autoincrement()) @unique
   level    Int  @default(0)
   user     User     @relation("stats", fields: [userId], references: [id])
   userId   String     
@@ -124,6 +130,7 @@ model Stats{
 
 
 model Achievements{
+  id        Int    @id @default(autoincrement()) @unique
   name      String
   achievementType    Type
   user      User     @relation("achievements", fields: [userId], references: [id])
@@ -146,11 +153,14 @@ enum Type {
 }
 
 model MatchHistory {
+  id        Int    @id @default(autoincrement()) @unique
+  message      String
   numberOfMatches        Int      @default(0)
   user      User     @relation("matchhistory", fields: [userId], references: [id])
-  userId    String     
+  userId    String
+  loser      User     @relation("matchhistoryloser", fields: [loserId], references: [id])
+  loserId    String      
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId])
 }
