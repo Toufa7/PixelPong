@@ -8,6 +8,7 @@ import { PrismaService } from 'src/auth/prisma.service';
 import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { use } from 'passport';
+import { emit } from 'process';
 // import { } from 'socket.io-client';
 
 
@@ -17,7 +18,7 @@ let map = new Map <any , any>();
 
 @WebSocketGateway({
     cors: {
-      origin: '*',
+      origin: 'http://localhost:5173',
       credentials: true,
     },
     namespace: 'chat',
@@ -84,21 +85,31 @@ let map = new Map <any , any>();
     ///////////////   -----get old convetation----- ///////////////////////
     @SubscribeMessage('getOldCnv')
     async getConv(client : Socket) {
+      console.log("getoldcnv");
       const user = await this.getUser(client);
       const dMSChat1 =  await this.prisma.dmschat.findMany({
         where: {
-          senderId: user.id,
+          OR: [
+            {senderId: user.id},
+            {receiverId: user.id}
+          ],
         },
         orderBy: {
           createdAt: 'desc'
         },
       });
       let tab : string[] = [];
+      //filter id of the other user
       dMSChat1.forEach(element => {
-        if(tab.filter(e => e == element.receiverId).length == 0)
-          tab.push(element.receiverId);
+          if(!tab.includes(element.senderId) && element.senderId != user.id)
+          {
+            tab.push(element.senderId);
+          }
+          else if(!tab.includes(element.receiverId)&& element.receiverId != user.id)
+          {
+            tab.push(element.receiverId);
+          }
       });
-      // console.log("dmschat :: ", tab);
       this.server.to(map.get(user.id)).emit('postOldCnv'  , tab );
     }
     // how to use this in front end
@@ -122,16 +133,16 @@ let map = new Map <any , any>();
                 messageDMs : body.message
               },
           });
-          console.log("msgToClient");
-            this.server.to(idUs).emit('msgToClient', { 
+            this.server.to(idUs).emit('msgToClient', {
               id :body.id,
-              idsender : user.id ,
               username: body.username,
               pic: body.pic,
               side: body.side,
               message: body.message,
+              idsender : user.id,
               timestamp: body.timestamp
             });
+            this.getConv(client);
         // }
     }
 

@@ -12,6 +12,7 @@ export class UsersService {
     const users = await this.prisma.user.findMany();
     return users;
   }
+  
   async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -20,6 +21,7 @@ export class UsersService {
     });
     return user;
   }
+
   async DeleteOne(id: string) {
     const user = await this.prisma.user.delete({
       where: {

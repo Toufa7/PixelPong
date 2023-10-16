@@ -22,12 +22,12 @@ export class AuthService {
   ) {}
   private generatePayload(user: User) {
     const payload: Payload = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      token: user.token,
+      id: user?.id,
+      username: user?.username,
+      email: user?.email,
+      token: user?.token,
+      image : user?.profileImage,
     };
-    if (user.profileImage) payload.image = user.profileImage;
     return payload;
   }
   googleLogin(user: User) {

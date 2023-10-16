@@ -1,21 +1,23 @@
-import { useState } from 'react';
+import './chatNavBar.scss'
+/******************* Packages  *******************/
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+/******************* Includes  *******************/
+import avatarGroup from '../assets/saka.jpeg'
+import publicGroup from '../assets/public.svg'
+import protectedGroup from '../assets/protected.svg'
+import privateGroup from '../assets/private.svg'
 import ChatSearch from './chatSearch'
 import CreateGroup from './createGroup';
 import ManageGroup from './mangeGroup';
-import avatarGroup from '../assets/saka.jpeg'
-// import publicGroup from '../assets/public.svg'
-// import protectedGroup from '../assets/protected.svg'
-import privateGroup from '../assets/private.svg'
-import './chatNavBar.scss'
-import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+
+
 const ChatNavBar = () => {
   const [data, setLabel] = useState({
 		label : false,
 		createOrmanage : false
 	}
   );
-
   return (
 	<div className="chatNavBarDivGroup">
 		<ChatSearch/>
@@ -29,8 +31,12 @@ const ChatNavBar = () => {
 					data.createOrmanage ?
 					(<ManageGroup/>)
 					:
-					(<CreateGroup/>)) : ""
+					(<CreateGroup/>)
+				)
+				:
+				""
 			}
+			{/* Listing the groups your in or own */}
 			<GroupsList />
 		</div>
 		<div className="chatLowerRibbonGroup"></div>
@@ -40,88 +46,52 @@ const ChatNavBar = () => {
 
 
 const GroupsList = () => {
-	console.log("GroupsList   GroupsList");
-	const [groupId, setGroupId] = useState("");
+	const [avatarGroup, setGroupAvatar] = useState();
+    const [groupsList, setGroupsList] = useState<string[]>([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
+            .then((response) => {
+				console.log("Groups List " ,response.data);
+				setGroupsList(response.data);
+				const endpoint = `http://localhost:3000/groupchat/getimage/${group.id}`;
+				axios.get(endpoint, {withCredentials: true})
+				.then((response) => {
+					console.log("Success Image Groups -> ", response.data);
+				})
+				.catch((erro) => {
+					console.log("Error Image -> ", erro);
+				})
+            });
+    }, []);
 
-	// axios.get(`http://localhost:3000/groupchat/getimage/${id}`, {withCredentials: true})
-	axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
-	.then((response) => {
-		console.log("*********** Groups -> ", response.data[0].id);
-		setGroupId(response.data[0].id);
-	})
-	.catch((erro) => {
-		console.log("Error List Groups -> ", erro);
-	})
 
 
-	axios.get(`http://localhost:3000/groupchat/getimage/${groupId}`, {withCredentials: true})
-	.then((response) => {
-		console.log("Image  Groups -> ", response.data);
-	})
-	.catch((erro) => {
-		console.log("Error Image Groups -> ", erro);
-	})
+
 	return (
-<>
-							<img src={`http://localhost:3000/groupchat/getimage/${groupId}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
-							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>Omar</span>
-							<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }}></img>
-						</>
-		)
+		<div className="chatGroupesDiv">
+		<i>GROUPES</i>
+		<div className="userChatGroupes">
+		{
+			groupsList.map((group : any) => (
+				<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} className="userChatGroup" key={name}>
+				<img src={`http://localhost:3000/groupchat/getimage/${group.id}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
+				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{group.namegb}</span>
+				{
+					group.grouptype == "PUBLIC" ? (
+						<img src={publicGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Public Group" />
+					) : group.grouptype == "PRIVATE" ? (
+						<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Private Group" />
+					) : (
+						<img src={protectedGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Protected Group" />
+					)
+				}
 
-
-
-	// const [groups]
-	// .then((response) => {
-	// 	console.log("Reseponse List Groups -> ", response.data);
-	// })
-	// .catch((erro) => {
-	// 	console.log("Error List Groups -> ", erro);
-	// })
-	// const setOpenBox = (groupName : string) => {
-	// 	document.getElementById('groupJoin')?.showModal();
-	// 	setGroupName(groupName);
-	// }
-	// const location = useLocation();
-	// console.log("Location => ", location);
-	// const [joinGroup, setJoinGroup] = useState(true);
-	// return (
-	// 	<div className="chatGroupesDiv">
-	// 	<i>GROUPES</i>
-	// 	<div className="userChatGroupes">
-	// 		{
-	// 			groups.map((name) => {
-	// 				return (
-	// 					<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} onClick={() => setOpenBox(name)} className="userChatGroup" key={name}>
-	// 						<img src={avatarGroup} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
-	// 						<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
-	// 						<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }}></img>
-	// 					</div>
-	// 			);})
-	// 		}
-	// 		<dialog className="nes-container" id="groupJoin">
-	// 			<h2 className="groupName">{groupName}</h2>
-	// 			<img className="groupAvatar" src={avatarGroup} />
-	// 			<p className="group-members">Total Members: 245</p>
-	// 			{
-	// 				joinGroup ? (
-	// 					<button onClick={() => setJoinGroup(false)} className="nes-btn">Join Group</button>
-	// 				)
-	// 				: 
-	// 				(
-	// 					joinGroup ? (
-	// 						<button onClick={() => setJoinGroup(true)} className="nes-btn">Pending</button>
-	// 					)
-	// 					: 
-	// 					(
-	// 						<button onClick={() => setJoinGroup(true)} className="nes-btn">Exit</button>
-	// 					)
-	// 				)
-	// 			}
-	// 		</dialog>
-	// 	</div>
-	// 	</div>
-	// );
+				</div>
+			))
+		}
+		</div>
+		</div>
+	);
 }
 
 export default ChatNavBar

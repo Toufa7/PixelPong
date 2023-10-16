@@ -7,8 +7,6 @@
         {
             background-image: url("../assets/search.svg");
             text-align: center;
-            // background-size: 30px;
-            // background-position: left;
             background-repeat: no-repeat;
             width: 100%;
         }
@@ -33,15 +31,15 @@
             align-self: flex-start;
         }
 
-        &:hover
-        {
-            background-color: #c1cae7;
-            color: #333c54;
-        }
         
         
-        .userChatinfo
+        .userChat
         {                        
+            &:hover
+            {
+                background-color: #c1cae7;
+                color: #333c54;
+            }
             span
             {
 

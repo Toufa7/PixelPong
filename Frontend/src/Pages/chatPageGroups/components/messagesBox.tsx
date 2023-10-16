@@ -22,7 +22,7 @@ const Messages = (props : groupInfo) => {
           (
             <>
               <HeaderInfo name={props.name} avatar={props.avatar}/>
-              {/* <MessagingBody psocket = {socket} /> */}
+              <MessagingBody />
             </>
           ) :
           (

@@ -16,6 +16,12 @@ import randomLogo from './assets/logo.svg'
 
 
 const NavBarBody = () => {
+	const [showNotification, setShowNotification] = useState(false);
+
+	const toggleNotification = () => {
+	  setShowNotification(!showNotification);
+	};
+
 	return (
 	<div className="nav-content">
 		<div className="nav-item">
@@ -23,11 +29,13 @@ const NavBarBody = () => {
 				<img src={groups}/>
 			</Link>
 		</div>
-		<div className="nav-item" >
-			<a className="noti" href="#" title="Notifications">
+
+		<div className="nav-item">
+		<Link to="/notifications" title="Notifications">
 				<img src={notificationLogo}/>
-			</a>
+		</Link>
 		</div>
+
 		<div className="nav-item">
 			<Link to="/chat" title="Chat">
 				<img src={msgLogo}/>
@@ -38,9 +46,7 @@ const NavBarBody = () => {
 				<img src={settingsLogo}/>
 			</Link>
 		</div>
-
 	</div>
-
 	);
 };
 
@@ -95,12 +101,11 @@ const NavBarFooter = () => {
 		fetchData();
     }, [])
 
-	const avatarIs = /*check ? */`http://localhost:3000/auth/avatar/${token.id}`/* : token.image*/;
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<Link to="/profil" title="Profil">
-				<img src={avatarIs ? avatarIs: '/public/profile-default.png'} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+				<img src={check ? `http://localhost:3000/auth/avatar/${token.id}` : '/public/profile-default.png'} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</Link>
 		</div>
 		<div className="nav-item">

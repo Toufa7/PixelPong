@@ -23,7 +23,7 @@ function Stars() {
     return stars;
   };
 
-  return <div className="container">{renderStars()}</div>;
+  return <div style={{display: 'flex', justifyContent: 'center'}} className="container">{renderStars()}</div>;
 }
 
 export default Stars;

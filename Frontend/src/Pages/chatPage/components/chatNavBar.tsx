@@ -3,9 +3,9 @@ import { chatSocketContext } from '../components/socketContext'
 import { useMap } from "@uidotdev/usehooks";
 import axios from 'axios'
 import ChatUser from '../components/ChatUser'
-import uknownUser from '../assets/images/nonprofile.png'
 import DmChatUser from './dmChatUser'
 import ChatSearch from './chatSearch'
+import uknownUser from '../assets/images/nonprofile.png'
 
 interface chatUser {
     userName: string;
@@ -36,9 +36,9 @@ const chatNavBar = () => {
 const Dms = (props:any) => {    
 
     const conversationsSocket = useContext(chatSocketContext)
-    const [usersArr, setUsersArr] = useState<chatUser[]>([]);
-    const [mapState, setMapState] = useState(new Map<string, chatUser>());
-    // let myMap = new Map<string, chatUser>();
+    
+    //dms map
+    let map = useMap();
 
     useEffect(() => {  
         
@@ -67,10 +67,7 @@ const Dms = (props:any) => {
                 .then((res) => {
                     
                     tmpObj = {userName: res.data.username, pic: res.data.profileImage, id: conversations[i]}
-                    setUsersArr(prevMessagesArr => [...prevMessagesArr, tmpObj]);
-                    
-                    // myMap.set(conversations[i], tmpObj);
-                    setMapState(mapState.set(conversations[i], tmpObj));
+                    map.set(conversations[i], tmpObj);
                 })
                 .catch(Error)
                     console.log('%cAn error happened in : ', 'color: red')
@@ -82,15 +79,13 @@ const Dms = (props:any) => {
         {
             props.cu(newString);
         };
-        
-        console.log("Array from return", Array.from(mapState.values()));
 
     return (
       <div className="chatDmDiv">
         <i>CHATS</i>
         <div className="userDms">
             {
-                Array.from(mapState.values()).map((user, index) => (
+                Array.from(map.values()).map((user, index) => (
                     <DmChatUser
                         key={index}
                         userName={user.userName}

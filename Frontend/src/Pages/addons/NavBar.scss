@@ -12,6 +12,23 @@
     background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #333C54;
     box-shadow: 0px 0px 5.34831px 0px rgba(0, 0, 0, 0.25);
     
+
+    .notification-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: none;
+        z-index: 5;
+      }
+      
+      .notification-container.show {
+        display: block;
+      }
+
     .nav-item  {
         img {
             margin: 20px 10px 10px 12px;
