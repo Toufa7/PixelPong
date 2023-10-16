@@ -11,26 +11,10 @@ import jwt_decode from "jwt-decode";
 /******************* Includes  *******************/
 
 const RetrieveCheckSendData =  () => {
-    // const [firstTimeLogin, setFristTimeLogin] = useState(false);
-    // const cookie = new Cookies();
-    // const token = jwt_decode(cookie.get('jwt'));
-    // axios.get(`http://localhost:3000/users/${token.id}`, {withCredentials: true})
-    // .then((Resepone) => {
-    //     setFristTimeLogin(Resepone.data.firstlogin)
-    // })
-    // .catch((bad )=> {
-    //     console.log("first ==+> ", bad);
-    // })
-
-
     const avatar = document.querySelector('[name="avatarUpload"]').files[0];
     const nicknameInput = document.querySelector('[name="nickname"]').value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
-    /**
-     * TODO: it's optionnaly either nickname or avatar or both
-    */
-//    const navigate = useNavigate();
-   if (avatar) {
+    if (avatar) {
        const data = new FormData();
        data.append('file', avatar);
        toast.promise(
@@ -46,7 +30,7 @@ const RetrieveCheckSendData =  () => {
             }
             ,{ duration: 5000, position: 'top-right' });           
     }
-    else if (usernameCheck.test(nicknameInput)) {
+    if (usernameCheck.test(nicknameInput)) {
         toast.promise(
             axios.all([
                 axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true }),
@@ -100,7 +84,7 @@ const Avatars = () => {
 
 
 export default function LoginSettings() {   
-    const [isChecked, set2FAStatus] = useState();
+    const [isChecked, set2FAStatus] = useState(false);
     const handle2FAChange = () => {
         set2FAStatus(!isChecked);
         const endpoint = isChecked ? "http://localhost:3000/auth/2fa/disable" : "http://localhost:3000/auth/2fa/enable";
@@ -115,6 +99,21 @@ export default function LoginSettings() {
     const cookie = new Cookies();
     const token : Token = jwt_decode(cookie.get('jwt'));
 	const [update , setUpdate] = useState("");
+
+        const [imagePreview, setImagePreview] = useState('');
+      
+        const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              setImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+
+
     return (
         <div style={{height: '100vh'}}>
             <Toaster/>
@@ -127,15 +126,17 @@ export default function LoginSettings() {
                             <input onChange={(e) => setUpdate(e.target.value)} type="text" name="nickname" className="nes-input" required placeholder="Choose a nickname"/>
                         </div>
                         <div className="choosingAvatarContainer">
-                            <span className="is-primary">Choose Avatar</span>
                         </div>
-                            {/* <Avatars /> */}
-                        <div className="uploadContainer">
-                            <label className="nes-btn">
-                                <input onChange={(e) => setUpdate(e.target.value)} formMethod="post" type="file" name="avatarUpload" accept=".png, .jpg, .jpeg" />
-                                <span>Upload your avatar</span>
-                            </label>
-                        </div>
+                            <div className="uploadContainer">
+                                <div>
+                                        <img src={imagePreview} alt="Preview" style={{width: '100px', height: '100px', borderRadius: '50px'}}/>
+                                </div>
+                                <label className="nes-btn">
+                                    Upload your image
+                                    <input onChange={handleImageChange} formMethod="post" type="file" alt="Upload your avatar" name="avatarUpload" accept="image/*"/>
+                                </label>
+                            </div>
+
                         <div className="twoFa" style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <label style={{ textAlign: 'left' }}>2FA</label>
                         <label style={{ textAlign: 'right' }}>
@@ -172,4 +173,4 @@ export default function LoginSettings() {
         </div>
         </div>
     );
-}
+    }

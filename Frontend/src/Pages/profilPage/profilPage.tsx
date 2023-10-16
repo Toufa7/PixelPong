@@ -22,8 +22,6 @@ import mail from './assets/mail.svg';
 import caution from './assets/caution.svg';
 import folder from './assets/folder.svg';
 
-
-
 const States = (props : {winRate: number, wins: number, loses: number, streak: number}) => {
     return (
             <div className="headStatesBox">
@@ -90,7 +88,7 @@ const Profil = () => {
             <div className="profilRectangle">
                 <div className="avatar">
                     <div className="left">
-                        <img  src={userData.avatar ? userData.avatar : '/public/profile-default.png'} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                        <img src={userData.avatar ? userData.avatar : '/public/profile-default.png'} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                     <div>
                         <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
                     <div>
@@ -104,68 +102,11 @@ const Profil = () => {
     );
 }
 
-// const GroupsAndFriends = () => {
-//     const cookie = new Cookies();
-//     const token = jwt_decode(cookie.get('jwt'));
-//     const [friendData, setFriendData] = useState<string[]>([]);
-
-//     useEffect(() => {
-//     axios.get(`http://localhost:3000/users/${token.id}/Friends`, {withCredentials: true})
-//     .then((response) => {
-//         console.log("Friend List -> ",  response.data);
-//         setFriendData(response.data);
-//     })
-//     },[])
-
-//     const removeFriend = (removeId : string) => {
-//         const local = token.id;
-//         const remote = removeId;
-//         const endpoint = `http://localhost:3000/users/${local}/remove/${remote}`
-//         axios.patch(endpoint, {}, {withCredentials: true})
-//         .then((reseponse) => {
-//             console.log("Removing Response" ,reseponse);
-//         })
-//     }
-    
-//     const [label, setlabel] = useState(true);
-//     return (
-//         <div className="gAndFBox">
-//             <div className="gAndFHeader">Groups & Friends</div>
-//             <div className="gAndFTabs">
-//                 <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
-//                 <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
-//             </div>
-//             <div className="gAndFContent">
-//                 <div className="listParent">
-//                 {label ? (
-//                         (
-//                         <></>)
-//                     ) : (
-//                         // Friends
-//                         Object.keys(friendData).map((idx) => (
-//                             <>
-//                                 <div className='list'>
-//                                 <img  className="avatar" src={friendData[idx].profileImage} alt="avatar" />
-//                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
-//                                     <span className='name' key={idx}>{friendData[idx].username}</span>
-//                                     <button style={{marginLeft: '10px'}} onClick={() => removeFriend(friendData[idx].id)}>Unfriend</button>
-//                                     </div>
-//                                 </div>
-//                             </>
-//                     ))
-//                 )}
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-
 const GroupsAndFriends = () => {
     interface friendInfo {
         id: string, 
         profileImage : string
     }
-
     const cookie = new Cookies();
     const token = jwt_decode(cookie.get('jwt'));
     const [friendData, setFriendData] = useState<string[]>([]);
@@ -179,7 +120,6 @@ const GroupsAndFriends = () => {
     }, []);
 
     const removeFriend = (removeId: string) => {
-        // const local = token.id;
         const remote = removeId;
         const endpoint = `http://localhost:3000/users/remove/`;
         axios.patch(endpoint, {friendId: remote}, {withCredentials: true})

@@ -8,8 +8,8 @@ import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from "../socket-client";
-// import Anime, { anime } from 'react-anime';
 import Anime, { anime } from 'react-anime';
+import { Search } from "./search";
 /******************* Includes  *******************/
 import notification from './assets/notification.mp3';
 import medal from './assets/medaille.svg';
@@ -59,6 +59,10 @@ const TopContainer = () => {
 		"Desafía a tus amigos a emocionantes partidos de ping pong"
 	];
 	return (
+		<>
+		<div className="search">
+		<input type="text" id="name_field" placeholder='Search for a group or user' className="nes-input"/>
+		</div>
 		<div className="headerBox">
 		<div className="topLoginBox">
 			<div className="loginBoxHeader">
@@ -82,6 +86,7 @@ const TopContainer = () => {
 		</div>
 		</div>
 		</div>
+		</>
 	);
 };
 
@@ -294,13 +299,13 @@ function Notification () {
 	const audio = new Audio(notification);
 	audio.play();
 	toast.custom(
-		<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1',}}>
+		<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1'}}>
 			<div style={{ width: '400px', height: '120px' }} className="nes-container with-title is-centered">
 				<p style={{ background: '#ffeeca', border: '2px solid black'}} className="title">Invitation Request</p>
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<img src={data.photo} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>	
-				{ isFriend ?
+				{isFriend ?
 					(
 						<>
 							<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
@@ -323,20 +328,20 @@ function Notification () {
 
 }
 
-export default function Home() {	
-	Notification();
+export default function Home() {
+	Notification();	
 	return (
 		<div style={{ height: '100vh' }}>
 			<Toaster/>
-			<TopContainer />
-			<div className="top-containers">
-				<TopLeft />
-				<TopRight winRate={0.01} wins={0} loses={0}/>
+				<TopContainer/>
+				<div className="top-containers">
+					<TopLeft/>
+					<TopRight winRate={0.01} wins={0} loses={0}/>
+				</div>
+				<div className="bottom-containers">
+					<BottomLeft/>
+					<BottomRight/>
+				</div>
 			</div>
-			<div className="bottom-containers">
-			<BottomLeft />
-			<BottomRight />
-			</div>
-		</div>
 	);
 }

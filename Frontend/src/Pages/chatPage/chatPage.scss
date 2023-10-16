@@ -15,6 +15,7 @@
     {
         flex: 24;
         display: flex;
+        overflow: hidden;
         
         .chatNavBarDiv
         {
@@ -119,7 +120,7 @@
                                 width: 50px;
                                 border-radius: 50%;
                                 object-fit: cover;
-                                align-self: flex-start;
+                                // align-self: flex-start;
                             }
                             
                             &:hover
@@ -420,37 +421,6 @@
     
 }
 
-// .messagesDiv
-// {
-//     display: flex;
-//     flex-direction: column;
-//     overflow: hidden;
-//     z-index: 0;
-    
-//     .MessageLowerRibbonDiv
-//     {
-//         flex: 1;
-//         display: flex;
-//         justify-content: space-between;
-        
-//         .leftDiamond
-//         {
-//             position: relative;
-//             height: 79px;
-//             width: 61px;
-//             left: 21%;
-//         }
-        
-//         .rightSparkle
-//         {
-//             position: relative;
-//             width: 86px;
-//             height: 76px;
-//             right: 4%;
-//         }
-//     }
-// }
-
 .chatDmDiv
 {
     flex: 1;
@@ -505,14 +475,17 @@
     }
 }
 
-// @media only screen and (max-width: 600px) {
-//     .chatPage {
-//         // font-size: small;
-//         margin-top: 80px;
-//     }
+@media only screen and (max-width: 600px) {
+    .userProfileAndMessages {
+        // font-size: small;
+        margin-top: 80px;
+    }
+    .chatNavBarDiv {
+        margin-top: 80px;
+        width: 80px;
+    }
 
-//     .mainNavBarDiv {
-//         visibility: hidden; 
-//     }
-
-// }
+    .usrProfileConversation {
+        width: 300px !important;
+    }
+}

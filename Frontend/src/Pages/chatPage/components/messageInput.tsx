@@ -1,5 +1,5 @@
 import '../chatPage.scss'
-import { useState, useRef, useEffect, useContext } from 'react'
+import { useRef, useEffect, useContext } from 'react'
 import { chatSocketContext } from './socketContext'
 import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg'
@@ -11,6 +11,7 @@ import MessageRightComponenet from './messageRightComponenet ';
 interface chatAgent
 {
     id: string;
+    senderid:string;
     username: string;
     pic: string;
     side: number;
@@ -84,7 +85,7 @@ const messageInput = (props: any) => {
         
         for (let i: number = 0; i < axiosResponse.length; i++)
         {
-            
+
             if (axiosResponse[i].senderId == props.Sender.id)
             {
                 molLmessageId = axiosResponse[i].senderId;
@@ -102,6 +103,7 @@ const messageInput = (props: any) => {
             
             const tmpMsgObj: chatAgent = {
                 id: molLmessageId,
+                senderid: axiosResponse[i].senderId, 
                 username: molLmessage,
                 pic: molMsgPic,
                 side: molMsgSide,
@@ -131,7 +133,7 @@ const messageInput = (props: any) => {
     useEffect(() => {
         //Recieving message from socket
         conversationsSocket.on('msgToClient', (payload: chatAgent) => {
-            conversationsSocket.emit('getOldCnv')
+            // conversationsSocket.emit('getOldCnv')
             receiveMessage(payload);
         });
 
@@ -142,10 +144,11 @@ const messageInput = (props: any) => {
     }, [props.Receiver.username])
 
     //Handling newly received message 
-    const receiveMessage = (newMessage: chatAgent) => {
+    const receiveMessage = (newMessage: any) => {
 
         const tmpMsgObj: chatAgent = {
             id: newMessage.id,
+            senderid: newMessage.idsender,
             username: newMessage.username,
             pic: newMessage.pic,
             side: 1,
@@ -154,7 +157,12 @@ const messageInput = (props: any) => {
         }
 
         //Don't forget to replace username with id
-        if (props.Receiver.username == tmpMsgObj.username)
+        // if (props.Receiver.username == tmpMsgObj.username)
+        // {
+        //     map.set(makeid(37), tmpMsgObj);
+        // }
+
+        if (props.Receiver.id == tmpMsgObj.senderid)
         {
             map.set(makeid(37), tmpMsgObj);
         }
@@ -174,13 +182,14 @@ const messageInput = (props: any) => {
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
             conversationsSocket.emit('msgToServer', newMessage)
-            conversationsSocket.emit('getOldCnv')
+            // conversationsSocket.emit('getOldCnv')
         };
         
         if (inputMessage != '')
         {
             const tmpMsgObj: chatAgent = {
                 id: props.Receiver.id,
+                senderid: props.Sender.id,
                 username: props.Sender.username,
                 pic: props.Sender.image,
                 side: 0,

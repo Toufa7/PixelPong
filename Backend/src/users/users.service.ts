@@ -196,7 +196,7 @@ export class UsersService {
       },
     });
   }
-  async sendFriendRequest(senderId: string, recieverId: string) {
+  async sendFriendRequest(senderId: string, recieverId: string, data: any) {
 
     console.log(senderId +"         "+"    " +recieverId)
     return await this.prisma.friendrequest.create({
@@ -204,6 +204,8 @@ export class UsersService {
         sender: { connect: { id: senderId } },
         receiver: { connect: { id: recieverId } },
         status: Status.PENDING,
+        message: data.message,
+        image: data.photo,
       },
     });
   }
@@ -246,6 +248,17 @@ export class UsersService {
   ]);
   console.log(id);
   }
+
+//create notification for friend request
+// async sendFriendRequest(senderId: string, recieverId: string) {
+//   return await this.prisma.friendrequest.create({
+//     data: {
+//       sender: { connect: { id: senderId } },
+//       receiver: { connect: { id: recieverId } },
+//       status: Status.PENDING,
+//     },
+//   });
+// }
 
 async refuseFriendRequest(id: number) {
   await this.prisma.$transaction([

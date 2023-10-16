@@ -15,3 +15,4 @@ const chatPageGroup = () => {
 }
 
 export default chatPageGroup 
+

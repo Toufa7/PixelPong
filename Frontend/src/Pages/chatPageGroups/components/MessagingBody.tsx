@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react';
 import Conversation from './conversation'
 import MessageInput from './messageInput'
-import { socketContext } from './socket.client';
+// import { socketContext } from './socket.client';
 
 // const socket = useContext(socketContext);
-const MessagingBody = (props: any) => {
+const MessagingBody = () => {
 	const [messaging, setMessaging] = useState<string[]>([]);
 	
 	const handleNewMessage = (newMessage: string) => {
