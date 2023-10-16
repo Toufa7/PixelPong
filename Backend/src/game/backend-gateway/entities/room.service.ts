@@ -30,7 +30,7 @@ export class Rooms{
     create_room_for_player(){
         // return new RoomDto(0,this.generate_Random_id(5));
         console.log("Room created");
-        this.rooms[this.generate_Random_id(5)] = new RoomDto(0,this.generate_Random_id(5));
+        this.rooms[this.generate_Random_id(5)] = new RoomDto(0,this.generate_Random_id(5),6);
     }
 
     SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_height){
