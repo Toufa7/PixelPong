@@ -43,7 +43,7 @@ https://www.syncfusion.com/blogs/post/top-7-react-animation-libraries-in-2022.as
 
 https://downloads.khinsider.com
 
-## FlexBox Visutalizer :
+## FlexBox Visualizer :
 
 https://flexbox.tech/
 
@@ -90,38 +90,9 @@ https://stackoverflow.com/questions/70491774/usenavigate-may-be-used-only-in-the
 
 https://howtodoinjava.com/typescript/maps/
 
-
-* The map() method of Array :
-
-
-        const arr = [9,4,5,7,8]
-        arr.map((value, idx) => {
-        console.log(`your index is -> ${idx} AND value is ${value}`);
-        })
-
-
-
-    interface UserSettingsProps {
-        name: string;
-        avatar: string;
-    }
-
-    // const userSettingsData = (props : {name : string, avatar : string}) 
-    const userSettingsData = (props: UserSettingsProps) => {
-    const data = {
-        username: props.name,
-        avatar: props.avatar
-    };
-    const endpoint = 'http://localhost:3000';
-    axios.post(endpoint, data)
-        .then(response => {
-        })
-        .catch(error => {
-        });
-    }
-
-
 ## Errors :
+
+https://sentry.io/answers/how-do-i-resolve-cannot-find-module-error-using-node-js/
 
 https://stackoverflow.com/questions/62185425/why-is-console-log-logging-twice-in-react-js
 
@@ -133,7 +104,6 @@ https://stackoverflow.com/questions/52051857/nest-schedule-npm-not-working
 
 
 ## Multiple Values For UseState 
-
 
 https://codesandbox.io/s/usestate-with-an-object-multiple-values-sorta-d52zt
 

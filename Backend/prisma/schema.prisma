@@ -113,6 +113,7 @@ model Friendrequest{
 }
 
 
+
 enum  Status {
   ACCEPTED
   PENDING

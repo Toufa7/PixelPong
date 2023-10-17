@@ -233,8 +233,8 @@ h1
   background-color: #DCC422;
   color: #FA005E;
   font-size: 1.3vw;
-  height: 60px;
-  width: 300px;
+  height: 80px;
+  width: fit-content;
   transform: translate(20%, 0%);
 }
 
