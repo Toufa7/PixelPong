@@ -18,7 +18,7 @@ let map = new Map <any , any>();
 
 @WebSocketGateway({
     cors: {
-      origin: '*',
+      origin: 'http://localhost:5173',
       credentials: true,
     },
     namespace: 'chat',
@@ -52,16 +52,41 @@ let map = new Map <any , any>();
     }
 
 
-
+    async oldcnv(iduser : string){
+      const dMSChat1 =  await this.prisma.dmschat.findMany({
+        where: {
+          OR: [
+            {senderId: iduser},
+            {receiverId: iduser}
+          ],
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+      });
+      let tab : string[] = [];
+      //filter id of the other user
+      dMSChat1.forEach(element => {
+          if(!tab.includes(element.senderId) && element.senderId != iduser)
+          {
+            tab.push(element.senderId);
+          }
+          else if(!tab.includes(element.receiverId)&& element.receiverId != iduser)
+          {
+            tab.push(element.receiverId);
+          }
+      });
+      return tab;
+    }
     ///////////////////////////////// connection ////////////////////////////////
     async handleConnection(client: Socket, ...args: any[]) {
-      console.log("Im hererererererere");
+      // console.log("Im hererererererere");
       this.logger.log(`connected : ${client.id}`  );
       const user = await this.getUser(client);
-      console.log(user);
+      // console.log(user);
       if(user){
         map.set(user.id, client.id);
-        console.log(map);
+        // console.log(map);
       }
     }
 
@@ -87,30 +112,8 @@ let map = new Map <any , any>();
     async getConv(client : Socket) {
       console.log("getoldcnv");
       const user = await this.getUser(client);
-      const dMSChat1 =  await this.prisma.dmschat.findMany({
-        where: {
-          OR: [
-            {senderId: user.id},
-            {receiverId: user.id}
-          ],
-        },
-        orderBy: {
-          createdAt: 'desc'
-        },
-      });
-      let tab : string[] = [];
-      //filter id of the other user
-      dMSChat1.forEach(element => {
-          if(!tab.includes(element.senderId) && element.senderId != user.id)
-          {
-            tab.push(element.senderId);
-          }
-          else if(!tab.includes(element.receiverId)&& element.receiverId != user.id)
-          {
-            tab.push(element.receiverId);
-          }
-      });
-      this.server.to(map.get(user.id)).emit('postOldCnv'  , tab );
+      
+      this.server.to(map.get(user.id)).emit('postOldCnv'  , await this.oldcnv(user.id));
     }
     // how to use this in front end
     // emit using this event ('getOldCnv')
@@ -143,6 +146,7 @@ let map = new Map <any , any>();
               timestamp: body.timestamp
             });
             this.getConv(client);
+            this.server.to(idUs).emit('postOldCnv'  , await this.oldcnv(body.id));
         // }
     }
 
