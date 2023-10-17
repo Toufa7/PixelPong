@@ -58,11 +58,11 @@ const ChatUser = (props:any) => {
                     <div className='chatUserControls'>
                     {
                         //Conditional rendring to display the control buttons or not based on the presence of remoteUser.profileImage
-                        remoteUser.profileImage ?  (<>
+                        remoteUser.profileImage ?  (<div className="chatControlButtons">
                                                         <button className='userControlButtons'><img src={play} width={50} height={50}></img></button>
                                                         <button className='userControlButtons'><img src={mute} width={50} height={50}></img></button>
                                                         <button className='userControlButtons'><img src={block} width={50} height={50}></img></button>
-                                                    </>)
+                                                    </div>)
                                                 :   (<></>)
                     }
                     </div>

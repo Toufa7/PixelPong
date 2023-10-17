@@ -80,7 +80,7 @@ const chatSearch = (props: any) => {
                     <input type='text' ref={firstRef} placeholder='Search' className='searchBar'/>
                 </form>
             </div>
-            <div className="userChat">
+            <div className="SearchUserChat">
                 {Found &&   <div onClick={removeElement}>
                                 <DmChatUser userName={friendFound.username} pic={friendFound.profileImage} id={friendFound.id} userId={updateSharedString} />
                             </div>}
