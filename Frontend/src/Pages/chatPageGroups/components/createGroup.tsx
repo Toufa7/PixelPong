@@ -15,7 +15,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 const CreatingGroup = () => {
 	const groupName : string	= document.getElementById('name_field')?.value;
-	const choice : number		= document.getElementById("default_select")?.value;
+	const choice : number		= document.getElementById("default_privacy")?.value;
 	const password : string		= document.getElementById("password_field")?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload1"]').files[0];
 	const regEx = /^[A-Za-z0-9_ ]{5,15}$/;
@@ -79,7 +79,7 @@ const CreateGroup = () => {
 				</div>
 				<label style={{marginTop: '10px'}}>Select Privacy</label>
 				<div className="nes-select">
-					<select  required id="default_select" onChange={(e) => setProtected(e.target.value == "2")} >
+					<select  required id="default_privacy" onChange={(e) => setProtected(e.target.value == "2")} >
 						<option value="" disabled selected hidden>Choose Privacy</option>
 						<option value="0" title={privacy[0]}>Public</option>
 						<option value="1" title={privacy[1]}>Private</option>

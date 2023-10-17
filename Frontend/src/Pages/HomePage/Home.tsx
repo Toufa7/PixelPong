@@ -99,37 +99,37 @@ const TopContainer = () => {
 	const [friends, setFriends] = useState([]);
 	const [theOne, setTheOne] = useState([]);
 	const [isFound, setFound] = useState(false);
+	const [friendGroup, setFriendGroup] = useState(false);
 	const firstRef = useRef(null);
 	const [visibility, setVisibility] = useState(true);
   
 	const handleSubmit = (e: any) => {
-	  e.preventDefault();
-	  const searchValue = firstRef.current.value;
-	  console.log(searchValue);
-  
-	  axios
-		.get(`http://localhost:3000/users/Friends/`, { withCredentials: true })
+		e.preventDefault();
+		const myinput = firstRef.current.value;
+		console.log(myinput);
+
+		axios.get(`http://localhost:3000/users/Friends/`, { withCredentials: true })
 		.then((response) => {
-		  setFriends(response.data);
-		  let isFound = false;
-		  for (let index = 0; index < response.data.length; index++) {
-			if (searchValue === response.data[index].username) {
-			  console.log("Found It");
-			  isFound = true;
-			  setTheOne(response.data[index]);
-			  firstRef.current.value = '';
-			  break;
+			setFriends(response.data);
+			let isFound = false;
+			for (let index = 0; index < response.data.length; index++) {
+			if (myinput === response.data[index].username) {
+				console.log("Found It");
+				isFound = true;
+				setTheOne(response.data[index]);
+				firstRef.current.value = '';
+				setFriendGroup(true);
+				break;
 			}
-		  }
-		  setFound(isFound);
-		  setVisibility(false);
+			}
+			setFound(isFound);
+			setVisibility(false);
 		})
 		.catch((error) => {
-		  console.log(error);
+			console.log(error);
 		});
 	};
 
-	console.log("first", theOne);
   
 	const removeElement = () => {
 	  setVisibility(true);
@@ -142,20 +142,39 @@ const TopContainer = () => {
 			<input ref={firstRef} type="text" id="name_field" placeholder='Search for a group or user' className="nes-input" />
 			{!visibility && (
 			<div onClick={removeElement} className="nes-container" style={{height: 'fitContent', padding: '5px', background: "#EDF2FA"}}>
-				{isFound ? (
-				<Link to={`/profil/${theOne.username}`}>
-					<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around',}}>
+				{isFound ? 
+				(
+					friendGroup ? (<Link to={`/profil/${theOne.username}`}>
+							<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
+								<div>
+									<img src={theOne.profileImage} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+									<span style={{ marginLeft: '20px' }}>{theOne.username}</span>
+								</div>
+							</div>		
+						</Link>)
+					:
+					(<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}} onClick={() => document.getElementById('joinGroup').showModal()}>
 						<div>
 							<img src={theOne.profileImage} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-							<span span style={{ marginLeft: '20px' }}>{theOne.username}</span>
+							<span style={{ marginLeft: '20px' }}>{theOne.username}</span>
 						</div>
-					</div>
-				</Link>) :
+					</div>)
+				) :
 				('0 results matched')}
 			</div>
 			)}
 		</form>
+			<dialog style={{height: '300px', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
+				<h2 className="groupName">{theOne.username}</h2>
+				<img style={{borderRadius: '50%',width: '20%',height: '50%', marginBottom: '20px'}} className="groupAvatar" src={theOne.profileImage} />
+				<p className="group-members">Total Members: 245</p>
+				<button className="nes-btn">Join Group</button>
+			</dialog>
 		</div>
+
+
+
+
 		<div className="headerBox">
 		<div className="topLoginBox">
 			<div className="loginBoxHeader">
