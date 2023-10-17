@@ -15,6 +15,17 @@ import { promises as fsPromises } from 'fs';
 export class GroupchatController {
     constructor(private readonly GroupchatService : GroupchatService ) {}
 
+    //get number user of a groupchat
+    @Get(":id/numberuser")
+    numberuser(@Param('id') id: string): any {
+        return this.GroupchatService.numberuser(id);
+    }
+    //get a all groupchat
+    @Get("all")
+    findallGp(): any {
+        return this.GroupchatService.findAllGp();
+    }
+
     //get all groupchat of a user
     @Get()
     findAll(@Req() Request : any): any {
