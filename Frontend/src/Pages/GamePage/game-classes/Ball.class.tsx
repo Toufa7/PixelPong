@@ -195,7 +195,7 @@ import { Paddle } from './paddle.class';
         //     return("nothing");
         // }
     
-        public update_pos(paddle1 : Paddle, paddle2 : Paddle){
+        public update_pos(paddle1 : Paddle, paddle2 : Paddle,width : number, height : number){
         //   let full_power : number = 500
         //     let reset_punch = this.check_collision(paddle,ai_paddle);
         //       if (this.ball_ob.keyIsPressed){
@@ -229,7 +229,7 @@ import { Paddle } from './paddle.class';
             // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
             // this.pos.x = this.pos.x + this.ball_speed_x;
             // this.pos.y = this.pos.y + this.ball_speed_y;
-            socket_gm?.emit("Ball_movement");
+            socket_gm?.emit("Ball_movement",{width : width , height : height});
 
             this.draw_the_ball("#e9ed09");
         }

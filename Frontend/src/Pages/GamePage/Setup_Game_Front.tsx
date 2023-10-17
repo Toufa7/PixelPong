@@ -10,15 +10,17 @@ import { Websocket_render } from './components/render_game_sketch_components';
 
 export default function Setup(){
   return (
-    <div id = 'child'>
+    // <div id = 'child'>
       <Game_instance/>
-      {/* <ContextSocket.Provider value={socket}>
-      <Websocket_render/>
-      </ContextSocket.Provider> */}
-    </div>
-    )
+  )
+     
 }
   
+
+ /* <ContextSocket.Provider value={socket}>
+      <Websocket_render/>
+      </ContextSocket.Provider> */
+    // </div>
   // <div id='Parent'>
   {/* <div id='canvas_renderer'> */}
     {/* <h1>DIV</h1> */}
