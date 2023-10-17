@@ -38,6 +38,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
   public User;
 
+
   
   public CountDown : number = 6; 
 
@@ -61,7 +62,7 @@ handleConnection(Player: Socket) {
           this.screen_metrics.screen_height = Data.s_h;
           console.log("---------------CONNECTION SECTION ------------------")
           console.log("new Player connected " + Player.id);
-          await this.Players.AddPlayer(Player , Player.id,0,(this.screen_metrics.screen_height / 2) - (90 / 2),20,95,"",this.User.id,My_username);
+          await this.Players.AddPlayer(Player , Player.id,0,(this.screen_metrics.screen_height / 2) - (95 / 2),20,95,"",this.User.id,My_username);
           console.log("Can i set Rooms --> " + this.Players.SetRoom);
           if (this.Players.SetRoom){
             this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
@@ -187,9 +188,13 @@ async handleDisconnect(Player: Socket) {
       let bottom = 0;
       let right = 0;
 
+      let local_Ball = {x : 0 ,y : 0};
+
       for(const id in this.Rooms.rooms){
           const Room = this.Rooms.rooms[id];
           if (Room.Player1?.id == Player.id || Room.Player2?.id == Player.id){
+            local_Ball.x = Room.GameBall.x;
+            local_Ball.y = Room.GameBall.y;
               top = (Room.GameBall.y - Room.GameBall.diameter / 2);
               bottom = (Room.GameBall.y + Room.GameBall.diameter / 2);
               left = (Room.GameBall.x - Room.GameBall.diameter / 2);
@@ -216,6 +221,16 @@ async handleDisconnect(Player: Socket) {
             }
             Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
             Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+            // if (Room.Player1.id == Player.id){
+              // this.server.to(Room.Player1.id).emit("UpdateBallPos",{GameBall_x :local_Ball.x , GameBall_y : local_Ball.y});
+            // }else
+            this.server.to(Room.Player1.id).emit("UpdateBallPos",{GameBall_x : Room.GameBall.x , GameBall_y : Room.GameBall.y});
+
+
+            // if (Room.Player2.id == Player.id){
+              // this.server.to(Room.Player2.id).emit("UpdateBallPos",{GameBall_x :local_Ball.x , GameBall_y : local_Ball.y});
+            // }else
+            this.server.to(Room.Player2.id).emit("UpdateBallPos",{GameBall_x : Room.GameBall.x , GameBall_y : Room.GameBall.y});
             break;
           }
         }
@@ -336,7 +351,7 @@ async handleDisconnect(Player: Socket) {
       for(const id in this.Rooms.rooms){
         const Room = this.Rooms.rooms[id];
         this.server.to(Room.id).emit("UpdatePlayerPos",Room);
-        this.server.to(Room.id).emit("UpdateBallPos",Room);
+        // this.server.to(Room.id).emit("UpdateBallPos",Room);
         
       }
     }
