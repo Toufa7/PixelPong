@@ -174,12 +174,17 @@ const TopContainer = () => {
 	  };
 	
 
-	  console.log("first --" ,privacy );
+	  console.log("theOne theOne theOne theOne --" ,theOne );
 
 	const removeElement = () => {
 	  setVisibility(true);
 	  setIsFound(false);
 	};
+
+
+	const password : string		= document.getElementById("password_join")?.value;
+	console.log("Passowrd Entered -> ", password);
+
 	return (
 		<>
 		<div className="search">
@@ -218,29 +223,44 @@ const TopContainer = () => {
 			</div>
 			)}
 		</form>
-			<dialog style={{height: '300px', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
-				<h2 className="groupName">{theOne.username}</h2>
+			<dialog style={{height: 'fitContent', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
+			<h1 className="groupName">{theOne.namegb}</h1>
+				<h4 className="grouptype">{theOne.grouptype}</h4>
+
+
 				<img style={{borderRadius: '50%',width: '20%',height: '100px', marginBottom: '20px'}} className="groupAvatar" src={avatar} />
 				<p className="group-members">Total Members: {users}</p>
 				{
 					privacy == "PUBLIC" ? (
 						<button onClick={() => {
-							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, { withCredentials: true })
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
 							.then((res) => {
 								console.log("Reseoinse Join -> ", res.data);
 							})
 							.catch(() => {})
-						}} className="nes-btn" >Join Group</button>
+						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
 					) : privacy == "PRIVATE" ? (
 						<button onClick={() => {
-							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, { withCredentials: true })
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
 							.then((res) => {
-								console.log("Reseoinse Join -> ", res.data);
+								console.log("Private Join -> ", res.data);
 							})
 							.catch(() => {})
-						}} className="nes-btn" >Join Group & Wait</button>
+						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Request To Join</button>
 						) : (
-						<><input style={{ background: '#E9E9ED' }} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" /><button className="nes-btn">Join Group</button></>
+						<>
+
+						<input style={{ background: '#E9E9ED', marginBottom: '10px' }} type="password" placeholder="P@55w0rd" maxLength={18} id="password_join" className="nes-input" />
+						<button onClick={() => {
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userprotected`, {pass :password} , { withCredentials: true })
+							.then((res) => {
+								console.log("Protected  -> ", res);
+							})
+							.catch(() => {})
+						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Join Group</button>
+
+
+						</>
 						)
 				}
 			</dialog>
