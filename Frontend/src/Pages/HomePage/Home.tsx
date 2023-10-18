@@ -225,7 +225,7 @@ const TopContainer = () => {
 				{
 					privacy == "PUBLIC" ? (
 						<button onClick={() => {
-							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, { withCredentials: true })
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`,{} , { withCredentials: true })
 							.then((res) => {
 								console.log("Reseoinse Join -> ", res.data);
 							})

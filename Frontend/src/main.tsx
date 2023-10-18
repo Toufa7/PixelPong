@@ -105,7 +105,7 @@ const HomeComponents = () => {
 const GameComponents = () => {
 	return (
 		<>
-			<Stars/>
+			{/* <Stars/> */}
 			<Setup/>
 		</>
 	);

@@ -33,6 +33,18 @@ export class GroupchatService {
     async findAllGp(): Promise<any> {
         return await this.prisma.groupchat.findMany();
     }
+    
+    //get a all groupchat is not member
+    async findAllGpnotmember(iduser: string): Promise<any> {
+        const data = await this.prisma.groupchat.findMany(
+            {
+                where: {
+                    usersgb: { none: { id: iduser } },
+                },
+            }
+        );
+        return data;
+    }
 
     //get all groupchat of a user
     async findAll(iduser: string) {
@@ -54,7 +66,6 @@ export class GroupchatService {
                 },
             }
         );
-        console.log(data);
         return data;
     }
 
@@ -305,7 +316,6 @@ export class GroupchatService {
         }
     }
 
-    ////// not working now ///////
     //add a user to a groupchat public
 
     async adduser(id: string, iduserconnected: string) {
@@ -342,6 +352,81 @@ export class GroupchatService {
         }
         else {
             return "Wrong password";
+        }
+    }
+    //accept a request to join a groupchat
+    async acceptrequest(id: string, iduser: string, iduserconnected: string) {
+        const superadmin = await this.prisma.groupchat.findUnique({
+            where: {
+                id: id,
+            },
+            select: {
+                superadmin: true,
+            },
+        });
+
+        //select the request
+        const request = await this.prisma.requestjoingroup.findFirst({
+            where: {
+                AND: [
+                    { senderId: iduser },
+                    { receiverId: superadmin.superadmin.id },
+                ],
+            },
+        });
+        //delete the request
+        await this.prisma.requestjoingroup.delete({
+            where: {
+                id: request[0].id,
+            },
+        });
+        if (superadmin.superadmin.id == iduserconnected) {
+            await this.prisma.requestjoingroup
+            return await this.prisma.groupchat.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    usersgb: { connect: [{ id: iduser }] },
+                },
+            });
+        }
+        else {
+            return "You are not the admin of this groupchat";
+        }
+    }
+
+    //refuse a request to join a groupchat
+    async refuserequest(id: string, iduser: string, iduserconnected: string) {
+        const superadmin = await this.prisma.groupchat.findUnique({
+            where: {
+                id: id,
+            },
+            select: {
+                superadmin: true,
+            },
+        });
+
+        //select the request
+        const request = await this.prisma.requestjoingroup.findFirst({
+            where: {
+                AND: [
+                    { senderId: iduser },
+                    { receiverId: superadmin.superadmin.id },
+                ],
+            },
+        });
+        //delete the request
+        await this.prisma.requestjoingroup.delete({
+            where: {
+                id: request[0].id,
+            },
+        });
+        if (superadmin.superadmin.id == iduserconnected) {
+            return "Request refused";
+        }
+        else {
+            return "You are not the admin of this groupchat";
         }
     }
 
@@ -433,6 +518,17 @@ export class GroupchatService {
                 },
             });
         }
+    }
+    //exit a groupchat
+    async exit(id: string, iduserconnected: string) {
+        return await this.prisma.groupchat.update({
+            where: {
+                id: id,
+            },
+            data: {
+                usersgb: { disconnect: [{ id: iduserconnected }] },
+            },
+        });
     }
 
     //delete an admin from a groupchat

@@ -32,7 +32,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   @WebSocketServer()
   public server : Server;
 
-  public screen_metrics : {screen_width : number , screen_height : number} = {screen_width : 0, screen_height : 0};
+  // public screen_metrics : {screen_width : number , screen_height : number} = {screen_width : 0, screen_height : 0};
 
   public Room_dl;
 
@@ -58,14 +58,16 @@ handleConnection(Player: Socket) {
           let t = await this.userService.findOne(this.User.id);
           let My_username : string = t.username;
           console.log("My UserName ---> " + My_username);
-          this.screen_metrics.screen_width = Data.s_w;
-          this.screen_metrics.screen_height = Data.s_h;
+          // this.screen_metrics.screen_width = Data.s_w;
+          // this.screen_metrics.screen_height = Data.s_h;
           console.log("---------------CONNECTION SECTION ------------------")
           console.log("new Player connected " + Player.id);
-          await this.Players.AddPlayer(Player , Player.id,0,(this.screen_metrics.screen_height / 2) - (95 / 2),20,95,"",this.User.id,My_username);
+          // let Player_width_scale = (2 / 100) * Data.s_w;
+          // let Player_height_scale = (20 / 100) * Data.s_h;
+          await this.Players.AddPlayer(Player , Player.id,0,(Data.s_h / 2) - (Data.pd_height / 2),Data.pd_width,Data.pd_height,Data.s_w,Data.s_h,"",this.User.id,My_username);
           console.log("Can i set Rooms --> " + this.Players.SetRoom);
           if (this.Players.SetRoom){
-            this.Rooms.SetupRooms(Player,this.Players,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+            this.Rooms.SetupRooms(Player,this.Players,Data.s_w,Data.s_h);
             this.SendToPlayersinRoom(Player,this.Rooms);
             console.log("--->Players" + JSON.stringify(this.Players.players));
             console.log("---------------------CCCoooCCC--------------------------------\n");
@@ -118,7 +120,7 @@ async handleDisconnect(Player: Socket) {
     }
 
     if(this.Players.players[Player.id])
-      this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.screen_metrics.screen_width,this.screen_metrics.screen_height);
+      this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.Players.players[Player.id]?.Scaled_width,this.Players.players[Player.id]?.Scaled_height);
     if (this.Room_dl?.client_count > 0 && client_count_before > 1){
           console.log("-------------There still another Player in the room!!-------------");
           this.Room_dl.CountDown = 6;
@@ -153,15 +155,6 @@ async handleDisconnect(Player: Socket) {
           // console.log("Player will Move Down from id --->" + this.Players.players[Player.id].id);
           this.Players.players[Player.id].y += dy;
 
-          if (this.Players.players[Player.id]?.y < 0){
-            this.Players.players[Player.id].y = 0;
-          }
-
-          if (this.Players.players[Player.id]?.y > this.screen_metrics.screen_height - this.Players.players[Player.id].height){
-            this.Players.players[Player.id].y =  this.screen_metrics.screen_height - this.Players.players[Player.id].height;
-            // console.log(this.screen_metrics.screen_width);
-
-          }
           // return;
         }
         else if ((Player_data.sig === "UP") && (Player_data.Key == Player_data.key_check)){
@@ -174,6 +167,13 @@ async handleDisconnect(Player: Socket) {
           // console.log("Mouse event " + Player_data.mouse_coord);
           this.Players.players[Player.id].y = Player_data.mouse_coord;
         }
+
+        if (this.Players.players[Player.id]?.y < 0){
+          this.Players.players[Player.id].y = 0;
+        }
+        if (this.Players.players[Player.id]?.y > Player_data.scaled_height - Player_data.pd_height){
+          this.Players.players[Player.id].y = Player_data.scaled_height - Player_data.pd_height;
+        }
       }
     }
 
@@ -183,58 +183,51 @@ async handleDisconnect(Player: Socket) {
     }
 
     check_collision_Ball_with_env(Ball_data,Player : Socket){
-      let top = 0;
-      let left = 0;
-      let bottom = 0;
-      let right = 0;
 
-      let local_Ball = {x : 0 ,y : 0};
+      console.log("Requesting for ball mobement");
+      // let top = 0;
+      // let left = 0;
+      // let bottom = 0;
+      // let right = 0;
 
-      for(const id in this.Rooms.rooms){
-          const Room = this.Rooms.rooms[id];
-          if (Room.Player1?.id == Player.id || Room.Player2?.id == Player.id){
-            local_Ball.x = Room.GameBall.x;
-            local_Ball.y = Room.GameBall.y;
-              top = (Room.GameBall.y - Room.GameBall.diameter / 2);
-              bottom = (Room.GameBall.y + Room.GameBall.diameter / 2);
-              left = (Room.GameBall.x - Room.GameBall.diameter / 2);
-              right = (Room.GameBall.x + Room.GameBall.diameter / 2);
+      // let local_Ball = {x : 0 ,y : 0};
 
-            if (this.check_collision_Ball_with_players(Ball_data,Player)){
-              Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
-              Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
-              break;
-            }
-
-            if (this.Manage_Game_Hit_Or_Reset(Player,Room)){
-              break;
-            }
-
-            else{
-              if(top < 0){
-                Room.GameBall.x = Room.GameBall.x + 8;
-                Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-              }
-            if (bottom > this.screen_metrics.screen_height){
-              Room.GameBall.x = Room.GameBall.x - 8;
-              Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-            }
-            Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
-            Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
-            // if (Room.Player1.id == Player.id){
-              // this.server.to(Room.Player1.id).emit("UpdateBallPos",{GameBall_x :local_Ball.x , GameBall_y : local_Ball.y});
-            // }else
-            this.server.to(Room.Player1.id).emit("UpdateBallPos",{GameBall_x : Room.GameBall.x , GameBall_y : Room.GameBall.y});
+      // for(const id in this.Rooms.rooms){
+      //     const Room = this.Rooms.rooms[id];
+      //     if (Room.Player1?.id == Player.id || Room.Player2?.id == Player.id){
+      //       local_Ball.x = Room.GameBall.x;
+      //       local_Ball.y = Room.GameBall.y;
+      //         top = (Room.GameBall.y - Room.GameBall.diameter / 2);
+      //         bottom = (Room.GameBall.y + Room.GameBall.diameter / 2);
+      //         left = (Room.GameBall.x - Room.GameBall.diameter / 2);
+      //         right = (Room.GameBall.x + Room.GameBall.diameter / 2);
 
 
-            // if (Room.Player2.id == Player.id){
-              // this.server.to(Room.Player2.id).emit("UpdateBallPos",{GameBall_x :local_Ball.x , GameBall_y : local_Ball.y});
-            // }else
-            this.server.to(Room.Player2.id).emit("UpdateBallPos",{GameBall_x : Room.GameBall.x , GameBall_y : Room.GameBall.y});
-            break;
-          }
-        }
-      }
+      //       if (this.check_collision_Ball_with_players(Room.Player1,Ball_data,Player)){
+      //         Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
+      //         Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+      //         break;
+      //       }
+
+      //       if (this.Manage_Game_Hit_Or_Reset(Room.Player1,Player,Room)){
+      //         break;
+      //       }
+
+      //       else{
+      //         if(top < 0){
+      //           Room.GameBall.x = Room.GameBall.x + 8;
+      //           Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+      //         }
+      //       if (bottom > Room.Player1.Scaled_height){
+      //         Room.GameBall.x = Room.GameBall.x - 8;
+      //         Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+      //       }
+      //       Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
+      //       Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+      //       break;
+      //     }
+      //   }
+      // }
     }
 
 
@@ -244,9 +237,9 @@ async handleDisconnect(Player: Socket) {
     // if (left < 0){
 
     // }
-  ManageWinLost(Player : Socket , Room : any) : boolean{
+  ManageWinLost(Player_CH , Player : Socket , Room : any) : boolean{
     let Ball_x = Room.GameBall.x;
-    let Ball_reverse_x = this.screen_metrics.screen_width - Room.GameBall.x;
+    let Ball_reverse_x = Player_CH.Scaled_width - Room.GameBall.x;
 
     if (Room.Player1.id == Player.id){
       return (this.Check_point_lost_for_players(Ball_x,Room.GameBall.diameter / 2,Room.Player1));
@@ -266,8 +259,8 @@ async handleDisconnect(Player: Socket) {
     return (false);
   }
 
-  Manage_Game_Hit_Or_Reset(Player : Socket , Room : any){
-    if (this.ManageWinLost(Player,Room)){
+  Manage_Game_Hit_Or_Reset(Player_CH , Player : Socket , Room : any){
+    if (this.ManageWinLost(Player_CH,Player,Room)){
       if (Room.Player1.Health_points == 0){
           this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Lose"});
           this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Win"});
@@ -277,31 +270,31 @@ async handleDisconnect(Player: Socket) {
           this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Lose"});
           this.historyService.addMatchHistory(Room.Player1.user_id,Room.Player2.user_id);
       }
-      Room.GameBall.x = this.screen_metrics.screen_width / 2;
-      Room.GameBall.y = this.screen_metrics.screen_height / 2;
+      Room.GameBall.x = Player_CH.Scaled_width / 2;
+      Room.GameBall.y = Player_CH.Scaled_height / 2;
       Room.GameBall.ball_speed_x = -4;
       Room.GameBall.ball_speed_y = 2;
       Room.Player1.x = 0;
-      Room.Player1.y = (this.screen_metrics.screen_height / 2) - (95 / 2);
+      Room.Player1.y = (Player_CH.Scaled_height / 2) - (95 / 2);
 
       Room.Player2.x = 0;
-      Room.Player2.y = (this.screen_metrics.screen_height / 2) - (95 / 2);
+      Room.Player2.y = (Player_CH.Scaled_height / 2) - (95 / 2);
 
       return (true);
     }
     return(false);
   }
 
-    check_collision_Ball_with_players(Ball_data,Player : Socket) : boolean{
+    check_collision_Ball_with_players(Player_CH , Ball_data,Player : Socket) : boolean{
       for(const id in this.Rooms.rooms){
         const Room = this.Rooms.rooms[id];
           let radius = Room.GameBall.diameter / 2;
           let Ball_x = Room.GameBall.x;
-          let Ball_reverse_x = this.screen_metrics.screen_width - Room.GameBall.x;
+          let Ball_reverse_x = Player_CH.Scaled_width - Room.GameBall.x;
           if (Room.Player1.id == Player.id){
-              return (this.Ball_points_check(radius,Room,Room.Player1,this.screen_metrics.screen_width,Ball_x));
+              return (this.Ball_points_check(radius,Room,Room.Player1,Player_CH.Scaled_width,Ball_x));
           }else if (Room.Player2.id == Player.id){
-            return (this.Ball_points_check(radius,Room,Room.Player2,this.screen_metrics.screen_width,Ball_reverse_x));
+            return (this.Ball_points_check(radius,Room,Room.Player2,Player_CH.Scaled_width,Ball_reverse_x));
           }
         }
     }
@@ -341,8 +334,10 @@ async handleDisconnect(Player: Socket) {
 
     @SubscribeMessage("UpdateScreenmetrics")
         FillScreenMetrics(@MessageBody() screen , @ConnectedSocket() Player : Socket){
-        this.screen_metrics.screen_width = screen.s_w;
-        this.screen_metrics.screen_height = screen.s_h;
+              this.Players.players[Player.id].Scaled_width = screen.s_w;
+              this.Players.players[Player.id].Scaled_height = screen.s_h;
+              // this.Players.players[Player.id].width = (2 / 100) * this.Players.players[Player.id].Scaled_width;
+              // this.Players.players[Player.id].height = (20 / 100) * this.Players.players[Player.id].Scaled_height;
       }
 
 
@@ -350,8 +345,36 @@ async handleDisconnect(Player: Socket) {
     handleevent(){
       for(const id in this.Rooms.rooms){
         const Room = this.Rooms.rooms[id];
-        this.server.to(Room.id).emit("UpdatePlayerPos",Room);
-        // this.server.to(Room.id).emit("UpdateBallPos",Room);
+        
+        let P1_scaled_P2__y = (Room.Player1?.y * Room.Player2?.Scaled_height) / Room.Player1?.Scaled_height;   
+        let P2_scaled_P1__y = (Room.Player2?.y * Room.Player1?.Scaled_height) / Room.Player2?.Scaled_height;
+
+
+        let P1_scaled_P2__x = (Room.Player1?.x * Room.Player2?.Scaled_width) / Room.Player1?.Scaled_width;   
+        let P2_scaled_P1__x = (Room.Player2?.x * Room.Player1?.Scaled_width) / Room.Player2?.Scaled_width;
+
+        console.log("-------------------SEPPPPP------------------");
+        
+        console.log("P2-->" + Room.Player2?.Scaled_height);
+        console.log("P2 y before scaling for P1 --> " + Room.Player2?.y);
+        console.log("P2 Scaled for player 1 -->" + P2_scaled_P1__y);
+        console.log("---------------------------------------------");
+        console.log("P1-->" + Room.Player1?.Scaled_height);
+        console.log("P1 y before scaling for P2 --> " + Room.Player1?.y);
+        console.log("P1 Scaled for player 2 -->" + P1_scaled_P2__y);
+        // P1_y_scaled : P1_scaled_P2__y ,
+        // P1_x_scaled:P1_scaled_P2__x ,
+
+        this.server.to(Room.Player1?.id).emit("UpdatePlayerPos",{who:"P1",P1_y:Room.Player1?.y, P2_y_scaled : P2_scaled_P1__y,
+          P1_x:Room.Player1?.x ,P2_x_scaled:P2_scaled_P1__x});
+
+        this.server.to(Room.Player2?.id).emit("UpdatePlayerPos",{who:"P2",P2_y:Room.Player2?.y, P1_y_scaled : P1_scaled_P2__y,
+          P2_x:Room.Player2?.x ,P2_x_scaled : P1_scaled_P2__x});
+          
+        // this.server.to(Room.id).emit("UpdateBallPos",{Room:Room,P1_width:Room.Player1?.Scaled_width,P1_height:Room.Player1?.Scaled_height,
+        //   P2_width:Room.Player2?.Scaled_width,P2_height:Room.Player2?.Scaled_height});
+
+        console.log("--------------------------------------------------");
         
       }
     }
