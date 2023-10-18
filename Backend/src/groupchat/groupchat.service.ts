@@ -321,6 +321,7 @@ export class GroupchatService {
 
     //add a user to a groupchat protected
     async adduserprotected(id: string, pass: string, iduserconnected: string) {
+        console.log(pass);
         const groupchat = await this.prisma.groupchat.findUnique({
             where: {
                 id: id,
@@ -331,7 +332,7 @@ export class GroupchatService {
         });
         const validPassword = await bcrypt.compare(pass, groupchat.password);
         if (validPassword) {
-            return await this.prisma.groupchat.update({
+            await this.prisma.groupchat.update({
                 where: {
                     id: id,
                 },
@@ -339,9 +340,10 @@ export class GroupchatService {
                     usersgb: { connect: { id: iduserconnected } },
                 },
             });
+            return "yes"
         }
         else {
-            return "Wrong password";
+            return "no";
         }
     }
 

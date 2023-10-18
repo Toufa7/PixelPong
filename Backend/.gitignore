@@ -6,7 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-backend/uploads
+backend/uploads/*
+backend/uploads/
 
 node_modules
 dist

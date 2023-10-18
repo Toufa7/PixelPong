@@ -37,9 +37,9 @@ export class GroupchatController {
         return this.GroupchatService.findOne(id.id);
     }
     //get all groupchat of a useradmin
-    @Get("lifihomanaadmin/:id")
-    findgpadmin(@Param('id') id: string): any {
-        return this.GroupchatService.findgpadmin(id);
+    @Get("lifihomanaadmin")
+    findgpadmin(@Req() Request : any): any {
+        return this.GroupchatService.findgpadmin(Request.user.id);
     }
 
     //get all users of a groupchat
@@ -64,7 +64,7 @@ export class GroupchatController {
     @Get(":id/superuser")
     findSuperUser(@Param('id') id: string): any {
         return this.GroupchatService.findSuperUser(id);
-    }
+    }``
 
     //get userban of a groupchat
     @Get(":id/userban")
@@ -154,7 +154,6 @@ export class GroupchatController {
         return this.GroupchatService.muteuser(id, iduser, req.user.id);
     }
 
-    ///////// not working now  /////////
     //add a user to a groupchat public
     @Patch(':id/userpublic')
     adduser(@Param('id') id: string , @Req() req : any): any {
@@ -163,8 +162,8 @@ export class GroupchatController {
 
     //add a user to a groupchat protected
     @Patch(":id/userprotected")
-    adduserprotected(@Param('id') id: string,  @Req() req : any, @Body() pass : string): any {
-        return this.GroupchatService.adduserprotected(id ,pass, req.user.id);
+    adduserprotected(@Param('id') id: string,  @Req() req : any, @Body() data : any): any {
+        return this.GroupchatService.adduserprotected(id ,data.pass, req.user.id);
     }
 
     //add an user to a groupchat private
