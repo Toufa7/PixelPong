@@ -185,9 +185,9 @@ const Achivements = () => {
                     <div className="icons">
                         <div>
                         {
-                            Array.from(achivements).map(([icon, achivText]) => (
-                            <div>
-                                <img src={icon} />
+                            Array.from(achivements).map(([icon, achivText], idx) => (
+                            <div key={idx}>
+                                <img src={icon}   />
                                 <span>{achivText}</span>
                             </div>
                             ))
