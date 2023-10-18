@@ -1,0 +1,59 @@
+.GrpchatSearchDiv
+{
+    .GrpfromClass
+    {
+        display: flex;
+        .searchBar
+        {
+            background-image: url("../assets/search.svg");
+            text-align: center;
+            background-repeat: no-repeat;
+            width: 100%;
+        }
+    }
+    
+    .SearchUserChat
+    {
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        width: 100%;
+        color: #c1cae7;
+        justify-content: center;
+        
+        &:hover
+        {
+            color: #333c54;
+            .userChat
+            {
+                background-color: #c1cae7;
+                color: #333c54;
+            }
+        }
+        
+        
+        
+        
+        .userChat
+        {
+            flex: 1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            width: 100vw;
+            img
+            {
+                height: 50px;
+                width: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                align-self: flex-start;
+            }
+
+            gap: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

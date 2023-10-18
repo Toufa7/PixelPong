@@ -16,7 +16,7 @@ const TwoFa = lazy(() => import('./Pages/2FA/twoFA'));
 const Home = lazy(() => import('./Pages/HomePage/Home'));
 const ProfilPage = lazy(() => import('./Pages/profilPage/profilPage'));
 const ChatPage = lazy(() => import('./Pages/chatPage/chatPage'));
-const ChatPageGroup = lazy(() => import('./Pages/chatPageGroups/chatPageGroup'));
+import GroupPage from './Pages/newGroupChat/GrpChatPage';
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
 const Setup = lazy(() => import('./Pages/GamePage/Setup_Game_Front'));
 const Error = lazy(() => import('./Pages/errorPage/errorPage'));
@@ -26,8 +26,8 @@ import Dogo from "./Pages/dogo.gif";
 export const OtherUser = () => {
 	return (
 		<>
-			<NavBar/>
 			<Stars/>
+			{/* <NavBar/> */}
 			<OtherProfilPage/>
 		</>
 	);
@@ -35,30 +35,30 @@ export const OtherUser = () => {
 export const NotificationComponents = () => {
 	return (
 		<>
-        <Stars/>
         <NavBar/>
+        <Stars/>
 		<Notification/>
 		</>
 	);
 }
 
-export const ChatComponents = () => {
-	return (
-		<>
-			<ChatPage/>
-		</>
-	);
-}
+// export const ChatComponents = () => {
+// 	return (
+// 		<>
+// 			<ChatPage/>
+// 		</>
+// 	);
+// }
 
 
-export const ChatGroupsComponents = () => {
-	return (
-		<>
-			<Stars/>
-			<ChatPageGroup/>
-		</>
-	);
-}
+// export const ChatGroupsComponents = () => {
+// 	return (
+// 		<>
+// 			{/* <Stars/> */}
+// 			<ChatPageGroup/>
+// 		</>
+// 	);
+// }
 
 const ProfilComponents = () => {
 	return (
@@ -184,7 +184,7 @@ const Routing = () => {
 						(<Route path="/*" 			element={<AlreadyInGame/>}/>)}
 					<Route path="/chat" 			element={<ChatPage/>}/>
 					<Route path="/notifications" 	element={<NotificationComponents/>}/>
-					<Route path="/groups" 			element={<ChatGroupsComponents/>}/>
+					<Route path="/groups" 			element={<GroupPage/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
