@@ -48,6 +48,10 @@ const CreatingGroup = () => {
 			,{ duration: 5000, position: 'top-right' });
 
 	}
+	else if (password.length < 8) {
+		toast.error("Password Too Short	", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
+	}
+
 	else if (!regEx.test(groupName)) {
 		if (!groupName)
 			toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
@@ -95,7 +99,7 @@ const CreateGroup = () => {
 				<label style={{marginTop: '10px'}}>Group Avatar</label>
 				<label style={{marginBottom: '10px'}} className="nes-btn">
 					<span>Click to upload</span>
-					<input formMethod="post" type="file" name="avatarUpload1" accept=".png, .jpg, .jpeg"/>
+					<input formMethod="post" type="file" name="avatarUpload1" accept="image/*"/>
 				</label>
 			<a onClick={CreatingGroup} className='nes-btn' href="#">Create</a>
 			</div>

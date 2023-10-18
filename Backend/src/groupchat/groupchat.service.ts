@@ -13,8 +13,25 @@ export class GroupchatService {
       ) {}
     
 
+    
 
+    //get number user of a groupchat
+    async numberuser(id: string): Promise<any> {
+        const data = await this.prisma.groupchat.findUnique({
+            where: {
+                id: id,
+            },
+            select: {
+                usersgb: true,
+            },
+        });
+        return data.usersgb.length;
+    }
 
+    //get a all groupchat
+    async findAllGp(): Promise<any> {
+        return await this.prisma.groupchat.findMany();
+    }
       
     //get all groupchat of a user
     async findAll(iduser: string) {
@@ -123,8 +140,11 @@ export class GroupchatService {
 
     //create a groupchat
     async create(createGroupchatDto: any, iduser : string) {
-        const saltOrRounds = 10;
-        const hash = await bcrypt.hash(createGroupchatDto.password, saltOrRounds);
+        if(createGroupchatDto.password)
+        {
+            const saltOrRounds = 10;
+            createGroupchatDto.password = await bcrypt.hash(createGroupchatDto.password, saltOrRounds);
+        }
         return await this.prisma.groupchat.create({
             data:{
                 namegb : createGroupchatDto.namegb,
@@ -132,7 +152,7 @@ export class GroupchatService {
                 admins : {connect : [{id : iduser} ]},
                 superadmin : {connect : {id : iduser} },
                 grouptype : createGroupchatDto.grouptype,
-                password : hash,
+                password : createGroupchatDto.password,
             },
         });
     }
@@ -272,13 +292,14 @@ export class GroupchatService {
     ////// not working now ///////
     //add a user to a groupchat public
 
-    async adduser(id: string, iduser : string, iduserconnected : string) {
+    async adduser(id: string, iduserconnected : string) {
+            console.log("id::" , iduserconnected)
             return await this.prisma.groupchat.update({
                 where: {
                     id: id,
                 },
                 data: {
-                    usersgb : {connect : {id : iduser}} ,
+                    usersgb : {connect : {id : iduserconnected}} ,
                 },
             });
     }

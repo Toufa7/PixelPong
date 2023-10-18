@@ -28,6 +28,12 @@ import mail from './assets/mail.svg';
 import caution from './assets/caution.svg';
 import folder from './assets/folder.svg';
 import { Link } from "react-router-dom";
+
+import publicGroup from './assets/public.svg'
+import protectedGroup from './assets/protected.svg'
+import privateGroup from './assets/private.svg'
+import NavBar from "../addons/NavBar";
+
 /*************************************************/
 
 const GetUserData = () => {
@@ -97,43 +103,82 @@ const TopContainer = () => {
 	];
 
 	const [friends, setFriends] = useState([]);
+	const [users, setUsers] = useState([]);
 	const [theOne, setTheOne] = useState([]);
-	const [isFound, setFound] = useState(false);
-	const [friendGroup, setFriendGroup] = useState(false);
+	const [privacy, setPrivacy] = useState();
+	const [isFound, setIsFound] = useState(false);
+	const [friendGroup, setFriendGroup] = useState("");
+	const [avatar, setAvatar] = useState("");
 	const firstRef = useRef(null);
 	const [visibility, setVisibility] = useState(true);
+
   
-	const handleSubmit = (e: any) => {
+	const searchInGroups = async (query : string) => {
+		try {
+			const response = await axios.get("http://localhost:3000/groupchat/all", {withCredentials: true});
+			const groups = response.data;
+			const foundGroup = groups.find(group => group.namegb === query);
+			if (foundGroup) {
+				console.log("Group Found -> ", foundGroup);
+				setPrivacy(foundGroup.grouptype)
+				setTheOne(foundGroup);
+				setFriendGroup("group");
+				setUsers([]);
+				const usersResponse = await axios.get(`http://localhost:3000/groupchat/${foundGroup.id}/numberuser`,{ withCredentials: true });
+				setAvatar(`http://localhost:3000/groupchat/getimage/${foundGroup.id}`);
+				setUsers(usersResponse.data);
+				setIsFound(true);
+				setVisibility(false);
+			}
+			else {
+				setIsFound(false);
+				setVisibility(false);
+		  }
+		} catch (error) {
+		  console.log("Error searching in groups:", error);
+		}
+	  };
+	
+	  const searchInFriends = async (query : string) => {
+		try {
+			const response = await axios.get("http://localhost:3000/users/Friends/", {withCredentials: true});
+			const friends = response.data;
+			const foundFriend = friends.find(friend => friend.username === query);
+			if (foundFriend) {
+			console.log("Friend Found");
+				setTheOne(foundFriend);
+				setFriendGroup("friend");
+				setIsFound(true);
+				setVisibility(false);
+			}
+			else {
+				setIsFound(false);
+				setVisibility(false);
+				}
+			}
+		catch (error) {
+			console.log("Error searching in friends:", error);
+		}
+		};
+
+	  const handleSubmit = (e) => {
 		e.preventDefault();
-		const myinput = firstRef.current.value;
-		console.log(myinput);
+		const searchQuery = firstRef.current.value;
+		console.log("Searching for --> ", searchQuery);
+	
+		console.log("Looking in Groups");
+		searchInGroups(searchQuery);
+	
+		console.log("Looking in Friends");
+		searchInFriends(searchQuery);
+	  };
+	
 
-		axios.get(`http://localhost:3000/users/Friends/`, { withCredentials: true })
-		.then((response) => {
-			setFriends(response.data);
-			let isFound = false;
-			for (let index = 0; index < response.data.length; index++) {
-			if (myinput === response.data[index].username) {
-				console.log("Found It");
-				isFound = true;
-				setTheOne(response.data[index]);
-				firstRef.current.value = '';
-				setFriendGroup(true);
-				break;
-			}
-			}
-			setFound(isFound);
-			setVisibility(false);
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-	};
+	  console.log("first --" ,privacy );
 
-  
 	const removeElement = () => {
 	  setVisibility(true);
-	  setFound(false);
+	  setIsFound(false);
 	};
 	return (
 		<>
@@ -144,20 +189,29 @@ const TopContainer = () => {
 			<div onClick={removeElement} className="nes-container" style={{height: 'fitContent', padding: '5px', background: "#EDF2FA"}}>
 				{isFound ? 
 				(
-					friendGroup ? (<Link to={`/profil/${theOne.username}`}>
+					(friendGroup == "friend") ?
+						(<Link to={`/profil/${theOne.username}`}>
 							<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
 								<div>
 									<img src={theOne.profileImage} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
 									<span style={{ marginLeft: '20px' }}>{theOne.username}</span>
+
 								</div>
 							</div>		
 						</Link>)
 					:
 					(<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}} onClick={() => document.getElementById('joinGroup').showModal()}>
-						<div>
-							<img src={theOne.profileImage} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-							<span style={{ marginLeft: '20px' }}>{theOne.username}</span>
-						</div>
+							<img src={avatar} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+							<span style={{ marginLeft: '20px' }}>{theOne.namegb}</span>
+							{
+										privacy == "PUBLIC" ? (
+											<img src={publicGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Public Group" />
+										) : privacy == "PRIVATE" ? (
+											<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Private Group" />
+										) : (
+											<img src={protectedGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Protected Group" />
+										)
+									}
 					</div>)
 				) :
 				('0 results matched')}
@@ -166,9 +220,29 @@ const TopContainer = () => {
 		</form>
 			<dialog style={{height: '300px', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
 				<h2 className="groupName">{theOne.username}</h2>
-				<img style={{borderRadius: '50%',width: '20%',height: '50%', marginBottom: '20px'}} className="groupAvatar" src={theOne.profileImage} />
-				<p className="group-members">Total Members: 245</p>
-				<button className="nes-btn">Join Group</button>
+				<img style={{borderRadius: '50%',width: '20%',height: '100px', marginBottom: '20px'}} className="groupAvatar" src={avatar} />
+				<p className="group-members">Total Members: {users}</p>
+				{
+					privacy == "PUBLIC" ? (
+						<button onClick={() => {
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, { withCredentials: true })
+							.then((res) => {
+								console.log("Reseoinse Join -> ", res.data);
+							})
+							.catch(() => {})
+						}} className="nes-btn" >Join Group</button>
+					) : privacy == "PRIVATE" ? (
+						<button onClick={() => {
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, { withCredentials: true })
+							.then((res) => {
+								console.log("Reseoinse Join -> ", res.data);
+							})
+							.catch(() => {})
+						}} className="nes-btn" >Join Group & Wait</button>
+						) : (
+						<><input style={{ background: '#E9E9ED' }} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" /><button className="nes-btn">Join Group</button></>
+						)
+				}
 			</dialog>
 		</div>
 
@@ -443,7 +517,7 @@ function Notification () {
 export default function Home() {
 	Notification();	
 	return (
-		<div style={{ height: '100vh' }}>
+		<div style={{ height: '100vh'}}>
 			<Toaster/>
 				<TopContainer/>
 				<div className="top-containers">

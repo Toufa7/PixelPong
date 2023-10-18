@@ -1,6 +1,7 @@
 body {
     background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #333C54 ;
     font-family: 'Press Start 2P', cursive;
+    
 }
 
 .search {
@@ -22,6 +23,7 @@ body {
     justify-content: center;
     padding-bottom: 20px;
     text-align: center;
+
     
     
     .topLoginBox {
@@ -89,7 +91,6 @@ body {
     justify-content: center;
     padding-bottom: 20px;
     column-gap: 85px;
-    margin: 10px;
     
 
     .loginBox {
@@ -134,7 +135,6 @@ body {
     flex-flow: row wrap;
     justify-content: center;
     column-gap: 85px;
-    margin: 10px;
 
 
     .loginBox {
@@ -214,7 +214,7 @@ body {
         height: calc(100%/3) !important;
         display: flex;
         align-items: center;
-        margin-bottom: 5px;
+        // margin-bottom: 5px;
 
         .position {
             margin-left: 10px;
@@ -236,6 +236,7 @@ body {
     height: calc(100%/3);
     opacity: 0.8;
     flex-direction: row;
+
         .match1 {
             height: 100%;
             display: flex;
