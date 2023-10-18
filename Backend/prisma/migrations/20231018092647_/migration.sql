@@ -84,6 +84,16 @@ CREATE TABLE "Friendrequest" (
 );
 
 -- CreateTable
+CREATE TABLE "Requestjoingroup" (
+    "id" TEXT NOT NULL,
+    "senderId" TEXT NOT NULL,
+    "receiverId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Requestjoingroup_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Stats" (
     "id" SERIAL NOT NULL,
     "level" INTEGER NOT NULL DEFAULT 0,
@@ -167,7 +177,13 @@ CREATE UNIQUE INDEX "Dmschat_id_key" ON "Dmschat"("id");
 CREATE UNIQUE INDEX "Groupchat_id_key" ON "Groupchat"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Groupchat_namegb_key" ON "Groupchat"("namegb");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Messagegb_id_key" ON "Messagegb"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Requestjoingroup_id_key" ON "Requestjoingroup"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Stats_id_key" ON "Stats"("id");
@@ -234,6 +250,12 @@ ALTER TABLE "Friendrequest" ADD CONSTRAINT "Friendrequest_senderId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "Friendrequest" ADD CONSTRAINT "Friendrequest_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Requestjoingroup" ADD CONSTRAINT "Requestjoingroup_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Requestjoingroup" ADD CONSTRAINT "Requestjoingroup_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Stats" ADD CONSTRAINT "Stats_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

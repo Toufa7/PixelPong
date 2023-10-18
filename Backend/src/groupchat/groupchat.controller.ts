@@ -9,11 +9,12 @@ import { diskStorage } from 'multer';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { promises as fsPromises } from 'fs';
+import { ChatGateway } from 'src/chat/chat.gateway'; 
 
 @UseGuards(JwtGuard)
 @Controller('groupchat')
 export class GroupchatController {
-    constructor(private readonly GroupchatService : GroupchatService ) {}
+    constructor(private readonly GroupchatService : GroupchatService , private readonly socket : ChatGateway ) {}
 
     //get number user of a groupchat
     @Get(":id/numberuser")
@@ -151,20 +152,25 @@ export class GroupchatController {
 
     ///////// not working now  /////////
     //add a user to a groupchat public
-    @Patch(":id/:iduser/userpublic")
-    adduser(@Param('id') id: string, @Param('iduser') iduser : string , @Req() req : any): any {
-        return this.GroupchatService.adduser(id, iduser, req.user.id);
+    @Patch(':id/userpublic')
+    adduser(@Param('id') id: string , @Req() req : any): any {
+        return this.GroupchatService.adduser(id, req.user.id);
     }
 
     //add a user to a groupchat protected
-    @Patch(":id/:iduser/userprotected")
-    adduserprotected(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any): any {
-        return this.GroupchatService.adduserprotected(id, iduser, req.user.id);
+    @Patch(":id/userprotected")
+    adduserprotected(@Param('id') id: string,  @Req() req : any, @Body() pass : string): any {
+        return this.GroupchatService.adduserprotected(id ,pass, req.user.id);
     }
 
     //add an user to a groupchat private
-    // ...
-    
+
+
+    //send request to join a groupchat
+    @Post(":id/request")
+    sendrequest(@Param('id') id: string, @Req() req : any): any {
+        this.socket.sendrequest(id, req.user.id);
+    }
     
     //////////////////////////////////////
 
