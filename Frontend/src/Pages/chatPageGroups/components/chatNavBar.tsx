@@ -1,4 +1,3 @@
-import './chatNavBar.scss'
 /******************* Packages  *******************/
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -19,9 +18,9 @@ const ChatNavBar = () => {
 	}
   );
   return (
-	<div className="chatNavBarDivGroup">
+	<div className="chatNavBarDivGroup" style={{background:"#FFFFFF",flex: "5",display: "flex",flexDirection: "column" ,overflow: "hidden",zIndex: "0",}}>
 		<ChatSearch/>
-		<div className="chatsContainerGroup">
+		<div className="chatsContainerGroup" style={{flex: "10",display: "flex",flexDirection: "column",borderRadius: "5px",border: "3px solid", zIndex: "0"}}>
 			<div className="choice" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 				<button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
 				<button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
@@ -36,7 +35,6 @@ const ChatNavBar = () => {
 				:
 				""
 			}
-			{/* Listing the groups your in or own */}
 			<GroupsList />
 		</div>
 		<div className="chatLowerRibbonGroup"></div>
@@ -70,7 +68,7 @@ const GroupsList = () => {
 	return (
 		<div className="chatGroupesDiv">
 		<i>GROUPES</i>
-		<div className="userChatGroupes">
+		<div className="userChatGroupes" style={{}}>
 		{
 			groupsList.map((group : any) => (
 				<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} className="userChatGroup" key={name}>

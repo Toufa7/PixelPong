@@ -127,22 +127,18 @@ const ListFriends = () => {
 				{
 					admins.map((name, index) => {
 						return (
-						<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly',}}>
+						<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}}>
 							<div>
-
-							<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
+								<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
 							</div>
 							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
-
 							<div className="nes-select" style={{ marginRight: '10px', width: '80px'}}>
-							
-								<select style={{ marginLeft: '10px' }} required id="muteSelect"  onChange={muteUser}>	
+								<select style={{ marginLeft: '10px'}} required id="muteSelect" onChange={muteUser}>	
 									<option disabled selected hidden>Mute</option>
 									<option value="0">5min</option>
 									<option value="1">15min</option>
 								</select>
 							</div>
-
 							<button  className="nes-btn is-warning" style={{ marginLeft: '10px', width: '100px'  }} onClick={() => kickMember(true, index)}>Kick</button>
 							<button className="nes-btn is-error" style={{ marginLeft: '10px', width: '80px' }}>Ban</button>
 						</div>
@@ -188,17 +184,17 @@ const ManageGroup = () => {
 	const [update , setUpdate] = useState("");
 	const oldName = "CurrentName";
 	return (
-	<div className="chatDmDiv">
-		<div className="groupSettings">
-		<div className="nes-field">
+	<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff" ,borderRadius: "10px"}}>
+		<div className="groupSettings" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
+		<div className="nes-field" style={{marginTop: '20px', width: '300px'}} >
 		<input  style={{background: '#E9E9ED'}} type="text" id="name_field" maxLength={18} placeholder={oldName} onChange={(e) => setUpdate(e.target.value)} className="nes-input"/>
 		</div>
-		<div style={{marginTop: '20px'}} className="nes-select">
+		<div style={{ marginLeft: '10px', width:' 300px'}} className="nes-select">
 			<select required id="default_select"  onChange={(e) => {
 				setProtected(e.target.value == "2")
 				setUpdate(e.target.value)
 			}}>
-				<option value="" disabled selected hidden>Change Privacy</option>
+				<option value=""  disabled selected hidden>Change Privacy</option>
 				<option value="0" title={privacy[0]}>Public</option>
 				<option value="1" title={privacy[1]}>Private</option>
 				<option value="2" title={privacy[2]}>Protected</option>
@@ -206,16 +202,16 @@ const ManageGroup = () => {
 		</div>
 
         {isProtected && (
-          <div style={{marginTop: '20px'}} className="nes-field">
+          <div style={{marginTop: '20px', width: '300px'}} className="nes-field">
             <input  style={{background: '#E9E9ED'}} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" />
           </div>
         )}
         <ListFriends/>
-		<label onChange={(e) => setUpdate(e)} style={{marginTop: '20px'}}  className="nes-btn">
+		<label onChange={(e) => setUpdate(e)} style={{marginTop: '20px', width: '300px'}}  className="nes-btn">
 			<span>Change Avatar</span>
 			<input type="file"/>
 		</label>
-        <button style={{marginTop: '20px'}} disabled={update ? false : true} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`} onClick={UpdateGroup}>Update</button>
+        <button style={{marginTop: '20px', width: '300px'}} disabled={update ? false : true} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`} onClick={UpdateGroup}>Update</button>
 		<Toaster/>
 		</div>
 	</div>

@@ -75,14 +75,14 @@ const CreateGroup = () => {
 	const [isProtected , setProtected] = useState(false);
 	const isCreateDisabled = groupName === "";
 	return (
-		<div className="chatDmDiv">
+		<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff" ,borderRadius: "10px"}}>
 			<Toaster/>
-			<div className="groupSettings">
-				<div  className="nes-field">
+			<div className="groupSettings" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
+				<div className="nes-field" style={{marginTop: '20px', width: '300px'}} >
 					<input style={{background: '#E9E9ED'}}	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
 				</div>
-				<label style={{marginTop: '10px'}}>Select Privacy</label>
-				<div className="nes-select">
+				<label>Select Privacy</label>
+				<div className="nes-select" style={{ marginLeft: '10px', width:' 300px'}}>
 					<select  required id="default_privacy" onChange={(e) => setProtected(e.target.value == "2")} >
 						<option value="" disabled selected hidden>Choose Privacy</option>
 						<option value="0" title={privacy[0]}>Public</option>
