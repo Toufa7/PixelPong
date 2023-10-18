@@ -107,3 +107,6 @@ https://stackoverflow.com/questions/52051857/nest-schedule-npm-not-working
 
 https://codesandbox.io/s/usestate-with-an-object-multiple-values-sorta-d52zt
 
+# useMap React Hook
+
+https://usehooks.com/usemap#:~:text=The%20useMap%20hook%20provides%20a,whenever%20these%20operations%20are%20performed.

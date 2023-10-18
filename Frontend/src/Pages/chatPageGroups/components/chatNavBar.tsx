@@ -25,23 +25,13 @@ const ChatNavBar = () => {
 				<button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
 				<button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
 			</div>
-			{	data.label ?
-				(
-					data.createOrmanage ?
-					(<ManageGroup/>)
-					:
-					(<CreateGroup/>)
-				)
-				:
-				""
-			}
+			{ data.label ? (data.createOrmanage ? (<ManageGroup/>) : (<CreateGroup/>)) : "" }
 			<GroupsList />
 		</div>
-		<div className="chatLowerRibbonGroup"></div>
+		<div className="GrpchatLowerRibbonGroup"></div>
 	</div>
   )
 }
-
 
 const GroupsList = () => {
 	const [avatarGroup, setGroupAvatar] = useState();
@@ -83,7 +73,6 @@ const GroupsList = () => {
 						<img src={protectedGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Protected Group" />
 					)
 				}
-
 				</div>
 			))
 		}

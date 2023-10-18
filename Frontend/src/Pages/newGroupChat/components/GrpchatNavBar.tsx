@@ -1,3 +1,4 @@
+import React from 'react';
 import { useContext, useEffect, useState } from 'react'
 import { chatSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
@@ -5,17 +6,14 @@ import axios from 'axios'
 import ChatUser from './GrpChatUser'
 import DmChatUser from './GrpdmChatUser'
 import ChatSearch from './GrpchatSearch'
-import React from 'react';
 import CreateGroup from './createGroup'
-import GrpChatNavBar from './GrpNavBar';
 import ManageGroup from './mangeGroup'
+import GrpChatNavBar from './GrpNavBar';
 interface chatUser {
     userName: string;
     pic: string;
     id: string;
 }
-
-
 
 const GrpchatNavBar = () => {
     
@@ -40,21 +38,21 @@ const GrpchatNavBar = () => {
 			            <div className="choice" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 				            <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
 				            <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
-			            </div> {	data.label ?
+			                </div> {data.label ?
                                 (
-                                        data.createOrmanage ?
-                                        (<ManageGroup/>)
-                                        :
-                                        (<CreateGroup/>)
+                                    data.createOrmanage ?
+                                    (<ManageGroup/>)
+                                    :
+                                    (<CreateGroup/>)
                                 )
 				                :
 				                ""
 			                    }
-		            </div>
-                <Dms cu={getCurentUserDms}/>
-	            </div>
-                <div className="GrpchatLowerRibbon"></div>
-            </div>
+		                    </div>
+                            <Dms cu={getCurentUserDms}/>
+	                    </div>
+                    <div className="GrpchatLowerRibbon"></div>
+                </div>
             <div className="GrpuserProfileAndMessages"><ChatUser pcurrentUserId={currentUserId}/></div>
         </div>
   )
@@ -70,8 +68,6 @@ const Dms = (props:any) => {
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
             .then((response:any) => {
-				console.log("Groups List " ,response.data);
-                console.log("Rspone oiez -> ",  response.data.length);
                 for (let index = 0; index < response.data.length; index++) {
                     GroupsMap.set(response.data[index].id, response.data[index])
                 }

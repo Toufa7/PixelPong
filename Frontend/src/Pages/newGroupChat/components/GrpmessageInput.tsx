@@ -33,7 +33,7 @@ const Conversation = (props: any) =>
         mesaageEndRef.current?.scrollIntoView();
     }, [props.MessagesArr]);
     
-    //Side 0 (Right) for sender Side 1 (Left) for receiver
+    //Side 0 (Right) for sender Side 1 (Left) for groupInfo
     return (
         <div className="conversationDiv">
             {
@@ -65,14 +65,14 @@ const messageInput = (props: any) => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
+            .get(`http://localhost:3000/chat/getOldMessages/${props.groupInfo.id}`, { withCredentials: true })
         
             .then((res) => {
                 fillMap(res.data);
             })
             .catch(Error)
                 console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
-    }, [props.Receiver.id])
+    }, [props.groupInfo.id])
     
     
     const fillMap = (axiosResponse: any) => {
@@ -98,8 +98,8 @@ const messageInput = (props: any) => {
             else
             {
                 molLmessageId = axiosResponse[i].receiverId;
-                molLmessage = props.Receiver.username;
-                molMsgPic = props.Receiver.profileImage;
+                molLmessage = props.groupInfo.username;
+                molMsgPic = props.groupInfo.profileImage;
                 molMsgSide = 1;
             }
             
@@ -143,7 +143,7 @@ const messageInput = (props: any) => {
         return () => {
             conversationsSocket.off('msgToClient');
         }
-    }, [props.Receiver.username])
+    }, [props.groupInfo.username])
 
     //Handling newly received message 
     const receiveMessage = (newMessage: any) => {
@@ -159,12 +159,12 @@ const messageInput = (props: any) => {
         }
 
         //Don't forget to replace username with id
-        // if (props.Receiver.username == tmpMsgObj.username)
+        // if (props.groupInfo.username == tmpMsgObj.username)
         // {
         //     map.set(makeid(37), tmpMsgObj);
         // }
 
-        if (props.Receiver.id == tmpMsgObj.senderid)
+        if (props.groupInfo.id == tmpMsgObj.senderid)
         {
             map.set(makeid(37), tmpMsgObj);
         }
@@ -190,7 +190,7 @@ const messageInput = (props: any) => {
         if (inputMessage != '')
         {
             const tmpMsgObj: chatAgent = {
-                id: props.Receiver.id,
+                id: props.groupInfo.id,
                 senderid: props.Sender.id,
                 username: props.Sender.username,
                 pic: props.Sender.image,
