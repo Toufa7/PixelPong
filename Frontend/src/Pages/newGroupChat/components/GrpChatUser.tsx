@@ -81,7 +81,7 @@ const MessagingBody = (props: any) => {
         <div className="GrpMessagingBodyDiv">
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
-            props.groupInfo.profileImage   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
+            props.groupInfo.id   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
                                             : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="user-photo" />
         }
     </div>

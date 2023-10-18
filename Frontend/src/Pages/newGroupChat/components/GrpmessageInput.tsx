@@ -63,18 +63,32 @@ const messageInput = (props: any) => {
     //Creating the messages map to be rendred
     let map = useMap();
 
+    //Our group users
     let groupUsers = useMap();
 
+    //get group users and fill them in the map
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/chat/getOldMessages/${props.groupInfo.id}`, { withCredentials: true })
-        
-            .then((res) => {
-                fillMap(res.data);
+            .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/users`, { withCredentials: true })
+            .then((res: any) => {
+                for (let i: number = 0; i < res.data.usersgb.length; i++) {
+                    groupUsers.set(res.data.usersgb[i].id, res.data.usersgb[i]);
+                }
             })
             .catch(Error)
                 console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
     }, [props.groupInfo.id])
+
+    // useEffect(() => {
+    //     axios
+    //         .get(`http://localhost:3000/chat/getOldMessages/${props.groupInfo.id}`, { withCredentials: true })
+        
+    //         .then((res) => {
+    //             fillMap(res.data);
+    //         })
+    //         .catch(Error)
+    //             console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+    // }, [props.groupInfo.id])
     
     
     const fillMap = (axiosResponse: any) => {
