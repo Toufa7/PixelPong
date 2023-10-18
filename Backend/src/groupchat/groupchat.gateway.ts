@@ -25,7 +25,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   @WebSocketServer() server : Server;
   private logger : Logger = new  Logger('gorupChatGateway');
 
-  ////////////////////////////////// -----disconnect-- ////////////////////////////////
+  ////////////////////////////////// -----dis-- ////////////////////////////////
   async handleDisconnect(client: Socket, ...args: any[]) {
     this.logger.log(`Client disconnected: ${client.id}`);
     const user = await this.getUser(client);
@@ -34,7 +34,6 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       map.delete( user.id);
     }
   }
-  ////////////////////////////////// -----connect-- ////////////////////////////////
   async handleConnection(client: any, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
     const user = await this.getUser(client);
@@ -43,7 +42,6 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       map.set(user.id,client.id);
     }
   }
-  ////////////////////////////////// -----init-- ////////////////////////////////
   afterInit(server: any) {
     this.logger.log("initialized");
   }
@@ -132,35 +130,47 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   }
 
 
-  sendrequest(id : string , idsender : string){
+  async sendrequest(id : string , idsender : string){
     
     
     //get superadmin of a groupchat
-    const superadmin = this.prisma.groupchat.findUnique({
+    const superadmin = await this.prisma.groupchat.findUnique({
       where: { id: id },
       select: {
         superadmin: true,
       },
     });
+    //check if notification already exist
+    const notification = await this.prisma.requestjoingroup.findMany({
+      where: {
+        AND: [
+          { senderId : idsender },
+          { receiverId : superadmin.superadmin.id }
+        ],
+      },
+    });
+    if(notification.length != 0){
+      return;
+    }
     //create notification in database
-    this.prisma.requestjoingroup.create({
+    await this.prisma.requestjoingroup.create({
       data: {
         sender: {connect: {id: idsender}},
-        receiver: {connect: {id: (superadmin.then((superadmin) => superadmin.superadmin.id)).toString()}},
+        receiver: {connect: {id: superadmin.superadmin.id}},
       },
     });
 
     //get user 
-    const user = this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: idsender },
     });
-    this.server.to(map.get(superadmin.then((superadmin) => superadmin.superadmin.id))).emit('notification', {
+    this.server.to(map.get(superadmin.superadmin.id)).emit('notification', {
       userId: idsender,
       type: 'join groupchat',
-      photo: user.then((user) => user.profileImage),
-      message: `${user.then((user) => user.username)} sent you a friend request`,
-      from: superadmin.then((superadmin) => superadmin.superadmin.id),
-      username: user.then((user) => user.username),
+      photo: user.profileImage,
+      message: `${user.username} sent you a friend request`,
+      from: superadmin.superadmin.id,
+      username: user.username,
     });
   }
 }

@@ -26,8 +26,8 @@ import Dogo from "./Pages/dogo.gif";
 export const OtherUser = () => {
 	return (
 		<>
+			<NavBar/>
 			<Stars/>
-			{/* <NavBar/> */}
 			<OtherProfilPage/>
 		</>
 	);
@@ -35,8 +35,8 @@ export const OtherUser = () => {
 export const NotificationComponents = () => {
 	return (
 		<>
-        <NavBar/>
         <Stars/>
+        <NavBar/>
 		<Notification/>
 		</>
 	);

@@ -64,9 +64,6 @@ const FriendRequest = ({ myData }) => {
 
 function Notifications() {
     const [myData, setmyData] = useState(null);
-
-
-
     const [friendRequests, setFriendRequests] = useState([]);
     useEffect(() => {
       socket.on("notification", (data) => {
@@ -76,9 +73,6 @@ function Notifications() {
       });
     }, []);
   
-
-
-
     console.log("My Data", myData);
   
     return (

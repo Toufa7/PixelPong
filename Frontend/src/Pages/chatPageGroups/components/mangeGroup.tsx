@@ -57,6 +57,12 @@ const UpdateGroup = () => {
 
 
 const ListFriends = () => {
+
+	let choice : number		= document.getElementById('muteSelect')?.value
+	const [muteTime , muteUser] = useState("");
+	
+
+
 	const [admins, isAdmin] = useState([
 		"Delaney Harris","Kamari Mahoney","Mohamed Delacruz","Marlene Knapp","Darion Horne"
 	]);
@@ -102,12 +108,12 @@ const ListFriends = () => {
 	} 
 	
 	const openMembersDialog = () => {
-		document.getElementById('dialog-default')?.showModal();
+		document.getElementById('dialog_members')?.showModal();
 	} 
 	return (
 		<section>
 		<button style={{marginTop: '20px'}} type="button" className="nes-btn" onClick={openMembersDialog}>Manage Members</button>
-		<dialog style={{height: "600px", width: "600px", background: "#e4f0ff"}} className="nes-dialog" id="dialog-default">
+		<dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="dialog_members">
 			<form method="dialog">
 				<menu className="dialog-menu">
 				<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -116,17 +122,29 @@ const ListFriends = () => {
 						<img style={{ height: '30px',   position: "relative", marginLeft: "5px" , top: '-3px',width: '30px'}}src={crown}></img>
 					</label>
 				</div>
-				<div style={{ height: 'fit-content', overflow: 'auto'}}>
+				<div style={{ height: 'fit-content'}}>
 				<div style={{borderBottom: "1px solid" }}></div>
 				{
 					admins.map((name, index) => {
 						return (
-						<div style={{display: 'flex', alignItems: 'center'}}>
+						<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly',}}>
+							<div>
+
 							<img src={avatar} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
+							</div>
 							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{name}</span>
-							<button style={{ marginLeft: '10px' }}>Mute</button>
-							<button style={{ marginLeft: '10px' }}>Ban</button>
-							<button style={{ marginLeft: '10px' }} onClick={() => kickMember(true, index)}>Kick</button>
+
+							<div className="nes-select" style={{ marginRight: '10px', width: '80px'}}>
+							
+								<select style={{ marginLeft: '10px' }} required id="muteSelect"  onChange={muteUser}>	
+									<option disabled selected hidden>Mute</option>
+									<option value="0">5min</option>
+									<option value="1">15min</option>
+								</select>
+							</div>
+
+							<button  className="nes-btn is-warning" style={{ marginLeft: '10px', width: '100px'  }} onClick={() => kickMember(true, index)}>Kick</button>
+							<button className="nes-btn is-error" style={{ marginLeft: '10px', width: '80px' }}>Ban</button>
 						</div>
 						)
 					;})

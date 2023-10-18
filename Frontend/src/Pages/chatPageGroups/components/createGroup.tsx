@@ -15,7 +15,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 const CreatingGroup = () => {
 	const groupName : string	= document.getElementById('name_field')?.value;
-	const choice : number		= document.getElementById("default_select")?.value;
+	const choice : number		= document.getElementById("default_privacy")?.value;
 	const password : string		= document.getElementById("password_field")?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload1"]').files[0];
 	const regEx = /^[A-Za-z0-9_ ]{5,15}$/;
@@ -48,6 +48,10 @@ const CreatingGroup = () => {
 			,{ duration: 5000, position: 'top-right' });
 
 	}
+	else if (password.length < 8) {
+		toast.error("Password Too Short	", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
+	}
+
 	else if (!regEx.test(groupName)) {
 		if (!groupName)
 			toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
@@ -79,7 +83,7 @@ const CreateGroup = () => {
 				</div>
 				<label style={{marginTop: '10px'}}>Select Privacy</label>
 				<div className="nes-select">
-					<select  required id="default_select" onChange={(e) => setProtected(e.target.value == "2")} >
+					<select  required id="default_privacy" onChange={(e) => setProtected(e.target.value == "2")} >
 						<option value="" disabled selected hidden>Choose Privacy</option>
 						<option value="0" title={privacy[0]}>Public</option>
 						<option value="1" title={privacy[1]}>Private</option>
@@ -95,7 +99,7 @@ const CreateGroup = () => {
 				<label style={{marginTop: '10px'}}>Group Avatar</label>
 				<label style={{marginBottom: '10px'}} className="nes-btn">
 					<span>Click to upload</span>
-					<input formMethod="post" type="file" name="avatarUpload1" accept=".png, .jpg, .jpeg"/>
+					<input formMethod="post" type="file" name="avatarUpload1" accept="image/*"/>
 				</label>
 			<a onClick={CreatingGroup} className='nes-btn' href="#">Create</a>
 			</div>
