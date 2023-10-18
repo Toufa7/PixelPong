@@ -1,12 +1,12 @@
-import '../GrpchatPage.scss'
+import React from 'react';
 import { useRef, useEffect, useContext } from 'react'
 import { chatSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg';
 import axios from 'axios';
+import '../GrpchatPage.scss'
 import MessageComponent from './GrpmessageComponenet'
 import MessageRightComponenet from './GrpmessageRightComponenet ';
-import React from 'react';
 
 
 // Class chatAgent responsible for defining the properties of each person onthe conversation
@@ -63,6 +63,8 @@ const messageInput = (props: any) => {
     //Creating the messages map to be rendred
     let map = useMap();
 
+    let groupUsers = useMap();
+
     useEffect(() => {
         axios
             .get(`http://localhost:3000/chat/getOldMessages/${props.groupInfo.id}`, { withCredentials: true })
@@ -115,7 +117,6 @@ const messageInput = (props: any) => {
 
             map.set(axiosResponse[i].id, tmpMsgObj);
         }
-        
     };
     
     //function to generate message id in the map
