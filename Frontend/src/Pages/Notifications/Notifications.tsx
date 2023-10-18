@@ -1,5 +1,4 @@
 import "./Notifications.scss"
-import otoufah from '../otoufah.jpg';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {socket} from '../../Pages/socket-client'
@@ -63,11 +62,15 @@ const FriendRequest = ({ myData }) => {
 };
 
 function Notifications() {
+    // let map = useMap();
+
+
     const [myData, setmyData] = useState(null);
     const [friendRequests, setFriendRequests] = useState([]);
     useEffect(() => {
       socket.on("notification", (data) => {
         console.log("Received notification:", data);
+        // map.set(data.id, data);
         setFriendRequests((prevRequests) => [...prevRequests, data]);
         setmyData(data);
       });

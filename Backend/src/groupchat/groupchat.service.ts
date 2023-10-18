@@ -70,7 +70,7 @@ export class GroupchatService {
     }
 
     // get one groupchat
-    async findOne(id: string) {
+    async findOne(id : string) {
         return await this.prisma.groupchat.findUnique({
             where: {
                 id: id,

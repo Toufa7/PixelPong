@@ -1,26 +1,24 @@
+import './GrpChatNavBar.scss'
 /******************* Packages  *******************/
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 /******************* Includes  *******************/
-import avatarGroup from '../assets/saka.jpeg'
 import publicGroup from '../assets/public.svg'
 import protectedGroup from '../assets/protected.svg'
 import privateGroup from '../assets/private.svg'
-import ChatSearch from './chatSearch'
 import CreateGroup from './createGroup';
 import ManageGroup from './mangeGroup';
 
 
-const ChatNavBar = () => {
+const GrpChatNavBar = () => {
   const [data, setLabel] = useState({
 		label : false,
 		createOrmanage : false
 	}
   );
   return (
-	<div className="chatNavBarDivGroup" style={{background:"#FFFFFF",flex: "5",display: "flex",flexDirection: "column" ,overflow: "hidden",zIndex: "0",}}>
-		<ChatSearch/>
-		<div className="chatsContainerGroup" style={{flex: "10",display: "flex",flexDirection: "column",borderRadius: "5px",border: "3px solid", zIndex: "0"}}>
+	<div className="chatNavBarDivGroup"  style={{background: '#FFFFFF',flex:  '5',display: 'flex',flexDirection: 'column',overflow: 'hidden',zIndex: '0'}}>
+		<div className="chatsContainerGroup" style={{flex: '10', display: 'flex', flexDirection: 'column', borderRadius: '5px', border: '3px solid', zIndex: '0'}} >
 			<div className="choice" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 				<button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
 				<button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
@@ -35,8 +33,9 @@ const ChatNavBar = () => {
 				:
 				""
 			}
-			<GroupsList />
+			{/* Listing the groups your in or own */}
 		</div>
+			<GroupsList />
 		<div className="chatLowerRibbonGroup"></div>
 	</div>
   )
@@ -46,7 +45,7 @@ const ChatNavBar = () => {
 const GroupsList = () => {
 	const [avatarGroup, setGroupAvatar] = useState();
     const [groupsList, setGroupsList] = useState<string[]>([]);
-    useEffect(() => {
+    useEffect(() => {   
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
             .then((response) => {
 				console.log("Groups List " ,response.data);
@@ -66,12 +65,11 @@ const GroupsList = () => {
 
 
 	return (
-		<div className="chatGroupesDiv">
-		<i>GROUPES</i>
-		<div className="userChatGroupes" style={{}}>
+        <div className="chatDmDiv" style={{border:' 1px solid', background: 'rgb(229, 240, 255)',borderRadius: '10px'}}>
+		<div className="userChatGroupes"  style={{display: 'flex',alignItems: 'center',padding: '10px',gap: '15px',cursor: 'pointer',borderBottom: '2px solid'}} >
 		{
 			groupsList.map((group : any) => (
-				<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} className="userChatGroup" key={name}>
+				<div  className="userChatGroup" style={{display: 'flex',alignItems: 'center',padding: '10px',gap: '15px',cursor: 'pointer',borderBottom: '2px solid'}} key={name}>
 				<img src={`http://localhost:3000/groupchat/getimage/${group.id}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{group.namegb}</span>
 				{
@@ -92,4 +90,4 @@ const GroupsList = () => {
 	);
 }
 
-export default ChatNavBar
+export default GrpChatNavBar

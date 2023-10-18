@@ -1,6 +1,6 @@
 import {useState } from "react";
 import avatar from '../../otoufah.jpg';
-import crown from '../assets/crown.svg';
+import crown from '../assets/crown.svg'
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
