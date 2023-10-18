@@ -48,6 +48,8 @@ datasource db {
   superadmin Groupchat[] @relation("superadmin")
   mute usermute[] @relation("mute")
   block Groupchat[] @relation("block")
+  requestjoinsender Requestjoingroup[] @relation("requestjoinsender")
+  requestjoinrecever Requestjoingroup[] @relation("requestjoinrecever")
 }
 
 model Dmschat {
@@ -62,7 +64,7 @@ model Dmschat {
 
 model Groupchat{
     id        String      @id @default(uuid()) @unique
-    namegb     String
+    namegb     String   @unique
     usersgb     User[] @relation("GroupChat")
     admins   User[] @relation("adminsGroupChat")
     idsuperadmin String
@@ -110,6 +112,16 @@ model Friendrequest{
   status    Status     @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+model Requestjoingroup{
+  id        String    @id @default(uuid()) @unique
+  sender    User       @relation("requestjoinsender", fields: [senderId], references: [id])
+  senderId  String
+  receiver  User      @relation("requestjoinrecever", fields: [receiverId], references: [id])
+  receiverId  String
+  createdAt DateTime @default(now())
 }
 
 

@@ -181,6 +181,7 @@ const messageInput = (props: any) => {
 
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
+            console.log("msgToServer sent to server");
             conversationsSocket.emit('msgToServer', newMessage)
             // conversationsSocket.emit('getOldCnv')
         };

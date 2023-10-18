@@ -212,4 +212,36 @@ let map = new Map <any , any>();
       }
     }
 
+
+    sendrequest(id : string , idsender : string){
+      
+      
+      //get superadmin of a groupchat
+      const superadmin = this.prisma.groupchat.findUnique({
+        where: { id: id },
+        select: {
+          superadmin: true,
+        },
+      });
+      //create notification in database
+      this.prisma.requestjoingroup.create({
+        data: {
+          sender: {connect: {id: idsender}},
+          receiver: {connect: {id: (superadmin.then((superadmin) => superadmin.superadmin.id)).toString()}},
+        },
+      });
+
+      //get user 
+      const user = this.prisma.user.findUnique({
+        where: { id: idsender },
+      });
+      this.server.to(map.get(superadmin.then((superadmin) => superadmin.superadmin.id))).emit('notification', {
+        userId: idsender,
+        type: 'join groupchat',
+        photo: user.then((user) => user.profileImage),
+        message: `${user.then((user) => user.username)} sent you a friend request`,
+        from: superadmin.then((superadmin) => superadmin.superadmin.id),
+        username: user.then((user) => user.username),
+      });
+    }
 }

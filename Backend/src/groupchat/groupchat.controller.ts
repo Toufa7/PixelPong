@@ -13,7 +13,7 @@ import { promises as fsPromises } from 'fs';
 @UseGuards(JwtGuard)
 @Controller('groupchat')
 export class GroupchatController {
-    constructor(private readonly GroupchatService : GroupchatService ) {}
+    constructor(private readonly GroupchatService : GroupchatService) {}
 
     //get number user of a groupchat
     @Get(":id/numberuser")
@@ -151,21 +151,25 @@ export class GroupchatController {
 
     ///////// not working now  /////////
     //add a user to a groupchat public
-    @Patch(":id/userpublic")
+    @Patch(':id/userpublic')
     adduser(@Param('id') id: string , @Req() req : any): any {
-        console.log("here here")
         return this.GroupchatService.adduser(id, req.user.id);
     }
 
     //add a user to a groupchat protected
-    @Patch(":id/:iduser/userprotected")
-    adduserprotected(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any): any {
-        return this.GroupchatService.adduserprotected(id, iduser, req.user.id);
+    @Patch(":id/userprotected")
+    adduserprotected(@Param('id') id: string,  @Req() req : any, @Body() pass : string): any {
+        return this.GroupchatService.adduserprotected(id ,pass, req.user.id);
     }
 
     //add an user to a groupchat private
-    // ...
-    
+
+
+    //send request to join a groupchat
+    // @Post(":id/request")
+    // sendrequest(@Param('id') id: string, @Req() req : any): any {
+    //     this.socket.sendrequest(id, req.user.id);
+    // }
     
     //////////////////////////////////////
 
