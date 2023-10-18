@@ -13,7 +13,11 @@ export class PlayerDto{
     Health_points : number;
     special_power : number;
 
-    constructor(id : string , x : number , y : number ,width : number , height : number , Hp : number , room_id? : string , user_id? : string, username? : string){
+
+    Scaled_width : number;
+    Scaled_height : number;
+
+    constructor(id : string , x : number , y : number ,width : number , height : number,Scaled_width : number , Scaled_height : number , Hp : number , room_id? : string , user_id? : string, username? : string){
         this.id = id;
         this.x  = x;
         this.y  = y;
@@ -23,5 +27,7 @@ export class PlayerDto{
         this.user_id = user_id;
         this.username = username;
         this.Health_points = Hp;
+        this.Scaled_width = Scaled_width;
+        this.Scaled_height  = Scaled_height;
     }
 }

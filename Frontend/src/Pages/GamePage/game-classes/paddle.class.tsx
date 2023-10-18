@@ -2,7 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { convertTypeAcquisitionFromJson, isConstructorDeclaration } from 'typescript';
-import { height, socket_gm } from '../game_flow_sketch';
+import {socket_gm } from '../game_flow_sketch';
 // import { socket } from '../socket_setup/client-connect';
 // import { socket } from '../socket_setup/client-connect';
 
@@ -31,6 +31,7 @@ export class Paddle {
     // public palyer_system : player_System;
   
     public pos : p5Types.Vector;
+  
     
     
       public constructor(c_x : number , c_y : number , pd_w : number , pd_h : number , p5_ob : p5Types, color : string/*health_sys : player_System*/){
@@ -52,7 +53,7 @@ export class Paddle {
     //         return (nb);
     //   }
   
-      public draw_paddle(color : string){
+      public draw_paddle(color : string,scaled_width : number , scaled_height : number){
 
         // let ac_y = this.paddle_obj.constrain(cr_y,0,screen_height - this.paddle_height);
         // this.corrd_x = cr_x;
@@ -61,8 +62,8 @@ export class Paddle {
         if (this.pos.y < 0){
           this.pos.y = 0;
         }
-        if (this.pos.y > height - this.paddle_height){
-            this.pos.y = height - this.paddle_height;
+        if (this.pos.y > scaled_height - this.paddle_height){
+            this.pos.y = scaled_height - this.paddle_height;
         }
 
         //p- rect parameters
@@ -75,16 +76,16 @@ export class Paddle {
         // this.paddle_obj.image(paddle_sprite,this.pos.x,this.pos.y,this.paddle_width,this.paddle_height);
       }
   
-      public get_points() : {left : number , right : number , top : number , bottom  : number} {
-        return ({
-          left : this.pos.x - this.paddle_width / 2,
-          right : this.pos.x + this.paddle_width / 2,
-          top : this.pos.y - this.paddle_height / 2,
-          bottom : this.pos.y + this.paddle_height / 2
-      });
-    }
+    //   public get_points() : {left : number , right : number , top : number , bottom  : number,width : number , height : number} {
+    //     return ({
+    //       left : this.pos.x - this.paddle_width / 2,
+    //       right : this.pos.x + this.paddle_width / 2,
+    //       top : this.pos.y - this.paddle_height / 2,
+    //       bottom : this.pos.y + this.paddle_height / 2
+    //   });
+    // }
   
-      public  update_Player_pos(canvas:any){
+      public  update_Player_pos(canvas:any,scaled_width : number ,scaled_height : number){
         let key_code;
         let key_pressed;
 
@@ -94,12 +95,13 @@ export class Paddle {
           if (this.paddle_obj.keyCode === (this.paddle_obj.DOWN_ARROW)){
             key_code = this.paddle_obj.keyCode;
             key_pressed = this.paddle_obj.DOWN_ARROW;
-            socket_gm?.emit("Player_movement",{sig : "DOWN" , Key : key_code , key_check : key_pressed});
+            socket_gm?.emit("Player_movement",{sig : "DOWN" , Key : key_code , key_check : key_pressed, scaled_height : scaled_height, pd_height : this.paddle_height});
             // this.pos.y += this.dy;
           }
           else if (this.paddle_obj.keyCode === (this.paddle_obj.UP_ARROW)){
             key_code = this.paddle_obj.keyCode;
             key_pressed = this.paddle_obj.UP_ARROW;
+            // this.paddle_height
             socket_gm?.emit("Player_movement",{sig : "UP" , Key : key_code , key_check : key_pressed});
             // this.pos.y -= this.dy;
           }
@@ -108,12 +110,13 @@ export class Paddle {
           // this.ms_y = event.layerY;
           // this.pos.y = this.ms_y;
           mouse_y = event.layerY;
-          socket_gm?.emit("Player_movement",{sig:"MOUSE",mouse_coord:mouse_y});
+          this.paddle_obj.mouseY;
+          socket_gm?.emit("Player_movement",{sig:"MOUSE",mouse_coord:this.paddle_obj.mouseY, scaled_height : scaled_height, pd_height : this.paddle_height});
         })
         
         // console.log("[ x : " + this.pos.x + " , " + " y : " + this.pos.y + " ] ");
 
-        this.draw_paddle(this.color);
+        this.draw_paddle(this.color,scaled_width,scaled_height);
       }
       
     }

@@ -43,6 +43,7 @@ export class Rooms{
                     console.log("Room enterd ["+Room.id+"]")
                     Room.Player1 = Players.players[Player.id];
                     Room.Player1.room_id = Room.id;
+                    // let scale_ball = (2.4 / 100) * screen_width;
                     Room.GameBall = new BallDto(-4,2,24,screen_width / 2 , screen_height / 2);
                     Room.client_count++;
                     Player.join(Room.id);
@@ -122,6 +123,7 @@ export class Rooms{
             Room.client_count--;
             Player.leave(Room.id);
             delete Room.Player1;
+            // let scale_ball = (2.4 / 100) * screen_width;
             Room.GameBall = new BallDto(-4,2,24,screen_width / 2 , screen_height / 2);
                 break;
         }
@@ -131,6 +133,7 @@ export class Rooms{
             Room.client_count--;
             Player.leave(Room.id);
             delete Room.Player2;
+            // let scale_ball = (2.4 / 100) * screen_width;
             Room.GameBall = new BallDto(-4,2,24,screen_width / 2 , screen_height / 2);
             break;
             }

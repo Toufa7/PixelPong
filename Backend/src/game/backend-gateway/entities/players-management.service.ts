@@ -31,7 +31,7 @@ export class Players_Management {
   }
 
   public async AddPlayer(Player : Socket ,player_id : string ,
-    x : number , y : number , width : number , height : number, room_id? : string , user_id? : string, username? : string){
+    x : number , y : number , width : number , height : number, screen_width : number, screen_height : number , room_id? : string , user_id? : string, username? : string){
         
     // this.players.push(new PlayerDto(id,x,y));
     console.log("User Id --->" + user_id);
@@ -39,7 +39,7 @@ export class Players_Management {
     // console.log("Before -->" + Object.keys(this.players).length);
     if (!this.SearchForExsitentUserID(user_id)){
       this.SetRoom = true;
-      this.players[player_id] = new PlayerDto(player_id,x,y,width , height ,10, room_id,user_id,username);
+      this.players[player_id] = new PlayerDto(player_id,x,y,width , height , screen_width , screen_height, 10, room_id,user_id,username);
       console.log("Player In game Setting up stats ...");
       await this.userService.ChangeStateInGame(user_id,true); // Updating Database Field in Game state
       console.log(" " + this.Player_Game_Info.inGame + " " + this.Player_Game_Info.userId);
