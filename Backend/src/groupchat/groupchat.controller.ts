@@ -9,12 +9,11 @@ import { diskStorage } from 'multer';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { promises as fsPromises } from 'fs';
-import { ChatGateway } from 'src/chat/chat.gateway'; 
 
 @UseGuards(JwtGuard)
 @Controller('groupchat')
 export class GroupchatController {
-    constructor(private readonly GroupchatService : GroupchatService , private readonly socket : ChatGateway ) {}
+    constructor(private readonly GroupchatService : GroupchatService) {}
 
     //get number user of a groupchat
     @Get(":id/numberuser")
@@ -167,10 +166,10 @@ export class GroupchatController {
 
 
     //send request to join a groupchat
-    @Post(":id/request")
-    sendrequest(@Param('id') id: string, @Req() req : any): any {
-        this.socket.sendrequest(id, req.user.id);
-    }
+    // @Post(":id/request")
+    // sendrequest(@Param('id') id: string, @Req() req : any): any {
+    //     this.socket.sendrequest(id, req.user.id);
+    // }
     
     //////////////////////////////////////
 
