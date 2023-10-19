@@ -138,8 +138,8 @@ let map = new Map <any , any>();
           });
             this.server.to(idUs).emit('msgToClient', {
               id :body.id,
-              username: body.username,
-              pic: body.pic,
+              username: user.username,
+              pic: user.pic,
               side: body.side,
               message: body.message,
               idsender : user.id,

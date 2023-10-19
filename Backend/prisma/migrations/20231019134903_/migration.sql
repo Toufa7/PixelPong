@@ -67,6 +67,7 @@ CREATE TABLE "Messagegb" (
     "id" TEXT NOT NULL,
     "senderid" TEXT NOT NULL,
     "message" TEXT NOT NULL,
+    "idgp" TEXT NOT NULL,
 
     CONSTRAINT "Messagegb_pkey" PRIMARY KEY ("id")
 );
@@ -243,7 +244,7 @@ ALTER TABLE "usermute" ADD CONSTRAINT "usermute_groupchatId_fkey" FOREIGN KEY ("
 ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_senderid_fkey" FOREIGN KEY ("senderid") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_id_fkey" FOREIGN KEY ("id") REFERENCES "Groupchat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_idgp_fkey" FOREIGN KEY ("idgp") REFERENCES "Groupchat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Friendrequest" ADD CONSTRAINT "Friendrequest_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
