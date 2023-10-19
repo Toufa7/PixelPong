@@ -44,11 +44,14 @@ export class GroupchatController {
     findAll(@Req() Request : any): any {
         return this.GroupchatService.findAll(Request.user.id);
     }
-    @Get(":id/groupinfo")
-    findOne(@Param() id : any) : any {
-        console.log(id, " id")
-        return this.GroupchatService.findOne(id.id);
-    }
+    
+    // @Get(":id/groupinfo")
+    // findOne(@Param() id : any) : any {
+    //     console.log(id, " id")
+    //     return this.GroupchatService.findOne(id.id);
+    // }
+
+
     //get all groupchat of a useradmin
     @Get("lifihomanaadmin/:id")
     findgpadmin(@Param('id') id: string): any {

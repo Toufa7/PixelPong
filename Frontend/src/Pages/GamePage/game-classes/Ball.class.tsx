@@ -195,7 +195,7 @@ import { Paddle } from './paddle.class';
         //     return("nothing");
         // }
     
-        public update_pos(paddle1 : Paddle, paddle2 : Paddle,width : number, height : number){
+        public update_pos(Player_id :string ,P1 : any , P2 : any,width : number, height : number, Ball1_diameter : number , Ball2_diameter : number,Player1_paddle : Paddle , Player2_paddle : Paddle){
         //   let full_power : number = 500
         //     let reset_punch = this.check_collision(paddle,ai_paddle);
         //       if (this.ball_ob.keyIsPressed){
@@ -229,7 +229,14 @@ import { Paddle } from './paddle.class';
             // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
             // this.pos.x = this.pos.x + this.ball_speed_x;
             // this.pos.y = this.pos.y + this.ball_speed_y;
-            socket_gm?.emit("Ball_movement",{width : width , height : height});
+            if (Player_id != P2.id){
+                console.log("Im Player 1 emitting no Player 2");
+                // socket_gm?.emit("Ball_movement",{Scaled_width : width , Scaled_height : height, Ball_P1_diameter : Ball1_diameter , Ball_P2_diameter : Ball2_diameter});
+
+                socket_gm?.emit("Ball_movement",{Scaled_width : width , Scaled_height : height, Ball_P1_diameter : Ball1_diameter , Ball_P2_diameter : Ball2_diameter,
+                    P1_paddle_x : Player1_paddle.pos.x , P1_paddle_y : Player1_paddle.pos.y , P1_paddle_width : Player1_paddle.paddle_width , P1_paddle_height : Player1_paddle.paddle_height,
+                    P2_paddle_x : Player2_paddle.pos.x , P2_paddle_y : Player2_paddle.pos.y , P2_paddle_width : Player2_paddle.paddle_width , P2_paddle_height : Player2_paddle.paddle_height});
+            }
 
             this.draw_the_ball("#e9ed09");
         }
