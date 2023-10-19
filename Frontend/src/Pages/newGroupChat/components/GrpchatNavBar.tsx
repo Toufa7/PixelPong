@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext, useEffect, useState } from 'react'
-import { chatSocketContext } from './GrpsocketContext'
+import { grpSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
 import axios from 'axios'
 import ChatUser from './GrpChatUser'
@@ -60,7 +60,7 @@ const GrpchatNavBar = () => {
 
 const Dms = (props:any) => {    
 
-    const conversationsSocket = useContext(chatSocketContext)
+    const conversationsSocket = useContext(grpSocketContext)
     
     //Groups map
     let GroupsMap = useMap();

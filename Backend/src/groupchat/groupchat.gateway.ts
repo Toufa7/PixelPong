@@ -65,11 +65,9 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     return null;
   }
 
+  ////////////////////////////////// -----ROOM-- ////////////////////////////////
 
-
-
-  ////////////////////////////////// -----ROMM-- ////////////////////////////////
-
+  //socket.emit('joinRoom', {room : ${roomid}})
   @SubscribeMessage('joinRoom')
   async handlenJoinRoom(client : Socket , data : any)
   {
@@ -88,9 +86,15 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       }
   }
 
+
+
+  //socker.emit('msgToRoom', {room : $roomid , message : "hello"})
+  //socket.on('msgToclient' , (res) =>{ })
   @SubscribeMessage('msgToRoom')
   async handleMessageRoom(client : Socket, body : any) {
     const user = await this.getUser(client);
+    console.log("usuuuu::: " , user);
+
     const inroom = await this.prisma.groupchat.findMany({
       where: {
         AND: [
@@ -101,13 +105,22 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     });
 
     if(inroom.length != 0){
-      this.server.to(body.room).emit('msgToclient', {'idsender': user.id, 'message': body.message});
-      this.prisma.messagegb.create({
+      await this.prisma.messagegb.create({
         data: {
           sender: {connect: {id: user.id}},
           groupchat: {connect: {id: body.room}},
           message : body.message
         },
+      });
+      this.server.to(body.room).emit('msgToclient', {
+        roomid: body.room,
+        timestamp: body.timestamp,
+        side: body.side,
+        message: body.message,
+        idsender: user.id,
+        username: user.username,
+        pic: user.image,
+
       });
     }
   }
