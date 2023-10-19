@@ -76,13 +76,13 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       const inroom = await this.prisma.groupchat.findMany({
         where: {
           AND: [
-            { id : data.room },
+            { id : data.roomid },
             { usersgb : {some : {id : user.id}}}
           ],
         },
       });
       if(inroom.length != 0){
-        client.join(data.room);
+        client.join(data.roomid);
       }
   }
 
@@ -98,7 +98,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     const inroom = await this.prisma.groupchat.findMany({
       where: {
         AND: [
-          { id : body.room },
+          { id : body.roomid },
           { usersgb : {some : {id : user.id}}}
         ],
       },
@@ -108,12 +108,12 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       await this.prisma.messagegb.create({
         data: {
           sender: {connect: {id: user.id}},
-          groupchat: {connect: {id: body.room}},
+          groupchat: {connect: {id: body.roomid}},
           message : body.message
         },
       });
-      this.server.to(body.room).emit('msgToclient', {
-        roomid: body.room,
+      this.server.to(body.roomid).emit('msgToclient', {
+        roomid: body.roomid,
         timestamp: body.timestamp,
         side: body.side,
         message: body.message,
@@ -132,13 +132,13 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     const inroom = await this.prisma.groupchat.findMany({
       where: {
         AND: [
-          { id : data.room },
+          { id : data.roomid },
           { usersgb : {some : {id : user.id}}}
         ],
       },
     });
     if(inroom.length != 0){
-      client.leave(data.room);
+      client.leave(data.roomid);
     }
   }
 

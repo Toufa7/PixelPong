@@ -68,7 +68,7 @@ const messageInput = (props: any) => {
 
     //Join the room
     useEffect(() => {
-        roomSocket.emit('joinRoom', {room : props.groupInfo.id})
+        roomSocket.emit('joinRoom', {roomid : props.groupInfo.id})
     }, [props.groupInfo.id])
     
     //Get group users and fill them in the map
@@ -96,47 +96,46 @@ const messageInput = (props: any) => {
     //             console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
     // }, [props.groupInfo.id])
     
-    const fillMap = (axiosResponse: any) => {
+    // const fillMap = (axiosResponse: any) => {
 
-        map.clear();
+    //     map.clear();
         
-        let molLmessageId: any = 'n/a';
-        let molLmessage: any = 'n/a';
-        let molMsgPic: any = 'n/a';
-        let molMsgSide: number = 0;
+    //     let molLmessageId: any = 'n/a';
+    //     let molLmessage: any = 'n/a';
+    //     let molMsgPic: any = 'n/a';
+    //     let molMsgSide: number = 0;
         
         
-        for (let i: number = 0; i < axiosResponse.length; i++)
-        {
+    //     for (let i: number = 0; i < axiosResponse.length; i++)
+    //     {
 
-            if (axiosResponse[i].senderId == props.Sender.id)
-            {
-                molLmessageId = axiosResponse[i].senderId;
-                molLmessage = props.Sender.username;
-                molMsgPic = props.Sender.image;
-                molMsgSide = 0;
-            }
-            else
-            {
-                molLmessageId = axiosResponse[i].receiverId;
-                molLmessage = props.groupInfo.username;
-                molMsgPic = props.groupInfo.profileImage;
-                molMsgSide = 1;
-            }
+    //         if (axiosResponse[i].senderId == props.Sender.id)
+    //         {
+    //             molLmessageId = axiosResponse[i].senderId;
+    //             molLmessage = props.Sender.username;
+    //             molMsgPic = props.Sender.image;
+    //             molMsgSide = 0;
+    //         }
+    //         else
+    //         {
+    //             molLmessageId = axiosResponse[i].receiverId;
+    //             molLmessage = props.groupInfo.username;
+    //             molMsgPic = props.groupInfo.profileImage;
+    //             molMsgSide = 1;
+    //         }
             
-            const tmpMsgObj: chatAgent = {
-                id: molLmessageId,
-                senderid: axiosResponse[i].senderId, 
-                username: molLmessage,
-                pic: molMsgPic,
-                side: molMsgSide,
-                message: axiosResponse[i].messageDMs,
-                timestamp: axiosResponse[i].createdAt,
-            }
-
-            map.set(axiosResponse[i].id, tmpMsgObj);
-        }
-    };
+    //         const tmpMsgObj: chatAgent = {
+    //             id: molLmessageId,
+    //             senderid: axiosResponse[i].senderId, 
+    //             username: molLmessage,
+    //             pic: molMsgPic,
+    //             side: molMsgSide,
+    //             message: axiosResponse[i].messageDMs,
+    //             timestamp: axiosResponse[i].createdAt,
+    //         }
+    //         map.set(axiosResponse[i].id, tmpMsgObj);
+    //     }
+    // };
     
     //function to generate message id in the map
     function makeid(length: number) :string {
@@ -155,9 +154,8 @@ const messageInput = (props: any) => {
     useEffect(() => {
         
         //Recieving message from socket
-        roomSocket.on('msgToclient', (payload: chatAgent) => {
-            console.log("Payload --->", payload);
-            // receiveMessage(payload);
+        roomSocket.on('msgToclient', (payload) => {
+            receiveMessage(payload);
         });
 
         //cleanup function
@@ -165,13 +163,15 @@ const messageInput = (props: any) => {
             roomSocket.off('msgToClient');
         }
 
-    }, [props.groupInfo.username])
+    }, [props.groupInfo.id])
 
     //Handling newly received message 
     const receiveMessage = (newMessage: any) => {
 
+        console.log("NewMessage is :", newMessage);
+
         const tmpMsgObj: chatAgent = {
-            id: newMessage.id,
+            id: newMessage.roomid,
             senderid: newMessage.idsender,
             username: newMessage.username,
             pic: newMessage.pic,
@@ -180,12 +180,16 @@ const messageInput = (props: any) => {
             timestamp: "n/a",
         }
 
-        if (props.groupInfo.id == tmpMsgObj.senderid)
+        console.log("newMessage.roomid", tmpMsgObj.id);
+        console.log("props.groupInfo.id", props.groupInfo.id)
+        
+        if (props.groupInfo.id == tmpMsgObj.id)
         {
             map.set(makeid(37), tmpMsgObj);
         }
     }
     
+    console.log("props.groupInfo.id outside ", props.groupInfo.id)
 
     //On submit Handler adds the new message the messagesMap and 
     //sends it in the socket
@@ -199,7 +203,12 @@ const messageInput = (props: any) => {
 
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
-            roomSocket.emit('msgToRoom', { room :  props.groupInfo.id, message : newMessage.message })
+            roomSocket.emit('msgToRoom', {
+                roomid :  props.groupInfo.id,
+                message : newMessage.message,
+                timestamp: "n/a",
+                side: 0,
+            })
         };
         
         if (inputMessage != '')
