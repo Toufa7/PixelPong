@@ -9,7 +9,6 @@ body {
     display: flex;
     justify-content: center;
 	align-items: center;
-    transform: translateY(50%);
 
     .notificationBox {
 		background: #C1C1C1;
@@ -34,7 +33,6 @@ body {
         }
 		
         .loginBoxOutside {
-            overflow: scroll;
 			height: 90%;
             border-top: 8px solid #ffe7e1;
             border-bottom: 8px solid #7C6E6E;

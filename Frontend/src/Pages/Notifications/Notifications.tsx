@@ -62,26 +62,29 @@ const FriendRequest = ({ myData }) => {
 };
 
 function Notifications() {
-    // let map = useMap();
-
-
     const [myData, setmyData] = useState(null);
     const [friendRequests, setFriendRequests] = useState([]);
     useEffect(() => {
       socket.on("notification", (data) => {
+        if (data) {
+          document.title = `Friend Request`;
+        }
         console.log("Received notification:", data);
-        // map.set(data.id, data);
         setFriendRequests((prevRequests) => [...prevRequests, data]);
         setmyData(data);
       });
+
+      return () => {
+        socket.off();
+        document.title = `PixelPong`;
+     }
     }, []);
   
-    console.log("My Data", myData);
   
     return (
-      <div style={{ height: '100vh', justifyContent: 'center' }}>
+      <div style={{ height: '100vh'}}>
         <div className="notification">
-          <div className="notificationBox">
+          <div className="notificationBox" >
             <div className="loginBoxHeader">Notifications</div>
             <div className="loginBoxOutside">
             {friendRequests.map(() => (

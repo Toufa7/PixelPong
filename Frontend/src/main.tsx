@@ -27,7 +27,7 @@ export const OtherUser = () => {
 	return (
 		<>
 			<Stars/>
-			{/* <NavBar/> */}
+			<NavBar/>
 			<OtherProfilPage/>
 		</>
 	);
@@ -35,9 +35,9 @@ export const OtherUser = () => {
 export const NotificationComponents = () => {
 	return (
 		<>
-        <NavBar/>
-        <Stars/>
-		<Notification/>
+			<Stars/>
+			<NavBar/>
+			<Notification/>
 		</>
 	);
 }
@@ -105,7 +105,7 @@ const HomeComponents = () => {
 const GameComponents = () => {
 	return (
 		<>
-			<Stars/>
+			{/* <Stars/> */}
 			<Setup/>
 		</>
 	);

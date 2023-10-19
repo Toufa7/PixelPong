@@ -9,11 +9,12 @@ import { diskStorage } from 'multer';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { promises as fsPromises } from 'fs';
+import { GroupchatGateway } from './groupchat.gateway';
 
 @UseGuards(JwtGuard)
 @Controller('groupchat')
 export class GroupchatController {
-    constructor(private readonly GroupchatService : GroupchatService) {}
+    constructor(private readonly GroupchatService : GroupchatService, private readonly  GroupchatGateway : GroupchatGateway) {}
 
     //get number user of a groupchat
     @Get(":id/numberuser")
@@ -26,6 +27,18 @@ export class GroupchatController {
         return this.GroupchatService.findAllGp();
     }
 
+    //get a all groupchat is not member
+    @Get("notmember")
+    findallGpnotmember(@Req() req : any): any {
+        return this.GroupchatService.findAllGpnotmember(req.user.id);
+    }
+
+
+    //get a groupchat
+    // @Get(":id/info")
+    // findOne(@Param('id') id: string): any {
+    //     return this.GroupchatService.findOne(id);
+    // }
     //get all groupchat of a user
     @Get()
     findAll(@Req() Request : any): any {
@@ -64,7 +77,7 @@ export class GroupchatController {
     @Get(":id/superuser")
     findSuperUser(@Param('id') id: string): any {
         return this.GroupchatService.findSuperUser(id);
-    }``
+    }
 
     //get userban of a groupchat
     @Get(":id/userban")
@@ -91,7 +104,6 @@ export class GroupchatController {
         const file = createReadStream(path);
         const extension = image.split('.')[1];
         res.setHeader('Content-Type', 'image/' + extension);
-        console.log(file.pipe(res));
         return file.pipe(res);
         
       } catch (err) {
@@ -126,20 +138,8 @@ export class GroupchatController {
     
     //update a groupchat
     @Patch(":id")
-    @UseInterceptors(
-        FileInterceptor('file', {
-          storage: diskStorage({
-            destination: './uploads',
-            filename: (req, file, cb) => {
-              const filename: string = file.originalname.split('.')[0] + Date.now();
-              const extension = file.originalname.split('.')[1];
-              cb(null, `${filename}.${extension}`);
-            },
-          }),
-        }),
-      )
-    update(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req : any): any { 
-        return this.GroupchatService.update(file.filename ,id, updateGroupchatDto, req.user.id);
+    update(@Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req : any): any { 
+        return this.GroupchatService.update(id, updateGroupchatDto, req.user.id);
     }
 
     // ban a user from a groupchat
@@ -166,17 +166,26 @@ export class GroupchatController {
         return this.GroupchatService.adduserprotected(id ,data.pass, req.user.id);
     }
 
-    //add an user to a groupchat private
+    /////////////////////-------add an user to a groupchat private----////////////////////
 
 
     //send request to join a groupchat
-    // @Post(":id/request")
-    // sendrequest(@Param('id') id: string, @Req() req : any): any {
-    //     this.socket.sendrequest(id, req.user.id);
-    // }
-    
-    //////////////////////////////////////
-
+    @Get(":id/request")
+    sendrequest(@Param('id') id: string, @Req() req : any): any {
+        console.log("sendrequest");
+        this.GroupchatGateway.sendrequest(id, req.user.id);
+    }
+    //accept a request to join a groupchat
+    @Patch(":id/:iduser/accept")
+    acceptrequest(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any): any {
+        return this.GroupchatService.acceptrequest(id, iduser, req.user.id);
+    }
+    //refuse a request to join a groupchat
+    @Patch(":id/:iduser/refuse")
+    refuserequest(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any): any {
+        return this.GroupchatService.refuserequest(id, iduser, req.user.id);
+    }
+    //////////////////////////////////////-------------------////////////////////////////////////
 
 
 
@@ -197,7 +206,11 @@ export class GroupchatController {
     removeuser(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any): any {
         return this.GroupchatService.removeuser(id, iduser, req.user.id);
     }
-
+    //exit a groupchat
+    @Delete(":id/exit")
+    exit(@Param('id') id: string, @Req() req : any): any {
+        return this.GroupchatService.exit(id, req.user.id);
+    }
     //delete an admin from a groupchat
     @Delete(":id/:iduser/admin")
     removeadmin(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any): any {

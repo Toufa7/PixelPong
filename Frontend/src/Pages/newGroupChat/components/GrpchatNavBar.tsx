@@ -15,8 +15,6 @@ interface chatUser {
     id: string;
 }
 
-
-
 const GrpchatNavBar = () => {
     
     const [currentUserId, setCurrentUserId] = useState('');
@@ -70,8 +68,7 @@ const Dms = (props:any) => {
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
             .then((response:any) => {
-				console.log("Groups List " ,response.data);
-                console.log("Rspone oiez -> ",  response.data.length);
+				console.log("Fetch Group -> " ,response.data);
                 for (let index = 0; index < response.data.length; index++) {
                     GroupsMap.set(response.data[index].id, response.data[index])
                 }
@@ -95,6 +92,7 @@ const Dms = (props:any) => {
                         pic={`http://localhost:3000/groupchat/getimage/${group.id}`}
                         userId={updateSharedString}
                         id={group.id}
+                        privacy={group.grouptype}
                     />
                 ))
             }

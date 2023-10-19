@@ -39,6 +39,10 @@ export let socket_gm : Socket;
 export let width : any;
 export let height : any;
 
+
+let scaled_width : number;
+let scaled_height : number;
+
 // export let inGame : boolean;
 // export let user_id : string;
 
@@ -75,7 +79,7 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any,
         Frontroom.Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,
             Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall?.ball_speed_y);
       }
-      Screen_display = "on_going";
+      // Screen_display = "on_going";
     }
     else{
       Frontroom.client_count = Backroom.client_count;
@@ -144,9 +148,9 @@ export const Game_instance = () =>{
     
     socket_gm?.on("connect",() =>{
       id_player = socket_gm.id;
-      width = document.getElementById('child')?.offsetWidth;
-      height = document.getElementById('child')?.offsetHeight;
-      socket_gm?.emit("PlayerEntered",{s_w : width , s_h : height});
+      scaled_width = ((80 / 100) * window.innerWidth);
+      scaled_height = ((50 / 100) * scaled_width);
+      socket_gm?.emit("PlayerEntered",{s_w : scaled_width , s_h : scaled_height,pd_width : (2 / 10 ) * scaled_width , pd_height : (20 / 10 ) * scaled_height});
     });
     return () => {
       socket_gm?.off("connect");
@@ -168,48 +172,15 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     let lose : p5Types.Image;
     let Screen_display :string = "on_going";
     let FrontCountDown : number = 6;
+
+    let P1_scaled_y : number;
+    let P2_scaled_y : number;
     
     // console.log(Infos);
     
     //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
         SettingUpBackWithFront(socket_gm, Frontroom, p5_ob,Screen_display);
     //o--------------------------------------------------------------------------
-  
-        //r- Getting Position of player form Backend
-  
-        socket_gm?.on("UpdatePlayerPos",(Backroom : any)=>{
-            // for(const id in Frontroom){
-              if(Frontroom.Player1){
-                  Frontroom.Player1.Paddle.pos.x = Backroom.Player1?.x;
-                  Frontroom.Player1.Paddle.pos.y = Backroom.Player1?.y;
-                  Frontroom.Player1.Health_points = Backroom.Player1?.Health_points;
-                  Frontroom.Player1.username = Backroom.Player1.username;
-              }
-              if (Frontroom.Player2){
-                Frontroom.Player2.Paddle.pos.x = Backroom.Player2?.x;
-                Frontroom.Player2.Paddle.pos.y = Backroom.Player2?.y;
-                Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
-                Frontroom.Player2.username = Backroom.Player2.username;
-              }
-            // }
-        });
-        //r-------------------------------------------
-  
-        //r- Getting Position of Ball from Backend
-  
-        socket_gm?.on("UpdateBallPos",(Backroom : any)=> {
-          let reverse_ball_x = width - Backroom.GameBall_x;
-  
-          // for(const id in Frontroom){
-            if (Frontroom.Player1 && socket_gm.id == Frontroom.Player1?.id){
-              Frontroom.Player1.Ball.pos.x = Backroom.GameBall_x;
-              Frontroom.Player1.Ball.pos.y = Backroom.GameBall_y;
-            }else if (Frontroom.Player2 && socket_gm.id == Frontroom.Player2?.id){
-              Frontroom.Player2.Ball.pos.x = reverse_ball_x;
-              Frontroom.Player2.Ball.pos.y = Backroom.GameBall_y;
-            }
-          // }
-        });
 
 
         //r--------------------------------------------
@@ -248,8 +219,8 @@ p5_ob.setup = () => {
         //     inGame = Player_Info?.inGame;
         //     user_id = Player_Info?.user_id;
         // });
-        let scaled_width = ((80 / 100) * window.innerWidth);
-        let scaled_height = ((50 / 100) * scaled_width);
+        scaled_width = ((80 / 100) * window.innerWidth);
+        scaled_height = ((50 / 100) * scaled_width);
         p5_ob.frameRate(120);
         // canvasDiv = document.getElementById('child');
         // width = document.getElementById('child')?.offsetWidth;
@@ -280,7 +251,69 @@ p5_ob.setup = () => {
       
 p5_ob.draw = () =>{
 
-        console.log("FrontCountDown -->" + FrontCountDown);
+    socket_gm?.on("CountDown",(C_T)=>{
+      
+    FrontCountDown = C_T.CountDown;
+    console.log("Counting From Frontend -->" + C_T.CountDown);
+    })
+
+           //r- Getting Position of player form Backend
+  
+          socket_gm?.on("UpdatePlayerPos",(Backroom : any)=>{
+
+            if (Backroom.who == "P1"){
+                  Frontroom.Player1.Paddle.pos.x = Backroom.P1_x;
+                  Frontroom.Player1.Paddle.pos.y = Backroom.P1_y;
+                  Frontroom.Player1.Paddle.paddle_width = (2 / 100) * scaled_width;
+                  Frontroom.Player1.Paddle.paddle_height = (20 / 100) * scaled_height;
+
+                Frontroom.Player2.Paddle.pos.x = Backroom.P2_x_scaled;
+                Frontroom.Player2.Paddle.pos.y = Backroom.P2_y_scaled;
+                Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
+                Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
+                // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
+                // Frontroom.Player2.username = Backroom.Player2.username;
+            }
+
+            else if (Backroom.who == "P2"){
+              Frontroom.Player2.Paddle.pos.x = Backroom.P2_x;
+              Frontroom.Player2.Paddle.pos.y = Backroom.P2_y;
+              Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
+              Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
+              // Frontroom.Player1.Health_points = Backroom.Player1?.Health_points;
+              // Frontroom.Player1.username = Backroom.Player1.username;
+
+              // P2_scaled_y = Backroom.P2_y_scaled;
+
+            Frontroom.Player1.Paddle.pos.x = Backroom.P1_x_scaled;
+            Frontroom.Player1.Paddle.pos.y = Backroom.P1_y_scaled;
+            Frontroom.Player1.Paddle.paddle_width = (2 / 100) * scaled_width;
+            Frontroom.Player1.Paddle.paddle_height = (20 / 100) * scaled_height;
+            // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
+            // Frontroom.Player2.username = Backroom.Player2.username;
+        }
+        });
+        //r-------------------------------------------
+  
+        //r- Getting Position of Ball from Backend
+  
+        socket_gm?.on("UpdateBallPos",(Backroom : any)=> {
+
+          let reverse_ball_x = scaled_width - Backroom.GameBall_x;
+  
+          // for(const id in Frontroom){
+            if (Frontroom.Player1 && socket_gm.id == Frontroom.Player1?.id){
+
+              Frontroom.Player1.Ball.pos.x = Backroom.GameBall?.x;
+              Frontroom.Player1.Ball.pos.y = Backroom.GameBall?.y;
+            }else if (Frontroom.Player2 && socket_gm.id == Frontroom.Player2?.id){
+              Frontroom.Player2.Ball.pos.x = (reverse_ball_x * Backroom.P2_width) / Backroom.P1_width;
+              Frontroom.Player2.Ball.pos.y = (Backroom.GameBall_y * Backroom.P2_height) / Backroom.P2_height;
+            }
+          // }
+        });
+
+        // console.log("FrontCountDown -->" + FrontCountDown);
 
         if (Screen_display == "Win"){
           p5_ob.background(win);
@@ -299,37 +332,40 @@ p5_ob.draw = () =>{
             const id_of_player2 = Frontroom.Player2?.id;
             const Player1 = Frontroom.Player1?.Paddle;
             const Player2 = Frontroom.Player2?.Paddle;
-            console.log(Frontroom.Player1?.username + ": My Health points are ---> " + Frontroom.Player1?.Health_points);
-            console.log(Frontroom.Player2?.username + ": My Health points are ---> " + Frontroom.Player2?.Health_points);
+            // console.log(Frontroom.Player1?.username + ": My Health points are ---> " + Frontroom.Player1?.Health_points);
+            // console.log(Frontroom.Player2?.username + ": My Health points are ---> " + Frontroom.Player2?.Health_points);
       
         if (Frontroom.Player1 && Frontroom.Player2){
           if (FrontCountDown > 0){
               p5_ob.fill("#e0e3ba");
               p5_ob.textSize(150);
-              p5_ob.text(FrontCountDown, width / 2, height / 2);
+              p5_ob.text(FrontCountDown, scaled_width / 2, scaled_height / 2);
             }
             else{
                     if (id_of_player1 == id_player){
-                      Player1?.update_Player_pos(canvas);
+                      Player1?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player2 && id_of_player2 != id_player){
-                        Player2.pos.x = width - Player2.paddle_width;
-                        Player2?.update_Player_pos(canvas);
+                        Player2.pos.x = scaled_width - Player2.paddle_width;
+                        // Player2.pos.y = P2_scaled_y;
+                        Player2?.update_Player_pos(canvas,scaled_width,scaled_height);
                       }
                     }
                     else if (id_of_player2 == id_player){
                       
-                      Player2?.update_Player_pos(canvas);
+                      Player2?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player1 && id_of_player1 != id_player){
-                        Player1.pos.x = width - Player1.paddle_width;
-                        Player1?.update_Player_pos(canvas);
+                        Player1.pos.x = scaled_width - Player1.paddle_width;
+                        // Player1.pos.y = P1_scaled_y;
+                        console.log(Player1.pos.y);
+                        Player1?.update_Player_pos(canvas,scaled_width,scaled_height);
                       }
                     }
     
-                    if (id_of_player1 == id_player)
-                      Frontroom.Player1?.Ball.update_pos(Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle,width,height);
-                    else if (id_of_player2 == id_player)
-                    Frontroom.Player2?.Ball.update_pos(Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle,width,height);
-                    // console.log(Player1.pos.x); 
+                    // if (id_of_player1 == id_player)
+                    //   Frontroom.Player1?.Ball.update_pos(Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle,scaled_width,scaled_height);
+                    // else if (id_of_player2 == id_player)
+                    // Frontroom.Player2?.Ball.update_pos(Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle,scaled_width,scaled_height);
+                    // console.log(Player1.pos.x);
             }
         }
         else{
@@ -350,12 +386,12 @@ p5_ob.draw = () =>{
   
     p5_ob.windowResized = () =>{
       // canvasDiv = document.getElementById('child');
-      let scaled_width = ((80 / 100) * window.innerWidth);
-        let scaled_height = ((50 / 100) * scaled_width);
-      console.log("resize--> " + window.innerWidth);
-      console.log("resize--> " + window.innerHeight);
+      scaled_width = ((80 / 100) * window.innerWidth);
+      scaled_height = ((50 / 100) * scaled_width);
+      // console.log("resize--> " + window.innerWidth);
+      // console.log("resize--> " + window.innerHeight);
       if (p5_ob){
-        // socket_gm?.emit("UpdateScreenmetrics",{s_w : width , s_h : height});
+        socket_gm?.emit("UpdateScreenmetrics",{s_w : scaled_width , s_h : scaled_height});
         p5_ob.resizeCanvas(scaled_width,scaled_height);
         canvas = p5_ob.createCanvas(scaled_width,scaled_height);
         const canvas_x = (window.innerWidth - p5_ob.width) / 2;

@@ -115,7 +115,7 @@ const TopContainer = () => {
   
 	const searchInGroups = async (query : string) => {
 		try {
-			const response = await axios.get("http://localhost:3000/groupchat/all", {withCredentials: true});
+			const response = await axios.get("http://localhost:3000/groupchat/notmember", {withCredentials: true});
 			const groups = response.data;
 			const foundGroup = groups.find(group => group.namegb === query);
 			if (foundGroup) {
@@ -180,11 +180,6 @@ const TopContainer = () => {
 	  setVisibility(true);
 	  setIsFound(false);
 	};
-
-
-	const password : string		= document.getElementById("password_join")?.value;
-	console.log("Passowrd Entered -> ", password);
-
 	return (
 		<>
 		<div className="search">
@@ -252,14 +247,19 @@ const TopContainer = () => {
 
 						<input style={{ background: '#E9E9ED', marginBottom: '10px' }} type="password" placeholder="P@55w0rd" maxLength={18} id="password_join" className="nes-input" />
 						<button onClick={() => {
+							const password = document.getElementById("password_join")?.value;
+							console.log("Password Entered Is => ", password);
 							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userprotected`, {pass :password} , { withCredentials: true })
 							.then((res) => {
-								console.log("Protected  -> ", res);
+								if (res.data == 'no')
+									toast.error("Invalid Password", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
+								else
+									toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'white'}, position: "top-right"});
 							})
-							.catch(() => {})
+							.catch(() => {
+
+							})
 						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Join Group</button>
-
-
 						</>
 						)
 				}
@@ -495,31 +495,29 @@ function Notification () {
 			.then((rese) => {
 				console.log("Notifcation Refuse ", rese);
 				setFriendStatus(friendStatus)
-				
 			})
 		} catch (error) {
 			console.log("Error Catched ", error);
 		}
 	}
-	
 	const audio = new Audio(notification);
 	audio.play();
 	toast.custom(
-		<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1'}}>
+		<div style={{ display: 'flex', alignItems: 'center', background: "#F2ECFF", color: 'black', borderRadius: '10px', zIndex: '-1'}}>
 			<div style={{ width: '400px', height: '120px' }} className="nes-container with-title is-centered">
 				<p style={{ background: '#ffeeca', border: '2px solid black'}} className="title">Invitation Request</p>
 			<div style={{ display: 'flex', alignItems: 'center' }}>
-				<img src={data.photo} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+				<img src={`http://localhost:3000/auth/avatar/${data.photo}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>	
 				{isFriend ?
-					(
-						<>
-							<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
-							<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
-						</>
-					) : 
-					(
-						<button style={{ marginLeft: '10px' }} onClick={() => setIsFriend(true)}>Accepted</button>
+						(
+							<>
+								<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
+								<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
+							</>
+						) : 
+						(
+							<button style={{ marginLeft: '10px' }} onClick={() => setIsFriend(true)}>Accepted</button>
 						)				
 					}
 			</div>
@@ -538,6 +536,7 @@ export default function Home() {
 	Notification();	
 	return (
 		<div style={{ height: '100vh'}}>
+			<title>Home</title>
 			<Toaster/>
 				<TopContainer/>
 				<div className="top-containers">

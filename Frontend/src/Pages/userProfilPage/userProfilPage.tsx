@@ -95,6 +95,10 @@ const Profil = () => {
                     {isFriend ? (
                         <>
                             <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
+                            <a  className="nes-btn" href="#" onClick={() => {
+                                
+
+                            }}>Block</a>
                         </>
                         ) : (
                             <a className="nes-btn" href="#" onClick={() => 

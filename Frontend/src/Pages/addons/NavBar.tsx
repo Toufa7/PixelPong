@@ -68,9 +68,10 @@ const NavBarFooter = () => {
   
 	const logout = () => {
 		coo.remove('jwt');
-		navigate('/login');
 		axios.post("http://localhost:3000/auth/logout", {withCredentials: true})
-		.then(() => {})
+		.then(() => {
+			navigate("/login");
+		})
 		.catch(() => {});
 	};
   

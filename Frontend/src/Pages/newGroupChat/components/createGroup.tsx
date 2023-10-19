@@ -22,6 +22,8 @@ const CreatingGroup = () => {
 	if (regEx.test(groupName) && groupAvatar && choice) {
 		const data = new FormData();
 		data.append('file', groupAvatar);
+
+		console.log("Avatar -> ", data);
 		let groupType = "PUBLIC";
 		if (choice == 1) {groupType = "PRIVATE";}
 		else if (choice == 2) {groupType = "PROTECTED";}
@@ -78,7 +80,7 @@ const CreateGroup = () => {
 		<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff" ,borderRadius: "10px"}}>
 			<Toaster/>
 			<div className="groupSettings" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
-				<div className="nes-field" style={{marginTop: '20px', width: '300px'}} >
+				<div className="nes-field" style={{margin: '10px', width: '300px'}} >
 					<input style={{background: '#E9E9ED'}}	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
 				</div>
 				<label>Select Privacy</label>
@@ -92,16 +94,16 @@ const CreateGroup = () => {
 				</div>
 
 				{isProtected && (
-					<div style={{marginTop: '10px'}} className="nes-field">
-						<input  style={{background: '#E9E9ED'}} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" />
+					<div style={{margin: '10px'}} className="nes-field">
+						<input  style={{background: '#E9E9ED'}} type="password" id="password_field" placeholder="P@55w0rd" minlength={8} maxLength={18} className="nes-input" />
 					</div>
 				)}
-				<label style={{marginTop: '10px'}}>Group Avatar</label>
-				<label style={{marginBottom: '10px'}} className="nes-btn">
+				<label style={{margin: '10px'}}>Group Avatar</label>
+				<label style={{margin: '10px'}} className="nes-btn">
 					<span>Click to upload</span>
 					<input formMethod="post" type="file" name="avatarUpload1" accept="image/*"/>
 				</label>
-			<a onClick={CreatingGroup} className='nes-btn' href="#">Create</a>
+			<a style={{margin: '10px'}}   onClick={CreatingGroup} className='nes-btn' href="#">Create</a>
 			</div>
 		</div>
 	)
