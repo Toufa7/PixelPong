@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRef, useEffect, useContext } from 'react'
+import { useState, useRef, useEffect, useContext } from 'react'
 import { grpSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg';
@@ -19,6 +19,19 @@ interface chatAgent
     side: number;
     message: string;
     timestamp: string;
+}
+
+function makeid(length: number) :string {
+        
+    let result: string = '';
+    const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength: number = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
 }
 
 //<*-----------------------------------------------------------------------------------------------------------------------------------*>
@@ -66,10 +79,20 @@ const messageInput = (props: any) => {
     //Our group users
     let groupUsers = useMap();
 
+    //Keeping track of the entered groups
+    // const [roomsHistory, setRoomsHistory] = useState<string[]>([]);
+
+    // setRoomsHistory(props.groupInfo.id);
+    // console.log("Rooms hisory is : ", roomsHistory);
+
     //Join the room
-    useEffect(() => {
-        roomSocket.emit('joinRoom', {roomid : props.groupInfo.id})
-    }, [props.groupInfo.id])
+    if (props.groupInfo.id != undefined)
+    {
+        useEffect(() => {
+            console.log("Room Joined")
+            roomSocket.emit('joinRoom', {roomid : props.groupInfo.id})
+        }, [props.groupInfo.id])
+    }
     
     //Get group users and fill them in the map
     useEffect(() => {
@@ -138,38 +161,35 @@ const messageInput = (props: any) => {
     // };
     
     //function to generate message id in the map
-    function makeid(length: number) :string {
+    // function makeid(length: number) :string {
         
-        let result: string = '';
-        const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength: number = characters.length;
-        let counter = 0;
-        while (counter < length) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          counter += 1;
-        }
-        return result;
-    }
+    //     let result: string = '';
+    //     const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    //     const charactersLength: number = characters.length;
+    //     let counter = 0;
+    //     while (counter < length) {
+    //       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    //       counter += 1;
+    //     }
+    //     return result;
+    // }
 
+    
     useEffect(() => {
-        
         //Recieving message from socket
-        roomSocket.on('msgToclient', (payload) => {
+        roomSocket.on(`${props.groupInfo.id}`, (payload) => {
             receiveMessage(payload);
         });
 
         //cleanup function
         return () => {
-            roomSocket.off('msgToClient');
+            roomSocket.off(`${props.groupInfo.id}`);
         }
 
     }, [props.groupInfo.id])
 
     //Handling newly received message 
     const receiveMessage = (newMessage: any) => {
-
-        console.log("NewMessage is :", newMessage);
-
         const tmpMsgObj: chatAgent = {
             id: newMessage.roomid,
             senderid: newMessage.idsender,
@@ -179,32 +199,28 @@ const messageInput = (props: any) => {
             message: newMessage.message,
             timestamp: "n/a",
         }
-
-        console.log("newMessage.roomid", tmpMsgObj.id);
-        console.log("props.groupInfo.id", props.groupInfo.id)
         
-        if (props.groupInfo.id == tmpMsgObj.id)
-        {
+        // if (props.groupInfo.id == tmpMsgObj.id)
+        // {
             map.set(makeid(37), tmpMsgObj);
-        }
+        // }
     }
     
-    console.log("props.groupInfo.id outside ", props.groupInfo.id)
 
-    //On submit Handler adds the new message the messagesMap and 
-    //sends it in the socket
+
     const onSubmitHandler = (e: any) => {
-        
         //Prevent browser from refreshing each time we hit enter on the from input
         e.preventDefault();
         
         //Getting the message from input box
         const inputMessage = document.querySelector('.GrpmessageInputBox')?.value;
-
+        
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
+            console.log("I sent a message.")
             roomSocket.emit('msgToRoom', {
                 roomid :  props.groupInfo.id,
+                messageid : `${makeid(37)}`,
                 message : newMessage.message,
                 timestamp: "n/a",
                 side: 0,
