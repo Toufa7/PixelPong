@@ -63,6 +63,7 @@ const Profil = () => {
         async function fetchData() {
             const cookie = new Cookies();
             const token = jwt_decode(cookie.get('jwt'));
+            console.log("Toekn -> ", token);
             const endpoints = [
                 `http://localhost:3000/auth/avatar/${token.id}`,
                 `http://localhost:3000/users/profil`
@@ -84,22 +85,27 @@ const Profil = () => {
         fetchData();
     }, [])
 
+
     return (
-            <div className="profilRectangle">
-                <div className="avatar">
-                    <div className="left">
-                        <img src={userData.avatar ? userData.avatar : '/public/profile-default.png'} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
-                    <div>
-                        <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
-                    <div>
-                        <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
-                    </div>
-                        <span style={{textAlign: 'right'}}>X/XXX</span>
-                    </div>
-                </div>
+        <div className="profilRectangle">
+          <div className="avatar">
+            <div className="left">
+              <img src={`http://localhost:3000/auth/avatar/${token.id}`} style={{width: '100px',height: '100px',marginRight: '10px',marginLeft: '10px',borderRadius: '50px'}} className="playerAvatar"/>
+            <div>
+              <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
+              <div>
+                <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
+              </div>
+              <span style={{textAlign: 'right'}}>32/100</span>
             </div>
             </div>
-    );
+            <div>
+              <div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
 }
 
 const GroupsAndFriends = () => {
@@ -202,16 +208,18 @@ const Achivements = () => {
 
 function ProfilPage() {
   return (
-    <>
+    <div style={{height: '100h'}}>
         <div className="topContainer">
             <Profil/>
-            <States winRate={0.00} wins={0} loses={0} streak={0}/>
         </div>
         <div className="downContainer">
             <GroupsAndFriends/>
+            <States winRate={0.00} wins={0} loses={0} streak={0}/>
+        </div>
+        <div className="downContainer">
             <Achivements/>
         </div>
-        </>
+    </div>
   )
 }
 

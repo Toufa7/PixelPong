@@ -96,6 +96,10 @@ const GetUserData = () => {
 
 const TopContainer = () => {
 
+	interface groupInfo {
+
+	}
+
 	const userData = GetUserData();
 	const textInfos = [
 		"Perfecciona tus habilidades en nuestra área de práctica exclusiva",
@@ -106,7 +110,7 @@ const TopContainer = () => {
 	const [users, setUsers] = useState([]);
 	const [theOne, setTheOne] = useState([]);
 	const [privacy, setPrivacy] = useState();
-	const [isFound, setIsFound] = useState(false);
+	const [isFound, setIsFound] = useState<boolean>(false);
 	const [friendGroup, setFriendGroup] = useState("");
 	const [avatar, setAvatar] = useState("");
 	const firstRef = useRef(null);
@@ -162,15 +166,15 @@ const TopContainer = () => {
 		};
 
 	  const handleSubmit = (e) => {
-		e.preventDefault();
-		const searchQuery = firstRef.current.value;
-		console.log("Searching for --> ", searchQuery);
-	
-		console.log("Looking in Groups");
-		searchInGroups(searchQuery);
-	
-		console.log("Looking in Friends");
-		searchInFriends(searchQuery);
+			e.preventDefault();
+			const searchQuery = firstRef.current.value;
+			console.log("Searching for --> ", searchQuery);
+				
+			console.log("Looking in Groups");
+			searchInGroups(searchQuery);
+				
+			console.log("Looking in Friends");
+			searchInFriends(searchQuery);
 	  };
 	
 
@@ -184,6 +188,7 @@ const TopContainer = () => {
 		<>
 		<div className="search">
 		<form onSubmit={handleSubmit}>
+
 			<input ref={firstRef} type="text" id="name_field" placeholder='Search for a group or user' className="nes-input" />
 			{!visibility && (
 			<div onClick={removeElement} className="nes-container" style={{height: 'fitContent', padding: '5px', background: "#EDF2FA"}}>
@@ -218,9 +223,17 @@ const TopContainer = () => {
 			</div>
 			)}
 		</form>
+		
+		<section>
+
+		<form method="dialog">
+
 			<dialog style={{height: 'fitContent', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
+			<button>Close</button>
+
 			<h1 className="groupName">{theOne.namegb}</h1>
 				<h4 className="grouptype">{theOne.grouptype}</h4>
+
 
 
 				<img style={{borderRadius: '50%',width: '20%',height: '100px', marginBottom: '20px'}} className="groupAvatar" src={avatar} />
@@ -264,6 +277,10 @@ const TopContainer = () => {
 						)
 				}
 			</dialog>
+
+			</form>
+			</section>
+
 		</div>
 
 
@@ -389,8 +406,8 @@ const BottomLeft = () => {
 			<HorizontalScroll>
 				{
 					achivements.map((key, idx) => {
-					return (
-						<img src={key} key={idx}/>
+						return (
+							<img src={key} key={idx}/>
 					)})
 				}
 			</HorizontalScroll>
@@ -461,9 +478,9 @@ const BottomRight= () => {
 		<div className="loginBoxHeader latest-matches1">ULTIMOS PARTIDOS</div>
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"win"} color={win}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"lose"} color={lose}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"draw"} color={draw}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"win"} color={win}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"lose"} color={lose}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"draw"} color={draw}/>
 			</div>
 			</div>
 	</div>

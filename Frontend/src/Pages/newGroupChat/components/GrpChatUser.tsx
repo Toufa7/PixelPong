@@ -4,11 +4,7 @@ import axios from 'axios'
 import MessageInput from './GrpmessageInput'
 import exit from '../assets/exit.svg'
 import info from '../assets/info.svg'
-import mute from '../assets/images/notification-off.svg'
-import block from '../assets/images/block.svg'
 import jwtDecode from 'jwt-decode'
-import oldcomputer from '../assets/oldComputer.png'
-import popCat from '../assets/pop-cat.gif'
 import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
 
@@ -181,18 +177,15 @@ console.log("Id is 1 -> ", props.pcurrentUserId);
 
 const MessagingBody = (props: any) => {
 
-
-
-
     return (
-    <div className="GrpMessagingBodyDiv">
-        {/* Passing Parent props to the child (localUser and remoteUser) */}
-        {
-            props.remoteUser.profileImage   ? (<MessageInput Sender={props.localUser} Receiver={props.remoteUser}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="user-photo" />
-        }
-    </div>
-    )
+        <div className="GrpMessagingBodyDiv">
+            {/* Passing Parent props to the child (localUser and remoteUser) */}
+            {
+                props.remoteUser.profileImage   ? (<MessageInput Sender={props.localUser} Receiver={props.remoteUser}/>)
+                                                : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="user-photo" />
+            }
+        </div>
+        )
 }
 
 export default ChatUser

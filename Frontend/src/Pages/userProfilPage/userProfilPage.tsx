@@ -1,5 +1,4 @@
 import './userProfilPage.scss'
-
 /******************* Packages  *******************/
 import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
@@ -8,36 +7,43 @@ import axios from "axios";
 /******************* Includes  *******************/
 import { useLocation } from 'react-router-dom';
 
-
-const States = () => {
+const States = (props : {winRate: number, wins: number, loses: number, streak: number}) => {
     return (
             <div className="headStatesBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
                 <div className="statesBoxContent">
                     <div>
                         <span className="key">Win Rate</span>
-                        <span className="value">X</span>
+                        <span className="value">{props.winRate}%</span>
                     </div>
                     <div>
                         <span className="key">Wins</span>
-                        <span className="value">X</span>
+                        <span className="value">{props.wins}</span>
                     </div>
                     <div>
                         <span className="key">Win Streak Record</span>
-                        <span className="value">X</span>
+                        <span className="value">{props.streak}</span>
                     </div>
                     <div>
                         <span className="key">Loses</span>
-                        <span className="value">X</span>
+                        <span className="value">{props.loses}</span>
                     </div>
                 </div>
             </div>
     );
 }
 
+
 const Profil = () => {
-    const [userData, setUserData] = useState({
-        avatar: '',
+
+    interface dataTypes {
+        avatar : string,
+        username:string,
+        check: boolean,
+        userId:string }
+
+    const [userData, setUserData] = useState<dataTypes>({
+        avatar : '',
         username: '',
         check: true,
         userId: ''
@@ -60,7 +66,6 @@ const Profil = () => {
                         check: false,
                         userId : response.data.id
                     }));
-                    console.log("data of user please : :: : :",userData.avatar)
                 } catch (avatarError) {
                     setUserData(() => ({
                         avatar: response.data.profileImage,
@@ -74,47 +79,48 @@ const Profil = () => {
         fetchData();
     }, []);
 
-    console.log("user Data ----> ", userData);
-    const [isFriend, setIsFriend] = useState(false);
+    const [isFriend, setIsFriend] = useState<boolean>(false);
     return (
-            <div className="profilRectangle">
-                <div className="avatar">
-                    <div className="left">
-                        <img  src={userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
-                    <div>
-                        <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
-                    <div>
-                        <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
-                    </div>
-                        <span style={{textAlign: 'right'}}>XX/XXX</span>
-                    </div>
-                </div>
+        <div className="profilRectangle">
+          <div className="avatar">
+            <div className="left">
+             <img  src={userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+            <div>
+              <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
+              <div>
+                <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
+              </div>
+              <span style={{textAlign: 'right'}}>32/100</span>
             </div>
-            <div className='buttonat'>
+            </div>
+            <div>
+              <div>
                 <a>
-                    {isFriend ? (
-                        <>
-                            <a  className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
-                            <a  className="nes-btn" href="#" onClick={() => {
-                                
+                     {isFriend ? (
+                         <>
+                             <a className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
+                             <a className="nes-btn" href="#" onClick={() => {
+                                 axios.post("http://localhost:3000/users/blocked", {from: userData.userId}, { withCredentials: true })
+                                 .then(() => {})
+                                 .catch(() => {})
+                             }}>Block</a>
+                         </>
+                         ) : (
+                             <a className="nes-btn" href="#" onClick={() => 
+                                 {
+                                     setIsFriend(true)
 
-                            }}>Block</a>
-                        </>
-                        ) : (
-                            <a className="nes-btn" href="#" onClick={() => 
-                                {
-                                    setIsFriend(true)
-                                    axios.post("http://localhost:3000/users/sendFriendRequest",userData, { withCredentials: true })
-                                    .then(() => {})
-                                    .catch(() => {})
-                                }
-                            }>Add Friend</a>)
-                        }
-                </a>
-                </div>
+                                 }
+                             }>Add Friend</a>)
+                         }
+                 </a>
+              </div>
             </div>
-    );
+          </div>
+        </div>
+      );
 }
+
 
 const GroupsAndFriends = () => {
 
@@ -135,7 +141,7 @@ const GroupsAndFriends = () => {
         })
     },[])
 
-    const [label, setlabel] = useState(true);
+    const [label, setlabel] = useState<boolean>(true);
     const [userData, setAvataStatus] = useState({
         avatar: '',
         check: true
@@ -193,6 +199,22 @@ const GroupsAndFriends = () => {
 }
 
 const Achivements = () => {
+    const achivements: Map<string, string> = new Map();
+    achivements.set("", "Win a match against different players");
+    achivements.set("", "Unlock a feature in the game");
+    achivements.set("", "Win 5 games with confidence and flair");
+    achivements.set("", "Claim the top spot on the leaderboard");
+    achivements.set("", "Never conceding a damage in a full match");
+    achivements.set("", "Win a match without losing a single point");
+    achivements.set("", "Score 10 consecutive points with powerful smashes");
+    achivements.set("", "Mer7ba");
+    achivements.set("", "Reach a ranking of top 10 players");
+    achivements.set("", "Block 50 opponent shots with a perfect defensive block");
+    achivements.set("", "Hit the ball with exceptional spin 50 times");
+    achivements.set("", "Chat with a friend");
+    achivements.set("", "Win a match without committing any fouls");
+    achivements.set("", "Unlock all hidden paddle designs");
+    achivements.set("", "Perform a tricky serve that your opponent fails to return");
 
     return (    
             <div className="fullAchivementsBox">
@@ -200,29 +222,37 @@ const Achivements = () => {
                 <div className="contentAchivementsBox">
                     <div className="icons">
                         <div>
-                            <img src="image" />
-                            <span>text</span>
-                        </div>
+                        {
+                            Array.from(achivements).map(([icon, achivText], idx) => (
+                            <div key={idx}>
+                                <img src={icon}   />
+                                <span>{achivText}</span>
+                            </div>
+                            ))
+                        }
                     </div>
                 </div>
+            </div>
             </div>
     );
 }   
 
 
 function OtherProfilPage() {
-  return (
-    <div style={{height: '100vh'}}>
-        <div className="topContainer">
-            <Profil/>
-            <States/>
-        </div>
-        <div className="downContainer">
-            <GroupsAndFriends/>
-            <Achivements/>
-        </div>
-    </div>
-  )
-}
+        return (
+          <div style={{height: '100h'}}>
+              <div className="topContainer">
+                  <Profil/>
+              </div>
+              <div className="downContainer">
+                  <GroupsAndFriends/>
+                  <States winRate={0.00} wins={0} loses={0} streak={0}/>
+              </div>
+              <div className="downContainer">
+                  <Achivements/>
+              </div>
+          </div>
+        )
+      }
 
 export default OtherProfilPage

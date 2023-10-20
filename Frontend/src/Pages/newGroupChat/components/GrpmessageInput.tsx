@@ -1,12 +1,12 @@
-import '../GrpchatPage.scss'
+import React from 'react';
 import { useRef, useEffect, useContext } from 'react'
-import { chatSocketContext } from './GrpsocketContext'
+import { grpSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg';
 import axios from 'axios';
+import '../GrpchatPage.scss'
 import MessageComponent from './GrpmessageComponenet'
 import MessageRightComponenet from './GrpmessageRightComponenet ';
-import React from 'react';
 
 
 // Class chatAgent responsible for defining the properties of each person onthe conversation
@@ -33,7 +33,7 @@ const Conversation = (props: any) =>
         mesaageEndRef.current?.scrollIntoView();
     }, [props.MessagesArr]);
     
-    //Side 0 (Right) for sender Side 1 (Left) for receiver
+    //Side 0 (Right) for sender Side 1 (Left) for groupInfo
     return (
         <div className="conversationDiv">
             {
@@ -58,22 +58,43 @@ const messageInput = (props: any) => {
     const firstRef = useRef(null);
     
     //Our chat socket
-    const conversationsSocket = useContext(chatSocketContext);
+    const roomSocket = useContext(grpSocketContext);
     
     //Creating the messages map to be rendred
     let map = useMap();
 
+    //Our group users
+    let groupUsers = useMap();
+
+    //Join the room
+    useEffect(() => {
+        roomSocket.emit('joinRoom', {room : props.groupInfo.id})
+    }, [props.groupInfo.id])
+    
+    //Get group users and fill them in the map
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
-        
-            .then((res) => {
-                fillMap(res.data);
+            .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/users`, { withCredentials: true })
+            .then((res: any) => {
+                for (let i: number = 0; i < res.data.usersgb.length; i++) {
+                    groupUsers.set(res.data.usersgb[i].id, res.data.usersgb[i]);
+                }
             })
             .catch(Error)
-                console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
-    }, [props.Receiver.id])
+            console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+    }, [props.groupInfo.id])
     
+    //Getting the old conversation
+    // useEffect(() => {
+    //     axios
+    //         .get(`http://localhost:3000/chat/getOldMessages/${props.groupInfo.id}`, { withCredentials: true })
+        
+    //         .then((res) => {
+    //             fillMap(res.data);
+    //         })
+    //         .catch(Error)
+    //             console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+    // }, [props.groupInfo.id])
     
     const fillMap = (axiosResponse: any) => {
 
@@ -98,8 +119,8 @@ const messageInput = (props: any) => {
             else
             {
                 molLmessageId = axiosResponse[i].receiverId;
-                molLmessage = props.Receiver.username;
-                molMsgPic = props.Receiver.profileImage;
+                molLmessage = props.groupInfo.username;
+                molMsgPic = props.groupInfo.profileImage;
                 molMsgSide = 1;
             }
             
@@ -115,7 +136,6 @@ const messageInput = (props: any) => {
 
             map.set(axiosResponse[i].id, tmpMsgObj);
         }
-        
     };
     
     //function to generate message id in the map
@@ -133,17 +153,19 @@ const messageInput = (props: any) => {
     }
 
     useEffect(() => {
+        
         //Recieving message from socket
-        conversationsSocket.on('msgToClient', (payload: chatAgent) => {
-            // conversationsSocket.emit('getOldCnv')
-            receiveMessage(payload);
+        roomSocket.on('msgToclient', (payload: chatAgent) => {
+            console.log("Payload --->", payload);
+            // receiveMessage(payload);
         });
 
         //cleanup function
         return () => {
-            conversationsSocket.off('msgToClient');
+            roomSocket.off('msgToClient');
         }
-    }, [props.Receiver.username])
+
+    }, [props.groupInfo.username])
 
     //Handling newly received message 
     const receiveMessage = (newMessage: any) => {
@@ -158,39 +180,32 @@ const messageInput = (props: any) => {
             timestamp: "n/a",
         }
 
-        //Don't forget to replace username with id
-        // if (props.Receiver.username == tmpMsgObj.username)
-        // {
-        //     map.set(makeid(37), tmpMsgObj);
-        // }
-
-        if (props.Receiver.id == tmpMsgObj.senderid)
+        if (props.groupInfo.id == tmpMsgObj.senderid)
         {
             map.set(makeid(37), tmpMsgObj);
         }
     }
     
 
-    //On submit Handler adds the new message the messagesArr and 
-    //sends it to messagesArr 
+    //On submit Handler adds the new message the messagesMap and 
+    //sends it in the socket
     const onSubmitHandler = (e: any) => {
         
         //Prevent browser from refreshing each time we hit enter on the from input
         e.preventDefault();
         
         //Getting the message from input box
-        const inputMessage = document.querySelector('.messageInputBox')?.value;
+        const inputMessage = document.querySelector('.GrpmessageInputBox')?.value;
 
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
-            conversationsSocket.emit('msgToServer', newMessage)
-            // conversationsSocket.emit('getOldCnv')
+            roomSocket.emit('msgToRoom', { room :  props.groupInfo.id, message : newMessage.message })
         };
         
         if (inputMessage != '')
         {
             const tmpMsgObj: chatAgent = {
-                id: props.Receiver.id,
+                id: props.groupInfo.id,
                 senderid: props.Sender.id,
                 username: props.Sender.username,
                 pic: props.Sender.image,
@@ -200,7 +215,6 @@ const messageInput = (props: any) => {
             }
             firstRef.current.value = '';
             handleNewMessage(tmpMsgObj);
-            map.set(makeid(37), tmpMsgObj);
         }
     }
 

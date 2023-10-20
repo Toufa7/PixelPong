@@ -139,7 +139,6 @@ export const Game_instance = () =>{
 
   const socketRef = useRef<Socket | null >(null);
 
-
   useEffect(()=>{
     if (socketRef.current == null){
       socketRef.current = io("ws://localhost:3000/game", {withCredentials: true, transports: ["websocket"] });
@@ -299,18 +298,32 @@ p5_ob.draw = () =>{
   
         socket_gm?.on("UpdateBallPos",(Backroom : any)=> {
 
-          let reverse_ball_x = scaled_width - Backroom.GameBall_x;
-  
+          
           // for(const id in Frontroom){
-            if (Frontroom.Player1 && socket_gm.id == Frontroom.Player1?.id){
-
-              Frontroom.Player1.Ball.pos.x = Backroom.GameBall?.x;
-              Frontroom.Player1.Ball.pos.y = Backroom.GameBall?.y;
-            }else if (Frontroom.Player2 && socket_gm.id == Frontroom.Player2?.id){
-              Frontroom.Player2.Ball.pos.x = (reverse_ball_x * Backroom.P2_width) / Backroom.P1_width;
-              Frontroom.Player2.Ball.pos.y = (Backroom.GameBall_y * Backroom.P2_height) / Backroom.P2_height;
-            }
+            // if (Frontroom.Player1 && socket_gm.id == Frontroom.Player1?.id){
+              
+            //   Frontroom.Player1.Ball.pos.x = Backroom.GameBall?.x;
+            //   Frontroom.Player1.Ball.pos.y = Backroom.GameBall?.y;
+            // }else if (Frontroom.Player2 && socket_gm.id == Frontroom.Player2?.id){
+            //   let reverse_ball_x = scaled_width - Backroom.GameBall_x;
+            //   Frontroom.Player2.Ball.pos.x = (reverse_ball_x * Backroom.P2_width) / Backroom.P1_width;
+            //   Frontroom.Player2.Ball.pos.y = (Backroom.GameBall_y * Backroom.P2_height) / Backroom.P2_height;
+            // }
           // }
+
+          if (Backroom.who == "P1"){
+              Frontroom.Player1.Ball.pos.x = Backroom.Ball1_x;
+              Frontroom.Player1.Ball.pos.y = Backroom.Ball1_y;
+              Frontroom.Player1.Ball.diameter = (2.4 / 100) * scaled_width;
+          }
+          else if (Backroom.who == "P2"){
+            let reverse_ball_x = scaled_width - Backroom.Ball2_x;
+            Frontroom.Player2.Ball.pos.x = reverse_ball_x;
+            Frontroom.Player2.Ball.pos.y = Backroom.Ball2_y;
+            Frontroom.Player2.Ball.diameter = (2.4 / 100) * scaled_width;
+          }
+
+
         });
 
         // console.log("FrontCountDown -->" + FrontCountDown);
@@ -336,7 +349,8 @@ p5_ob.draw = () =>{
             // console.log(Frontroom.Player2?.username + ": My Health points are ---> " + Frontroom.Player2?.Health_points);
       
         if (Frontroom.Player1 && Frontroom.Player2){
-          if (FrontCountDown > 0){
+
+            if (FrontCountDown > 0){
               p5_ob.fill("#e0e3ba");
               p5_ob.textSize(150);
               p5_ob.text(FrontCountDown, scaled_width / 2, scaled_height / 2);
@@ -346,7 +360,6 @@ p5_ob.draw = () =>{
                       Player1?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player2 && id_of_player2 != id_player){
                         Player2.pos.x = scaled_width - Player2.paddle_width;
-                        // Player2.pos.y = P2_scaled_y;
                         Player2?.update_Player_pos(canvas,scaled_width,scaled_height);
                       }
                     }
@@ -355,24 +368,21 @@ p5_ob.draw = () =>{
                       Player2?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player1 && id_of_player1 != id_player){
                         Player1.pos.x = scaled_width - Player1.paddle_width;
-                        // Player1.pos.y = P1_scaled_y;
-                        console.log(Player1.pos.y);
                         Player1?.update_Player_pos(canvas,scaled_width,scaled_height);
                       }
                     }
+                    if (id_of_player1 == id_player)
+                      Frontroom.Player1?.Ball.update_pos(id_of_player1,Frontroom.Player1,Frontroom.Player2,scaled_width,scaled_height,Frontroom.Player1.Ball.diameter,Frontroom.Player2.Ball.diameter,Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle);
+                    else if (id_of_player2 == id_player)
+                      Frontroom.Player2?.Ball.update_pos(id_of_player2,Frontroom.Player1,Frontroom.Player2,scaled_width,scaled_height,Frontroom.Player1.Ball.diameter,Frontroom.Player2.Ball.diameter,Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle);
     
-                    // if (id_of_player1 == id_player)
-                    //   Frontroom.Player1?.Ball.update_pos(Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle,scaled_width,scaled_height);
-                    // else if (id_of_player2 == id_player)
-                    // Frontroom.Player2?.Ball.update_pos(Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle,scaled_width,scaled_height);
-                    // console.log(Player1.pos.x);
             }
         }
         else{
               p5_ob.background(MatchmakingPage);
               // p5_ob.image(MatchmakingPage,170,0,750,550);
               p5_ob.fill("#e0e3ba");
-              p5_ob.text("MatchMaking ...",p5_ob.width / 2 -  25 ,p5_ob.height/2);
+              // p5_ob.text("MatchMaking ...",p5_ob.width / 2 -  25 ,p5_ob.height/2);
           }
         // }
       }

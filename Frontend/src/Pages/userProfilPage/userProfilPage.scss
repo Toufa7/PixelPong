@@ -1,138 +1,27 @@
 @import "../../../node_modules/nes.css/css/nes.min.css";
 
 body {
-    background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #333C54;
+	background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #333C54;
 }
-
 
 .downContainer {
 	display: flex;
     flex-flow: row wrap;
-    justify-content:space-evenly;
+    justify-content:center;
 	align-items: center;
-	.fullAchivementsBox {
-		width: 652px; height: 302px;
-		background: #BFB3E1;
-		border-bottom: 8px solid #7C6E6E;
-		border-left: 8px solid #7C6E6E;
-		border-right: 8px solid #EBD9F0;
-		z-index: 0;
-			.headAchivementsBox {
-				height: 20%;
-				background-color: #BFB3E1;
-				border-bottom: 8px solid #7C6E6E;
-				border-left: 8px solid black;
-				border-top: 8px solid #EBD9F0;
-				color: #694694;
-			}
-	
-			.contentAchivementsBox {
-				height: 80%;
-				border-top: 8px solid #EBD9F0;
-				border-left: 8px solid black;
-				border-bottom: 8px solid black;
-				overflow: scroll;
-	
-				.icons img {
-					width: 70px; height: 70px;
-					margin-top: 5px;
-					margin-right: 20px;
-					margin-left: 15px;
-					margin-bottom: 15px;
-					opacity: 0.35;
-				}
-				.icons span {
-					opacity: 0.35;
-				}
-			}
-		}
-	}
-	
-	
-		.gAndFBox {
-			
-			width: 500px; height: 488px;
-			background-color: #8ade84;
-			border-left: 8px solid #f9f871;
-			border-right: 8px solid #000000;
-			border-bottom: 8px solid #f9f871;
-			z-index: 0;
-
-			.gAndFHeader {
-				height: 10%;
-				background-color: #8ade84;
-				border-bottom: 8px solid #7C6E6E;
-				border-left: 8px solid black;
-				border-top: 8px solid #f9f871;
-				text-align: center;
-				font-size: x-large;
-			}
-			
-			.gAndFTabs {
-				display: flex;
-				height: 6%;
-				.A,
-				.B {
-					flex-grow: 1;
-				}
-			}
-			.gAndFContent {
-				height: 84%;
-				border-top: 8px solid #f9f871;
-				border-left: 8px solid black;
-				border-bottom: 8px solid black;
-				color: white;
-				overflow: scroll;
-				scroll-behavior: smooth;
-				.listParent {
-					.list {
-						border: 2px solid black;
-						display: flex;
-						align-items: center;
-						padding: 10px;
-						display: flex;
-
-						
-						.avatar {
-							width: 60px; height: 60px; 
-							margin-right: 10px;
-							margin-left: 10px;
-							border-radius: 50px;
-							flex-grow: 0;
-
-						}
-						.name {
-						}
-						.ico {
-							height: 40px; width: 40px;
-							margin-top: 5px;
-							right: 22px;
-							flex-grow: 1;
-						}
-
-					}
-
-				}
-			}
-		}
-	
+	padding: 20px;
 
 
-.topContainer {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content:space-evenly;
-	padding-bottom: 20px;
-	align-items: center;
-	
-	
+
+
 	.headStatesBox {
-		width: 500px; height: 488px;
+		width: 540px; height: 488px;
 		background-color: cadetblue;
 		border-left: 8px solid #EBD9F0;
 		border-right: 8px solid #000000;
 		border-bottom: 8px solid #EBD9F0;
 		z-index: 0;
+
 	
 			.statesBoxHeader {
 				height: 10%;
@@ -140,10 +29,8 @@ body {
 				border-bottom: 8px solid #7C6E6E;
 				border-left: 8px solid black;
 				border-top: 8px solid #EBD9F0;
-				
 			}
 	
-			
 			.statesBoxContent {
 				height: 90%;
 				border-top: 8px solid #EBD9F0;
@@ -164,53 +51,194 @@ body {
 				}
 			}
 		}
-	}
 
-	  
-		.profilRectangle {
-			width: 655px;
-			height: 216px;
-			background-color: #F0A814CC;
-			border-top: 8px solid #EBD9F0;
-			border-bottom: 8px solid #7C6E6E;
-			border-left: 8px solid #7C6E6E;
-			border-right: 8px solid #EBD9F0;
-			flex-shrink: 1;
+
+	.fullAchivementsBox {
+		width: auto; height: 488px;
+		background: #BFB3E1;
+		border-bottom: 8px solid #7C6E6E;
+		border-left: 8px solid #7C6E6E;
+		border-right: 8px solid #EBD9F0;
+		z-index: 0;
+			
+			.headAchivementsBox {
+				height: 10%;
+				background-color: #BFB3E1;
+				border-bottom: 8px solid #7C6E6E;
+				border-left: 8px solid black;
+				border-top: 8px solid #EBD9F0;
+				color: #694694;
+			}
+	
+			.contentAchivementsBox {
+				height: 90%;
+				border-top: 8px solid #EBD9F0;
+				border-left: 8px solid black;
+				border-bottom: 8px solid black;
+				overflow-y: auto;
+	
+				.icons img {
+					width: 70px; height: 70px;
+					margin-top: 5px;
+					margin-right: 20px;
+					margin-left: 15px;
+					margin-bottom: 15px;
+					opacity: 0.35;
+				}
+				.icons span {
+					opacity: 0.35;
+					font-size:16px;
+				}
+			}
+		}
+	}
+	
+	
+		.gAndFBox {
+			width: 500px; height: 488px;
+			background-color: #4ba5de;
+			border-left: 8px solid white;
+			border-right: 8px solid #000000;
+			border-bottom: 8px solid white;
 			z-index: 0;
 
-	  
-		  .avatar {
-			height: 75%;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-	  
-			.left {
-			  display: flex;
-			  align-items: center;
+			.gAndFHeader {
+				height: 10%;
+				background-color: #4ba5de;
+				border-bottom: 8px solid #7C6E6E;
+				border-left: 8px solid black;
+				border-top: 8px solid white;
+				text-align: center;
+				font-size: x-large;
 			}
-		  }
-		}
-
-		.buttonat {
-			flex-shrink: 1;
-			background: #aa855a;
-			align-items: center;
-			justify-content: center;
-			display: flex;
-			gap: 10px 20px !important;
 			
-		}
-		.buttonat .nes-btn {
-			gap: 10px 20px !important;
+			.gAndFTabs {
+				display: flex;
+				height: 6%;
+				.A,
+				.B {
+					flex-grow: 1;
+				}
+			}
+			.gAndFContent {
+				height: 84%;
+				border-top: 8px solid white;
+				border-left: 8px solid black;
+				border-bottom: 8px solid black;
+				color: white;
+				overflow-y: auto;
+				scroll-behavior: smooth;
+				.listParent {
+					.list {
+						border: 2px solid black;
+						display: flex;
+						align-items: center;
+						padding: 10px;
+						.avatar {
+							width: 50px;
+							height: 50px;
+							object-fit: cover;
+							border-radius: 50%;
+						}
+						.name {
+							justify-content: space-between;
+							align-items: center;
+							align-items: end;
+						}
+					}
+				}
+			}
 		}
 	
 
+.topContainer {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:space-evenly;
+	padding: 20px;
+	align-items: center;
+	
+	
+	// .headStatesBox {
+	// 	width: 500px; height: 488px;
+	// 	background-color: cadetblue;
+	// 	border-left: 8px solid #EBD9F0;
+	// 	border-right: 8px solid #000000;
+	// 	border-bottom: 8px solid #EBD9F0;
+	// 	z-index: 0;
+	
+	// 		.statesBoxHeader {
+	// 			height: 10%;
+	// 			background-color: cadetblue;
+	// 			border-bottom: 8px solid #7C6E6E;
+	// 			border-left: 8px solid black;
+	// 			border-top: 8px solid #EBD9F0;
+				
+	// 		}
+	
+	// 		.statesBoxContent {
+	// 			height: 90%;
+	// 			border-top: 8px solid #EBD9F0;
+	// 			border-left: 8px solid black;
+	// 			border-bottom: 8px solid black;
+	// 			color: white;
 
+	// 			& div {
+	// 				margin: 20px;   
+	// 				justify-content: space-between;
+	// 				display: flex;
+	// 				.key {
+	// 					text-align: left;
+	// 				}
+	// 				.value {
+	// 					text-align: right;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+}
 
+	  
+.profilRectangle {
+	width: 1040px;
+	height: auto;
+	background-color: #FFBB01;
+	border-top: 8px solid #EBD9F0;
+	border-bottom: 8px solid #FFFFFF;
+	border-left: 8px solid #FFFFFF;
+	border-right: 8px solid #EBD9F0;
+	flex-shrink: 1;
+	z-index: 0;
 
-		@media only screen and (max-width: 600px) {
-			.profilRectangle {
-				margin-top: 75px;
-			}
+	.avatar {
+		height: 75%;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		margin: 20px;
+
+		.left {
+			display: flex;
+			align-items: center;
 		}
+	}
+}
+
+.buttonat {
+	flex-shrink: 1;
+	background: #aa855a;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	gap: 10px 20px !important;
+	
+}
+.buttonat .nes-btn {
+	gap: 10px 20px !important;
+}
+
+@media only screen and (max-width: 600px) {
+    .profilRectangle {
+        margin-top: 75px;
+    }
+}
