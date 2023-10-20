@@ -23,8 +23,10 @@ const UpdateGroup = (id : string) => {
 	const usernameCheck			= /^[A-Za-z0-9_]{5,15}$/;
 	
 	if (usernameCheck.test(groupName) || groupAvatar || choice || password) {
-		const data = new FormData();
-		data.append('file', groupAvatar);
+		console.log("THE ID IS -> ", id);
+		// console.log("update Avatar -> ", groupAvatar);
+		// console.log("update data  Avatar -> ", data);
+
 		interface groupTypes {
 			namegb : string;
 			usersgb : string;
@@ -42,20 +44,29 @@ const UpdateGroup = (id : string) => {
 		groupData.grouptype = groupType;
 	  
 		if (choice == 2) {groupData.password = password;}
-	  
-		toast.promise(
-			axios.patch(`http://localhost:3000/groupchat/${id}`, groupData, { withCredentials: true })
-			.then(() => {
-				axios.post(`http://localhost:3000/groupchat/${id}/uploadimage`, data, { withCredentials: true })
-				.then(() => {})
-			}),
-			{
-			loading: "Sending data...",
-			success: "Success Settings!",
-			error: "An error occurred",
-			},
-			{ duration: 5000, position: 'top-right' }
-		);
+		console.log(" --===Update ====--> ", groupData);
+
+		if (id)
+		{
+			toast.promise(
+				axios.patch(`http://localhost:3000/groupchat/${id}`, groupData, { withCredentials: true })
+				.then(() => {
+					if (groupAvatar) {
+
+						const data = new FormData();
+						data.append('file', groupAvatar);
+						axios.post(`http://localhost:3000/groupchat/${id}/uploadimage`, data, { withCredentials: true })
+						.then(() => {})
+					}
+				}),
+				{
+					loading: "Sending data...",
+					success: "Success Settings!",
+					error: "An error occurred",
+				},
+				{ duration: 5000, position: 'top-right' }
+			);
+		}
 	}
 	else if (password && password.length < 8) {
 		toast.error("Password Too Short	", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
@@ -291,9 +302,12 @@ const ManageGroup = () => {
 							<img src={erase} style={{width: '40px', height: '40px', marginRight: '10px'}}  onClick={() => {
 								axios.delete(`http://localhost:3000/groupchat/${selecting.id}`, {withCredentials: true})
 								.then(() => {
+									console.log("Deleted GRou ID -> ", selecting.id)
 									toast.success("Delete Success", {style: {textAlign: "center", width: '300px'}, position: "top-right"});
 								})
 								.catch(() => {
+									console.log("Deleted GRou ID -> ", selecting.id)
+
 									toast.error("Delete Failed", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 								})}}
 							></img>Delete Group</a>
