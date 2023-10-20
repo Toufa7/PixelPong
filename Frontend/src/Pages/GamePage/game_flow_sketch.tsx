@@ -7,6 +7,7 @@ import { P5CanvasInstance, ReactP5Wrapper, Sketch } from "react-p5-wrapper";
 import { Paddle } from './game-classes/paddle.class';
 // import { id_player } from './components/render_game_sketch_components';
 import { Ball } from './game-classes/Ball.class';
+import jwt_decode from 'jwt-decode';
 
 
 //h-             WORKING IMPORTS
@@ -21,6 +22,7 @@ import Win from "./assets/Win.png";
 import Lose from "./assets/Lose.jpeg";
 import Dimension from "./assets/Dim.gif";
 import { Socket, io } from 'socket.io-client';
+import { Cookies } from 'react-cookie';
 // import axios from 'axios';
 // import { Cookies } from 'react-cookie';
 // import { socket } from './socket_setup/client-connect';
@@ -43,6 +45,9 @@ export let height : any;
 
 let scaled_width : number;
 let scaled_height : number;
+export let Player1_username : string;
+export let Player2_username : string;
+export let Update_screen : boolean;
 
 // export let inGame : boolean;
 // export let user_id : string;
@@ -173,14 +178,26 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     let Screen_display :string = "on_going";
     let FrontCountDown : number = 6;
     let Dim : p5Types.Image;
+    let user_image : p5Types.Image;
 
     let P1_scaled_y : number;
     let P2_scaled_y : number;
+
+
+    const cookie = new Cookies();
+    const token : any = jwt_decode(cookie.get('jwt'));
+
+    let Get_user_image : any;
+    // console.log(token.username);
+    // let user_image : p5Types.Image;
     
     // console.log(Infos);
     
     //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
+
         SettingUpBackWithFront(socket_gm, Frontroom, p5_ob,Screen_display);
+
+        // Get_user_image = "http://localhost:3000/auth/avatar/${token.id}"
     //o--------------------------------------------------------------------------
 
 
@@ -195,6 +212,8 @@ p5_ob.preload = () =>{
           win = p5_ob.loadImage(Win);
           lose = p5_ob.loadImage(Lose);
           Dim = p5_ob.loadImage(Dimension);
+          user_image = p5_ob.loadImage(Get_user_image);
+
 }
         //r------------------
   
@@ -252,7 +271,6 @@ p5_ob.setup = () => {
       })
       
 p5_ob.draw = () =>{
-
     socket_gm?.on("CountDown",(C_T)=>{
       
     FrontCountDown = C_T.CountDown;
@@ -273,6 +291,7 @@ p5_ob.draw = () =>{
                 Frontroom.Player2.Paddle.pos.y = Backroom.P2_y_scaled;
                 Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
                 Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
+
                 // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
                 // Frontroom.Player2.username = Backroom.Player2.username;
             }
@@ -282,6 +301,7 @@ p5_ob.draw = () =>{
               Frontroom.Player2.Paddle.pos.y = Backroom.P2_y;
               Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
               Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
+
               // Frontroom.Player1.Health_points = Backroom.Player1?.Health_points;
               // Frontroom.Player1.username = Backroom.Player1.username;
 
@@ -291,6 +311,7 @@ p5_ob.draw = () =>{
             Frontroom.Player1.Paddle.pos.y = Backroom.P1_y_scaled;
             Frontroom.Player1.Paddle.paddle_width = (2 / 100) * scaled_width;
             Frontroom.Player1.Paddle.paddle_height = (20 / 100) * scaled_height;
+            
             // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
             // Frontroom.Player2.username = Backroom.Player2.username;
         }
@@ -332,6 +353,7 @@ p5_ob.draw = () =>{
         // console.log("FrontCountDown -->" + FrontCountDown);
 
         if (Screen_display == "Win"){
+          Update_screen = false;
           p5_ob.background(Dim);
           p5_ob.fill("#ffffff");
           p5_ob.textSize((5.4 / 100) * scaled_width);
@@ -339,6 +361,7 @@ p5_ob.draw = () =>{
           console.log("You Won");
         }
         else if (Screen_display == "Lose"){
+          Update_screen = false;
           p5_ob.background(Dim);
           p5_ob.fill("#ffffff");
           p5_ob.textSize((5.4 / 100) * scaled_width);
@@ -350,52 +373,63 @@ p5_ob.draw = () =>{
 
           // for(const id in Frontroom){
             p5_ob.background("#FA9200");
+            // Player2_username = Frontroom.Player2_username;
+            // console.log(Frontroom.Player1?.username + ": My Health points are ---> " + Frontroom.Player1?.Health_points);
+            // console.log(Frontroom.Player2?.username + ": My Health points are ---> " + Frontroom.Player2?.Health_points);
+            
+          if (Frontroom.Player1 && Frontroom.Player2){
+            Update_screen = true;
             const id_of_player1 = Frontroom.Player1?.id;
             const id_of_player2 = Frontroom.Player2?.id;
             const Player1 = Frontroom.Player1?.Paddle;
             const Player2 = Frontroom.Player2?.Paddle;
-            // console.log(Frontroom.Player1?.username + ": My Health points are ---> " + Frontroom.Player1?.Health_points);
-            // console.log(Frontroom.Player2?.username + ": My Health points are ---> " + Frontroom.Player2?.Health_points);
-      
-        if (Frontroom.Player1 && Frontroom.Player2){
-
             if (FrontCountDown > 0){
               p5_ob.fill("#e0e3ba");
               p5_ob.textSize(150);
               p5_ob.text(FrontCountDown, scaled_width / 2, scaled_height / 2);
-        }
-        else{
+            }
+            else{
                     if (id_of_player1 == id_player){
+                      Player1_username = Frontroom.Player1?.username;
                       Player1?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player2 && id_of_player2 != id_player){
+                        Player2_username = Frontroom.Player2?.username;
                         Player2.pos.x = scaled_width - Player2.paddle_width;
                         Player2?.update_Player_pos(canvas,scaled_width,scaled_height);
                       }
                     }
                     else if (id_of_player2 == id_player){
-                      
+                      Player1_username = Frontroom.Player2?.username;
                       Player2?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player1 && id_of_player1 != id_player){
+                        Player2_username = Frontroom.Player1?.username;
                         Player1.pos.x = scaled_width - Player1.paddle_width;
                         Player1?.update_Player_pos(canvas,scaled_width,scaled_height);
                       }
                     }
                     if (id_of_player1 == id_player)
-                      Frontroom.Player1?.Ball.update_pos(id_of_player1,Frontroom.Player1,Frontroom.Player2,scaled_width,scaled_height,Frontroom.Player1.Ball.diameter,Frontroom.Player2.Ball.diameter,Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle);
+                      Frontroom.Player1?.Ball.update_pos(id_of_player1,Frontroom.Player1,
+                          Frontroom.Player2,scaled_width,scaled_height,Frontroom.Player1.Ball.diameter,Frontroom.Player2.Ball.diameter,Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle);
                     else if (id_of_player2 == id_player)
-                      Frontroom.Player2?.Ball.update_pos(id_of_player2,Frontroom.Player1,Frontroom.Player2,scaled_width,scaled_height,Frontroom.Player1.Ball.diameter,Frontroom.Player2.Ball.diameter,Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle);
+                      Frontroom.Player2?.Ball.update_pos(id_of_player2,Frontroom.Player1,
+                          Frontroom.Player2,scaled_width,scaled_height,Frontroom.Player1.Ball.diameter,Frontroom.Player2.Ball.diameter,Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle);
     
-        }
+              }
       }
-        else{
+        else{ 
               p5_ob.background(MatchmakingPage);
+              Update_screen = false;
               // p5_ob.image(MatchmakingPage,170,0,750,550);
               p5_ob.fill("#e0e3ba");
               // p5_ob.text("MatchMaking ...",p5_ob.width / 2 -  25 ,p5_ob.height/2);
           }
+          // p5_ob.fill("#ffffff");
+          // p5_ob.textSize((2.4 / 100) * window.innerWidth);
+          // p5_ob.text(Frontroom.Player1?.username, window.innerWidth - 300, window.innerHeight - 300);
         // }
       }
       else if (Screen_display == "Forfait"){
+          Update_screen = false;
           console.log("Game  Over someone forfaited");
           p5_ob.background(ovp);
           // p5_ob.image(ovp,250,0,600,550);

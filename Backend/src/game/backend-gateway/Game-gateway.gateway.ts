@@ -264,11 +264,12 @@ async handleDisconnect(Player: Socket) {
           Room.GameBall.y = Game_Data.Scaled_height / 2;
           Room.GameBall.ball_speed_x = -4;
           Room.GameBall.ball_speed_y = 2;
+          
           Room.Player1.x = 0;
           Room.Player1.y = (Game_Data.Scaled_height / 2) - (Game_Data.P1_paddle_height / 2);
 
           Room.Player2.x = 0;
-          Room.Player2.y = (Game_Data.Scaled_height / 2) - (Game_Data.P1_paddle_height / 2);
+          Room.Player2.y = (Game_Data.Scaled_height / 2) - (Game_Data.P2_paddle_height / 2);
           return (true);
         }
         return (false);
@@ -298,6 +299,9 @@ async handleDisconnect(Player: Socket) {
 
 
     Ball_points_check(radius : number,Room,Player1_x,Player1_y,Player1_width,Player1_height,Player2_x,Player2_y,Player2_width,Player2_height,screen_width,Ball_x,Game_Data) : boolean{
+      // let Randomencounter : number;
+
+      
       let r : number  = 0;
         for(let i = 0; i < 16 ; i++){
           let degree = (i * 22.5) * (Math.PI / 180);
@@ -312,14 +316,14 @@ async handleDisconnect(Player: Socket) {
                 console.log("hit left half")
                 if(y_ball > (Player1_y + 15) && y_ball < (Player1_y + Player1_height - 11)){
                     console.log("hit mid !!");
-                    Room.GameBall.x = Room.GameBall.x + 8;
+                    Room.GameBall.x = Room.GameBall.x + 4;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
                     return(true);
                 }
                 else{
                     console.log("hit corner !!");
                     console.log(Player1_y);
-                    Room.GameBall.x = Room.GameBall.x + 8;
+                    Room.GameBall.x = Room.GameBall.x + 4;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
 
                     // this.r = this.ball_ob.random(0,2);
