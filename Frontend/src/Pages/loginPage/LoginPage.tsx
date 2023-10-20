@@ -17,8 +17,7 @@ const Buttons = () => {
     return (
         <>
             <div className="a">
-                <a className="nes-btn google" href="http://localhost:3000/auth/go
-                ogle/">Google</a>
+                <a className="nes-btn google" href="http://localhost:3000/auth/google/">Google</a>
             </div>
                 <div className="text-OR">
                     <AnimatedText type="chars">-- OR --</AnimatedText>
