@@ -11,14 +11,14 @@ import crown from '../assets/crown.svg'
 
 const ChatUser = (props:any) => {
     //Fetching current user (Receiver) data each time the prop gets new value
-    const [remoteUser, setRemoteUser] = useState({});
+    const [groupRoom, setgroupRoom] = useState({});
     useEffect(() => {
         const fetchCurrentUserInfo = (id: any) => {
             if (id)
             {
                 axios.get(`http://localhost:3000/groupchat/${id}/groupinfo`, { withCredentials: true })
                 .then((response) => {
-                    setRemoteUser(response.data);
+                    setgroupRoom(response.data);
                     console.log("rese -> ", response.data);
                 })
                 .catch((erro) => {
@@ -57,7 +57,6 @@ const ChatUser = (props:any) => {
         });
     }, []);
 
-console.log("Id is 1 -> ", props.pcurrentUserId);
 
     const openDialogUsers = () => {
         console.log("Clicked On Info")
@@ -70,15 +69,15 @@ console.log("Id is 1 -> ", props.pcurrentUserId);
                     <div className="GrpplayerPicProfile">
                         <div className="GrpchatUser">
                             {
-                                //Conditional rendring to display the profile image or not based on the presence of remoteUser.profileImage
-                                remoteUser.image ?   <img src={`http://localhost:3000/groupchat/getimage/${remoteUser.id}`} alt="user-photo"/>
+                                //Conditional rendring to display the profile image or not based on the presence of groupRoom.profileImage
+                                groupRoom.image ?   <img src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="user-photo"/>
                                                         :   <img src={info} alt="user-photo" />
                             }
                             <div className="GrpchatUserName">
                                 <span>
                                     {
-                                        //Conditional rendring to display the profile username or not based on the presence of remoteUser.username
-                                        remoteUser.namegb ?   remoteUser.namegb
+                                        //Conditional rendring to display the profile username or not based on the presence of groupRoom.username
+                                        groupRoom.namegb ?   groupRoom.namegb
                                                             :   'Start a conversation   '
                                     }
                                 </span>
@@ -86,8 +85,8 @@ console.log("Id is 1 -> ", props.pcurrentUserId);
                         </div>
                     <div className='GrpchatUserControls'>
                     {
-                        //Conditional rendring to display the control buttons or not based on the presence of remoteUser.profileImage
-                        remoteUser.namegb ?  (<div className="GrpchatControlButtons">
+                        //Conditional rendring to display the control buttons or not based on the presence of groupRoom.profileImage
+                        groupRoom.namegb ?  (<div className="GrpchatControlButtons">
                                                         <button className='GrpuserControlButtons'>
                                                             <img src={info} onClick={openDialogUsers} width={50} height={50} title='Group Info' ></img>
                                                         </button>
@@ -168,8 +167,8 @@ console.log("Id is 1 -> ", props.pcurrentUserId);
 		</dialog>
 		</section>
 
-            {/* Sending LocalUser (Sender) and RemoteUser (Receiver) objects to Messaging Body component */}
-            <MessagingBody localUser={localUser} remoteUser={remoteUser}/>
+            {/* Sending LocalUser (Sender) and groupRoom (Receiver) objects to Messaging Body component */}
+            <MessagingBody localUser={localUser} groupInfo={groupRoom}/>
             <div className='GrpchatBodyLowerRibbon'></div>
         </div>
     );
@@ -179,13 +178,13 @@ const MessagingBody = (props: any) => {
 
     return (
         <div className="GrpMessagingBodyDiv">
-            {/* Passing Parent props to the child (localUser and remoteUser) */}
-            {
-                props.remoteUser.profileImage   ? (<MessageInput Sender={props.localUser} Receiver={props.remoteUser}/>)
-                                                : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="user-photo" />
-            }
-        </div>
-        )
+        {/* Passing Parent props to the child (localUser and remoteUser) */}
+        {
+            props.groupInfo.id   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="user-photo" />
+        }
+    </div>
+    )
 }
 
 export default ChatUser

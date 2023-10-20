@@ -14,15 +14,11 @@ interface chatUser {
     pic: string;
     id: string;
 }
-
 const GrpchatNavBar = () => {
-    
     const [currentUserId, setCurrentUserId] = useState('');
-    
     const getCurentUserDms = (data: any) => {
         setCurrentUserId(data);
     }
-
     const [data, setLabel] = useState({
 		label : false,
 		createOrmanage : false

@@ -80,32 +80,19 @@ export class GroupchatService {
 
     //get all users of a groupchat
     async findAllUsers(id: string) {
-        const data = await this.prisma.groupchat.findUnique({
+        return await this.prisma.groupchat.findUnique({
             where: {
                 id: id,
             },
             select: {
                 usersgb: true,
-                admins: true,
             },
         });
-        var users = [];
-        if(data.usersgb)
-        {
-            data.usersgb.forEach(user => {
-                data.admins.forEach(admin => {
-                    if (user.id != admin.id) {
-                        users.push(user);
-                    }
-                });
-            });
-        }
-        return users;
     }
 
     //get all admins of a groupchat
     async findAllAdmins(id: string) {
-        const data = await this.prisma.groupchat.findUnique({
+        return await this.prisma.groupchat.findUnique({
             where: {
                 id: id,
             },
@@ -113,7 +100,6 @@ export class GroupchatService {
                 admins: true,
             },
         });
-        return data.admins
     }
 
     //get all messages of a groupchat
@@ -196,7 +182,7 @@ export class GroupchatService {
     //upload a image to a groupchat
     async uploadimage(filename: string, id: string, iduserconnected: string) {
         //get sueperadmin of the groupchat
-        console.log("uploade image :: ", filename)
+        
         try
         {
             const superadmin = await this.prisma.groupchat.findUnique({
@@ -227,8 +213,7 @@ export class GroupchatService {
     }
 
     //update a groupchat
-    async update(id: string, updateGroupchatDto: any, iduserconnected: string) {
-        console.log("updateGroupchatDto :::  ", updateGroupchatDto);
+    async update(filename: string, id: string, updateGroupchatDto: any, iduserconnected: string) {
         if (updateGroupchatDto.password) {
             const saltOrRounds = 10;
             updateGroupchatDto.password = await bcrypt.hash(updateGroupchatDto.password, saltOrRounds);
@@ -258,6 +243,7 @@ export class GroupchatService {
                     namegb: updateGroupchatDto.namegb,
                     grouptype: updateGroupchatDto.grouptype,
                     password: updateGroupchatDto.password,
+                    image: filename,
                 },
             });
         }
@@ -345,7 +331,6 @@ export class GroupchatService {
 
     //add a user to a groupchat protected
     async adduserprotected(id: string, pass: string, iduserconnected: string) {
-        console.log(pass);
         const groupchat = await this.prisma.groupchat.findUnique({
             where: {
                 id: id,
@@ -356,7 +341,7 @@ export class GroupchatService {
         });
         const validPassword = await bcrypt.compare(pass, groupchat.password);
         if (validPassword) {
-            await this.prisma.groupchat.update({
+            return await this.prisma.groupchat.update({
                 where: {
                     id: id,
                 },
@@ -364,10 +349,9 @@ export class GroupchatService {
                     usersgb: { connect: { id: iduserconnected } },
                 },
             });
-            return "yes"
         }
         else {
-            return "no";
+            return "Wrong password";
         }
     }
     //accept a request to join a groupchat

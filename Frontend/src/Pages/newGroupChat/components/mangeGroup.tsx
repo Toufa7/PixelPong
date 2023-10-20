@@ -24,6 +24,7 @@ const UpdateGroup = (id : string) => {
 	
 	if (usernameCheck.test(groupName) || groupAvatar || choice || password) {
 		const data = new FormData();
+		data.append('file', groupAvatar);
 		interface groupTypes {
 			namegb : string;
 			usersgb : string;
@@ -32,7 +33,6 @@ const UpdateGroup = (id : string) => {
 			password? : string;
 			image : string;
 		}
-		data.append('file', groupAvatar);
 		
 		const groupData : groupTypes = {};
 		if (groupName) {groupData.namegb = groupName;}

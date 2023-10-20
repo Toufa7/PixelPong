@@ -34,6 +34,7 @@ export class GroupchatController {
     }
 
 
+
     //get all groupchat of a user
     @Get()
     findAll(@Req() Request : any): any {
@@ -54,8 +55,8 @@ export class GroupchatController {
     }
     //get all groupchat of a useradmin
     @Get("lifihomanaadmin")
-    findgpadmin(@Req() Request : any): any {
-        return this.GroupchatService.findgpadmin(Request.user.id);
+    findgpadmin(@Req() req : any): any {
+        return this.GroupchatService.findgpadmin(req.id);
     }
 
     //get all users of a groupchat
@@ -142,8 +143,20 @@ export class GroupchatController {
     
     //update a groupchat
     @Patch(":id")
-    update(@Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req : any): any { 
-        return this.GroupchatService.update(id, updateGroupchatDto, req.user.id);
+    @UseInterceptors(
+        FileInterceptor('file', {
+          storage: diskStorage({
+            destination: './uploads',
+            filename: (req, file, cb) => {
+              const filename: string = file.originalname.split('.')[0] + Date.now();
+              const extension = file.originalname.split('.')[1];
+              cb(null, `${filename}.${extension}`);
+            },
+          }),
+        }),
+      )
+    update(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req : any): any { 
+        return this.GroupchatService.update(file.filename ,id, updateGroupchatDto, req.user.id);
     }
 
     // ban a user from a groupchat
@@ -158,6 +171,7 @@ export class GroupchatController {
         return this.GroupchatService.muteuser(id, iduser, req.user.id);
     }
 
+    ///////// not working now  /////////
     //add a user to a groupchat public
     @Patch(':id/userpublic')
     adduser(@Param('id') id: string , @Req() req : any): any {
@@ -166,8 +180,8 @@ export class GroupchatController {
 
     //add a user to a groupchat protected
     @Patch(":id/userprotected")
-    adduserprotected(@Param('id') id: string,  @Req() req : any, @Body() data : any): any {
-        return this.GroupchatService.adduserprotected(id ,data.pass, req.user.id);
+    adduserprotected(@Param('id') id: string,  @Req() req : any, @Body() pass : string): any {
+        return this.GroupchatService.adduserprotected(id ,pass, req.user.id);
     }
 
     /////////////////////-------add an user to a groupchat private----////////////////////
