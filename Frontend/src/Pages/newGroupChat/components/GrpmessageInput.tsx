@@ -4,7 +4,7 @@ import { grpSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg';
 import axios from 'axios';
-import '../GrpchatPage.scss'
+// import '../GrpchatPage.scss'
 import MessageComponent from './GrpmessageComponenet'
 import MessageRightComponenet from './GrpmessageRightComponenet ';
 
