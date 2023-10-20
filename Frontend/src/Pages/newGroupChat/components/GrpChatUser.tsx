@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import MessageInput from './GrpmessageInput'
@@ -9,7 +8,7 @@ import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
 
 
-const ChatUser = (props:any) => {
+const ChatUser = (props : any) => {
     //Fetching current user (Receiver) data each time the prop gets new value
     const [groupRoom, setgroupRoom] = useState({});
     useEffect(() => {
@@ -40,6 +39,8 @@ const ChatUser = (props:any) => {
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
         .then((response) => {
+            console.log("Admins -> ", response.data)
+
             setUsers(response.data);
         })
         .catch((error) => {
@@ -50,10 +51,12 @@ const ChatUser = (props:any) => {
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/admins`, { withCredentials: true })
         .then((response) => {
+            console.log("Admins -> ", response.data)
             setAdmins(response.data);
         })
         .catch((error) => {
             console.log("Error fetching admins:", error);
+
         });
     }, []);
 
