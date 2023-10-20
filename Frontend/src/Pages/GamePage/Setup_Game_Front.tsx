@@ -7,15 +7,18 @@ import { ReactP5Wrapper } from "react-p5-wrapper";
 import { Game_instance} from './game_flow_sketch';
 // import { ContextSocket, socket } from './socket_setup/client-connect';
 import { Websocket_render } from './components/render_game_sketch_components';
+import { InfoBorad } from './info_board'
 
 export default function Setup(){
   return (
-    // <div id = 'child'>
+    <>
       <Game_instance/>
+      <InfoBorad/>
+    </>
   )
-     
+
 }
-  
+
 
  /* <ContextSocket.Provider value={socket}>
       <Websocket_render/>
