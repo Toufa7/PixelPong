@@ -19,6 +19,7 @@ import f from "./assets/cubecavern_memesbruh03.ttf";
 import over_g from "./assets/wdS.gif";
 import Win from "./assets/Win.png";
 import Lose from "./assets/Lose.jpeg";
+import Dimension from "./assets/Dim.gif";
 import { Socket, io } from 'socket.io-client';
 // import axios from 'axios';
 // import { Cookies } from 'react-cookie';
@@ -171,6 +172,7 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     let lose : p5Types.Image;
     let Screen_display :string = "on_going";
     let FrontCountDown : number = 6;
+    let Dim : p5Types.Image;
 
     let P1_scaled_y : number;
     let P2_scaled_y : number;
@@ -192,6 +194,7 @@ p5_ob.preload = () =>{
           ovp = p5_ob.loadImage(over_g);
           win = p5_ob.loadImage(Win);
           lose = p5_ob.loadImage(Lose);
+          Dim = p5_ob.loadImage(Dimension);
 }
         //r------------------
   
@@ -329,11 +332,17 @@ p5_ob.draw = () =>{
         // console.log("FrontCountDown -->" + FrontCountDown);
 
         if (Screen_display == "Win"){
-          p5_ob.background(win);
+          p5_ob.background(Dim);
+          p5_ob.fill("#ffffff");
+          p5_ob.textSize((5.4 / 100) * scaled_width);
+          p5_ob.text("You Win !!", scaled_width / 2, scaled_height / 2);
           console.log("You Won");
         }
         else if (Screen_display == "Lose"){
-          p5_ob.background(lose);
+          p5_ob.background(Dim);
+          p5_ob.fill("#ffffff");
+          p5_ob.textSize((5.4 / 100) * scaled_width);
+          p5_ob.text("You Lose !!", scaled_width / 2, scaled_height / 2);
           console.log("You Lost");
         }
         else{
@@ -354,8 +363,8 @@ p5_ob.draw = () =>{
               p5_ob.fill("#e0e3ba");
               p5_ob.textSize(150);
               p5_ob.text(FrontCountDown, scaled_width / 2, scaled_height / 2);
-            }
-            else{
+        }
+        else{
                     if (id_of_player1 == id_player){
                       Player1?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player2 && id_of_player2 != id_player){
@@ -376,8 +385,8 @@ p5_ob.draw = () =>{
                     else if (id_of_player2 == id_player)
                       Frontroom.Player2?.Ball.update_pos(id_of_player2,Frontroom.Player1,Frontroom.Player2,scaled_width,scaled_height,Frontroom.Player1.Ball.diameter,Frontroom.Player2.Ball.diameter,Frontroom.Player1?.Paddle,Frontroom.Player2?.Paddle);
     
-            }
         }
+      }
         else{
               p5_ob.background(MatchmakingPage);
               // p5_ob.image(MatchmakingPage,170,0,750,550);

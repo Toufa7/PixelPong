@@ -34,11 +34,6 @@ export class GroupchatController {
     }
 
 
-    //get a groupchat
-    // @Get(":id/info")
-    // findOne(@Param('id') id: string): any {
-    //     return this.GroupchatService.findOne(id);
-    // }
     //get all groupchat of a user
     @Get()
     findAll(@Req() Request : any): any {
@@ -49,6 +44,7 @@ export class GroupchatController {
     //     console.log(id, " id")
     //     return this.GroupchatService.findOne(id.id);
     // }
+    @Get(":id/groupinfo")
 
     //get a groupchat
     @Get(":id/groupinfo")

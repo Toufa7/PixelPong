@@ -132,7 +132,9 @@ const messageInput = (props: any) => {
 
     useEffect(() => {
         //Recieving message from socket
+        console.log("================>");
         conversationsSocket.on('msgToClient', (payload: chatAgent) => {
+            console.log("---------------->");
             // conversationsSocket.emit('getOldCnv')
             receiveMessage(payload);
         });

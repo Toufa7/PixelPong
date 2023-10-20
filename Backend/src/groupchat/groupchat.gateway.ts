@@ -28,19 +28,19 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   ////////////////////////////////// -----dis-- ////////////////////////////////
   async handleDisconnect(client: Socket, ...args: any[]) {
     this.logger.log(`Client disconnected: ${client.id}`);
-    const user = await this.getUser(client);
-    if(user)
-    {
-      map.delete( user.id);
-    }
+    // const user = await this.getUser(client);
+    // if(user)
+    // {
+    //   map.delete( user.id);
+    // }
   }
   async handleConnection(client: any, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-    const user = await this.getUser(client);
-    if(user)
-    {
-      map.set(user.id,client.id);
-    }
+    // const user = await this.getUser(client);
+    // if(user)
+    // {
+    //   map.set(user.id,client.id);
+    // }
   }
   afterInit(server: any) {
     this.logger.log("initialized");
@@ -72,17 +72,22 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   async handlenJoinRoom(client : Socket , data : any)
   {
       const user = await this.getUser(client);
-
       const inroom = await this.prisma.groupchat.findMany({
         where: {
           AND: [
-            { id : data.room },
+            { id : data.roomid },
             { usersgb : {some : {id : user.id}}}
           ],
         },
       });
       if(inroom.length != 0){
-        client.join(data.room);
+        if(map.get(`${data.roomid}${user.id}`) != client.id)
+        { 
+          map.set(data.roomid + user.id , client.id)
+          console.log("user join ==" , user.id, " room   :: ", data.roomid , "get room: ",map.get(data.roomid+user.id));
+          // console.log("map ==> " ,map);
+          client.join(data.roomid);
+        }
       }
   }
 
@@ -93,12 +98,10 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   @SubscribeMessage('msgToRoom')
   async handleMessageRoom(client : Socket, body : any) {
     const user = await this.getUser(client);
-    console.log("usuuuu::: " , user);
-
     const inroom = await this.prisma.groupchat.findMany({
       where: {
         AND: [
-          { id : body.room },
+          { id : body.roomid },
           { usersgb : {some : {id : user.id}}}
         ],
       },
@@ -108,14 +111,16 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       await this.prisma.messagegb.create({
         data: {
           sender: {connect: {id: user.id}},
-          groupchat: {connect: {id: body.room}},
+          groupchat: {connect: {id: body.roomid}},
           message : body.message
         },
       });
-      this.server.to(body.room).emit('msgToclient', {
-        roomid: body.room,
+      console.log("========++++++=======");
+      this.server.to(body.roomid).emit(body.roomid, {
+        roomid: body.roomid,
         timestamp: body.timestamp,
         side: body.side,
+        messageid: body.messageId,
         message: body.message,
         idsender: user.id,
         username: user.username,
@@ -132,13 +137,13 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     const inroom = await this.prisma.groupchat.findMany({
       where: {
         AND: [
-          { id : data.room },
+          { id : data.roomid },
           { usersgb : {some : {id : user.id}}}
         ],
       },
     });
     if(inroom.length != 0){
-      client.leave(data.room);
+      client.leave(data.roomid);
     }
   }
 

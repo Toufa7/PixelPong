@@ -211,55 +211,69 @@ async handleDisconnect(Player: Socket) {
               break;
             }
 
+            if (this.Catch_Win_Lost_Reset_Game(local_Ball_x,local_Ball_y,Game_Data,left,right,Room.Player1,Room.Player2,Room)){
+              break;
+            }
+
 
             if(top < 0){
-              // Room.GameBall.x = Room.GameBall.x + 8;
+              Room.GameBall.x = Room.GameBall.x + 8;
               Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
             }
             if (bottom > Game_Data.Scaled_height){
-            // Room.GameBall.x = Room.GameBall.x - 8;
+            Room.GameBall.x = Room.GameBall.x - 8;
             Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
             }
             Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
             Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
             break;
           }
-
-      //     }
-      //     if (Room.Player1?.id == Player.id || Room.Player2?.id == Player.id){
-      //       local_Ball.x = Room.GameBall.x;
-      //       local_Ball.y = Room.GameBall.y;
-      //         top = (Room.GameBall.y - Room.GameBall.diameter / 2);
-      //         bottom = (Room.GameBall.y + Room.GameBall.diameter / 2);
-      //         left = (Room.GameBall.x - Room.GameBall.diameter / 2);
-      //         right = (Room.GameBall.x + Room.GameBall.diameter / 2);
-
-
-            // if (this.check_collision_Ball_with_players(Room,Game_Data,Player)){
-            //   Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
-            //   Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
-            //   break;
-            // }
-
-            // if (this.Manage_Game_Hit_Or_Reset(Room.Player1,Player,Room)){
-            //   break;
-            // }
-
-            // else{
-            //   if(top < 0){
-            //     // Room.GameBall.x = Room.GameBall.x + 8;
-            //     Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-            // }
-            // if (bottom > Room.Player1.Scaled_height){
-            //   // Room.GameBall.x = Room.GameBall.x - 8;
-            //   Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-            // }
-            // Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
-            // Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
-            // break;
-          // }
       }
     }
+
+    Win_Lose_Management(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room) : boolean{
+      if (Ball_left_point < 0){
+        Room.Player1.Health_points--;
+        console.log("I got Hit --->" + Room.Player1?.username);
+        
+        return (true);
+      }
+      else if (Ball_right_point > Game_Data.Scaled_width){
+        Room.Player2.Health_points--;
+        console.log("I got Hit --->" + Room.Player2?.username);
+        
+        return (true);
+      }
+      return (false);
+    }
+
+
+    Catch_Win_Lost_Reset_Game(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room){
+        if (this.Win_Lose_Management(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room)){
+            if (Room.Player1.Health_points == 0){
+              console.log("the Game Sould end Player 2 Wins!!");
+              this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Lose"});
+              this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Win"});
+            }
+            else if (Room.Player2.Health_points == 0){
+              console.log("the Game Sould end Player 1 Wins!!");
+              this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Win"});
+              this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Lose"});
+            }
+          Room.GameBall.x = Game_Data.Scaled_width / 2;
+          Room.GameBall.y = Game_Data.Scaled_height / 2;
+          Room.GameBall.ball_speed_x = -4;
+          Room.GameBall.ball_speed_y = 2;
+          Room.Player1.x = 0;
+          Room.Player1.y = (Game_Data.Scaled_height / 2) - (Game_Data.P1_paddle_height / 2);
+
+          Room.Player2.x = 0;
+          Room.Player2.y = (Game_Data.Scaled_height / 2) - (Game_Data.P1_paddle_height / 2);
+          return (true);
+        }
+        return (false);
+    }
+
 
     check_collision_Ball_with_players(Ball_x : number , Ball_y : number , Ball_diameter : number , Player , Game_Data , Player_socket : Socket) : boolean{
       for(const id in this.Rooms.rooms){
@@ -281,6 +295,7 @@ async handleDisconnect(Player: Socket) {
         //   }
         }
     }
+
 
     Ball_points_check(radius : number,Room,Player1_x,Player1_y,Player1_width,Player1_height,Player2_x,Player2_y,Player2_width,Player2_height,screen_width,Ball_x,Game_Data) : boolean{
       let r : number  = 0;
@@ -340,84 +355,8 @@ async handleDisconnect(Player: Socket) {
 
             }
         }
-  
-          // if (((x_ball > Player.x && x_ball < Player.x + Player.width && y_ball > Player.y && y_ball < Player.y + Player.height))){
-          //         if(y_ball > (Player.y + 20 && x_ball < Player.x + Player.width) && y_ball < (Player.y + Player.height - 20)){
-          //             console.log("hit mid !!");
-          //             Ball_x = Ball_x + 20;
-          //             Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-          //             return(true);
-          //         }
-          //         else{
-          //             console.log("hit corner !!");
-          //             Ball_x = Ball_x + 20;
-          //             Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-          //             // Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-          //             r = Math.random() * 2;
-          //             if (r){
-          //               console.log(Math.floor(r));
-          //               Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-          //             }
-          //             return(true);
-          //         }
-          //   }
-        }
-        return (false);
-    }
-
-
-    // if (right > this.screen_metrics.screen_width){
-
-    // }
-    // if (left < 0){
-
-    // }
-  ManageWinLost(Player_CH , Player : Socket , Room : any) : boolean{
-    let Ball_x = Room.GameBall.x;
-    let Ball_reverse_x = Player_CH.Scaled_width - Room.GameBall.x;
-
-    if (Room.Player1.id == Player.id){
-      return (this.Check_point_lost_for_players(Ball_x,Room.GameBall.diameter / 2,Room.Player1));
-    }
-    else if (Room.Player2.id == Player.id){
-      return (this.Check_point_lost_for_players(Ball_reverse_x,Room.GameBall.diameter / 2,Room.Player2));
-    }
-  }
-
-  Check_point_lost_for_players(Ball_x,diameter,Player) : boolean{
-    let left = Ball_x - diameter;
-    if (left < -10){
-      Player.Health_points--;
-      console.log("I got Hit --->" + Player.username);
-      return(true);
-    }
-    return (false);
-  }
-
-  Manage_Game_Hit_Or_Reset(Player_CH , Player : Socket , Room : any){
-    if (this.ManageWinLost(Player_CH,Player,Room)){
-      if (Room.Player1.Health_points == 0){
-          this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Lose"});
-          this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Win"});
-          // this.historyService.addMatchHistory(Room.Player2.user_id,Room.Player1.user_id);
-      }else if (Room.Player2.Health_points == 0){
-          this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Win"});
-          this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Lose"});
-          // this.historyService.addMatchHistory(Room.Player1.user_id,Room.Player2.user_id);
       }
-      Room.GameBall.x = Player_CH.Scaled_width / 2;
-      Room.GameBall.y = Player_CH.Scaled_height / 2;
-      Room.GameBall.ball_speed_x = -4;
-      Room.GameBall.ball_speed_y = 2;
-      Room.Player1.x = 0;
-      Room.Player1.y = (Player_CH.Scaled_height / 2) - (95 / 2);
-
-      Room.Player2.x = 0;
-      Room.Player2.y = (Player_CH.Scaled_height / 2) - (95 / 2);
-
-      return (true);
-    }
-    return(false);
+      return (false);
   }
 
 
@@ -558,7 +497,53 @@ async handleDisconnect(Player: Socket) {
 
 
 
+  // ManageWinLost(Player_CH , Player : Socket , Room : any) : boolean{
+  //   let Ball_x = Room.GameBall.x;
+  //   let Ball_reverse_x = Player_CH.Scaled_width - Room.GameBall.x;
 
+  //   if (Room.Player1.id == Player.id){
+  //     return (this.Check_point_lost_for_players(Ball_x,Room.GameBall.diameter / 2,Room.Player1));
+  //   }
+  //   else if (Room.Player2.id == Player.id){
+  //     return (this.Check_point_lost_for_players(Ball_reverse_x,Room.GameBall.diameter / 2,Room.Player2));
+  //   }
+  // }
+
+  // Check_point_lost_for_players(Ball_x,diameter,Player) : boolean{
+  //   let left = Ball_x - diameter;
+  //   if (left < -10){
+  //     Player.Health_points--;
+  //     console.log("I got Hit --->" + Player.username);
+  //     return(true);
+  //   }
+  //   return (false);
+  // }
+
+  // Manage_Game_Hit_Or_Reset(Player_CH , Player : Socket , Room : any){
+  //   if (this.ManageWinLost(Player_CH,Player,Room)){
+  //     if (Room.Player1.Health_points == 0){
+  //         this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Lose"});
+  //         this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Win"});
+  //         // this.historyService.addMatchHistory(Room.Player2.user_id,Room.Player1.user_id);
+  //     }else if (Room.Player2.Health_points == 0){
+  //         this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Win"});
+  //         this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Lose"});
+  //         // this.historyService.addMatchHistory(Room.Player1.user_id,Room.Player2.user_id);
+  //     }
+  //     Room.GameBall.x = Player_CH.Scaled_width / 2;
+  //     Room.GameBall.y = Player_CH.Scaled_height / 2;
+  //     Room.GameBall.ball_speed_x = -4;
+  //     Room.GameBall.ball_speed_y = 2;
+  //     Room.Player1.x = 0;
+  //     Room.Player1.y = (Player_CH.Scaled_height / 2) - (95 / 2);
+
+  //     Room.Player2.x = 0;
+  //     Room.Player2.y = (Player_CH.Scaled_height / 2) - (95 / 2);
+
+  //     return (true);
+  //   }
+  //   return(false);
+  // }
 
 
 
@@ -590,3 +575,37 @@ async handleDisconnect(Player: Socket) {
 //       })
 //     })
 // }Timeout
+
+
+      //     }
+      //     if (Room.Player1?.id == Player.id || Room.Player2?.id == Player.id){
+      //       local_Ball.x = Room.GameBall.x;
+      //       local_Ball.y = Room.GameBall.y;
+      //         top = (Room.GameBall.y - Room.GameBall.diameter / 2);
+      //         bottom = (Room.GameBall.y + Room.GameBall.diameter / 2);
+      //         left = (Room.GameBall.x - Room.GameBall.diameter / 2);
+      //         right = (Room.GameBall.x + Room.GameBall.diameter / 2);
+
+
+            // if (this.check_collision_Ball_with_players(Room,Game_Data,Player)){
+            //   Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
+            //   Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+            //   break;
+            // }
+
+            // else{
+            //   if(top < 0){
+            //     // Room.GameBall.x = Room.GameBall.x + 8;
+            //     Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+            // }
+            // if (bottom > Room.Player1.Scaled_height){
+            //   // Room.GameBall.x = Room.GameBall.x - 8;
+            //   Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+            // }
+            // Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
+            // Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+            // break;
+          // }
+
+
+

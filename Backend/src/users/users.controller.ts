@@ -165,19 +165,29 @@ async getFriendsOfOther(@Param('id') id: string) {
   }
 }
 
+@Get('notifications')
+async getallNotifications(@Req() req: any){
+  try {
+    return await this.usersService.getallNotifications(req.user.id);
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+  }
+}
+
 @Post('sendFriendRequest')
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
   try {
-    const notification = await this.usersService.sendFriendRequest(req.user.id, body.userId);
     const user = await this.usersService.findOne(req.user.id);
-    this.socket.hanldleSendNotification(body.userId, req.user.id, {
+    const data : FriendrequestDto =  {
       userId: req.user.id,
       type: 'friendrequestreceived',
       photo: user.profileImage,
       message: `${req.user.username} sent you a friend request`,
-      from: body.userId,
-      username: user.username,
-    });
+      to: body.userId,
+      from: user.username,
+    }
+    await this.socket.hanldleSendNotification(body.userId, req.user.id,data);
+    const notification = await this.usersService.sendFriendRequest(req.user.id, data);
     return notification;
   } catch (error) {
     console.error(error); // Log the error for debugging

@@ -37,8 +37,8 @@ datasource db {
   blocked      User[]   @relation("block")
   blockedby      User[]   @relation("block")
   firstlogin Boolean @default(true)
-  friendreqsent   Friendrequest[]   @relation("friendreqsent")
-  friendreqreceived   Friendrequest[]   @relation("friendreqreceived")
+  friendreqsent   Notification[]   @relation("Notification")
+  friendreqreceived   Notification[]   @relation("Notificationreceived")
   //chat
   dmschat     Dmschat[]     @relation("DMsChat")
   recieverDMs  Dmschat[] @relation("ReciverDMsChat")
@@ -77,6 +77,7 @@ model Groupchat{
     messagesgb Messagegb[] @relation("GBMessage")
     }
 
+
 model  usermute{
   id        Int     @id @default(autoincrement())
   user      User     @relation("mute", fields: [userId], references: [id])
@@ -104,13 +105,16 @@ enum Grouptype{
 
 
 
-model Friendrequest{
+model Notification{
   id        Int     @id @default(autoincrement())
-  sender    User        @relation("friendreqsent", fields: [senderId], references: [id])
+  sender    User        @relation("Notification", fields: [senderId], references: [id])
   senderId  String
-  receiver  User        @relation("friendreqreceived", fields: [receiverId], references: [id])
+  receiver  User        @relation("Notificationreceived", fields: [receiverId], references: [id])
   receiverId  String
-  status    Status     @default(PENDING)
+  name        String?
+  recivername  String?
+  message   String?
+  status    Status?     @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
