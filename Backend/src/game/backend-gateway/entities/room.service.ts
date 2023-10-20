@@ -44,7 +44,7 @@ export class Rooms{
                     Room.Player1 = Players.players[Player.id];
                     Room.Player1.room_id = Room.id;
                     // let scale_ball = (2.4 / 100) * screen_width;
-                    Room.GameBall = new BallDto(-4,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+                    Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
                     Room.client_count++;
                     Player.join(Room.id);
                     break;
@@ -143,7 +143,7 @@ export class Rooms{
             console.log("Found the Player (Player1) in room ["+Room.id+"]-->" + Room.Player1.id);
             room_id = Room.id;
             Room.client_count--;
-            Room.GameBall = new BallDto(-4,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+            Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
             Player.leave(Room.id);
             delete Room.Player1;
             // let scale_ball = (2.4 / 100) * screen_width;
@@ -153,7 +153,7 @@ export class Rooms{
                 if (Player_id == Room.Player2?.id && Room.Player2){
                 console.log("Found the Player (Player2) in room ["+Room.id+"]-->" + Room.Player2.id);
                 Room.client_count--;
-                Room.GameBall = new BallDto(-4,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+                Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
                 Player.leave(Room.id);
                 delete Room.Player2;
                 // let scale_ball = (2.4 / 100) * screen_width;
