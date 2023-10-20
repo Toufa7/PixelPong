@@ -34,6 +34,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     //   map.delete( user.id);
     // }
   }
+
   async handleConnection(client: any, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
     // const user = await this.getUser(client);
@@ -45,8 +46,6 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   afterInit(server: any) {
     this.logger.log("initialized");
   }
-
-
 
   async getUser(client: Socket)  {
     const session = client.handshake.headers.cookie;
@@ -64,7 +63,6 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     }
     return null;
   }
-
   ////////////////////////////////// -----ROOM-- ////////////////////////////////
 
   //socket.emit('joinRoom', {room : ${roomid}})

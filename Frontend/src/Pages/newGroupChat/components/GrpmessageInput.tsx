@@ -89,7 +89,6 @@ const messageInput = (props: any) => {
     if (props.groupInfo.id != undefined)
     {
         useEffect(() => {
-            console.log("Room Joined")
             roomSocket.emit('joinRoom', {roomid : props.groupInfo.id})
         }, [props.groupInfo.id])
     }
@@ -106,74 +105,62 @@ const messageInput = (props: any) => {
             .catch(Error)
             console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
     }, [props.groupInfo.id])
+
+    // console.log("Group user are : ", groupUsers);
     
     //Getting the old conversation
-    // useEffect(() => {
-    //     axios
-    //         .get(`http://localhost:3000/chat/getOldMessages/${props.groupInfo.id}`, { withCredentials: true })
+    useEffect(() => {
+        axios
+            .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/messages`, { withCredentials: true })
         
-    //         .then((res) => {
-    //             fillMap(res.data);
-    //         })
-    //         .catch(Error)
-    //             console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
-    // }, [props.groupInfo.id])
+            .then((res:any) => {
+                fillMap(res.data.messagesgb);
+            })
+            .catch(Error)
+                console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+    }, [props.groupInfo.id])
     
-    // const fillMap = (axiosResponse: any) => {
+    const fillMap = (axiosResponse: any) => {
 
-    //     map.clear();
-        
-    //     let molLmessageId: any = 'n/a';
-    //     let molLmessage: any = 'n/a';
-    //     let molMsgPic: any = 'n/a';
-    //     let molMsgSide: number = 0;
-        
-        
-    //     for (let i: number = 0; i < axiosResponse.length; i++)
-    //     {
+        map.clear();
+        console.log("Axios response is : ", axiosResponse);
 
-    //         if (axiosResponse[i].senderId == props.Sender.id)
-    //         {
-    //             molLmessageId = axiosResponse[i].senderId;
-    //             molLmessage = props.Sender.username;
-    //             molMsgPic = props.Sender.image;
-    //             molMsgSide = 0;
-    //         }
-    //         else
-    //         {
-    //             molLmessageId = axiosResponse[i].receiverId;
-    //             molLmessage = props.groupInfo.username;
-    //             molMsgPic = props.groupInfo.profileImage;
-    //             molMsgSide = 1;
-    //         }
+        let molLmessageId: any = 'n/a';
+        let molLmessage: any = 'n/a';
+        let molMsgPic: any = 'n/a';
+        let molMsgSide: number = 0;
+        
+        
+        for (let i: number = 0; i < axiosResponse.length; i++)
+        {
+
+            if (axiosResponse[i].senderid == props.Sender.id)
+            {
+                molLmessageId = axiosResponse[i].senderId;
+                molLmessage = props.Sender.username;
+                molMsgPic = props.Sender.image;
+                molMsgSide = 0;
+            }
+            else
+            {
+                molLmessageId = axiosResponse[i].receiverId;
+                molLmessage = props.groupInfo.username;
+                molMsgPic = groupUsers.get(axiosResponse[i].senderid).profileImage;
+                molMsgSide = 1;
+            }
             
-    //         const tmpMsgObj: chatAgent = {
-    //             id: molLmessageId,
-    //             senderid: axiosResponse[i].senderId, 
-    //             username: molLmessage,
-    //             pic: molMsgPic,
-    //             side: molMsgSide,
-    //             message: axiosResponse[i].messageDMs,
-    //             timestamp: axiosResponse[i].createdAt,
-    //         }
-    //         map.set(axiosResponse[i].id, tmpMsgObj);
-    //     }
-    // };
-    
-    //function to generate message id in the map
-    // function makeid(length: number) :string {
-        
-    //     let result: string = '';
-    //     const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //     const charactersLength: number = characters.length;
-    //     let counter = 0;
-    //     while (counter < length) {
-    //       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    //       counter += 1;
-    //     }
-    //     return result;
-    // }
-
+            const tmpMsgObj: chatAgent = {
+                id: molLmessageId,
+                senderid: axiosResponse[i].senderId, 
+                username: molLmessage,
+                pic: molMsgPic,
+                side: molMsgSide,
+                message: axiosResponse[i].message,
+                timestamp: axiosResponse[i].createdAt,
+            }
+            map.set(axiosResponse[i].id, tmpMsgObj);
+        }
+    };
     
     useEffect(() => {
         //Recieving message from socket
@@ -190,20 +177,23 @@ const messageInput = (props: any) => {
 
     //Handling newly received message 
     const receiveMessage = (newMessage: any) => {
+
+        let messageSide: number = 1;
+        
+        if (newMessage.idsender == props.Sender.id)
+            messageSide = 0;
+
         const tmpMsgObj: chatAgent = {
             id: newMessage.roomid,
             senderid: newMessage.idsender,
             username: newMessage.username,
             pic: newMessage.pic,
-            side: 1,
+            side: messageSide,
             message: newMessage.message,
             timestamp: "n/a",
         }
         
-        // if (props.groupInfo.id == tmpMsgObj.id)
-        // {
-            map.set(makeid(37), tmpMsgObj);
-        // }
+        map.set(makeid(37), tmpMsgObj);
     }
     
 
