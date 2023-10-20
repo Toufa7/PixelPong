@@ -191,20 +191,24 @@ export class UsersService {
       },
     });
   }
-  async sendFriendRequest(senderId: string, recieverId: string) {
-    console.log(senderId  +"      "+ recieverId)
-    return await this.prisma.friendrequest.create({
+  async sendFriendRequest(senderId: string, data: any) {
+    // console.log(senderId  +"      "+ recieverId)
+    console.log(data);
+    return await this.prisma.notification.create({
       data: {
         sender: { connect: { id: senderId } },
-        receiver: { connect: { id: recieverId } },
+        receiver: { connect: { id: data.to } },
         status: Status.PENDING,
+        name: data.type,
+        message: data.message,
+        recivername:data.to,
       },
     });
   }
   
   async acceptFriendRequest(id: number, senderId: string, recieverId: string) {
     await this.prisma.$transaction([
-      this.prisma.friendrequest.update({
+      this.prisma.notification.update({
         where: { id: id },
         data: { status: Status.ACCEPTED },
       }),
@@ -232,7 +236,7 @@ export class UsersService {
         },
       },
     }),
-    this.prisma.friendrequest.delete({
+    this.prisma.notification.delete({
       where:{
         id,
       },
@@ -241,13 +245,23 @@ export class UsersService {
   console.log(id);
   }
 
+  async getallNotifications(id: string){
+    const notifications = await this.prisma.notification.findMany({
+      where:{
+        receiverId: id,
+      },
+    });
+    return notifications;   
+
+  }
+
 async refuseFriendRequest(id: number) {
   await this.prisma.$transaction([
-  this.prisma.friendrequest.update({
+  this.prisma.notification.update({
     where: { id: id },
     data: { status: Status.DECLINED },
   }),
-  this.prisma.friendrequest.delete({
+  this.prisma.notification.delete({
     where:{
       id,
     },
@@ -257,7 +271,7 @@ async refuseFriendRequest(id: number) {
 
 
 async findFriendRequestIdBySenderReceiver(senderId: string, receiverId: string): Promise<number | null> {
-  const friendrequest = await this.prisma.friendrequest.findFirst({
+  const friendrequest = await this.prisma.notification.findFirst({
     where: {
       senderId,
       receiverId,
