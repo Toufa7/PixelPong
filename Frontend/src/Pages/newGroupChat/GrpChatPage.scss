@@ -142,7 +142,7 @@
             
             .GrpchatLowerRibbon
             {
-                flex: 1;
+                flex: 0.5;
                 border-bottom-right-radius: 10px;
                 border-bottom-left-radius: 10px;
                 flex-shrink: 2;
@@ -433,7 +433,7 @@
     
     .GrpuserDms
     {
-        height: 70vh;
+        height: 40vh;
         overflow: scroll;
         overflow-y: auto;
         overflow-x: hidden;
