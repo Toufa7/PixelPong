@@ -12,7 +12,7 @@ const FriendRequest = ({ myData }) => {
     if (!showInvitation) {
     return null;
     }
-
+      console.log("My Data ", myData.to);
     const acceptFriend = async () => {
         setShowInvitation(false);
 
