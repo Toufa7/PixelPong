@@ -143,20 +143,8 @@ export class GroupchatController {
     
     //update a groupchat
     @Patch(":id")
-    @UseInterceptors(
-        FileInterceptor('file', {
-          storage: diskStorage({
-            destination: './uploads',
-            filename: (req, file, cb) => {
-              const filename: string = file.originalname.split('.')[0] + Date.now();
-              const extension = file.originalname.split('.')[1];
-              cb(null, `${filename}.${extension}`);
-            },
-          }),
-        }),
-      )
-    update(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req : any): any { 
-        return this.GroupchatService.update(file.filename ,id, updateGroupchatDto, req.user.id);
+    update(@Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req : any): any { 
+        return this.GroupchatService.update(id, updateGroupchatDto, req.user.id);
     }
 
     // ban a user from a groupchat

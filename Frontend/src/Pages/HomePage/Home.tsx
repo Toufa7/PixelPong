@@ -106,12 +106,24 @@ const TopContainer = () => {
 		"Desafía a tus amigos a emocionantes partidos de ping pong"
 	];
 
+	interface theOneTypes {
+		username : string,
+		profileImage : string,
+		namegb : string,
+		grouptype: string
+	}
+
+	const [theOne, setTheOne] = useState<theOneTypes>({
+		username: "",
+		profileImage: "",
+		namegb: "",
+		grouptype: ""
+	});
 	const [friends, setFriends] = useState([]);
 	const [users, setUsers] = useState([]);
-	const [theOne, setTheOne] = useState([]);
 	const [privacy, setPrivacy] = useState();
 	const [isFound, setIsFound] = useState<boolean>(false);
-	const [friendGroup, setFriendGroup] = useState("");
+	const [friendGroup, setFriendGroup] = useState<string>("");
 	const [avatar, setAvatar] = useState("");
 	const firstRef = useRef(null);
 	const [visibility, setVisibility] = useState(true);
@@ -141,15 +153,15 @@ const TopContainer = () => {
 		} catch (error) {
 		  console.log("Error searching in groups:", error);
 		}
-	  };
+	};
 	
-	  const searchInFriends = async (query : string) => {
+	const searchInFriends = async (query : string) => {
 		try {
 			const response = await axios.get("http://localhost:3000/users/Friends/", {withCredentials: true});
 			const friends = response.data;
 			const foundFriend = friends.find(friend => friend.username === query);
 			if (foundFriend) {
-			console.log("Friend Found");
+				console.log("Friend Found");
 				setTheOne(foundFriend);
 				setFriendGroup("friend");
 				setIsFound(true);
@@ -158,32 +170,29 @@ const TopContainer = () => {
 			else {
 				setIsFound(false);
 				setVisibility(false);
-				}
 			}
+		}
 		catch (error) {
 			console.log("Error searching in friends:", error);
 		}
-		};
+	};
 
 	  const handleSubmit = (e) => {
 			e.preventDefault();
 			const searchQuery = firstRef.current.value;
 			console.log("Searching for --> ", searchQuery);
-				
 			console.log("Looking in Groups");
 			searchInGroups(searchQuery);
-				
 			console.log("Looking in Friends");
 			searchInFriends(searchQuery);
 	  };
-	
 
-	  console.log("theOne theOne theOne theOne --" ,theOne );
 
 	const removeElement = () => {
-	  setVisibility(true);
-	  setIsFound(false);
+		setVisibility(true);
+		setIsFound(false);
 	};
+
 	return (
 		<>
 		<div className="search">
@@ -194,6 +203,7 @@ const TopContainer = () => {
 			<div onClick={removeElement} className="nes-container" style={{height: 'fitContent', padding: '5px', background: "#EDF2FA"}}>
 				{isFound ? 
 				(
+					// the varibale friendGroup set whether we found a group or a freind
 					(friendGroup == "friend") ?
 						(<Link to={`/profil/${theOne.username}`}>
 							<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
@@ -229,13 +239,8 @@ const TopContainer = () => {
 		<form method="dialog">
 
 			<dialog style={{height: 'fitContent', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
-			<button>Close</button>
-
 			<h1 className="groupName">{theOne.namegb}</h1>
-				<h4 className="grouptype">{theOne.grouptype}</h4>
-
-
-
+				<h5 className="grouptype">{theOne.grouptype}</h5>
 				<img style={{borderRadius: '50%',width: '20%',height: '100px', marginBottom: '20px'}} className="groupAvatar" src={avatar} />
 				<p className="group-members">Total Members: {users}</p>
 				{
@@ -243,15 +248,20 @@ const TopContainer = () => {
 						<button onClick={() => {
 							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
 							.then((res) => {
-								console.log("Reseoinse Join -> ", res.data);
+								toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
 							})
 							.catch(() => {})
-						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
+							document.getElementById('joinGroup').close
+						}
+						
+					} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
 					) : privacy == "PRIVATE" ? (
 						<button onClick={() => {
 							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
 							.then((res) => {
 								console.log("Private Join -> ", res.data);
+								toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
+
 							})
 							.catch(() => {})
 						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Request To Join</button>
@@ -267,7 +277,7 @@ const TopContainer = () => {
 								if (res.data == 'no')
 									toast.error("Invalid Password", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
 								else
-									toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'white'}, position: "top-right"});
+									toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
 							})
 							.catch(() => {
 

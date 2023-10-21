@@ -18,10 +18,12 @@ const CreatingGroup = () => {
 	const choice : number		= document.getElementById("default_privacy")?.value;
 	const password : string		= document.getElementById("password_field")?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload1"]').files[0];
+	
 	const regEx = /^[A-Za-z0-9_ ]{5,15}$/;
 	if (regEx.test(groupName) && groupAvatar && choice) {
 		const data = new FormData();
 		data.append('file', groupAvatar);
+		console.log("Created Avatar -> ", groupAvatar);
 
 		console.log("Avatar -> ", data);
 		let groupType = "PUBLIC";
@@ -32,7 +34,7 @@ const CreatingGroup = () => {
 			grouptype: groupType,
 			password: (choice == 2) ? password : undefined
 		};
-		console.log(" --=======--> ", groupData);
+		console.log(" --== Create =====--> ", groupData);
 		toast.promise(
 			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
 			.then((response) => {
