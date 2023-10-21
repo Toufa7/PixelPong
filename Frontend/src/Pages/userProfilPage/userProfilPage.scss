@@ -12,8 +12,6 @@ body {
 	padding: 20px;
 
 
-
-
 	.headStatesBox {
 		width: 540px; height: 488px;
 		background-color: cadetblue;
@@ -239,6 +237,6 @@ body {
 
 @media only screen and (max-width: 600px) {
     .profilRectangle {
-        margin-top: 75px;
+        margin-top: 75px !important;
     }
 }

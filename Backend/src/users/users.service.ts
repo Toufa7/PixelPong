@@ -112,7 +112,7 @@ export class UsersService {
         username: true,
         profileImage: true,
         achievements: true,
-        stats: true,
+        // stats: true,
         status: true,
       },
     });
@@ -130,7 +130,6 @@ export class UsersService {
         username: true,
         profileImage: true,
         achievements: true,
-        stats: true,
         status: true,
       },
     });
@@ -181,6 +180,7 @@ export class UsersService {
       });
   }
   async updatestatus(user, status) {
+    console.log("123 :: : :: ",status)
     await this.prisma.user.updateMany({
       where: {
         id: user.id,

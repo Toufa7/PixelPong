@@ -2,7 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { convertTypeAcquisitionFromJson, isConstructorDeclaration } from 'typescript';
-import {height, socket_gm, width} from '../game_flow_sketch';
+import {ball_asset, height, socket_gm, width} from '../game_flow_sketch';
 // import { socket } from '../socket_setup/client-connect';
 import { Paddle } from './paddle.class';
 // import { socket } from '../socket_setup/client-connect';
@@ -54,13 +54,13 @@ import { Paddle } from './paddle.class';
     
             //p- ellipse parameters
     
-            this.ball_ob.fill(color);
-            this.ball_ob.strokeWeight(2);
-            this.ball_ob.ellipse(this.pos.x,this.pos.y,this.diameter,this.diameter);
+            // this.ball_ob.fill(color);
+            // this.ball_ob.strokeWeight(2);
+            // this.ball_ob.ellipse(this.pos.x,this.pos.y,this.diameter,this.diameter);
     
             //p- sprite parameters
     
-            // this.ball_ob.image(ball_sprites,this.pos.x,this.pos.y,this.diameter,this.diameter);
+            this.ball_ob.image(ball_asset,this.pos.x,this.pos.y,this.diameter,this.diameter);
         }
 
         public get_points() : {left : number , right : number , top : number , bottom  : number} {

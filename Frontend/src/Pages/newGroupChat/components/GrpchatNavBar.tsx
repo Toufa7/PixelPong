@@ -55,12 +55,9 @@ const GrpchatNavBar = () => {
 }
 
 const Dms = (props:any) => {    
-
     const conversationsSocket = useContext(grpSocketContext)
-    
-    //Groups map
+    // Groups map
     let GroupsMap = useMap();
-
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
             .then((response:any) => {

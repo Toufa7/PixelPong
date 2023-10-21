@@ -154,10 +154,9 @@ const TopContainer = () => {
 		  console.log("Error searching in groups:", error);
 		}
 	};
-	
 	const searchInFriends = async (query : string) => {
 		try {
-			const response = await axios.get("http://localhost:3000/users/Friends/", {withCredentials: true});
+			const response = await axios.get("http://localhost:3000/users/all", {withCredentials: true});
 			const friends = response.data;
 			const foundFriend = friends.find(friend => friend.username === query);
 			if (foundFriend) {
@@ -206,11 +205,10 @@ const TopContainer = () => {
 					// the varibale friendGroup set whether we found a group or a freind
 					(friendGroup == "friend") ?
 						(<Link to={`/profil/${theOne.username}`}>
-							<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
+							<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', textDecoration: 'none'}}>
 								<div>
 									<img src={theOne.profileImage} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
 									<span style={{ marginLeft: '20px' }}>{theOne.username}</span>
-
 								</div>
 							</div>		
 						</Link>)
@@ -247,27 +245,25 @@ const TopContainer = () => {
 					privacy == "PUBLIC" ? (
 						<button onClick={() => {
 							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
-							.then((res) => {
-								toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
-							})
-							.catch(() => {})
-							document.getElementById('joinGroup').close
+								.then(() => {
+									toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+									document.getElementById('joinGroup').close();
+								})
+								.catch(() => {});
 						}
-						
 					} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
 					) : privacy == "PRIVATE" ? (
 						<button onClick={() => {
 							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
 							.then((res) => {
 								console.log("Private Join -> ", res.data);
-								toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
-
+								toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+								document.getElementById('joinGroup').close();
 							})
 							.catch(() => {})
-						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Request To Join</button>
+						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Request To Join</button>
 						) : (
 						<>
-
 						<input style={{ background: '#E9E9ED', marginBottom: '10px' }} type="password" placeholder="P@55w0rd" maxLength={18} id="password_join" className="nes-input" />
 						<button onClick={() => {
 							const password = document.getElementById("password_join")?.value;
@@ -276,8 +272,10 @@ const TopContainer = () => {
 							.then((res) => {
 								if (res.data == 'no')
 									toast.error("Invalid Password", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
-								else
+								else {
+									document.getElementById('joinGroup').close();
 									toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
+								}
 							})
 							.catch(() => {
 

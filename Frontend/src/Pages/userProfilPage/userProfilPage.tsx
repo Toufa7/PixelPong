@@ -2,89 +2,102 @@ import './userProfilPage.scss'
 /******************* Packages  *******************/
 import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import axios from "axios";
 /******************* Includes  *******************/
 import { useLocation } from 'react-router-dom';
+const ErrorPage = lazy(() => import('../errorPage/errorPage'))
+import Stars from '../addons/Stars';
+import NavBar from '../addons/NavBar';
 
 const States = (props : {winRate: number, wins: number, loses: number, streak: number}) => {
     return (
-            <div className="headStatesBox">
-                <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
-                <div className="statesBoxContent">
-                    <div>
-                        <span className="key">Win Rate</span>
-                        <span className="value">{props.winRate}%</span>
-                    </div>
-                    <div>
-                        <span className="key">Wins</span>
-                        <span className="value">{props.wins}</span>
-                    </div>
-                    <div>
-                        <span className="key">Win Streak Record</span>
-                        <span className="value">{props.streak}</span>
-                    </div>
-                    <div>
-                        <span className="key">Loses</span>
-                        <span className="value">{props.loses}</span>
-                    </div>
+        <div className="headStatesBox">
+            <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
+            <div className="statesBoxContent">
+                <div>
+                    <span className="key">Win Rate</span>
+                    <span className="value">{props.winRate}%</span>
+                </div>
+                <div>
+                    <span className="key">Wins</span>
+                    <span className="value">{props.wins}</span>
+                </div>
+                <div>
+                    <span className="key">Win Streak Record</span>
+                    <span className="value">{props.streak}</span>
+                </div>
+                <div>
+                    <span className="key">Loses</span>
+                    <span className="value">{props.loses}</span>
                 </div>
             </div>
+        </div>
     );
 }
 
 
 const Profil = () => {
-
     interface dataTypes {
         avatar : string,
-        username:string,
+        username: string,
         check: boolean,
-        userId:string }
-
+        userId: string,
+        status: string
+    }
     const [userData, setUserData] = useState<dataTypes>({
         avatar : '',
         username: '',
         check: true,
-        userId: ''
+        userId: '',
+        status: ''
     });
-    // const path = window.location.pathname;
-    const location = useLocation();
-    console.log("Endpit => ", `http://localhost:3000/users${location.pathname}`)
+    const location = useLocation();    
     useEffect(() => {
         async function fetchData() {
             const endpoint = `http://localhost:3000/users${location.pathname}`;
-            const response = await axios.get(endpoint, { withCredentials: true });
-            console.log("info => ", endpoint);
+            const response = await axios.get(endpoint, {withCredentials: true});
                 const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
                 try {
-                    
                     await axios.get(avatarURL, { withCredentials: true });
+                    console.log("Respoen ===> ", response.data);
                     setUserData(() => ({
                         avatar: avatarURL,
                         username: response.data.username,
                         check: false,
-                        userId : response.data.id
+                        userId : response.data.id,
+                        status: response.data.status
                     }));
-                } catch (avatarError) {
+                }
+                catch (avatarError) {
                     setUserData(() => ({
                         avatar: response.data.profileImage,
                         username: response.data.username,
                         check: false,
-                        userId : response.data.id
-
+                        userId : response.data.id,
+                        status: response.data.status
                     }));
                 }
         }
         fetchData();
     }, []);
 
+    console.log("User Data -> ", userData);
     const [isFriend, setIsFriend] = useState<boolean>(false);
     return (
         <div className="profilRectangle">
           <div className="avatar">
             <div className="left">
-             <img  src={userData.avatar} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                <img src={`http://localhost:3000/auth/avatar/${userData.userId}`} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                {
+                    userData.status == "ONLINE" ? (<>
+                        <div style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px', background: '#63C163'}}></div>
+                    </>)
+                    :
+                    userData.status != "ONLINE" ? (<>
+                        <div style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px' ,background: '#F2202B'}}></div>
+                    </>) : (<></>)
+                }            
             <div>
               <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
               <div>
@@ -95,25 +108,22 @@ const Profil = () => {
             </div>
             <div>
               <div>
-                <a>
-                     {isFriend ? (
-                         <>
-                             <a className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
-                             <a className="nes-btn" href="#" onClick={() => {
-                                 axios.post("http://localhost:3000/users/blocked", {from: userData.userId}, { withCredentials: true })
-                                 .then(() => {})
-                                 .catch(() => {})
-                             }}>Block</a>
-                         </>
-                         ) : (
-                             <a className="nes-btn" href="#" onClick={() => 
-                                 {
-                                     setIsFriend(true)
-
-                                 }
-                             }>Add Friend</a>)
-                         }
-                 </a>
+                    {isFriend ? (
+                                <div>
+                                    <a className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
+                                    <a className="nes-btn is-error" href="#" onClick={() => {
+                                        axios.patch("http://localhost:3000/users/blocked", {frienId: userData.userId}, { withCredentials: true })
+                                        .then(() => {})
+                                        .catch(() => {})
+                                    }}>Block</a>
+                                </div>
+                            ) : (
+                        <a className="nes-btn" href="#" onClick={() => {setIsFriend(true); 
+                            axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
+                            .then(() => {})
+                            .catch(() => {})
+                        }}>Add Friend</a>)
+                    }
               </div>
             </div>
           </div>
@@ -123,8 +133,9 @@ const Profil = () => {
 
 
 const GroupsAndFriends = () => {
-
     const info = useLocation();
+
+    console.log("Info Of User -> ", info);
     const [thisId, setId] = useState();
     const endpoint = `http://localhost:3000/users${info.pathname}`;
     axios.get(endpoint, {withCredentials: true})
@@ -135,9 +146,8 @@ const GroupsAndFriends = () => {
     useEffect(() => {
         axios.get(`http://localhost:3000/users/friends/${thisId}`, {withCredentials: true})
         .then((response) => {
-            console.log("Friend List -> ",  response.data);
+            console.log("Friend List -> ", response.data);
             setFriendData(response.data);
-            console.log(" => " , response.data);
         })
     },[])
 
@@ -239,20 +249,50 @@ const Achivements = () => {
 
 
 function OtherProfilPage() {
+    const location = useLocation();   
+    const [userExist, isUserExist] = useState<string>(""); 
+
+    useEffect(() => {
+	const searchInFriends = async () => {
+		try {
+			const response = await axios.get("http://localhost:3000/users/all", {withCredentials: true});
+			const friends = response.data;
+			const foundFriend = friends.find(friend => friend.username == location.pathname.replace("/profil/",""));
+			if (foundFriend) {
+                isUserExist("Found");
+			}
+			else {
+                isUserExist("NotFound");
+			}
+		}
+		catch (error) {
+			console.log("Error searching in friends:", error);
+		}
+	};
+        searchInFriends();
+    }, [])
+
+    console.log("Is User Exist -> ", userExist);
+    if (userExist == "NotFound") {
+        return (<ErrorPage title={"User Not Found"} errorType={'Oops! The user you\'re looking \nfor couldn\'t be found'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />)
+    }
+    else
         return (
-          <div style={{height: '100h'}}>
-              <div className="topContainer">
-                  <Profil/>
-              </div>
-              <div className="downContainer">
-                  <GroupsAndFriends/>
-                  <States winRate={0.00} wins={0} loses={0} streak={0}/>
-              </div>
-              <div className="downContainer">
-                  <Achivements/>
-              </div>
-          </div>
+            <div style={{height: '100h'}}>
+                <Stars/>
+			    <NavBar/>
+                <div className="topContainer">
+                    <Profil/>
+                </div>
+                <div className="downContainer">
+                    <GroupsAndFriends/>
+                    <States winRate={0.00} wins={0} loses={0} streak={0}/>
+                </div>
+                <div className="downContainer">
+                    <Achivements/>
+                </div>
+            </div>
         )
-      }
+}
 
 export default OtherProfilPage

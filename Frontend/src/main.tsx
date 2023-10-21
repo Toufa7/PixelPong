@@ -16,18 +16,16 @@ const TwoFa = lazy(() => import('./Pages/2FA/twoFA'));
 const Home = lazy(() => import('./Pages/HomePage/Home'));
 const ProfilPage = lazy(() => import('./Pages/profilPage/profilPage'));
 const ChatPage = lazy(() => import('./Pages/chatPage/chatPage'));
-import GroupPage from './Pages/newGroupChat/GrpChatPage';
 const OtherProfilPage = lazy(() => import('./Pages/userProfilPage/userProfilPage'));
 const Setup = lazy(() => import('./Pages/GamePage/Setup_Game_Front'));
 const Error = lazy(() => import('./Pages/errorPage/errorPage'));
 const Notification = lazy(() => import('./Pages/Notifications/Notifications'));
+import GroupPage from './Pages/newGroupChat/GrpChatPage';
 import Dogo from "./Pages/dogo.gif";
 
 export const OtherUser = () => {
 	return (
 		<>
-			<Stars/>
-			<NavBar/>
 			<OtherProfilPage/>
 		</>
 	);
@@ -41,24 +39,6 @@ export const NotificationComponents = () => {
 		</>
 	);
 }
-
-// export const ChatComponents = () => {
-// 	return (
-// 		<>
-// 			<ChatPage/>
-// 		</>
-// 	);
-// }
-
-
-// export const ChatGroupsComponents = () => {
-// 	return (
-// 		<>
-// 			{/* <Stars/> */}
-// 			<ChatPageGroup/>
-// 		</>
-// 	);
-// }
 
 const ProfilComponents = () => {
 	return (
@@ -188,7 +168,7 @@ const Routing = () => {
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
-					<Route path="/*" 				element={<Error/>}/>
+					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
 
 

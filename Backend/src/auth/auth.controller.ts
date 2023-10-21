@@ -195,11 +195,13 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
       return res.status(HttpStatus.BAD_REQUEST).json({ message: 'User not updated' });
     }
   }
+  @Post('logout')
   @UseGuards(JwtGuard)
   async logout(@Req() req, @Res() res) {
-    res.clearCookie('jwt');
     const status = UserStatus.OFFLINE;
+    console.log("stattttttuuuus : ",status)
     await this.usersService.updatestatus(req.user, status);
+    res.clearCookie('jwt');
     return res.status(200).json({ message: 'User logged out' });
   }
 }
