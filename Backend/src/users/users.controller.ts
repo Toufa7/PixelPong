@@ -174,7 +174,7 @@ async getallNotifications(@Req() req: any){
   }
 }
 
-@Post('sendFriendRequest')
+@Post('sendFriendRequest') 
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
   try {
 	const user = await this.usersService.findOne(req.user.id);
