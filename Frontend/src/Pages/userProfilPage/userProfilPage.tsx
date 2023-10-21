@@ -116,7 +116,7 @@ const Profil = () => {
                                         .then(() => {})
                                         .catch(() => {})
                                     }}>Block</a>
-                                    </div>
+                                </div>
                             ) : (
                         <a className="nes-btn" href="#" onClick={() => {setIsFriend(true)}}>Add Friend</a>)
                     }
