@@ -44,8 +44,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit('checkout', { msg: 'hello' });
     if (jwt) {
       const user = decode(jwt);
-      // //console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
-      // //console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
+      console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
+      console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
       this.connectedUsers.set(user['id'], client.id);
       const status = UserStatus.ONLINE;
@@ -55,6 +55,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.userservice.updatestatus(user, status);
     }
   }
+
 
   async handleDisconnect(client: Socket) {
     //console.log('A client disconnected');
@@ -82,10 +83,11 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     try {
       // await this.gatewayservice.createnotification(data);
       const sockets = this.connectedUsers.get(clientId);
-      //console.log(sockets.id)
+      console.log("wtffff",sockets)
+      console.log("wtffff",clientId)
 
       if (sockets) {
-        //console.log('sending  ');
+        console.log('sending  ');
         this.server.to(sockets).emit('notification', data);
       }
     } catch (error) {
