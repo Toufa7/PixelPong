@@ -36,29 +36,32 @@ const ChatUser = (props : any) => {
 
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
-    useEffect(() => {
-        axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
-        .then((response) => {
-            console.log("Admins -> ", response.data)
+    if (props.pcurrentUserId) 
+    {
+        useEffect(() => {
+            axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
+            .then((response) => {
+                console.log("Admins -> ", response.data)
 
-            setUsers(response.data);
-        })
-        .catch((error) => {
-            console.log("Error fetching users:", error);
-        });
-    }, []);
-    
-    useEffect(() => {
-        axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/admins`, { withCredentials: true })
-        .then((response) => {
-            console.log("Admins -> ", response.data)
-            setAdmins(response.data);
-        })
-        .catch((error) => {
-            console.log("Error fetching admins:", error);
+                setUsers(response.data);
+            })
+            .catch((error) => {
+                console.log("Error fetching users:", error);
+            });
+        }, []);
+        
+        useEffect(() => {
+            axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/admins`, { withCredentials: true })
+            .then((response) => {
+                console.log("Admins -> ", response.data)
+                setAdmins(response.data);
+            })
+            .catch((error) => {
+                console.log("Error fetching admins:", error);
 
-        });
-    }, []);
+            });
+        }, []);
+    }
 
 
     const openDialogUsers = () => {

@@ -5,16 +5,15 @@ import Draggable from 'react-draggable';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 
-const ErrorPage = () => {
+const ErrorPage = (props : {title: string , errorType: string, msg: string}) => {
 
     const navigate = useNavigate();
     return (
         <div className="container">
-
         <Draggable>
         <div className="window">
             <div className="title-bar">
-                <div className="title-bar-text">Error</div>
+                <div className="title-bar-text">{props.title}</div>
                     <div className="title-bar-controls">
                         <button aria-label="Minimize"></button>
                         <button aria-label="Maximize"></button>
@@ -24,10 +23,10 @@ const ErrorPage = () => {
                 <div className="window-body">
                     <div className="windowBodyImg">
                         <img src={ErrorIcon} alt="Error Icon" width={65} height={60} />
-                        <p>Error happend from our side</p>
+                        <p>{props.errorType}</p>
                     </div>
                     <div className='ReportProgressBar'>
-                        <p>Report is being sent to PixelPong team</p>
+                        <p>{props.msg}</p>
                         <div className="progressBar">
                         <progress></progress>
                     </div>
@@ -35,7 +34,7 @@ const ErrorPage = () => {
                 <div className="directionButtons">
                     <div className="homeButton">
                     <Link to="/home">
-                        <button >Home Page</button>
+                        <button>Home Page</button>
         			</Link>
                     </div>
                     <div className="preButton">

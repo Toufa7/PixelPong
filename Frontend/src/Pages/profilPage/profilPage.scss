@@ -9,20 +9,20 @@ body {
     flex-flow: row wrap;
     justify-content:center;
 	align-items: center;
-	padding: 20px;
-
-
+	padding: 10px;
 
 
 	.headStatesBox {
+		margin: 10px;
+
 		width: 540px; height: 488px;
 		background-color: cadetblue;
 		border-left: 8px solid #EBD9F0;
 		border-right: 8px solid #000000;
 		border-bottom: 8px solid #EBD9F0;
 		z-index: 0;
+		
 
-	
 			.statesBoxHeader {
 				height: 10%;
 				background-color: cadetblue;
@@ -95,6 +95,7 @@ body {
 	
 	
 		.gAndFBox {
+			margin: 10px;
 			width: 500px; height: 488px;
 			background-color: #4ba5de;
 			border-left: 8px solid white;
