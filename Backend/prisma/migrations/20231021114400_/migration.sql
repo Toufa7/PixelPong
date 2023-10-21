@@ -98,19 +98,6 @@ CREATE TABLE "Requestjoingroup" (
 );
 
 -- CreateTable
-CREATE TABLE "Stats" (
-    "id" SERIAL NOT NULL,
-    "level" INTEGER NOT NULL DEFAULT 0,
-    "userId" TEXT NOT NULL,
-    "wins" INTEGER NOT NULL DEFAULT 0,
-    "loses" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Stats_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Achievements" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -128,7 +115,9 @@ CREATE TABLE "MatchHistory" (
     "message" TEXT NOT NULL,
     "numberOfMatches" INTEGER NOT NULL DEFAULT 0,
     "userId" TEXT NOT NULL,
-    "loserId" TEXT NOT NULL,
+    "level" INTEGER DEFAULT 0,
+    "wins" INTEGER DEFAULT 0,
+    "loses" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -188,12 +177,6 @@ CREATE UNIQUE INDEX "Messagegb_id_key" ON "Messagegb"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Requestjoingroup_id_key" ON "Requestjoingroup"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Stats_id_key" ON "Stats"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Stats_userId_key" ON "Stats"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Achievements_id_key" ON "Achievements"("id");
@@ -262,16 +245,10 @@ ALTER TABLE "Requestjoingroup" ADD CONSTRAINT "Requestjoingroup_senderId_fkey" F
 ALTER TABLE "Requestjoingroup" ADD CONSTRAINT "Requestjoingroup_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Stats" ADD CONSTRAINT "Stats_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Achievements" ADD CONSTRAINT "Achievements_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MatchHistory" ADD CONSTRAINT "MatchHistory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MatchHistory" ADD CONSTRAINT "MatchHistory_loserId_fkey" FOREIGN KEY ("loserId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_friends" ADD CONSTRAINT "_friends_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
