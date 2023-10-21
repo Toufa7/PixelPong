@@ -12,6 +12,7 @@ import sprinkle from './assets/sprinkle.svg';
 import sparkles from './assets/sparkles.gif';
 import { useNavigate } from 'react-router-dom';
 import letsPlay from './assets/success.mp3';
+import cat from './assets/cat.gif'
 
 function WelcomePage() {
   function playing () {
@@ -53,13 +54,14 @@ function WelcomePage() {
             </div>
             <div id="playButton">
               <button id="letsPlayButton" type="button" onMouseDown={playing} className="nes-btn is-warning" onClick={() => {navigate('/login');}}>LET'S PLAY</button>
-              <img id='ClickMe' alt="clickImgGif" src={clickImg} width={94} height={90}></img>
+              <img id='ClickMe' alt="clickImgGif" src={clickImg}></img>
             </div>
-
           </div>
           <div id='chairContainer'>
             <img src={chair} id="chairimg" alt='chair' width={215} height={102}></img>
             <img src={light} id="lightimg" alt='light' width={156} height={315}></img>
+            <img id="catimg" src={cat} alt="three" width={100} height={20}></img>
+
           </div>
         </div>
 
