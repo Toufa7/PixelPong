@@ -114,6 +114,23 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         },
       });
       console.log("========++++++=======");
+      const blocked =  await this.prisma.user.findUnique({
+        where: { id: user.id },
+        select: {
+          blocked: true,
+        },
+      });
+
+      const allsocket = await this.server.in(body.roomid).fetchSockets();
+      allsocket.forEach((socket) => {
+        blocked.blocked.forEach((block) => {
+          if (socket.id == map.get(body.roomid + block.id)) {
+            socket.leave(body.roomid);
+          }
+        });
+      });
+
+
       this.server.to(body.roomid).emit(body.roomid, {
         roomid: body.roomid,
         timestamp: body.timestamp,
@@ -125,6 +142,16 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         pic: user.image,
 
       });
+      
+
+      allsocket.forEach((socket) => {
+        blocked.blocked.forEach((block) => {
+          if (socket.id == map.get(body.roomid + block.id)) {
+            socket.join(body.roomid);
+          }
+        });
+      });
+
     }
   }
 
