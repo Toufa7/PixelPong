@@ -49,7 +49,7 @@ async addMatchHistory(userId:string){
                 message: `You won against ${loser.username}!`,
             },
         }),
-        this.prisma.stats.update({
+        this.prisma.stats.updateMany({
             where: {
                 userId: winnerId,
             },
@@ -67,7 +67,7 @@ async addMatchHistory(userId:string){
                 message: `You lost against ${winner.username}!`,
             },
         }),
-        this.prisma.stats.update({
+        this.prisma.stats.updateMany({
             where: {
                 userId: loserId,
             },
