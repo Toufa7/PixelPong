@@ -22,7 +22,10 @@ import Win from "./assets/Win.png";
 import Lose from "./assets/Lose.jpeg";
 import Dimension from "./assets/Dim.gif";
 import { Socket, io } from 'socket.io-client';
-import { Cookies } from 'react-cookie';
+import BackgroundGame from "./assets/bc_mini.png";
+import pd from "./assets/blue_paddle.png";
+import ball from "./assets/yellow_ball.png";
+
 // import axios from 'axios';
 // import { Cookies } from 'react-cookie';
 // import { socket } from './socket_setup/client-connect';
@@ -45,12 +48,19 @@ export let height : any;
 
 let scaled_width : number;
 let scaled_height : number;
+
 export let Player1_username : string;
 export let Player2_username : string;
+export let Player1_HealthPoints : number;
+export let Player2_HealthPoints : number;
+
+
 export let Update_screen : boolean;
 
-// export let inGame : boolean;
-// export let user_id : string;
+export let GameBackgrund : p5Types.Image;
+export let pd_asset : p5Types.Image;
+export let ball_asset : p5Types.Image;
+
 
 
 
@@ -178,16 +188,12 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     let Screen_display :string = "on_going";
     let FrontCountDown : number = 6;
     let Dim : p5Types.Image;
-    let user_image : p5Types.Image;
 
     let P1_scaled_y : number;
     let P2_scaled_y : number;
 
 
-    const cookie = new Cookies();
-    const token : any = jwt_decode(cookie.get('jwt'));
 
-    let Get_user_image : any;
     // console.log(token.username);
     // let user_image : p5Types.Image;
     
@@ -197,7 +203,6 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
 
         SettingUpBackWithFront(socket_gm, Frontroom, p5_ob,Screen_display);
 
-        // Get_user_image = "http://localhost:3000/auth/avatar/${token.id}"
     //o--------------------------------------------------------------------------
 
 
@@ -212,7 +217,11 @@ p5_ob.preload = () =>{
           win = p5_ob.loadImage(Win);
           lose = p5_ob.loadImage(Lose);
           Dim = p5_ob.loadImage(Dimension);
-          user_image = p5_ob.loadImage(Get_user_image);
+          GameBackgrund = p5_ob.loadImage(BackgroundGame);
+          pd_asset = p5_ob.loadImage(pd);
+          ball_asset = p5_ob.loadImage(ball);
+
+          // user_image = p5_ob.loadImage(Get_user_image);
 
 }
         //r------------------
@@ -286,11 +295,16 @@ p5_ob.draw = () =>{
                   Frontroom.Player1.Paddle.pos.y = Backroom.P1_y;
                   Frontroom.Player1.Paddle.paddle_width = (2 / 100) * scaled_width;
                   Frontroom.Player1.Paddle.paddle_height = (20 / 100) * scaled_height;
+                  Frontroom.Player1.Health_points = Backroom.Health_points_P1;
+
+
+                  
 
                 Frontroom.Player2.Paddle.pos.x = Backroom.P2_x_scaled;
                 Frontroom.Player2.Paddle.pos.y = Backroom.P2_y_scaled;
                 Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
                 Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
+                Frontroom.Player2.Health_points = Backroom.Health_points_P2;
 
                 // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
                 // Frontroom.Player2.username = Backroom.Player2.username;
@@ -301,7 +315,7 @@ p5_ob.draw = () =>{
               Frontroom.Player2.Paddle.pos.y = Backroom.P2_y;
               Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
               Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
-
+              Frontroom.Player2.Health_points = Backroom.Health_points_P2;
               // Frontroom.Player1.Health_points = Backroom.Player1?.Health_points;
               // Frontroom.Player1.username = Backroom.Player1.username;
 
@@ -311,6 +325,7 @@ p5_ob.draw = () =>{
             Frontroom.Player1.Paddle.pos.y = Backroom.P1_y_scaled;
             Frontroom.Player1.Paddle.paddle_width = (2 / 100) * scaled_width;
             Frontroom.Player1.Paddle.paddle_height = (20 / 100) * scaled_height;
+            Frontroom.Player1.Health_points = Backroom.Health_points_P1;
             
             // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
             // Frontroom.Player2.username = Backroom.Player2.username;
@@ -372,10 +387,7 @@ p5_ob.draw = () =>{
         if (Screen_display === "on_going"){
 
           // for(const id in Frontroom){
-            p5_ob.background("#FA9200");
-            // Player2_username = Frontroom.Player2_username;
-            // console.log(Frontroom.Player1?.username + ": My Health points are ---> " + Frontroom.Player1?.Health_points);
-            // console.log(Frontroom.Player2?.username + ": My Health points are ---> " + Frontroom.Player2?.Health_points);
+            p5_ob.background(GameBackgrund);
             
           if (Frontroom.Player1 && Frontroom.Player2){
             Update_screen = true;
@@ -391,8 +403,12 @@ p5_ob.draw = () =>{
             else{
                     if (id_of_player1 == id_player){
                       Player1_username = Frontroom.Player1?.username;
+
+                      Player1_HealthPoints = Frontroom.Player1?.Health_points;
+                      
                       Player1?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player2 && id_of_player2 != id_player){
+                        Player2_HealthPoints = Frontroom.Player2?.Health_points;
                         Player2_username = Frontroom.Player2?.username;
                         Player2.pos.x = scaled_width - Player2.paddle_width;
                         Player2?.update_Player_pos(canvas,scaled_width,scaled_height);
@@ -400,8 +416,12 @@ p5_ob.draw = () =>{
                     }
                     else if (id_of_player2 == id_player){
                       Player1_username = Frontroom.Player2?.username;
+
+                      Player1_HealthPoints = Frontroom.Player2?.Health_points;
+                      
                       Player2?.update_Player_pos(canvas,scaled_width,scaled_height);
                       if (Player1 && id_of_player1 != id_player){
+                        Player2_HealthPoints = Frontroom.Player1?.Health_points;
                         Player2_username = Frontroom.Player1?.username;
                         Player1.pos.x = scaled_width - Player1.paddle_width;
                         Player1?.update_Player_pos(canvas,scaled_width,scaled_height);

@@ -12,75 +12,87 @@ export class HistoryService {
     constructor(private readonly prisma: PrismaService){
     }
 
-async addMatchHistory(winnerId:string, loserId:string){
-    const loser = await this.prisma.user.findUnique({
+async addMatchHistory(userId:string){
+    const find = await this.prisma.matchHistory.findFirst({
         where: {
-            id: loserId,
-        },
-    })
+            userId: userId,
+        }
+    });
+        const newMatchHistory = await this.prisma.matchHistory.create({
+            data: {
+                user: {
+                    connect: {
+                        id: userId,
+                    },
+                },
+            },
+        });
+        return newMatchHistory;
+}
+ async updateMatchHistory(winnerId:string, loserId:string){
     const winner = await this.prisma.user.findUnique({
         where: {
             id: winnerId,
         },
     })
-
-    console.log("userid " + winnerId, " loserid" + loserId);
-    const newMatchHistory = await this.prisma.matchHistory.create({
-        data: {
-            user: {
-                connect: {
-                    id: winnerId,
-                },
-            },
-            loser: {
-                connect: {
-                    id: loserId,
-                },
-            },
-            message: `${winner.username  } won against ${  loser.username}}`
+    const loser = await this.prisma.user.findUnique({
+        where: {
+            id: loserId,
         },
     });
-    return newMatchHistory;
-}
-async createStats(userId:string){
-    const newStats = await this.prisma.stats.create({
-        data: {
-            user: {
-                connect: {
-                    id: userId,
+    await this.prisma.$transaction([
+        this.prisma.matchHistory.updateMany({
+            where: {
+                userId: winnerId,
+            },
+            data: {
+                message: `You won against ${loser.username}!`,
+            },
+        }),
+        this.prisma.stats.update({
+            where: {
+                userId: winnerId,
+            },
+            data: {
+                wins: {
+                    increment: 1,
                 },
             },
+        }),
+        this.prisma.matchHistory.updateMany({
+            where: {
+                userId: loserId,
+            },
+            data: {
+                message: `You lost against ${winner.username}!`,
+            },
+        }),
+        this.prisma.stats.update({
+            where: {
+                userId: loserId,
+            },
+            data: {
+                loses: {
+                    increment: 1,
+                },
+            },
+        }),
+    ]);
+}
+async getMatchHistory(userId:string){
+    const matchHistory = await this.prisma.matchHistory.findMany({
+        where: {
+            userId: userId,
         },
     });
-    return newStats;
+    return matchHistory;
 }
-async updateStats(userId:string, loserId:string){
+async getSoloStats(userId:string){
     const stats = await this.prisma.stats.findUnique({
         where: {
             userId: userId,
         },
     });
-    const loserStats = await this.prisma.stats.findUnique({
-        where: {
-            userId: loserId,
-        },
-    });
-    const newStats = await this.prisma.stats.update({
-        where: {
-            userId: userId,
-        },
-        data: {
-            wins: stats.wins + 1,
-        },
-    });
-    const newLoserStats = await this.prisma.stats.update({
-        where: {
-            userId: loserId,
-        },
-        data: {
-            loses: loserStats.loses + 1,
-        },
-    });
-    return newStats;
+    return stats;
 }
 }

@@ -233,13 +233,13 @@ async handleDisconnect(Player: Socket) {
 
     Win_Lose_Management(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room) : boolean{
       if (Ball_left_point < 0){
-        Room.Player1.Health_points--;
+        Room.Player1.Health_points -=100;
         console.log("I got Hit --->" + Room.Player1?.username);
         
         return (true);
       }
       else if (Ball_right_point > Game_Data.Scaled_width){
-        Room.Player2.Health_points--;
+        Room.Player2.Health_points -=100;
         console.log("I got Hit --->" + Room.Player2?.username);
         
         return (true);
@@ -398,10 +398,10 @@ async handleDisconnect(Player: Socket) {
         // P1_x_scaled:P1_scaled_P2__x ,
 
         this.server.to(Room.Player1?.id).emit("UpdatePlayerPos",{who:"P1",P1_y:Room.Player1?.y, P2_y_scaled : P2_scaled_P1__y,
-          P1_x:Room.Player1?.x ,P2_x_scaled:P2_scaled_P1__x});
+          P1_x:Room.Player1?.x ,P2_x_scaled:P2_scaled_P1__x , Health_points_P1 : Room.Player1?.Health_points, Health_points_P2 : Room.Player2?.Health_points});
 
         this.server.to(Room.Player2?.id).emit("UpdatePlayerPos",{who:"P2",P2_y:Room.Player2?.y, P1_y_scaled : P1_scaled_P2__y,
-          P2_x:Room.Player2?.x ,P2_x_scaled : P1_scaled_P2__x});
+          P2_x:Room.Player2?.x ,P2_x_scaled : P1_scaled_P2__x , Health_points_P1 : Room.Player1?.Health_points, Health_points_P2 : Room.Player2?.Health_points });
           
           
           // console.log("--------------------------------------------------");
