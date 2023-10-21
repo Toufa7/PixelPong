@@ -2,7 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { convertTypeAcquisitionFromJson, isConstructorDeclaration } from 'typescript';
-import {socket_gm } from '../game_flow_sketch';
+import {pd_asset, socket_gm } from '../game_flow_sketch';
 // import { socket } from '../socket_setup/client-connect';
 // import { socket } from '../socket_setup/client-connect';
 
@@ -68,12 +68,12 @@ export class Paddle {
 
         //p- rect parameters
 
-        this.paddle_obj.fill(color);
-        this.paddle_obj.rect(this.pos.x,this.pos.y,this.paddle_width,this.paddle_height,this.radius_top_left,this.radius_top_left);
+        // this.paddle_obj.fill(color);
+        // this.paddle_obj.rect(this.pos.x,this.pos.y,this.paddle_width,this.paddle_height,this.radius_top_left,this.radius_top_left);
 
         //p- sprite parameters
         
-        // this.paddle_obj.image(paddle_sprite,this.pos.x,this.pos.y,this.paddle_width,this.paddle_height);
+        this.paddle_obj.image(pd_asset,this.pos.x,this.pos.y,this.paddle_width,this.paddle_height);
       }
   
     //   public get_points() : {left : number , right : number , top : number , bottom  : number,width : number , height : number} {
