@@ -170,7 +170,7 @@ body {
         background-color: #3B7469;
     }    
     .latest-matches2 {
-        overflow: scroll;
+        overflow-y: scroll;
         scroll-behavior: smooth;
     }
     .achievements2 {
@@ -204,10 +204,9 @@ body {
 .on-going-matches1 {
     padding: 10px;
     border-radius: 5px;
-
 }
 .on-going-matches2 {
-    overflow: scroll;
+    overflow-y: scroll;
     scroll-behavior: smooth;
     .match1 {
         border: 1px solid black;

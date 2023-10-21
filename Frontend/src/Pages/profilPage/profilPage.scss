@@ -7,10 +7,54 @@ body {
 .downContainer {
 	display: flex;
     flex-flow: row wrap;
-    justify-content:space-evenly;
+    justify-content:center;
 	align-items: center;
+	padding: 20px;
+
+
+
+
+	.headStatesBox {
+		width: 540px; height: 488px;
+		background-color: cadetblue;
+		border-left: 8px solid #EBD9F0;
+		border-right: 8px solid #000000;
+		border-bottom: 8px solid #EBD9F0;
+		z-index: 0;
+
+	
+			.statesBoxHeader {
+				height: 10%;
+				background-color: cadetblue;
+				border-bottom: 8px solid #7C6E6E;
+				border-left: 8px solid black;
+				border-top: 8px solid #EBD9F0;
+			}
+	
+			.statesBoxContent {
+				height: 90%;
+				border-top: 8px solid #EBD9F0;
+				border-left: 8px solid black;
+				border-bottom: 8px solid black;
+				color: white;
+
+				& div {
+					margin: 20px;   
+					justify-content: space-between;
+					display: flex;
+					.key {
+						text-align: left;
+					}
+					.value {
+						text-align: right;
+					}
+				}
+			}
+		}
+
+
 	.fullAchivementsBox {
-		width: 700px; height: 400px;
+		width: auto; height: 488px;
 		background: #BFB3E1;
 		border-bottom: 8px solid #7C6E6E;
 		border-left: 8px solid #7C6E6E;
@@ -18,7 +62,7 @@ body {
 		z-index: 0;
 			
 			.headAchivementsBox {
-				height: 20%;
+				height: 10%;
 				background-color: #BFB3E1;
 				border-bottom: 8px solid #7C6E6E;
 				border-left: 8px solid black;
@@ -27,11 +71,11 @@ body {
 			}
 	
 			.contentAchivementsBox {
-				height: 80%;
+				height: 90%;
 				border-top: 8px solid #EBD9F0;
 				border-left: 8px solid black;
 				border-bottom: 8px solid black;
-				overflow: scroll;
+				overflow-y: auto;
 	
 				.icons img {
 					width: 70px; height: 70px;
@@ -52,18 +96,18 @@ body {
 	
 		.gAndFBox {
 			width: 500px; height: 488px;
-			background-color: #8ade84;
-			border-left: 8px solid #f9f871;
+			background-color: #4ba5de;
+			border-left: 8px solid white;
 			border-right: 8px solid #000000;
-			border-bottom: 8px solid #f9f871;
+			border-bottom: 8px solid white;
 			z-index: 0;
 
 			.gAndFHeader {
 				height: 10%;
-				background-color: #8ade84;
+				background-color: #4ba5de;
 				border-bottom: 8px solid #7C6E6E;
 				border-left: 8px solid black;
-				border-top: 8px solid #f9f871;
+				border-top: 8px solid white;
 				text-align: center;
 				font-size: x-large;
 			}
@@ -78,11 +122,11 @@ body {
 			}
 			.gAndFContent {
 				height: 84%;
-				border-top: 8px solid #f9f871;
+				border-top: 8px solid white;
 				border-left: 8px solid black;
 				border-bottom: 8px solid black;
 				color: white;
-				overflow: scroll;
+				overflow-y: auto;
 				scroll-behavior: smooth;
 				.listParent {
 					.list {
@@ -106,61 +150,62 @@ body {
 			}
 		}
 	
+
 .topContainer {
     display: flex;
     flex-flow: row wrap;
     justify-content:space-evenly;
-	padding-bottom: 20px;
+	padding: 20px;
 	align-items: center;
 	
 	
-	.headStatesBox {
-		width: 500px; height: 488px;
-		background-color: cadetblue;
-		border-left: 8px solid #EBD9F0;
-		border-right: 8px solid #000000;
-		border-bottom: 8px solid #EBD9F0;
-		z-index: 0;
+	// .headStatesBox {
+	// 	width: 500px; height: 488px;
+	// 	background-color: cadetblue;
+	// 	border-left: 8px solid #EBD9F0;
+	// 	border-right: 8px solid #000000;
+	// 	border-bottom: 8px solid #EBD9F0;
+	// 	z-index: 0;
 	
-			.statesBoxHeader {
-				height: 10%;
-				background-color: cadetblue;
-				border-bottom: 8px solid #7C6E6E;
-				border-left: 8px solid black;
-				border-top: 8px solid #EBD9F0;
+	// 		.statesBoxHeader {
+	// 			height: 10%;
+	// 			background-color: cadetblue;
+	// 			border-bottom: 8px solid #7C6E6E;
+	// 			border-left: 8px solid black;
+	// 			border-top: 8px solid #EBD9F0;
 				
-			}
+	// 		}
 	
-			.statesBoxContent {
-				height: 90%;
-				border-top: 8px solid #EBD9F0;
-				border-left: 8px solid black;
-				border-bottom: 8px solid black;
-				color: white;
+	// 		.statesBoxContent {
+	// 			height: 90%;
+	// 			border-top: 8px solid #EBD9F0;
+	// 			border-left: 8px solid black;
+	// 			border-bottom: 8px solid black;
+	// 			color: white;
 
-				& div {
-					margin: 20px;   
-					justify-content: space-between;
-					display: flex;
-					.key {
-						text-align: left;
-					}
-					.value {
-						text-align: right;
-					}
-				}
-			}
-		}
+	// 			& div {
+	// 				margin: 20px;   
+	// 				justify-content: space-between;
+	// 				display: flex;
+	// 				.key {
+	// 					text-align: left;
+	// 				}
+	// 				.value {
+	// 					text-align: right;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
 }
 
 	  
 .profilRectangle {
-	width: 655px;
-	height: 216px;
-	background-color: #F0A814CC;
+	width: 1040px;
+	height: auto;
+	background-color: #FFBB01;
 	border-top: 8px solid #EBD9F0;
-	border-bottom: 8px solid #7C6E6E;
-	border-left: 8px solid #7C6E6E;
+	border-bottom: 8px solid #FFFFFF;
+	border-left: 8px solid #FFFFFF;
 	border-right: 8px solid #EBD9F0;
 	flex-shrink: 1;
 	z-index: 0;
@@ -168,8 +213,9 @@ body {
 	.avatar {
 		height: 75%;
 		display: flex;
-		justify-content: space-between;
+		justify-content: space-around;
 		align-items: center;
+		margin: 20px;
 
 		.left {
 			display: flex;
@@ -190,6 +236,7 @@ body {
 .buttonat .nes-btn {
 	gap: 10px 20px !important;
 }
+
 @media only screen and (max-width: 600px) {
     .profilRectangle {
         margin-top: 75px;

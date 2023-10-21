@@ -213,7 +213,7 @@ export class GroupchatService {
     }
 
     //update a groupchat
-    async update(filename: string, id: string, updateGroupchatDto: any, iduserconnected: string) {
+    async update(id: string, updateGroupchatDto: any, iduserconnected: string) {
         if (updateGroupchatDto.password) {
             const saltOrRounds = 10;
             updateGroupchatDto.password = await bcrypt.hash(updateGroupchatDto.password, saltOrRounds);
@@ -243,7 +243,6 @@ export class GroupchatService {
                     namegb: updateGroupchatDto.namegb,
                     grouptype: updateGroupchatDto.grouptype,
                     password: updateGroupchatDto.password,
-                    image: filename,
                 },
             });
         }

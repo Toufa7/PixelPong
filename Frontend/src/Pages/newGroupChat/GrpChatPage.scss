@@ -131,11 +131,8 @@
                             
                             
                             .GrpuserChatinfo
-                            {                        
-                                span
-                                {
-                                    
-                                }
+                            {       
+                                span {}
                             }
                         }
                         
@@ -594,6 +591,14 @@
     }
 }
 
+.groupSettings {
+    .GroupAvataraa {
+        overflow: auto;
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+}
 
 // .chatsContainerGroup {
 //     flex: 10;

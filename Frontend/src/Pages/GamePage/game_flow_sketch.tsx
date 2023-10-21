@@ -155,7 +155,6 @@ export const Game_instance = () =>{
 
   const socketRef = useRef<Socket | null >(null);
 
-
   useEffect(()=>{
     if (socketRef.current == null){
       socketRef.current = io("ws://localhost:3000/game", {withCredentials: true, transports: ["websocket"] });

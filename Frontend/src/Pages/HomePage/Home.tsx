@@ -96,18 +96,34 @@ const GetUserData = () => {
 
 const TopContainer = () => {
 
+	interface groupInfo {
+
+	}
+
 	const userData = GetUserData();
 	const textInfos = [
 		"Perfecciona tus habilidades en nuestra área de práctica exclusiva",
 		"Desafía a tus amigos a emocionantes partidos de ping pong"
 	];
 
+	interface theOneTypes {
+		username : string,
+		profileImage : string,
+		namegb : string,
+		grouptype: string
+	}
+
+	const [theOne, setTheOne] = useState<theOneTypes>({
+		username: "",
+		profileImage: "",
+		namegb: "",
+		grouptype: ""
+	});
 	const [friends, setFriends] = useState([]);
 	const [users, setUsers] = useState([]);
-	const [theOne, setTheOne] = useState([]);
 	const [privacy, setPrivacy] = useState();
-	const [isFound, setIsFound] = useState(false);
-	const [friendGroup, setFriendGroup] = useState("");
+	const [isFound, setIsFound] = useState<boolean>(false);
+	const [friendGroup, setFriendGroup] = useState<string>("");
 	const [avatar, setAvatar] = useState("");
 	const firstRef = useRef(null);
 	const [visibility, setVisibility] = useState(true);
@@ -115,7 +131,7 @@ const TopContainer = () => {
   
 	const searchInGroups = async (query : string) => {
 		try {
-			const response = await axios.get("http://localhost:3000/groupchat/all", {withCredentials: true});
+			const response = await axios.get("http://localhost:3000/groupchat/notmember", {withCredentials: true});
 			const groups = response.data;
 			const foundGroup = groups.find(group => group.namegb === query);
 			if (foundGroup) {
@@ -137,15 +153,15 @@ const TopContainer = () => {
 		} catch (error) {
 		  console.log("Error searching in groups:", error);
 		}
-	  };
+	};
 	
-	  const searchInFriends = async (query : string) => {
+	const searchInFriends = async (query : string) => {
 		try {
 			const response = await axios.get("http://localhost:3000/users/Friends/", {withCredentials: true});
 			const friends = response.data;
 			const foundFriend = friends.find(friend => friend.username === query);
 			if (foundFriend) {
-			console.log("Friend Found");
+				console.log("Friend Found");
 				setTheOne(foundFriend);
 				setFriendGroup("friend");
 				setIsFound(true);
@@ -154,41 +170,40 @@ const TopContainer = () => {
 			else {
 				setIsFound(false);
 				setVisibility(false);
-				}
 			}
+		}
 		catch (error) {
 			console.log("Error searching in friends:", error);
 		}
-		};
+	};
 
 	  const handleSubmit = (e) => {
-		e.preventDefault();
-		const searchQuery = firstRef.current.value;
-		console.log("Searching for --> ", searchQuery);
-	
-		console.log("Looking in Groups");
-		searchInGroups(searchQuery);
-	
-		console.log("Looking in Friends");
-		searchInFriends(searchQuery);
+			e.preventDefault();
+			const searchQuery = firstRef.current.value;
+			console.log("Searching for --> ", searchQuery);
+			console.log("Looking in Groups");
+			searchInGroups(searchQuery);
+			console.log("Looking in Friends");
+			searchInFriends(searchQuery);
 	  };
-	
 
-	  console.log("first --" ,privacy );
 
 	const removeElement = () => {
-	  setVisibility(true);
-	  setIsFound(false);
+		setVisibility(true);
+		setIsFound(false);
 	};
+
 	return (
 		<>
 		<div className="search">
 		<form onSubmit={handleSubmit}>
+
 			<input ref={firstRef} type="text" id="name_field" placeholder='Search for a group or user' className="nes-input" />
 			{!visibility && (
 			<div onClick={removeElement} className="nes-container" style={{height: 'fitContent', padding: '5px', background: "#EDF2FA"}}>
 				{isFound ? 
 				(
+					// the varibale friendGroup set whether we found a group or a freind
 					(friendGroup == "friend") ?
 						(<Link to={`/profil/${theOne.username}`}>
 							<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
@@ -218,32 +233,64 @@ const TopContainer = () => {
 			</div>
 			)}
 		</form>
-			<dialog style={{height: '300px', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
-				<h2 className="groupName">{theOne.username}</h2>
+		
+		<section>
+
+		<form method="dialog">
+
+			<dialog style={{height: 'fitContent', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
+			<h1 className="groupName">{theOne.namegb}</h1>
+				<h5 className="grouptype">{theOne.grouptype}</h5>
 				<img style={{borderRadius: '50%',width: '20%',height: '100px', marginBottom: '20px'}} className="groupAvatar" src={avatar} />
 				<p className="group-members">Total Members: {users}</p>
 				{
 					privacy == "PUBLIC" ? (
 						<button onClick={() => {
-							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`,{} , { withCredentials: true })
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
 							.then((res) => {
-								console.log("Reseoinse Join -> ", res.data);
+								toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
 							})
 							.catch(() => {})
-						}} className="nes-btn" >Join Group</button>
+							document.getElementById('joinGroup').close
+						}
+						
+					} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
 					) : privacy == "PRIVATE" ? (
 						<button onClick={() => {
-							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, { withCredentials: true })
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
 							.then((res) => {
-								console.log("Reseoinse Join -> ", res.data);
+								console.log("Private Join -> ", res.data);
+								toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
+
 							})
 							.catch(() => {})
-						}} className="nes-btn" >Join Group & Wait</button>
+						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Request To Join</button>
 						) : (
-						<><input style={{ background: '#E9E9ED' }} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" /><button className="nes-btn">Join Group</button></>
+						<>
+
+						<input style={{ background: '#E9E9ED', marginBottom: '10px' }} type="password" placeholder="P@55w0rd" maxLength={18} id="password_join" className="nes-input" />
+						<button onClick={() => {
+							const password = document.getElementById("password_join")?.value;
+							console.log("Password Entered Is => ", password);
+							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userprotected`, {pass :password} , { withCredentials: true })
+							.then((res) => {
+								if (res.data == 'no')
+									toast.error("Invalid Password", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
+								else
+									toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
+							})
+							.catch(() => {
+
+							})
+						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Join Group</button>
+						</>
 						)
 				}
 			</dialog>
+
+			</form>
+			</section>
+
 		</div>
 
 
@@ -369,8 +416,8 @@ const BottomLeft = () => {
 			<HorizontalScroll>
 				{
 					achivements.map((key, idx) => {
-					return (
-						<img src={key} key={idx}/>
+						return (
+							<img src={key} key={idx}/>
 					)})
 				}
 			</HorizontalScroll>
@@ -441,9 +488,9 @@ const BottomRight= () => {
 		<div className="loginBoxHeader latest-matches1">ULTIMOS PARTIDOS</div>
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"win"} color={win}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"lose"} color={lose}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs: '/public/profile-default.png'} player2="Oppenent" rslt={"draw"} color={draw}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"win"} color={win}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"lose"} color={lose}/>
+				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"draw"} color={draw}/>
 			</div>
 			</div>
 	</div>
@@ -475,31 +522,29 @@ function Notification () {
 			.then((rese) => {
 				console.log("Notifcation Refuse ", rese);
 				setFriendStatus(friendStatus)
-				
 			})
 		} catch (error) {
 			console.log("Error Catched ", error);
 		}
 	}
-	
 	const audio = new Audio(notification);
 	audio.play();
 	toast.custom(
-		<div style={{ display: 'flex', alignItems: 'center', color: 'black', borderRadius: '10px', zIndex: '-1'}}>
+		<div style={{ display: 'flex', alignItems: 'center', background: "#F2ECFF", color: 'black', borderRadius: '10px', zIndex: '-1'}}>
 			<div style={{ width: '400px', height: '120px' }} className="nes-container with-title is-centered">
 				<p style={{ background: '#ffeeca', border: '2px solid black'}} className="title">Invitation Request</p>
 			<div style={{ display: 'flex', alignItems: 'center' }}>
-				<img src={data.photo} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+				<img src={`http://localhost:3000/auth/avatar/${data.photo}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>	
 				{isFriend ?
-					(
-						<>
-							<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
-							<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
-						</>
-					) : 
-					(
-						<button style={{ marginLeft: '10px' }} onClick={() => setIsFriend(true)}>Accepted</button>
+						(
+							<>
+								<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
+								<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
+							</>
+						) : 
+						(
+							<button style={{ marginLeft: '10px' }} onClick={() => setIsFriend(true)}>Accepted</button>
 						)				
 					}
 			</div>
@@ -518,6 +563,7 @@ export default function Home() {
 	Notification();	
 	return (
 		<div style={{ height: '100vh'}}>
+			<title>Home</title>
 			<Toaster/>
 				<TopContainer/>
 				<div className="top-containers">

@@ -54,9 +54,9 @@ export class GroupchatController {
         return this.GroupchatService.findOne(id.id);
     }
     //get all groupchat of a useradmin
-    @Get("lifihomanaadmin/:id")
-    findgpadmin(@Param('id') id: string): any {
-        return this.GroupchatService.findgpadmin(id);
+    @Get("lifihomanaadmin")
+    findgpadmin(@Req() req : any): any {
+        return this.GroupchatService.findgpadmin(req.id);
     }
 
     //get all users of a groupchat
@@ -143,20 +143,8 @@ export class GroupchatController {
     
     //update a groupchat
     @Patch(":id")
-    @UseInterceptors(
-        FileInterceptor('file', {
-          storage: diskStorage({
-            destination: './uploads',
-            filename: (req, file, cb) => {
-              const filename: string = file.originalname.split('.')[0] + Date.now();
-              const extension = file.originalname.split('.')[1];
-              cb(null, `${filename}.${extension}`);
-            },
-          }),
-        }),
-      )
-    update(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req : any): any { 
-        return this.GroupchatService.update(file.filename ,id, updateGroupchatDto, req.user.id);
+    update(@Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req : any): any { 
+        return this.GroupchatService.update(id, updateGroupchatDto, req.user.id);
     }
 
     // ban a user from a groupchat
