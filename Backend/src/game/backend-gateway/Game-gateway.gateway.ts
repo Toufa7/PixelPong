@@ -67,6 +67,7 @@ handleConnection(Player: Socket) {
           await this.Players.AddPlayer(Player , Player.id,0,(Data.s_h / 2) - (Data.pd_height / 2),Data.pd_width,Data.pd_height,Data.s_w,Data.s_h,"",this.User.id,My_username);
           console.log("Can i set Rooms --> " + this.Players.SetRoom);
           if (this.Players.SetRoom){
+            this.historyService.addMatchHistory(this.Players.players[Player.id].user_id);
             this.Rooms.SetupRooms(Player,this.Players,Data.s_w,Data.s_h);
             this.SendToPlayersinRoom(Player,this.Rooms);
             console.log("--->Players" + JSON.stringify(this.Players.players));
@@ -254,11 +255,13 @@ async handleDisconnect(Player: Socket) {
               console.log("the Game Sould end Player 2 Wins!!");
               this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Lose"});
               this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Win"});
+              this.historyService.updateMatchHistory(Room.Player2.user_id,Room.Player1.user_id);
             }
             else if (Room.Player2.Health_points == 0){
               console.log("the Game Sould end Player 1 Wins!!");
               this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Win"});
               this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Lose"});
+              this.historyService.updateMatchHistory(Room.Player1.user_id,Room.Player2.user_id);
             }
           Room.GameBall.x = Game_Data.Scaled_width / 2;
           Room.GameBall.y = Game_Data.Scaled_height / 2;
