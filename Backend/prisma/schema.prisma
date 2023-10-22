@@ -119,14 +119,16 @@ model Notification{
 }
 
 model Stats {
+  id      Int @id @default(autoincrement()) @unique
   level     Int?    @default(0)
   wins      Int?    @default(0)
   loses     Int?    @default(0)
+  numberOfMatches        Int      @default(0)
   user      User     @relation("stats", fields: [userId], references: [id])
   userId    String     
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  @@unique([userId])
+  // @@unique([userId])
 }
 
 model Requestjoingroup{
@@ -179,7 +181,6 @@ enum Type {
 model MatchHistory {
   id        Int    @id @default(autoincrement()) @unique
   message      String?
-  numberOfMatches        Int      @default(0)
   user      User     @relation("matchhistory", fields: [userId], references: [id])
   userId    String
   level    Int?  @default(0)
