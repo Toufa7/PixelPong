@@ -103,6 +103,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         usersmute: true,
       },
     });
+    console.log("usermuted == ",usermuted);
     //check if user is muted
     if(usermuted.usersmute.some((usermute) => usermute.id == user.id)){
       console.log("user is muted");

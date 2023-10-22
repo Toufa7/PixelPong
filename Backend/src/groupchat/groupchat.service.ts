@@ -124,9 +124,9 @@ export class GroupchatService {
                 }
             );
             if (data) {
-                console.log("---------------------+++++++++++----------------", iduser);
-                console.log(data);
-                console.log("---------------------++-------++++----------------");
+                // console.log("---------------------+++++++++++----------------", iduser);
+                // console.log(data);
+                // console.log("---------------------++-------++++----------------");
 
                 return data;
             }
