@@ -25,6 +25,7 @@ import { Socket, io } from 'socket.io-client';
 import BackgroundGame from "./assets/bc_mini.png";
 import pd from "./assets/blue_paddle.png";
 import ball from "./assets/yellow_ball.png";
+import { socket } from '../socket-client';
 
 // import axios from 'axios';
 // import { Cookies } from 'react-cookie';
@@ -436,12 +437,14 @@ p5_ob.draw = () =>{
     
               }
       }
-        else{ 
-              p5_ob.background(MatchmakingPage);
-              Update_screen = false;
-              // p5_ob.image(MatchmakingPage,170,0,750,550);
-              p5_ob.fill("#e0e3ba");
+        else{
+              if (id_player == Frontroom.Player1?.id || id_player == Frontroom.Player2?.id){
+                p5_ob.background(MatchmakingPage);
+                Update_screen = false;
+                // p5_ob.image(MatchmakingPage,170,0,750,550);
+                p5_ob.fill("#e0e3ba");
               // p5_ob.text("MatchMaking ...",p5_ob.width / 2 -  25 ,p5_ob.height/2);
+              }
           }
           // p5_ob.fill("#ffffff");
           // p5_ob.textSize((2.4 / 100) * window.innerWidth);
