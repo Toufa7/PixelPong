@@ -174,8 +174,9 @@ async getallNotifications(@Req() req: any){
   }
 }
 
-@Post('sendFriendRequest')
+@Post('sendFriendRequest') 
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
+  console.log("body", body.to)
   try {
 	const user = await this.usersService.findOne(req.user.id);
 	const data : FriendrequestDto =  {
@@ -183,10 +184,10 @@ async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
 	  type: 'friendrequestreceived',
 	  photo: user.profileImage,
 	  message: `${req.user.username} sent you a friend request`,
-	  to: body.userId,
+	  to: body.to,
 	  from: user.username,
 	}
-	await this.socket.hanldleSendNotification(body.userId, req.user.id,data);
+	await this.socket.hanldleSendNotification(body.to, req.user.id,data);
 	const notification = await this.usersService.sendFriendRequest(req.user.id, data);
 	return notification;
   } catch (error) {
@@ -196,11 +197,11 @@ async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
 }
 
 @Patch('acceptFriendRequest')
-async acceptFriendRequest(@Body() body: FriendrequestDto) {
+async acceptFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
   try {
-	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
-	console.log('Bodyyyy', body);
-	const find = await this.usersService.acceptFriendRequest(friendrequest, body.userId, body.from);
+	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.to, body.userId);
+	console.log('Bodyyyy', friendrequest);
+	const find = await this.usersService.acceptFriendRequest(friendrequest.id, body.to, body.userId);
 	return find;
   } catch (error) {
 	console.error(error); // Log the error for debugging

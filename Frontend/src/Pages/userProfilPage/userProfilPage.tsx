@@ -112,13 +112,17 @@ const Profil = () => {
                                 <div>
                                     <a className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
                                     <a className="nes-btn is-error" href="#" onClick={() => {
-                                        axios.post("http://localhost:3000/users/blocked", {from: userData.userId}, { withCredentials: true })
+                                        axios.patch("http://localhost:3000/users/blocked", {frienId: userData.userId}, { withCredentials: true })
                                         .then(() => {})
                                         .catch(() => {})
                                     }}>Block</a>
                                 </div>
                             ) : (
-                        <a className="nes-btn" href="#" onClick={() => {setIsFriend(true)}}>Add Friend</a>)
+                        <a className="nes-btn" href="#" onClick={() => {setIsFriend(true); 
+                            axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
+                            .then(() => {})
+                            .catch(() => {})
+                        }}>Add Friend</a>)
                     }
               </div>
             </div>
