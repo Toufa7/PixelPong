@@ -238,12 +238,13 @@ export class UsersService {
     }),
     this.prisma.notification.delete({
       where:{
-        id,
+        id:id,
       },
     })
   ]);
-  console.log(id);
+  console.log("its delete : : : : :: : : : : : ",id);
   }
+  
 
   async getallNotifications(id: string){
     const notifications = await this.prisma.notification.findMany({
@@ -263,7 +264,7 @@ async refuseFriendRequest(id: number) {
   }),
   this.prisma.notification.delete({
     where:{
-      id,
+      id: id,
     },
   })
 ])
