@@ -6,6 +6,7 @@ import info from '../assets/info.svg'
 import jwtDecode from 'jwt-decode'
 import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
+import toast from 'react-hot-toast'
 
 
 const ChatUser = (props : any) => {
@@ -102,9 +103,11 @@ const ChatUser = (props : any) => {
                                                             @Delete(":id/exit") */}
 
                                                             <img src={exit} onClick={() => {
-                                                                axios.delete(`http://localhost:3000/groupchat/${id}/exit`, { withCredentials: true })
+                                                                axios.delete(`http://localhost:3000/groupchat/${props.pcurrentUserId}/exit`, { withCredentials: true })
                                                                 .then((reseponse) => {
-                                                                    console.log("Reseponse Exiting Group -> ", reseponse );
+                                                                    console.log("Response Exiting Group -> ", reseponse);
+                                                                    toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+
                                                                 })
                                                                 .catch((error) => {
                                                                     console.log("Reseponse Exiting Group -> ", error)

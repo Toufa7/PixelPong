@@ -11,7 +11,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	transform: translateY(40%);
 
 
 
@@ -21,9 +20,8 @@ body {
 		height: fit-content;
 		width: 500px;
 		max-width: 500px;
-		top: 50%;
-		left: 50%;
-		transform: translate(0, 100%);
+		transform: translateY(30vh);
+
 		border-top: 8px solid #B19D9D;
 		border-right: 8px solid black;
 		border-bottom: 8px solid black;    
