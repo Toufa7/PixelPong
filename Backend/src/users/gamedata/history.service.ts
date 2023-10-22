@@ -13,7 +13,8 @@ export class HistoryService {
     }
 
 async addMatchHistory(userId:string){
-    const find = await this.prisma.matchHistory.findFirst({
+    let stats = null;
+    const find = await this.prisma.stats.findFirst({
         where: {
             userId: userId,
         }
@@ -27,7 +28,20 @@ async addMatchHistory(userId:string){
                 },
             },
         });
-        return newMatchHistory;
+        if(!find)
+        {
+        stats = await this.prisma.stats.create({
+            data: {
+                user: {
+                    connect: {
+                        id: userId,
+                    },
+                },
+            },
+        }); 
+    } 
+    else stats = find;
+        return {newMatchHistory, stats};
 }
  async updateMatchHistory(winnerId:string, loserId:string){
     const winner = await this.prisma.user.findUnique({
@@ -57,6 +71,9 @@ async addMatchHistory(userId:string){
                 wins: {
                     increment: 1,
                 },
+                numberOfMatches:{
+                    increment: 1,
+                }
             },
         }),
         this.prisma.matchHistory.updateMany({
@@ -75,6 +92,9 @@ async addMatchHistory(userId:string){
                 loses: {
                     increment: 1,
                 },
+                numberOfMatches:{
+                    increment: 1,
+                }
             },
         }),
     ]);
@@ -87,12 +107,12 @@ async getMatchHistory(userId:string){
     });
     return matchHistory;
 }
-async getSoloStats(userId:string){
-    const stats = await this.prisma.stats.findUnique({
-        where: {
-            userId: userId,
-        },
-    });
-    return stats;
-}
+// async getSoloStats(userId:string){
+//     const stats = await this.prisma.stats.findUnique({
+//         where: {
+//             userId: userId,
+//         },
+//     });
+//     return stats;
+// }
 }

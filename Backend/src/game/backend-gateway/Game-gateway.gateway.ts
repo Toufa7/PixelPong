@@ -42,6 +42,8 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   
   public CountDown : number = 6; 
 
+  public Check_forfait = true;
+
   afterInit(server: Server) {
     this.server = server;
     console.log("Server listening on port 3000");
@@ -56,7 +58,7 @@ handleConnection(Player: Socket) {
           console.log("i am a, : ", this.User);
           console.log("First----> " + JSON.stringify(this.Players.players));
           let t = await this.userService.findOne(this.User.id);
-          let My_username : string = t.username;
+          let My_username : string = t?.username;
           console.log("My UserName ---> " + My_username);
           // this.screen_metrics.screen_width = Data.s_w;
           // this.screen_metrics.screen_height = Data.s_h;
@@ -71,7 +73,7 @@ handleConnection(Player: Socket) {
             this.Rooms.SetupRooms(Player,this.Players,Data.s_w,Data.s_h);
             this.SendToPlayersinRoom(Player,this.Rooms);
             console.log("--->Players" + JSON.stringify(this.Players.players));
-            console.log("---------------------CCCoooCCC--------------------------------\n");
+            console.log("---------------------CCCoooCCC--------------------------------\n");  
           }
 
         })
@@ -99,12 +101,19 @@ handleConnection(Player: Socket) {
 
 async handleDisconnect(Player: Socket) {
   this.User = await this.getUser(Player);
+
+
+    let id_Player1 : string;
+    let id_Player2 : string;
+
     let client_count_before : number;
     let Player_deleted = Player.id;
     for(const id in this.Rooms.rooms){
       const Room = this.Rooms.rooms[id];
       if (Room.Player1?.id == Player_deleted  || Room.Player2?.id == Player_deleted){
         this.Room_dl = this.Rooms.rooms[id];
+        id_Player1 = Room.Player1?.user_id;
+        id_Player2 = Room.Player2?.user_id;
         client_count_before = this.Room_dl.client_count;
         break;
       }
@@ -124,6 +133,21 @@ async handleDisconnect(Player: Socket) {
       this.Rooms.CleanRoom(Player.id,Player,this.Players,this.server,this.Players.players[Player.id]?.Scaled_width,this.Players.players[Player.id]?.Scaled_height);
     if (this.Room_dl?.client_count > 0 && client_count_before > 1){
           console.log("-------------There still another Player in the room!!-------------");
+
+          console.log("-------------FORFAIT SECTION--------------");
+
+          console.log("Player that were in the Room P1--> " + id_Player1);
+          console.log("Player that were in the Room P2--> " + id_Player2);
+
+          if (this.Room_dl.Player1 && this.Check_forfait){
+            console.log("The Player 1 Won by Forfait ---> " + this.Room_dl.Player1?.username);
+            this.historyService.updateMatchHistory(id_Player1,id_Player2);
+          }
+          else if (this.Room_dl.Player2 && this.Check_forfait){
+            console.log("The Player 2 Won by Forfait ---> " + this.Room_dl.Player2?.username);
+            this.historyService.updateMatchHistory(id_Player2,id_Player1);
+          }
+          console.log("-------!!!!!!!!!!!!!!!!!!!!!!!!!!!------------");
           this.Room_dl.CountDown = 6;
           this.server.to(this.Room_dl.id).emit("PlayerLeave",{Result:"Forfait"});
     }
@@ -207,8 +231,8 @@ async handleDisconnect(Player: Socket) {
             let right = (local_Ball_x + local_Ball_diameter / 2);
 
             if (this.check_collision_Ball_with_players(local_Ball_x,local_Ball_y,local_Ball_diameter,Room.Player1,Game_Data,Player)){
-              Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
-              Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+              Room.GameBall.x += Room.GameBall.ball_speed_x;
+              Room.GameBall.y += Room.GameBall.ball_speed_y;
               break;
             }
 
@@ -218,11 +242,11 @@ async handleDisconnect(Player: Socket) {
 
 
             if(top < 0){
-              Room.GameBall.x = Room.GameBall.x + 8;
+              // Room.GameBall.x = Room.GameBall.x + 8;
               Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
             }
-            if (bottom > Game_Data.Scaled_height){
-            Room.GameBall.x = Room.GameBall.x - 8;
+            if (bottom > Game_Data.Scaled_height - 10){
+            // Room.GameBall.x = Room.GameBall.x - 8;
             Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
             }
             Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
@@ -233,13 +257,13 @@ async handleDisconnect(Player: Socket) {
     }
 
     Win_Lose_Management(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room) : boolean{
-      if (Ball_left_point < 0){
+      if (Ball_left_point < -20){
         Room.Player1.Health_points -=100;
         console.log("I got Hit --->" + Room.Player1?.username);
         
         return (true);
       }
-      else if (Ball_right_point > Game_Data.Scaled_width){
+      else if (Ball_right_point > Game_Data.Scaled_width + 20){
         Room.Player2.Health_points -=100;
         console.log("I got Hit --->" + Room.Player2?.username);
         
@@ -251,21 +275,27 @@ async handleDisconnect(Player: Socket) {
 
     Catch_Win_Lost_Reset_Game(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room){
         if (this.Win_Lose_Management(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room)){
+          let RandHit : number = Math.floor(Math.random() * 2);
             if (Room.Player1.Health_points == 0){
               console.log("the Game Sould end Player 2 Wins!!");
               this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Lose"});
               this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Win"});
               this.historyService.updateMatchHistory(Room.Player2.user_id,Room.Player1.user_id);
+              this.Check_forfait = false;
             }
             else if (Room.Player2.Health_points == 0){
               console.log("the Game Sould end Player 1 Wins!!");
               this.server.to(Room.Player1.id).emit("MatchEnded",{Result:"Win"});
               this.server.to(Room.Player2.id).emit("MatchEnded",{Result:"Lose"});
               this.historyService.updateMatchHistory(Room.Player1.user_id,Room.Player2.user_id);
+              this.Check_forfait = false;
             }
           Room.GameBall.x = Game_Data.Scaled_width / 2;
           Room.GameBall.y = Game_Data.Scaled_height / 2;
-          Room.GameBall.ball_speed_x = -4;
+          if (RandHit)
+            Room.GameBall.ball_speed_x = -4;
+          else
+            Room.GameBall.ball_speed_x = 4;
           Room.GameBall.ball_speed_y = 2;
           
           Room.Player1.x = 0;
@@ -302,9 +332,11 @@ async handleDisconnect(Player: Socket) {
 
 
     Ball_points_check(radius : number,Room,Player1_x,Player1_y,Player1_width,Player1_height,Player2_x,Player2_y,Player2_width,Player2_height,screen_width,Ball_x,Game_Data) : boolean{
-      // let Randomencounter : number;
+      let RandomHit : number;
+      let speed_increase : number = 1.5;
 
-      
+      RandomHit = Math.floor(Math.random() * 2);
+      // console.log("Using Random in numbers ---> " + RandomHit);
       let r : number  = 0;
         for(let i = 0; i < 16 ; i++){
           let degree = (i * 22.5) * (Math.PI / 180);
@@ -313,22 +345,29 @@ async handleDisconnect(Player: Socket) {
           let y_ball = radius * (Math.sin(Room.GameBall.y + degree)) + Room.GameBall.y;
 
 
-          if (((x_ball > Player1_x && x_ball < Player1_x + Player1_width && y_ball > Player1_y && y_ball < Player1_y + Player1_height) 
-        || (x_ball > Player2_x && x_ball < Player2_x + Player2_width && y_ball > Player2_y && y_ball < Player2_y + Player2_height))){
+          if (((x_ball > Player1_x && x_ball < Player1_x + Player1_width - 10 && y_ball > Player1_y && y_ball < Player1_y + Player1_height) 
+        || (x_ball > Player2_x && x_ball < Player2_x + Player2_width - 10 && y_ball > Player2_y && y_ball < Player2_y + Player2_height))){
             if (x_ball < Game_Data.Scaled_width / 2){
                 console.log("hit left half")
-                if(y_ball > (Player1_y + 15) && y_ball < (Player1_y + Player1_height - 11)){
-                    console.log("hit mid !!");
+                if(y_ball > (Player1_y + 8) && y_ball < (Player1_y + Player1_height - 8)){
+                    console.log("P1---hit mid !!");
                     Room.GameBall.x = Room.GameBall.x + 4;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+                    Room.GameBall.ball_speed_x *= speed_increase;
+                    // if (RandomHit == 0)
+                      Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+                    // else{
+                    //   Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x + speed_increase;
+                    //   Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+                    // }
                     return(true);
                 }
                 else{
-                    console.log("hit corner !!");
+                    console.log("P1---hit corner !!");
                     console.log(Player1_y);
                     Room.GameBall.x = Room.GameBall.x + 4;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-
+                    Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
                     // this.r = this.ball_ob.random(0,2);
                     // console.log("r--->" + this.r);
                     // if (Math.floor(this.r))
@@ -339,19 +378,22 @@ async handleDisconnect(Player: Socket) {
             }
             else{
                 console.log("right half");
-                if(y_ball > (Player2_y + 15) && y_ball < (Player2_y + Player2_height - 11)){
-                  Room.GameBall.x = Room.GameBall.x - 8;
+                if(y_ball > (Player2_y + 8) && y_ball < (Player2_y + Player2_height - 8)){
+                    Room.GameBall.x = Room.GameBall.x - 4;
                   // this.collision_happend = true;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-                    console.log("---hit mid !!");
+                    Room.GameBall.ball_speed_x *= speed_increase;
+                    // if (RandomHit == 0)
+                      Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+                    console.log("P2---hit mid !!");
                     return(true);
                 }
                 else{
                   // this.collision_happend = true;
-                  Room.GameBall.x = Room.GameBall.x - 8;
-                    console.log("---hit corner !!");
+                  Room.GameBall.x = Room.GameBall.x - 4;
+                    console.log("P2---hit corner !!");
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-
+                    Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
                     // this.r = this.ball_ob.random(0,2);
                     // console.log("r--->" + this.r);
                     // if (Math.floor(this.r))

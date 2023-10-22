@@ -2,6 +2,7 @@
 
 body {
 	background: linear-gradient(243deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 99.23%), #333C54;
+    height: 100vh;
 }
 
 .notification {
@@ -9,8 +10,11 @@ body {
     display: flex;
     justify-content: center;
 	align-items: center;
-
+    
+    
     .notificationBox {
+        transform: translateY(25vh);
+        overflow-y: auto;
 		background: #C1C1C1;
         width: 600px;
         height: 560px;
@@ -24,7 +28,7 @@ body {
         .loginBoxHeader {
             height: 10%;            
 			background: #5970E4;
-            font-size:x-large;
+            font-size: x-large;
             border-bottom: 8px solid #7C6E6E;
             border-right: 8px solid #7C6E6E;
             display: flex;
@@ -39,6 +43,7 @@ body {
             border-right: 8px solid #7C6E6E;
 
 
+
             .nes-container {
                 background: #f2ecff;
             }
@@ -49,6 +54,6 @@ body {
 
 @media only screen and (max-width: 600px) {
     .notification {
-        margin-top: 80px;
+        margin-top: 90px;
     }
 }

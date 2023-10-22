@@ -11,9 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
-backend/uploads
-backend/node_modules
-backend/.env
+Backend/uploads
+Backend/node_modules
+Backend/.env
 # Editor directories and files
 .vscode/*
 .vite/*

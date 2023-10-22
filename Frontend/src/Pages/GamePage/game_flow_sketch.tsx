@@ -23,8 +23,10 @@ import Lose from "./assets/Lose.jpeg";
 import Dimension from "./assets/Dim.gif";
 import { Socket, io } from 'socket.io-client';
 import BackgroundGame from "./assets/bc_mini.png";
+import BackgroundGame2 from "./assets/bckg2.png";
 import pd from "./assets/blue_paddle.png";
 import ball from "./assets/yellow_ball.png";
+import { socket } from '../socket-client';
 
 // import axios from 'axios';
 // import { Cookies } from 'react-cookie';
@@ -192,6 +194,8 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     let P1_scaled_y : number;
     let P2_scaled_y : number;
 
+    let button : any;
+
 
 
     // console.log(token.username);
@@ -210,14 +214,17 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   
         //r- Loading Images
 p5_ob.preload = () =>{
-
+          let Rnd_background = Math.floor(Math.random() * 2);
           MatchmakingPage = p5_ob.loadImage(gifMatch);
           font = p5_ob.loadFont(f);
           ovp = p5_ob.loadImage(over_g);
           win = p5_ob.loadImage(Win);
           lose = p5_ob.loadImage(Lose);
           Dim = p5_ob.loadImage(Dimension);
-          GameBackgrund = p5_ob.loadImage(BackgroundGame);
+          if (Rnd_background)
+            GameBackgrund = p5_ob.loadImage(BackgroundGame);
+          else
+            GameBackgrund = p5_ob.loadImage(BackgroundGame2);
           pd_asset = p5_ob.loadImage(pd);
           ball_asset = p5_ob.loadImage(ball);
 
@@ -436,12 +443,14 @@ p5_ob.draw = () =>{
     
               }
       }
-        else{ 
-              p5_ob.background(MatchmakingPage);
-              Update_screen = false;
-              // p5_ob.image(MatchmakingPage,170,0,750,550);
-              p5_ob.fill("#e0e3ba");
+        else{
+              if (id_player == Frontroom.Player1?.id || id_player == Frontroom.Player2?.id){
+                p5_ob.background(MatchmakingPage);
+                Update_screen = false;
+                // p5_ob.image(MatchmakingPage,170,0,750,550);
+                p5_ob.fill("#e0e3ba");
               // p5_ob.text("MatchMaking ...",p5_ob.width / 2 -  25 ,p5_ob.height/2);
+              }
           }
           // p5_ob.fill("#ffffff");
           // p5_ob.textSize((2.4 / 100) * window.innerWidth);
