@@ -221,7 +221,6 @@
                                 border-radius: 50%;
                                 object-fit: cover;
                                 align-self: flex-start;
-                                border: 3px solid;
                             }
                             
                             .chatUserName
@@ -408,6 +407,14 @@
                             }
                         }
                         
+                    }
+
+                    .imagePlaceHolder
+                    {
+                        align-self: center;
+                        justify-self: center;
+                        position: relative;
+                        bottom: -21.5%;
                     }
                 }
 

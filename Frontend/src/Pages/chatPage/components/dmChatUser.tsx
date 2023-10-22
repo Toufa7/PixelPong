@@ -1,4 +1,3 @@
-import Messages from '../components/messages'
 //This component is used to display the conversation
 //of a user in a conversation
 
@@ -7,7 +6,7 @@ const dmChatUser = ({userName ,pic ,userId , id}: any) => {
     //pic: it's picture
     //id: it's id in the database
     //userId: callback function to return the id to the parent componenet
-    
+
     const handleOnClick = () => {
         userId(id);
     };

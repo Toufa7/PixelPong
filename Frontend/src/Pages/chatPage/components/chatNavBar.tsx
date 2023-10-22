@@ -5,7 +5,6 @@ import axios from 'axios'
 import ChatUser from '../components/ChatUser'
 import DmChatUser from './dmChatUser'
 import ChatSearch from './chatSearch'
-import uknownUser from '../assets/images/nonprofile.png'
 
 interface chatUser {
     userName: string;
@@ -37,7 +36,7 @@ const Dms = (props:any) => {
 
     const conversationsSocket = useContext(chatSocketContext)
     
-    //dms map
+    //Dms map
     let map = useMap();
 
     useEffect(() => {  
@@ -65,20 +64,19 @@ const Dms = (props:any) => {
             axios
                 .get(`http://localhost:3000/users/profile/${conversations[i]}`, { withCredentials: true })
                 .then((res) => {
-                    
-                    tmpObj = {userName: res.data.username, pic: res.data.profileImage, id: conversations[i]}
+                    tmpObj = {userName: res.data.username, pic: `http://localhost:3000/auth/avatar/${conversations[i]}`, id: conversations[i]}
                     map.set(conversations[i], tmpObj);
                 })
                 .catch(Error)
                     console.log('%cAn error happened in : ', 'color: red')
                     console.log('%cDms: Dms:handleNewConversations', 'color: blue');
         }   
-        };
+    };
         
-        const updateSharedString = (newString: string) =>
-        {
-            props.cu(newString);
-        };
+    const updateSharedString = (newString: string) =>
+    {
+        props.cu(newString);
+    };
 
     return (
       <div className="chatDmDiv">

@@ -113,7 +113,6 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
           message : body.message
         },
       });
-      console.log("========++++++=======");
       this.server.to(body.roomid).emit(body.roomid, {
         roomid: body.roomid,
         timestamp: body.timestamp,
