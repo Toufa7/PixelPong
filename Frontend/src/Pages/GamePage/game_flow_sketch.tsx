@@ -193,6 +193,8 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
     let P1_scaled_y : number;
     let P2_scaled_y : number;
 
+    let button : any;
+
 
 
     // console.log(token.username);
