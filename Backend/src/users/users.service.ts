@@ -192,21 +192,22 @@ export class UsersService {
     });
   }
   async sendFriendRequest(senderId: string, data: any) {
-    console.log(senderId  +"  ...    "+ data.to)
+    console.log(senderId  +"  ...    "+ data)
     console.log(data);
     return await this.prisma.notification.create({
       data: {
-        sender: { connect: { id: senderId } },
+        user: { connect: { id: senderId } },
         receiver: { connect: { id: data.to } },
         status: Status.PENDING,
         name: data.type,
         message: data.message,
-        recivername:data.to,
+        from:data.from,
       },
     });
   }
   
   async acceptFriendRequest(id: number, senderId: string, recieverId: string) {
+    console.log(id +" "+ senderId+" "+ recieverId)
     await this.prisma.$transaction([
       this.prisma.notification.updateMany({
         where: { id: id },
@@ -238,17 +239,18 @@ export class UsersService {
     }),
     this.prisma.notification.delete({
       where:{
-        id,
+        id:id,
       },
     })
   ]);
-  console.log(id);
+  console.log("its delete : : : : :: : : : : : ",id);
   }
+  
 
   async getallNotifications(id: string){
     const notifications = await this.prisma.notification.findMany({
       where:{
-        receiverId: id,
+        to: id,
       },
     });
     return notifications;   
@@ -263,7 +265,7 @@ async refuseFriendRequest(id: number) {
   }),
   this.prisma.notification.delete({
     where:{
-      id,
+      id: id,
     },
   })
 ])
@@ -271,10 +273,11 @@ async refuseFriendRequest(id: number) {
 
 
 async findFriendRequestIdBySenderReceiver(senderId: string, receiverId: string): Promise<any> {
+  console.log("seeeender ", senderId, " rec   ", receiverId);
   const friendrequest = await this.prisma.notification.findFirst({
     where: {
-      senderId :receiverId,
-      receiverId: senderId,
+      userId :senderId  ,
+      to: receiverId,
     },
     select: {
       id: true,
@@ -302,5 +305,5 @@ async isauthenticated(id: string, isauth: boolean)
     where:{id : id},
     data:{authenticated: isauth}
   })
-}
+} 
 }

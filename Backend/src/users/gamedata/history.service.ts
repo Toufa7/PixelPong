@@ -27,7 +27,16 @@ async addMatchHistory(userId:string){
                 },
             },
         });
-        return newMatchHistory;
+        const stats = await this.prisma.stats.create({
+            data: {
+                user: {
+                    connect: {
+                        id: userId,
+                    },
+                },
+            },
+        }); 
+        return {newMatchHistory, stats};
 }
  async updateMatchHistory(winnerId:string, loserId:string){
     const winner = await this.prisma.user.findUnique({

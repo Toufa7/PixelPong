@@ -75,10 +75,10 @@ CREATE TABLE "Messagegb" (
 -- CreateTable
 CREATE TABLE "Notification" (
     "id" SERIAL NOT NULL,
-    "senderId" TEXT NOT NULL,
-    "receiverId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "to" TEXT NOT NULL,
     "name" TEXT,
-    "recivername" TEXT,
+    "from" TEXT,
     "message" TEXT,
     "status" "Status" DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -246,10 +246,10 @@ ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_senderid_fkey" FOREIGN KEY ("s
 ALTER TABLE "Messagegb" ADD CONSTRAINT "Messagegb_idgp_fkey" FOREIGN KEY ("idgp") REFERENCES "Groupchat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Notification" ADD CONSTRAINT "Notification_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Notification" ADD CONSTRAINT "Notification_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_to_fkey" FOREIGN KEY ("to") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Stats" ADD CONSTRAINT "Stats_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -207,8 +207,8 @@ async handleDisconnect(Player: Socket) {
             let right = (local_Ball_x + local_Ball_diameter / 2);
 
             if (this.check_collision_Ball_with_players(local_Ball_x,local_Ball_y,local_Ball_diameter,Room.Player1,Game_Data,Player)){
-              Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
-              Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
+              Room.GameBall.x += Room.GameBall.ball_speed_x;
+              Room.GameBall.y += Room.GameBall.ball_speed_y;
               break;
             }
 
@@ -218,11 +218,11 @@ async handleDisconnect(Player: Socket) {
 
 
             if(top < 0){
-              Room.GameBall.x = Room.GameBall.x + 8;
+              // Room.GameBall.x = Room.GameBall.x + 8;
               Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
             }
-            if (bottom > Game_Data.Scaled_height){
-            Room.GameBall.x = Room.GameBall.x - 8;
+            if (bottom > Game_Data.Scaled_height - 10){
+            // Room.GameBall.x = Room.GameBall.x - 8;
             Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
             }
             Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
@@ -302,9 +302,10 @@ async handleDisconnect(Player: Socket) {
 
 
     Ball_points_check(radius : number,Room,Player1_x,Player1_y,Player1_width,Player1_height,Player2_x,Player2_y,Player2_width,Player2_height,screen_width,Ball_x,Game_Data) : boolean{
-      // let Randomencounter : number;
+      let RandomHit : number;
+      let speed_increase : number = 1.5;
 
-      
+      RandomHit = Math.floor(Math.random() * 2);
       let r : number  = 0;
         for(let i = 0; i < 16 ; i++){
           let degree = (i * 22.5) * (Math.PI / 180);
@@ -313,18 +314,24 @@ async handleDisconnect(Player: Socket) {
           let y_ball = radius * (Math.sin(Room.GameBall.y + degree)) + Room.GameBall.y;
 
 
-          if (((x_ball > Player1_x && x_ball < Player1_x + Player1_width && y_ball > Player1_y && y_ball < Player1_y + Player1_height) 
+          if (((x_ball > Player1_x && x_ball < Player1_x + Player1_width - 2 && y_ball > Player1_y && y_ball < Player1_y + Player1_height) 
         || (x_ball > Player2_x && x_ball < Player2_x + Player2_width && y_ball > Player2_y && y_ball < Player2_y + Player2_height))){
             if (x_ball < Game_Data.Scaled_width / 2){
                 console.log("hit left half")
                 if(y_ball > (Player1_y + 15) && y_ball < (Player1_y + Player1_height - 11)){
-                    console.log("hit mid !!");
+                    console.log("P1---hit mid !!");
                     Room.GameBall.x = Room.GameBall.x + 4;
+                    // if (RandomHit == 0)
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+                    // Room.GameBall.ball_speed_x *= speed_increase;
+                    // else{
+                    //   Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x + speed_increase;
+                    //   Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
+                    // }
                     return(true);
                 }
                 else{
-                    console.log("hit corner !!");
+                    console.log("P1---hit corner !!");
                     console.log(Player1_y);
                     Room.GameBall.x = Room.GameBall.x + 4;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
@@ -340,16 +347,17 @@ async handleDisconnect(Player: Socket) {
             else{
                 console.log("right half");
                 if(y_ball > (Player2_y + 15) && y_ball < (Player2_y + Player2_height - 11)){
-                  Room.GameBall.x = Room.GameBall.x - 8;
+                    Room.GameBall.x = Room.GameBall.x - 4;
                   // this.collision_happend = true;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-                    console.log("---hit mid !!");
+                    // Room.GameBall.ball_speed_x *= speed_increase;
+                    console.log("P2---hit mid !!");
                     return(true);
                 }
                 else{
                   // this.collision_happend = true;
-                  Room.GameBall.x = Room.GameBall.x - 8;
-                    console.log("---hit corner !!");
+                  Room.GameBall.x = Room.GameBall.x - 4;
+                    console.log("P2---hit corner !!");
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
 
                     // this.r = this.ball_ob.random(0,2);
