@@ -113,8 +113,6 @@ const GroupsAndFriends = () => {
         id: string, 
         profileImage : string
     }
-    const cookie = new Cookies();
-    const token = jwt_decode(cookie.get('jwt'));
     const [friendData, setFriendData] = useState<string[]>([]);
 
     useEffect(() => {

@@ -12,27 +12,14 @@ import { Link } from "react-router-dom";
 /******************* Includes  *******************/
 
 const RetrieveCheckSendData =  () => {
-    
-    const avatar = document.querySelector('[name="avatarUpload"]')?.files[0];
-    const nicknameInput = document.querySelector('[name="nickname"]')?.value;
-    const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;    
-    const [isFirstLogging, setIsFirstLogging] = useState<boolean>();
-    axios.get( "http://localhost:3000/users/profil", { withCredentials: true })
-        .then((resespo) => {
-            setIsFirstLogging(resespo.data.firstlogin);
-        })
-    console.log("!avatar && !nicknameInput && isFirstLogging == true -> ", !avatar && !nicknameInput && isFirstLogging == true)
-    if (!avatar && !nicknameInput && isFirstLogging == true)
-    {
-        document.getElementById('warning')?.showModal();
-        return (<></>);
-    }
-
+    const avatar = document.querySelector('[name="avatarUpload"]').files[0];
+    const nicknameInput = document.querySelector('[name="nickname"]').value;
+    const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
     if (avatar) {
        const data = new FormData();
        data.append('file', avatar);
        toast.promise(
-        axios.all([
+           axios.all([
                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
             ]).then(axios.spread((responseNickname) => {
                 console.log(responseNickname);
@@ -124,6 +111,26 @@ export default function LoginSettings() {
         }
 
 
+
+        const [isFirstLogging, setIsFirstLogging] = useState(true);
+
+        useEffect(() => {
+          const fetchData = () => {
+              axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+              .then((response) => {
+                  console.log("USER INFO -> ", response.data)
+                  setIsFirstLogging(response.data.firstlogin)
+              })
+              .catch((error) => {
+              console.log("Error -> ", error);
+            })
+            }
+      
+          fetchData();
+        }, []);
+
+
+
     return (
         <div style={{height: '100vh'}}>
             <Toaster/>
@@ -155,7 +162,21 @@ export default function LoginSettings() {
                         </label>
                      </div>
                         <div className="startContainer">
-                            <button style={{width: 'fit-content'}} onClick={RetrieveCheckSendData} type="button" className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update</button>
+                            <button style={{width: 'fit-content'}} onClick={() => {
+                                if (!document.querySelector('[name="avatarUpload"]')?.files[0] && !document.querySelector('[name="nickname"]')?.value && isFirstLogging == true) {
+                                    console.log("isFirstLogging -> ",isFirstLogging);
+                                    console.log("avatarUpload -> ",document.querySelector('[name="avatarUpload"]')?.files[0]);
+                                    console.log("nickname -> ",document.querySelector('[name="nickname"]')?.value);
+
+                                    document.getElementById('warning')?.showModal();
+                                }
+                                else
+                                {
+                                    console.log("===== Retrving =====")
+                                    RetrieveCheckSendData();
+
+                                }
+                                }} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update</button>
                         </div>
                     </div>
                     {/* A dialog show up for the 1st time and ask the user if he want to go with the default username & avatar */}
@@ -173,7 +194,7 @@ export default function LoginSettings() {
                                 <div>
                                     <button style={{margin: '10px'}} className="nes-btn">Cancel</button>
                                     <Link to="/home">
-                                    <a style={{margin: '10px'}} className="nes-btn is-primary">Confirm</a>
+                                    <a style={{margin: '10px', color: 'black'}} className="nes-btn is-primary">Confirm</a>
                                     </Link>
                                 </div>
                             </form>

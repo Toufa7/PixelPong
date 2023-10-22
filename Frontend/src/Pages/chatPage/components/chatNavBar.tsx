@@ -62,8 +62,7 @@ const Dms = (props:any) => {
 
         for (let i: number = 0; i < conversations.length; i++)
         {
-            axios
-                .get(`http://localhost:3000/users/profile/${conversations[i]}`, { withCredentials: true })
+            axios.get(`http://localhost:3000/users/profile/${conversations[i]}`, { withCredentials: true })
                 .then((res) => {
                     
                     tmpObj = {userName: res.data.username, pic: res.data.profileImage, id: conversations[i]}
