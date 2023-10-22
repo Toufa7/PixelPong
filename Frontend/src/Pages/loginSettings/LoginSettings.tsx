@@ -7,18 +7,32 @@ import { useEffect, useState } from "react";
 import Anime from 'react-anime';
 import { Cookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
+import { Link } from "react-router-dom";
 
 /******************* Includes  *******************/
 
 const RetrieveCheckSendData =  () => {
-    const avatar = document.querySelector('[name="avatarUpload"]').files[0];
-    const nicknameInput = document.querySelector('[name="nickname"]').value;
-    const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
+    
+    const avatar = document.querySelector('[name="avatarUpload"]')?.files[0];
+    const nicknameInput = document.querySelector('[name="nickname"]')?.value;
+    const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;    
+    const [isFirstLogging, setIsFirstLogging] = useState<boolean>();
+    axios.get( "http://localhost:3000/users/profil", { withCredentials: true })
+        .then((resespo) => {
+            setIsFirstLogging(resespo.data.firstlogin);
+        })
+    console.log("!avatar && !nicknameInput && isFirstLogging == true -> ", !avatar && !nicknameInput && isFirstLogging == true)
+    if (!avatar && !nicknameInput && isFirstLogging == true)
+    {
+        document.getElementById('warning')?.showModal();
+        return (<></>);
+    }
+
     if (avatar) {
        const data = new FormData();
        data.append('file', avatar);
        toast.promise(
-           axios.all([
+        axios.all([
                axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
             ]).then(axios.spread((responseNickname) => {
                 console.log(responseNickname);
@@ -43,10 +57,6 @@ const RetrieveCheckSendData =  () => {
                  error: "An error occurred",
              }
              ,{ duration: 5000, position: 'top-right' });           
-    }
-    else if (!avatar && nicknameInput.length)
-    {
-        document.getElementById('warning')?.showModal();
     }
     else if (!nicknameInput){
         toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
@@ -156,13 +166,15 @@ export default function LoginSettings() {
                                 <p>Do you want to go with the default settings?</p>
                                 <Anime translateY={['-100%', '0%']} duration={3000}>
                                     <div>
-                                        <img style={{width: '100px', height: '100px', borderRadius: '50%', margin: '10px'}} src={token.image}></img>
+                                        <img style={{width: '100px', height: '100px', borderRadius: '50%', margin: '10px'}} src={`http://localhost:3000/auth/avatar/default-image`}></img>
                                         <a style={{fontWeight: "bold"}}>{token.username}</a>
                                     </div>
                                 </Anime>
                                 <div>
                                     <button style={{margin: '10px'}} className="nes-btn">Cancel</button>
-                                    <a style={{margin: '10px'}} href="/home" className="nes-btn is-primary">Confirm</a>
+                                    <Link to="/home">
+                                    <a style={{margin: '10px'}} className="nes-btn is-primary">Confirm</a>
+                                    </Link>
                                 </div>
                             </form>
                         </dialog>

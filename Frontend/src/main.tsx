@@ -40,6 +40,7 @@ export const NotificationComponents = () => {
 	);
 }
 
+
 const ProfilComponents = () => {
 	return (
 		<>

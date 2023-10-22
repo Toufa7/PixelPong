@@ -11,6 +11,8 @@ import { use } from 'passport';
 import { emit } from 'process';
 
 let map = new Map <any , any>();
+let mapclient = new Map <any , any>();
+
 
 @WebSocketGateway({
   cors: {
@@ -28,20 +30,22 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   ////////////////////////////////// -----dis-- ////////////////////////////////
   async handleDisconnect(client: Socket, ...args: any[]) {
     this.logger.log(`Client disconnected: ${client.id}`);
-    // const user = await this.getUser(client);
-    // if(user)
-    // {
-    //   map.delete( user.id);
-    // }
-  }
+    const user = await this.getUser(client);
+    if(user)
+    {
+     
+      mapclient.delete( user.id);
+    }
+  } 
 
   async handleConnection(client: any, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-    // const user = await this.getUser(client);
-    // if(user)
-    // {
-    //   map.set(user.id,client.id);
-    // }
+    const user = await this.getUser(client);
+    if(user)
+    {
+      console.log("in user cond ", user.id+ "   "+ client.id)
+      mapclient.set(user.id,client.id);
+    }
   }
   afterInit(server: any) {
     this.logger.log("initialized");
@@ -186,7 +190,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
 
 
   async sendrequest(id : string , idsender : string){
-    
+    console.log("map  :: ", mapclient);
     //check if user in groupchat
     const inroom = await this.prisma.groupchat.findMany({
       where: {
@@ -243,7 +247,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     const user = await this.prisma.user.findUnique({
       where: { id: idsender },
     });
-    this.server.to(map.get(superadmin.superadmin.id)).emit('notification', {
+    this.server.emit('notificationgrp', {
       userId: idsender,
       type: 'join groupchat',
       photo: user.profileImage,

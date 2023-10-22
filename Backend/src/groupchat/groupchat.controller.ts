@@ -43,7 +43,6 @@ export class GroupchatController {
         return this.GroupchatService.findAllGp();
     }
 
-
     
     //get groupchats where not a member
     @Get("notmember")
@@ -58,11 +57,11 @@ export class GroupchatController {
     findAll(@Req() Request : any): any {
         return this.GroupchatService.findAll(Request.user.id);
     }
-    
+
     //get all groupchat of a useradmin
     @Get("lifihomanaadmin")
     findgpadmin(@Req() req : any): any {
-        return this.GroupchatService.findgpadmin(req.id);
+        return this.GroupchatService.findgpadmin(req.user.id);
     }
 
     //get all users of a groupchat
@@ -130,9 +129,9 @@ export class GroupchatController {
     }
 
     //get Requestjoingroup of a groupchat
-    @Get(":id/requestjoingroup")
-    findRequestjoingroup(@Param('id') id: string): any {
-        return this.GroupchatService.findRequestjoingroup(id);
+    @Get("requestjoingroup")
+    findRequestjoingroup(@Req() req : any ) : any {
+        return this.GroupchatService.findRequestjoingroup(req.user.id);
     }
 
 
@@ -176,8 +175,8 @@ export class GroupchatController {
    
     // mute a user from a groupchats
     @Post(":id/:iduser/mute")
-    mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any, @Body() time : number ): any {
-        return this.GroupchatService.muteuser(id, iduser, req.user.id, time);
+    mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any, @Body() data :any ): any {
+        return this.GroupchatService.muteuser(id, iduser, req.user.id, data.time);
     }
 
 
@@ -195,7 +194,7 @@ export class GroupchatController {
 
     /////////////////////-------add an user to a groupchat private----////////////////////
     //send request to join a groupchat
-    @Get(":id/request")
+    @Post(":id/request")
     sendrequest(@Param('id') id: string, @Req() req : any): any {
         console.log("sendrequest");
         this.GroupchatGateway.sendrequest(id, req.user.id);
