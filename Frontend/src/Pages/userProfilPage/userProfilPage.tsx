@@ -5,7 +5,7 @@ import Cookies from 'universal-cookie';
 import { lazy, useEffect, useState } from "react";
 import axios from "axios";
 /******************* Includes  *******************/
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 const ErrorPage = lazy(() => import('../errorPage/errorPage'))
 import Stars from '../addons/Stars';
 import NavBar from '../addons/NavBar';
@@ -142,36 +142,31 @@ const GroupsAndFriends = () => {
     .then((res) => {
         setId(res.data.id);
     })
+
+
+
+
     const [friendData, setFriendData] = useState<string[]>([]);
     useEffect(() => {
         axios.get(`http://localhost:3000/users/friends/${thisId}`, {withCredentials: true})
         .then((response) => {
-            console.log("Friend List -> ", response.data);
+            console.log("Friend List Remote -> ", response.data);
             setFriendData(response.data);
         })
-    },[])
+    },[thisId])
+ 
+
+
+
+
+
+
+
+
+
 
     const [label, setlabel] = useState<boolean>(true);
-    const [userData, setAvataStatus] = useState({
-        avatar: '',
-        check: true
-    });
-    const cookie = new Cookies();
-    const token = jwt_decode(cookie.get('jwt'));
-    useEffect(() => {
-        async function checking() {
-        await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
-        .then(() => {
-            setAvataStatus(() => ({
-                avatar: `http://localhost:3000/auth/avatar/${token.id}`,
-                check: false
-                }));
-        })
-        .catch(() => {})
-    }
-    checking(); 
-    }, []);
-
+    console.log("friendData -> ", friendData)
       return (
           <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
@@ -187,18 +182,15 @@ const GroupsAndFriends = () => {
                         </>
                     )
                     ) : (
-                        // Friends
-                        Object.keys(friendData).map((idx) => (
-                            <>
-                                <div className='list'>
-                                <img  className="avatar" src={friendData[idx].profileImage} alt="avatar" />
-                                <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center',marginLeft: '10px'}}>
-                                    <span className='name' key={idx}>{friendData[idx].username}</span>
-                                    </div>
+                        friendData.map((friend : string) => (
+                            <div className='list' key={friend.id}>
+                                <img className="avatar" src={`http://localhost:3000/auth/avatar/${friend.id}`} alt="avatar" />
+                                <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
+                                    <span className='name'>{friend.username}</span>
                                 </div>
-
-                            </>
-                    ))
+                            </div>
+                        )
+                    )
                 )}
 
                     </div>
@@ -251,6 +243,9 @@ const Achivements = () => {
 function OtherProfilPage() {
     const location = useLocation();   
     const [userExist, isUserExist] = useState<string>(""); 
+    const [theOne, setTheOne] = useState<string>(""); 
+
+    const currUser = useParams();
 
     useEffect(() => {
 	const searchInFriends = async () => {
@@ -272,10 +267,26 @@ function OtherProfilPage() {
         searchInFriends();
     }, [])
 
-    console.log("Is User Exist -> ", userExist);
+
+    const [user, setUser] = useState<string>("");
+    axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
+    .then((res) => {
+        setUser(res.data.username);
+        console.log("Res -> ", res.data.username)
+    })
+    .catch((erro) => {
+        console.error("Erro -> ", erro);
+
+    })
+
+    console.log("Is User Exist -> ", currUser.userId , user);
     if (userExist == "NotFound") {
         return (<ErrorPage title={"User Not Found"} errorType={'Oops! The user you\'re looking \nfor couldn\'t be found'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />)
     }
+    else if (userExist != "NotFound" && currUser.userId == user) {
+        return (<ErrorPage title={"Localhost"} errorType={'Oops!couldn\'t found 127.0.0.1'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />)
+    }
+
     else
         return (
             <div style={{height: '100h'}}>
