@@ -25,6 +25,9 @@ const chatSearch = (props: any) => {
     const cookieJwt = document.cookie;
     const jwtArr:string[] =  cookieJwt.split("=");
     let localUser: any = jwtDecode(jwtArr[1]);
+    
+    console.log("Local user is : ", localUser)
+    //http://localhost:3000/users/profil
 
     useEffect(() => {
         fetchCurrentUserInfo(localUser.id);

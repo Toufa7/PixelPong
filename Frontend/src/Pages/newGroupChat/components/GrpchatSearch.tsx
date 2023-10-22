@@ -75,20 +75,20 @@ const chatSearch = (props: any) => {
 
     return (
         <div className="GrpchatSearchDiv">
-            <span>CHAT</span>
-            <div className="GrpsearchForm">
-                <form className="GrpfromClass" onSubmit={onSubmitHandler}>
+            <span>GROUP CHAT</span>
+            {/* <div className="GrpsearchForm"> */}
+                {/* <form className="GrpfromClass" onSubmit={onSubmitHandler}>
                     <input type='text' ref={firstRef} placeholder='Search' className='searchBar'/>
-                </form>
-            </div>
-            <div className="GrpSearchUserChat">
+                </form> */}
+            {/* </div> */}
+            {/* <div className="GrpSearchUserChat">
                 {Found &&   <div onClick={removeElement}>
                                 <DmChatUser userName={friendFound.username} pic={friendFound.profileImage} id={friendFound.id} userId={updateSharedString} />
                             </div>}
                 {notFound && <div onClick={removeElement}>
                                 <DmChatUser userName={"Not Found"} pic={search}/>
                             </div>}
-            </div>
+            </div> */}
         </div>
     )
 }

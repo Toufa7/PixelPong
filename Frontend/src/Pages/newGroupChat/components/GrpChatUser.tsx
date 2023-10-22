@@ -36,8 +36,8 @@ const ChatUser = (props : any) => {
 
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
-    if (props.pcurrentUserId) 
-    {
+    // if (props.pcurrentUserId) 
+    // {
         useEffect(() => {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
             .then((response) => {
@@ -61,7 +61,7 @@ const ChatUser = (props : any) => {
 
             });
         }, []);
-    }
+    // }
 
 
     const openDialogUsers = () => {

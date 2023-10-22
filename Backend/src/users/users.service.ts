@@ -192,7 +192,7 @@ export class UsersService {
     });
   }
   async sendFriendRequest(senderId: string, data: any) {
-    // console.log(senderId  +"      "+ recieverId)
+    console.log(senderId  +"  ...    "+ data.to)
     console.log(data);
     return await this.prisma.notification.create({
       data: {
@@ -208,7 +208,7 @@ export class UsersService {
   
   async acceptFriendRequest(id: number, senderId: string, recieverId: string) {
     await this.prisma.$transaction([
-      this.prisma.notification.update({
+      this.prisma.notification.updateMany({
         where: { id: id },
         data: { status: Status.ACCEPTED },
       }),
@@ -238,12 +238,13 @@ export class UsersService {
     }),
     this.prisma.notification.delete({
       where:{
-        id,
+        id:id,
       },
     })
   ]);
-  console.log(id);
+  console.log("its delete : : : : :: : : : : : ",id);
   }
+  
 
   async getallNotifications(id: string){
     const notifications = await this.prisma.notification.findMany({
@@ -263,25 +264,25 @@ async refuseFriendRequest(id: number) {
   }),
   this.prisma.notification.delete({
     where:{
-      id,
+      id: id,
     },
   })
 ])
 }
 
 
-async findFriendRequestIdBySenderReceiver(senderId: string, receiverId: string): Promise<number | null> {
+async findFriendRequestIdBySenderReceiver(senderId: string, receiverId: string): Promise<any> {
   const friendrequest = await this.prisma.notification.findFirst({
     where: {
-      senderId,
-      receiverId,
+      senderId :receiverId,
+      receiverId: senderId,
     },
     select: {
       id: true,
     },
   });
 
-  return friendrequest?.id || null;
+  return friendrequest;
 }
 
 async ChangeStateInGame(id: string, ingame: boolean)  //Chaning The State of Player in Game

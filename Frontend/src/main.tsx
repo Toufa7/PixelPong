@@ -149,7 +149,7 @@ const Routing = () => {
 	// console.log("User is not Logged in -> ", !logged )
 	return (
 		<BrowserRouter>
-		<Suspense fallback={<div>Loading...</div>}>
+		<Suspense fallback={<div><img src={'https://64.media.tumblr.com/02f1e684630962dfde601535ca66c7ec/4f559fadb3dc32b2-db/s1280x1920/b30ed1f7179224fc6c882fc432975dea793cf25a.gifv'}/> </div>}>
 		<Routes>
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
 			{logged && !userData.twofaStatus && (

@@ -13,6 +13,8 @@ import dogo from '../assets/dogo.gif'
 
 const ChatUser = (props:any) => {
 
+    let localUser: any;
+
     //Fetching current user (Receiver) data each time the prop gets new value
     const [remoteUser, setRemoteUser] = useState({});
     
@@ -30,10 +32,23 @@ const ChatUser = (props:any) => {
         fetchCurrentUserInfo(props.pcurrentUserId);
     }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
 
+    //Fetching local user
+    useEffect(() => {
+        axios
+            .get(`http://localhost:3000/users/profil`, { withCredentials: true })
+            .then((res:any) => {
+                console.log("Here is the response --->", res.data);
+                localUser = res.data;
+            })
+            .catch(Error)
+                console.log("Erro happened when feching local user data")
+    }, [props.pcurrentUserId])
+
+    //http://localhost:3000/users/profil
     //Identifying local user (Sender)
-    const cookieJwt = document.cookie;
-    const jwtArr:string[] =  cookieJwt.split("=");
-    let localUser: any = jwtDecode(jwtArr[1]);
+    // const cookieJwt = document.cookie;
+    // const jwtArr:string[] =  cookieJwt.split("=");
+    // let localUser: any = jwtDecode(jwtArr[1]);
 
     return (
         <div className='usrProfileConversation'>
@@ -50,7 +65,7 @@ const ChatUser = (props:any) => {
                                     {
                                         //Conditional rendring to display the profile username or not based on the presence of remoteUser.username
                                         remoteUser.username ?   remoteUser.username
-                                                            :   'Start a conversation by searching or clicking a DM'
+                                                            :   'Start a conversation'
                                     }
                                 </span>
                             </div>
