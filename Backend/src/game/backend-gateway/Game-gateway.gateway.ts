@@ -56,7 +56,7 @@ handleConnection(Player: Socket) {
           console.log("i am a, : ", this.User);
           console.log("First----> " + JSON.stringify(this.Players.players));
           let t = await this.userService.findOne(this.User.id);
-          let My_username : string = t.username;
+          let My_username : string = t?.username;
           console.log("My UserName ---> " + My_username);
           // this.screen_metrics.screen_width = Data.s_w;
           // this.screen_metrics.screen_height = Data.s_h;
@@ -71,7 +71,7 @@ handleConnection(Player: Socket) {
             this.Rooms.SetupRooms(Player,this.Players,Data.s_w,Data.s_h);
             this.SendToPlayersinRoom(Player,this.Rooms);
             console.log("--->Players" + JSON.stringify(this.Players.players));
-            console.log("---------------------CCCoooCCC--------------------------------\n");
+            console.log("---------------------CCCoooCCC--------------------------------\n");  
           }
 
         })

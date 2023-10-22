@@ -10,6 +10,7 @@ export class UsersService {
     return users;
   }
   async findOne(id: string) {
+    console.log("hadchi d khalil", id);
     const user = await this.prisma.user.findUnique({
       where: {
         id: id,
