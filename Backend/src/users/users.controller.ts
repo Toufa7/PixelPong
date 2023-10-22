@@ -67,7 +67,7 @@ async removeFriend(
   try {
 	await this.usersService.removefriend(req.user.id, body.from);
   } catch (error) {
-	console.error(error.message); // Log the error for debugging
+	console.error(error.message); // Log the error for debuggingƒ
   }
 }
 
@@ -89,7 +89,7 @@ async updateOne(@Req() req: any, @Body() body: UserDto): Promise<User | null> {
 	const { username } = body;
 	return await this.usersService.UpdateforOne(req.user.id, username);
   } catch (error) {
-	console.error(error.message); // Log the error for debugging
+	console.error(error.messagƒe); // Log the error for debugging
   }
 }
 

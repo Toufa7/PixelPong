@@ -151,7 +151,7 @@ const GroupsAndFriends = () => {
                         // Friends
                         friendData.map((friend : string) => (
                             <div className='list' key={friend.id}>
-                                <img className="avatar" src={friend.profileImage} alt="avatar" />
+                                <img className="avatar" src={`http://localhost:3000/auth/avatar/${friend.id}`} alt="avatar" />
                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
                                     <span className='name'>{friend.username}</span>
                                     <button style={{marginLeft: '10px'}} onClick={() => removeFriend(friend.id)}>Unfriend</button>

@@ -24,7 +24,8 @@ const GrpchatNavBar = () => {
 		createOrmanage : false
 	}
 )
-    
+
+    const [isCreated, setIsCreated] = useState<boolean>(false)
     return (
         <div className="GrpchatMessage">
             <div className="GrpchatNavBarDiv">
@@ -39,13 +40,13 @@ const GrpchatNavBar = () => {
                                     data.createOrmanage ?
                                     (<ManageGroup/>)
                                     :
-                                    (<CreateGroup/>)
+                                    (<CreateGroup setIsCreated={setIsCreated} />)
                                 )
 				                :
 				                ""
 			                    }
 		                    </div>
-                            <Dms cu={getCurentUserDms}/>
+                            <Dms cu={getCurentUserDms} isCreated={isCreated}/>
 	                    </div>
                     <div className="GrpchatLowerRibbon"></div>
                 </div>
@@ -68,7 +69,7 @@ const Dms = (props:any) => {
                     GroupsMap.set(response.data[index].id, response.data[index])
                 }
             });
-    }, []);
+    }, [props.isCreated]);
 
     const updateSharedString = (newString: string) =>
     {

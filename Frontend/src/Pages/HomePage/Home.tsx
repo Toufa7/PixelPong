@@ -110,14 +110,17 @@ const TopContainer = () => {
 		username : string,
 		profileImage : string,
 		namegb : string,
-		grouptype: string
+		grouptype: string,
+		id: string
 	}
 
 	const [theOne, setTheOne] = useState<theOneTypes>({
 		username: "",
 		profileImage: "",
 		namegb: "",
-		grouptype: ""
+		grouptype: "",
+		id: "",
+
 	});
 	const [friends, setFriends] = useState([]);
 	const [users, setUsers] = useState([]);

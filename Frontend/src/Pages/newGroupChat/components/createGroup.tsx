@@ -13,7 +13,7 @@ import toast, { Toaster } from "react-hot-toast";
 */
 
 
-const CreatingGroup = () => {
+const CreatingGroup = (setIsCreated) => {
 	const groupName : string	= document.getElementById('name_field')?.value;
 	const choice : number		= document.getElementById("default_privacy")?.value;
 	const password : string		= document.getElementById("password_field")?.value;
@@ -40,6 +40,7 @@ const CreatingGroup = () => {
 			.then((response) => {
 				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
 				.then((response) => {
+					setIsCreated(true);
 					console.log("Creating Group Response -> ", response);
 				})
 				console.log("Creating Group Response -> ", response);
@@ -73,7 +74,7 @@ const CreatingGroup = () => {
 	}
 }
 
-const CreateGroup = () => {
+const CreateGroup = ({setIsCreated} : {setIsCreated: boolean}) => {
 	const privacy = ["Limited to Members","Only Members Allowed","Password-Protected Group"]
 	const [groupName , setGroupName] = useState("");
 	const [isProtected , setProtected] = useState<boolean>(false);
@@ -106,7 +107,7 @@ const CreateGroup = () => {
 					<span>Click to upload</span>
 					<input formMethod="post" type="file" name="avatarUpload1" accept="image/*"/>
 				</label>
-			<button style={{margin: '10px'}} disabled={update ? false : true} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}   onClick={CreatingGroup} href="#">Create</button>
+			<button style={{margin: '10px'}} disabled={update ? false : true} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}   onClick={() => CreatingGroup(setIsCreated)} href="#">Create</button>
 			</div>
 		</div>
 	)
