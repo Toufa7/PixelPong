@@ -96,6 +96,18 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   @SubscribeMessage('msgToRoom')
   async handleMessageRoom(client : Socket, body : any) {
     const user = await this.getUser(client);
+    // get usermuted of a groupchat
+    const usermuted = await this.prisma.groupchat.findUnique({
+      where: { id: body.roomid },
+      select: {
+        usersmute: true,
+      },
+    });
+    //check if user is muted
+    if(usermuted.usersmute.some((usermute) => usermute.id == user.id)){
+      console.log("user is muted");
+      return ;
+    }
     const inroom = await this.prisma.groupchat.findMany({
       where: {
         AND: [
@@ -114,6 +126,23 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         },
       });
       console.log("========++++++=======");
+      const blocked =  await this.prisma.user.findUnique({
+        where: { id: user.id },
+        select: {
+          blocked: true,
+        },
+      });
+
+      const allsocket = await this.server.in(body.roomid).fetchSockets();
+      allsocket.forEach((socket) => {
+        blocked.blocked.forEach((block) => {
+          if (socket.id == map.get(body.roomid + block.id)) {
+            socket.leave(body.roomid);
+          }
+        });
+      });
+
+
       this.server.to(body.roomid).emit(body.roomid, {
         roomid: body.roomid,
         timestamp: body.timestamp,
@@ -125,6 +154,16 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         pic: user.image,
 
       });
+      
+
+      allsocket.forEach((socket) => {
+        blocked.blocked.forEach((block) => {
+          if (socket.id == map.get(body.roomid + block.id)) {
+            socket.join(body.roomid);
+          }
+        });
+      });
+
     }
   }
 
@@ -148,7 +187,31 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
 
   async sendrequest(id : string , idsender : string){
     
-    
+    //check if user in groupchat
+    const inroom = await this.prisma.groupchat.findMany({
+      where: {
+        AND: [
+          { id : id },
+          { usersgb : {some : {id : idsender}}}
+        ],
+      },
+    });
+    if(inroom.length != 0){
+      console.log("user in groupchat");
+      return;
+    }
+    //get userban of a groupchat
+    const userban = await this.prisma.groupchat.findUnique({
+      where: { id: id },
+      select: {
+        usersblock: true,
+      },
+    });
+    //check if user is ban
+    if(userban.usersblock.some((user) => user.id == idsender)){
+      console.log("user is ban");
+      return ;
+    }
     //get superadmin of a groupchat
     const superadmin = await this.prisma.groupchat.findUnique({
       where: { id: id },
