@@ -46,7 +46,7 @@ datasource db {
   admingroupe      Groupchat[] @relation("adminsGroupChat")
   superadmin Groupchat[] @relation("superadmin")
   mute usermute[] @relation("mute")
-  block Groupchat[] @relation("block")
+  block Groupchat[]    @relation("block")
   requestjoinsender Requestjoingroup[] @relation("requestjoinsender")
   requestjoinrecever Requestjoingroup[] @relation("requestjoinrecever")
 }

@@ -44,8 +44,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit('checkout', { msg: 'hello' });
     if (jwt) {
       const user = decode(jwt);
-      console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
-      console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
+      // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
+      // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
       this.connectedUsers.set(user['id'], client.id);
       const status = UserStatus.ONLINE;

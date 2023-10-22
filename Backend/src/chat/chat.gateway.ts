@@ -127,6 +127,17 @@ let map = new Map <any , any>();
 
       console.log("msgToServer");
         const user = await this.getUser(client);
+        const usermuted = await this.prisma.groupchat.findUnique({
+          where: { id: body.roomid },
+          select: {
+            usersmute: true,
+          },
+        });
+        //check if user is muted
+        if(usermuted.usersmute.some((usermute) => usermute.id == user.id)){
+          console.log("user is muted");
+          return ;
+        }
         const idUs = map.get(body.id);
             const dMSChat1 =  await this.prisma.dmschat.create({
               data: {

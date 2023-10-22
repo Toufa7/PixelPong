@@ -181,7 +181,7 @@ export class UsersService {
       });
   }
   async updatestatus(user, status) {
-    console.log("123 :: : :: ",status)
+    // console.log("123 :: : :: ",status)
     await this.prisma.user.updateMany({
       where: {
         id: user.id,
