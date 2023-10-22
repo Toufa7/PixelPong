@@ -115,6 +115,7 @@ export class GroupchatService {
     //get all groupchat of a useradmin
     async findgpadmin(iduser: string) {
         try {
+            //get all groupchat where user is admin
             const data = await this.prisma.groupchat.findMany(
                 {
                     where: {
@@ -122,8 +123,13 @@ export class GroupchatService {
                     },
                 }
             );
-            if (data)
+            if (data) {
+                console.log("---------------------+++++++++++----------------", iduser);
+                console.log(data);
+                console.log("---------------------++-------++++----------------");
+
                 return data;
+            }
             else
                 console.log("no groupchat found");
         }
@@ -166,11 +172,15 @@ export class GroupchatService {
             if (data) {
                 var users = [];
                 data.usersgb.forEach(user => {
+                    let check = false;
                     data.admins.forEach(admin => {
                         if (user.id != admin.id) {
-                            users.push(user);
+                            check = true;
                         }
                     });
+                    if (check) {
+                        users.push(user);
+                    }
                 });
                 return users;
             }
@@ -183,9 +193,9 @@ export class GroupchatService {
     }
 
     //get all admins of a groupchat
-    async findAllAdmins(id: string) :  Promise<any>{
+    async findAllAdmins(id: string): Promise<any> {
         try {
-            return await this.prisma.groupchat.findUnique({
+            const data = await this.prisma.groupchat.findUnique({
                 where: {
                     id: id,
                 },
@@ -193,6 +203,8 @@ export class GroupchatService {
                     admins: true,
                 },
             });
+
+            return data;
         }
         catch (error) {
             return [];
@@ -239,7 +251,7 @@ export class GroupchatService {
         }
     }
     //get superuser of a groupchat
-    async findSuperUser(id: string) : Promise<any> {
+    async findSuperUser(id: string): Promise<any> {
         try {
             return await this.prisma.groupchat.findUnique({
                 where: {
@@ -722,24 +734,31 @@ export class GroupchatService {
             });
         }
     }
-    
+
     //exit a groupchat
     async exit(id: string, iduserconnected: string) {
         try {
+
             //check if the userconnected  is a superadmin of the groupchat
             const superadmin = await this.findSuperUser(id);
-            if(superadmin.superadmin.id == iduserconnected){
+            if (superadmin.superadmin.id == iduserconnected) {
+                //delete all messages of the groupchat
+                await this.prisma.messagegb.deleteMany({
+                    where: {
+                        idgp: id,
+                    },
+                });
                 return await this.prisma.groupchat.delete({
                     where: {
                         id: id,
                     },
                 });
             }
-            
+
             // get all admins of the groupchat
             const admins = await this.findAllAdmins(id);
             //check if the userconnected  is an admin of the groupchat
-            if(admins.admins.includes(iduserconnected)){
+            if (admins.admins.includes(iduserconnected)) {
                 return await this.prisma.groupchat.update({
                     where: {
                         id: id,

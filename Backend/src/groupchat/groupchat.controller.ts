@@ -58,11 +58,11 @@ export class GroupchatController {
     findAll(@Req() Request : any): any {
         return this.GroupchatService.findAll(Request.user.id);
     }
-    
+
     //get all groupchat of a useradmin
     @Get("lifihomanaadmin")
     findgpadmin(@Req() req : any): any {
-        return this.GroupchatService.findgpadmin(req.id);
+        return this.GroupchatService.findgpadmin(req.user.id);
     }
 
     //get all users of a groupchat
@@ -130,9 +130,9 @@ export class GroupchatController {
     }
 
     //get Requestjoingroup of a groupchat
-    @Get(":id/requestjoingroup")
-    findRequestjoingroup(@Param('id') id: string): any {
-        return this.GroupchatService.findRequestjoingroup(id);
+    @Get("requestjoingroup")
+    findRequestjoingroup(@Req() req : any ) : any {
+        return this.GroupchatService.findRequestjoingroup(req.user.id);
     }
 
 
