@@ -33,8 +33,8 @@ datasource db {
   //relations
   friends   User [] @relation("friends")
   friendsby       User[] @relation("friends")
-  blocked      User[]   @relation("block")
-  blockedby      User[]   @relation("block")
+  blocked      User[]   @relation("blocked")
+  blockedby      User[]   @relation("blocked")
   firstlogin Boolean @default(true)
   friendreqsent   Notification[]   @relation("Notification")
   friendreqreceived   Notification[]   @relation("Notificationreceived")

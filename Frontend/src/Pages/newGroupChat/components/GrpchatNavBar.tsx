@@ -29,7 +29,7 @@ const GrpchatNavBar = () => {
     return (
         <div className="GrpchatMessage">
             <div className="GrpchatNavBarDiv">
-                <ChatSearch userFound={getCurentUserDms} />
+                <ChatSearch/>
                 <div className="chatNavBarDivGroup" style={{border: "3px solid",borderRadius: "5px", background:"#FFFFFF",flex: "5",display: "flex",flexDirection: "column" ,overflow: "hidden",zIndex: "0"}}>
 		            <div className="chatsContainerGroup" style={{display: "flex",flexDirection: "column",borderRadius: "5px",border: "3px solid", zIndex: "0"}}>
 			            <div className="choice" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

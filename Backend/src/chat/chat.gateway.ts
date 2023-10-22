@@ -147,10 +147,11 @@ let map = new Map <any , any>();
                 messageDMs : body.message
               },
           });
+
             this.server.to(idUs).emit('msgToClient', {
               id :body.id,
               username: user.username,
-              pic: user.pic,
+              pic: user.image,
               side: body.side,
               message: body.message,
               idsender : user.id,
