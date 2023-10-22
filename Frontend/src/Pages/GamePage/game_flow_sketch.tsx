@@ -23,6 +23,7 @@ import Lose from "./assets/Lose.jpeg";
 import Dimension from "./assets/Dim.gif";
 import { Socket, io } from 'socket.io-client';
 import BackgroundGame from "./assets/bc_mini.png";
+import BackgroundGame2 from "./assets/bckg2.png";
 import pd from "./assets/blue_paddle.png";
 import ball from "./assets/yellow_ball.png";
 import { socket } from '../socket-client';
@@ -213,14 +214,17 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
   
         //r- Loading Images
 p5_ob.preload = () =>{
-
+          let Rnd_background = Math.floor(Math.random() * 2);
           MatchmakingPage = p5_ob.loadImage(gifMatch);
           font = p5_ob.loadFont(f);
           ovp = p5_ob.loadImage(over_g);
           win = p5_ob.loadImage(Win);
           lose = p5_ob.loadImage(Lose);
           Dim = p5_ob.loadImage(Dimension);
-          GameBackgrund = p5_ob.loadImage(BackgroundGame);
+          if (Rnd_background)
+            GameBackgrund = p5_ob.loadImage(BackgroundGame);
+          else
+            GameBackgrund = p5_ob.loadImage(BackgroundGame2);
           pd_asset = p5_ob.loadImage(pd);
           ball_asset = p5_ob.loadImage(ball);
 
