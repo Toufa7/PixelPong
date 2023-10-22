@@ -34,7 +34,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly userservice: UsersService,
     private readonly gatewayservice: GateWayService,
   ) {}
-  connectedUsers: Map<string, string> = new Map();
+  connectedUsers: Map<string, string[]> = new Map();
 
   //handle connection and deconnection
 
@@ -47,7 +47,11 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
       // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
-      this.connectedUsers.set(user['id'], client.id);
+      if(this.connectedUsers.has(user['id']))
+        this.connectedUsers.get(user['id']).push(client.id);
+      else
+        this.connectedUsers.set(user['id'], [client.id]);
+        
       const status = UserStatus.ONLINE;
       // //console.log(
       //   'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
@@ -88,7 +92,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       if (sockets) {
         console.log('sending');
-        this.server.emit('notification', data);
+        this.server.to(sockets).emit('notification', data);
       }
     } catch (error) {
       //console.log(error);
