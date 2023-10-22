@@ -10,8 +10,8 @@ import { join } from 'path';
 import { createReadStream } from 'fs';
 import { promises as fsPromises } from 'fs';
 import { GroupchatGateway } from './groupchat.gateway';
-import { time } from 'console';
-import { Timestamp } from 'rxjs';
+import {v4 as  uuid } from 'uuid';
+
 
 @UseGuards(JwtGuard)
 @Controller('groupchat')
@@ -20,7 +20,7 @@ export class GroupchatController {
 
     //get number user of a groupchat
     @Get(":id/numberuser")
-    numberuser(@Param('id') id: string): any {
+    numberuser(@Param('id') id : uuid): Promise<number> {
         return this.GroupchatService.numberuser(id);
     }
 
@@ -40,7 +40,6 @@ export class GroupchatController {
     //get a all groupchat
     @Get("all")
     findallGp(): any {
-        console.log("findallGp");
         return this.GroupchatService.findAllGp();
     }
 
@@ -59,6 +58,7 @@ export class GroupchatController {
     findAll(@Req() Request : any): any {
         return this.GroupchatService.findAll(Request.user.id);
     }
+    
     //get all groupchat of a useradmin
     @Get("lifihomanaadmin")
     findgpadmin(@Req() req : any): any {
@@ -82,11 +82,11 @@ export class GroupchatController {
     @Get(":id/messages")
     findAllMessages(@Param('id') id: string, @Req() req : any ): any {
         const data =  this.GroupchatService.findAllMessages(id, req.user.id);
-        console.log("-------------findAllMessages------------------");
-        console.log(data);
-        data.then((result) => {
-            console.log(result );
-        });
+        // console.log("-------------findAllMessages------------------");
+        // // console.log(data.then((res) => { console.log(res); }));
+        // console.log(data);
+        // console.log("-------------end  findAllMessages------------------");
+
         return data;
     }
 
@@ -129,6 +129,14 @@ export class GroupchatController {
       }
     }
 
+    //get Requestjoingroup of a groupchat
+    @Get(":id/requestjoingroup")
+    findRequestjoingroup(@Param('id') id: string): any {
+        return this.GroupchatService.findRequestjoingroup(id);
+    }
+
+
+
     //crear a groupchat
     @Post()
     create(@Body() createGroupchatDto: CreateGroupchatDto , @Req() req : any): any {
@@ -165,10 +173,11 @@ export class GroupchatController {
         return this.GroupchatService.banuser(id, iduser, req.user.id);
     }
 
-    // mute a user from a groupchat
+   
+    // mute a user from a groupchats
     @Post(":id/:iduser/mute")
-    mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any): any {
-        return this.GroupchatService.muteuser(id, iduser, req.user.id);
+    mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any, @Body() time : number ): any {
+        return this.GroupchatService.muteuser(id, iduser, req.user.id, time);
     }
 
 

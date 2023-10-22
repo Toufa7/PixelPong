@@ -3,7 +3,6 @@ import { PrismaService } from 'src/auth/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Cron } from '@nestjs/schedule';
-import e from 'express';
 
 @Injectable()
 export class GroupchatService {
@@ -12,7 +11,6 @@ export class GroupchatService {
         private readonly prisma: PrismaService,
         private jwtService: JwtService,
     ) { }
-
 
 
 
@@ -30,7 +28,7 @@ export class GroupchatService {
             return data.usersgb.length;
         }
         catch (error) {
-            return 0;
+            console.log(error);
         }
     }
 
@@ -45,7 +43,7 @@ export class GroupchatService {
                     superadmin: true,
                 },
             });
-            if (data.superadmin.id == iduserconnected) {
+            if (data && data.superadmin.id == iduserconnected) {
                 return true;
             }
             else {
@@ -53,7 +51,7 @@ export class GroupchatService {
             }
         }
         catch (error) {
-            return false;
+            console.log(error);
         }
     }
 
@@ -138,18 +136,22 @@ export class GroupchatService {
     async findOne(id: string) {
         try {
 
-            return await this.prisma.groupchat.findUnique({
+            const data = await this.prisma.groupchat.findUnique({
                 where: {
                     id: id,
                 },
             });
+            if (data)
+                return data;
+            else
+                throw new HttpException('Groupchat not found', HttpStatus.NOT_FOUND);
         }
         catch (error) {
-            throw new HttpException('Groupchat not found', HttpStatus.NOT_FOUND);
+            throw new HttpException('Groupchat not found', HttpStatus.BAD_REQUEST);
         }
     }
 
-    //get all users of a groupchat
+    //get all users of a groupchat if not admin
     async findAllUsers(id: string) {
         try {
             const data = await this.prisma.groupchat.findUnique({
@@ -161,15 +163,19 @@ export class GroupchatService {
                     admins: true,
                 },
             });
-            var users = [];
-            data.usersgb.forEach(user => {
-                data.admins.forEach(admin => {
-                    if (user.id != admin.id) {
-                        users.push(user);
-                    }
+            if (data) {
+                var users = [];
+                data.usersgb.forEach(user => {
+                    data.admins.forEach(admin => {
+                        if (user.id != admin.id) {
+                            users.push(user);
+                        }
+                    });
                 });
-            });
-            return users;
+                return users;
+            }
+            else
+                return [];
         }
         catch (error) {
             return [];
@@ -177,7 +183,7 @@ export class GroupchatService {
     }
 
     //get all admins of a groupchat
-    async findAllAdmins(id: string) {
+    async findAllAdmins(id: string) :  Promise<any>{
         try {
             return await this.prisma.groupchat.findUnique({
                 where: {
@@ -194,7 +200,7 @@ export class GroupchatService {
     }
 
     //get all messages of a groupchat
-    async findAllMessages(id: string, iduserconnected: string) {
+    async findAllMessages(id: string, iduserconnected: string): Promise<any> {
         try {
             //get user is blocked
             const userblock = await this.prisma.user.findUnique({
@@ -213,7 +219,7 @@ export class GroupchatService {
                     messagesgb: true,
                 },
             });
-            var messagesgb = [];
+            var messagessend = [];
             messages.messagesgb.forEach(element => {
                 let check = false;
                 userblock.blocked.forEach(user => {
@@ -222,17 +228,18 @@ export class GroupchatService {
                     }
                 });
                 if (!check) {
-                    messagesgb.push(element);
+                    messagessend.push(element);
                 }
             });
-            return messagesgb;
+            return messagessend;
+
         }
         catch (error) {
             return [];
         }
     }
     //get superuser of a groupchat
-    async findSuperUser(id: string) {
+    async findSuperUser(id: string) : Promise<any> {
         try {
             return await this.prisma.groupchat.findUnique({
                 where: {
@@ -249,7 +256,7 @@ export class GroupchatService {
     }
 
     //get userban of a groupchat
-    async findUserBan(id: string) {
+    async findUserBan(id: string): Promise<any> {
         try {
             return await this.prisma.groupchat.findUnique({
                 where: {
@@ -283,6 +290,24 @@ export class GroupchatService {
         }
     }
 
+
+    //get Requestjoingroup of a groupchat
+    async findRequestjoingroup(id: string) {
+
+        try {
+            return await this.prisma.requestjoingroup.findMany({
+                where: {
+                    receiverId: id,
+                },
+            });
+        }
+        catch (error) {
+            return null;
+        }
+    }
+
+
+
     //create a groupchat
     async create(createGroupchatDto: any, iduser: string) {
         try {
@@ -293,7 +318,6 @@ export class GroupchatService {
             });
 
             if (namegp == null) {
-                console.log("here");
                 if (createGroupchatDto.password) {
                     const saltOrRounds = 10;
                     createGroupchatDto.password = await bcrypt.hash(createGroupchatDto.password, saltOrRounds);
@@ -388,15 +412,52 @@ export class GroupchatService {
                 return "You are not an admin of this groupchat";
             }
         }
-        catch(error) {
-        return null;
+        catch (error) {
+            return null;
         }
-}
+    }
 
     //ban a user from a groupchat
     async banuser(id: string, iduser: string, iduserconnected: string) {
-    try {
-        const data = await this.prisma.groupchat.findUnique({
+        try {
+            const data = await this.prisma.groupchat.findUnique({
+                where: {
+                    id: id,
+                },
+                select: {
+                    admins: true,
+                },
+            });
+            //check if the user is an admin of the groupchat
+            var admin = false;
+            data.admins.forEach(element => {
+                if (element.id == iduserconnected) {
+                    admin = true;
+                }
+            });
+            if (admin) {
+                return await this.prisma.groupchat.update({
+                    where: {
+                        id: id,
+                    },
+                    data: {
+                        usersblock: { connect: [{ id: iduser }] },
+                        usersgb: { disconnect: [{ id: iduser }] },
+                    },
+                });
+            }
+            else {
+                return "You are not the admin of this groupchat";
+            }
+        }
+        catch (error) {
+            return null;
+        }
+    }
+
+    //mute a user from a groupchat
+    async muteuser(id: string, iduser: string, iduserconnected: string, time: number) {
+        const admins = await this.prisma.groupchat.findUnique({
             where: {
                 id: id,
             },
@@ -406,19 +467,17 @@ export class GroupchatService {
         });
         //check if the user is an admin of the groupchat
         var admin = false;
-        data.admins.forEach(element => {
+        admins.admins.forEach(element => {
             if (element.id == iduserconnected) {
                 admin = true;
             }
         });
         if (admin) {
-            return await this.prisma.groupchat.update({
-                where: {
-                    id: id,
-                },
+            return await this.prisma.usermute.create({
                 data: {
-                    usersblock: { connect: [{ id: iduser }] },
-                    usersgb: { disconnect: [{ id: iduser }] },
+                    user: { connect: { id: iduser } },
+                    groupchat: { connect: { id: id } },
+                    expiresAt: new Date(Date.now() + time + 3600000),
                 },
             });
         }
@@ -426,271 +485,78 @@ export class GroupchatService {
             return "You are not the admin of this groupchat";
         }
     }
-    catch (error) {
-        return null;
-    }
-}
-
-    //mute a user from a groupchat
-    async muteuser(id: string, iduser: string, iduserconnected: string) {
-    const admins = await this.prisma.groupchat.findUnique({
-        where: {
-            id: id,
-        },
-        select: {
-            admins: true,
-        },
-    });
-    //check if the user is an admin of the groupchat
-    var admin = false;
-    admins.admins.forEach(element => {
-        if (element.id == iduserconnected) {
-            admin = true;
-        }
-    });
-    if (admin) {
-        return await this.prisma.usermute.create({
-            data: {
-                user: { connect: { id: iduser } },
-                groupchat: { connect: { id: id } },
-                expiresAt: new Date(Date.now() + 1000),
-            },
-        });
-    }
-    else {
-        return "You are not the admin of this groupchat";
-    }
-}
 
     //add a user to a groupchat public
 
     async adduser(id: string, iduserconnected: string) {
-    return await this.prisma.groupchat.update({
-        where: {
-            id: id,
-        },
-        data: {
-            usersgb: { connect: { id: iduserconnected } },
-        },
-    });
-}
+        //get user ban of the groupchat
+        const userban = await this.findUserBan(id);
+        //check if the user is not banned
+        var notban = true;
+        userban.usersblock.forEach(element => {
+            if (element.id == iduserconnected) {
+                notban = false;
+            }
+        });
+        if (notban) {
+            return await this.prisma.groupchat.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    usersgb: { connect: { id: iduserconnected } },
+                },
+            });
+        }
+        else {
+            return "You are banned from this groupchat";
+        }
+    }
 
     //add a user to a groupchat protected
     async adduserprotected(id: string, pass: string, iduserconnected: string) {
-    const groupchat = await this.prisma.groupchat.findUnique({
-        where: {
-            id: id,
-        },
-        select: {
-            password: true,
-        },
-    });
-    const validPassword = await bcrypt.compare(pass, groupchat.password);
-    if (validPassword) {
-        return await this.prisma.groupchat.update({
-            where: {
-                id: id,
-            },
-            data: {
-                usersgb: { connect: { id: iduserconnected } },
-            },
+
+        //get user ban of the groupchat
+        const userban = await this.findUserBan(id);
+        //check if the user is not banned
+        var notban = true;
+        userban.usersblock.forEach(element => {
+            if (element.id == iduserconnected) {
+                notban = false;
+            }
         });
+        if (notban) {
+            const groupchat = await this.prisma.groupchat.findUnique({
+                where: {
+                    id: id,
+                },
+                select: {
+                    password: true,
+                },
+            });
+            const validPassword = await bcrypt.compare(pass, groupchat.password);
+            if (validPassword) {
+                return await this.prisma.groupchat.update({
+                    where: {
+                        id: id,
+                    },
+                    data: {
+                        usersgb: { connect: { id: iduserconnected } },
+                    },
+                });
+            }
+            else {
+                return "Wrong password";
+            }
+        }
+        else {
+            return "You are banned from this groupchat";
+        }
+
     }
-    else {
-        return "Wrong password";
-    }
-}
+
     //accept a request to join a groupchat
     async acceptrequest(id: string, iduser: string, iduserconnected: string) {
-    const superadmin = await this.prisma.groupchat.findUnique({
-        where: {
-            id: id,
-        },
-        select: {
-            superadmin: true,
-        },
-    });
-
-    //select the request
-    const request = await this.prisma.requestjoingroup.findFirst({
-        where: {
-            AND: [
-                { senderId: iduser },
-                { receiverId: superadmin.superadmin.id },
-            ],
-        },
-    });
-    //delete the request
-    await this.prisma.requestjoingroup.delete({
-        where: {
-            id: request[0].id,
-        },
-    });
-    if (superadmin.superadmin.id == iduserconnected) {
-        await this.prisma.requestjoingroup
-        return await this.prisma.groupchat.update({
-            where: {
-                id: id,
-            },
-            data: {
-                usersgb: { connect: [{ id: iduser }] },
-            },
-        });
-    }
-    else {
-        return "You are not the admin of this groupchat";
-    }
-}
-
-    //refuse a request to join a groupchat
-    async refuserequest(id: string, iduser: string, iduserconnected: string) {
-    const superadmin = await this.prisma.groupchat.findUnique({
-        where: {
-            id: id,
-        },
-        select: {
-            superadmin: true,
-        },
-    });
-
-    //select the request
-    const request = await this.prisma.requestjoingroup.findFirst({
-        where: {
-            AND: [
-                { senderId: iduser },
-                { receiverId: superadmin.superadmin.id },
-            ],
-        },
-    });
-    //delete the request
-    await this.prisma.requestjoingroup.delete({
-        where: {
-            id: request[0].id,
-        },
-    });
-    if (superadmin.superadmin.id == iduserconnected) {
-        return "Request refused";
-    }
-    else {
-        return "You are not the admin of this groupchat";
-    }
-}
-
-    ////////////////////////////////////////////////
-
-
-
-
-    //add an admin to a groupchat
-    async addadmin(id: string, iduser: string, iduserconnected: string) {
-    //get sueperadmin of the groupchat
-    const superadmin = await this.prisma.groupchat.findUnique({
-        where: {
-            id: id,
-        },
-        select: {
-            superadmin: true,
-        },
-    });
-    if (superadmin.superadmin.id == iduserconnected) {
-        return await this.prisma.groupchat.update({
-            where: {
-                id: id,
-            },
-            data: {
-                admins: { connect: [{ id: iduser }] },
-            },
-        });
-    }
-    else {
-        return "You are not the superadmin of this groupchat";
-    }
-}
-
-    //delete a groupchat
-    async remove(id: string, iduserconnected: string) {
-    const superadmin = await this.prisma.groupchat.findUnique({
-        where: {
-            id: id,
-        },
-        select: {
-            superadmin: true,
-        },
-    });
-    //delete all messages of the groupchat
-    await this.prisma.messagegb.deleteMany({
-        where: {
-            idgp: id,
-        },
-    });
-    if (superadmin.superadmin.id == iduserconnected) {
-        return await this.prisma.groupchat.delete({
-            where: {
-                id: id,
-            },
-        });
-    }
-    else {
-        return "You are not the superadmin of this groupchat";
-    }
-}
-
-    //delete a user from a groupchat
-    async removeuser(id: string, iduser: string, iduserconnected: string) {
-    //get all admins of the groupchat
-    const admins = await this.prisma.groupchat.findUnique({
-        where: {
-            id: id,
-        },
-        select: {
-            admins: true,
-        },
-    });
-    //check if the userconnected  is an admin of the groupchat
-    var admin = false;
-    admins.admins.forEach(element => {
-        if (element.id == iduserconnected) {
-            admin = true;
-        }
-    });
-    //check if the user not an admin of the groupchat
-    var notadmin = true;
-    admins.admins.forEach(element => {
-        if (element.id == iduser) {
-            notadmin = false;
-        }
-    });
-    if (admin || iduserconnected == iduser || notadmin) {
-        return await this.prisma.groupchat.update({
-            where: {
-                id: id,
-            },
-            data: {
-                usersgb: { disconnect: [{ id: iduser }] },
-            },
-        });
-    }
-}
-    //exit a groupchat
-    async exit(id: string, iduserconnected: string) {
-    try {
-        return await this.prisma.groupchat.update({
-            where: {
-                id: id,
-            },
-            data: {
-                usersgb: { disconnect: [{ id: iduserconnected }] },
-            },
-        });
-    } catch (error) {
-        return null;
-    }
-}
-
-    //delete an admin from a groupchat
-    async removeadmin(id: string, iduser: string, iduserconnected: string) {
-
-    try { //get sueperadmin of the groupchat
         const superadmin = await this.prisma.groupchat.findUnique({
             where: {
                 id: id,
@@ -699,46 +565,257 @@ export class GroupchatService {
                 superadmin: true,
             },
         });
-        if ((superadmin.superadmin.id == iduserconnected || iduserconnected == iduser) && iduserconnected != superadmin.superadmin.id) {
+
+        //select the request
+        const request = await this.prisma.requestjoingroup.findFirst({
+            where: {
+                AND: [
+                    { senderId: iduser },
+                    { receiverId: superadmin.superadmin.id },
+                ],
+            },
+        });
+        //delete the request
+        await this.prisma.requestjoingroup.delete({
+            where: {
+                id: request[0].id,
+            },
+        });
+        if (superadmin.superadmin.id == iduserconnected) {
+            await this.prisma.requestjoingroup
             return await this.prisma.groupchat.update({
                 where: {
                     id: id,
                 },
                 data: {
-                    admins: { disconnect: [{ id: iduser }] },
+                    usersgb: { connect: [{ id: iduser }] },
+                },
+            });
+        }
+        else {
+            return "You are not the admin of this groupchat";
+        }
+    }
+
+    //refuse a request to join a groupchat
+    async refuserequest(id: string, iduser: string, iduserconnected: string) {
+        const superadmin = await this.prisma.groupchat.findUnique({
+            where: {
+                id: id,
+            },
+            select: {
+                superadmin: true,
+            },
+        });
+
+        //select the request
+        const request = await this.prisma.requestjoingroup.findFirst({
+            where: {
+                AND: [
+                    { senderId: iduser },
+                    { receiverId: superadmin.superadmin.id },
+                ],
+            },
+        });
+        //delete the request
+        await this.prisma.requestjoingroup.delete({
+            where: {
+                id: request[0].id,
+            },
+        });
+        if (superadmin.superadmin.id == iduserconnected) {
+            return "Request refused";
+        }
+        else {
+            return "You are not the admin of this groupchat";
+        }
+    }
+
+    ////////////////////////////////////////////////
+    //add an admin to a groupchat
+    async addadmin(id: string, iduser: string, iduserconnected: string) {
+        //get sueperadmin of the groupchat
+        const superadmin = await this.prisma.groupchat.findUnique({
+            where: {
+                id: id,
+            },
+            select: {
+                superadmin: true,
+            },
+        });
+        if (superadmin.superadmin.id == iduserconnected) {
+            return await this.prisma.groupchat.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    admins: { connect: [{ id: iduser }] },
                 },
             });
         }
         else {
             return "You are not the superadmin of this groupchat";
         }
-    } catch (error) {
-        return null;
     }
-}
 
-
-//////check if user is expired mute ///////
-
-@Cron('*/5 * * * * *')
-async expiremute() {
-    try {
-
-        const usermute = await this.prisma.usermute.findMany({
+    //delete a groupchat
+    async remove(id: string, iduserconnected: string) {
+        const superadmin = await this.prisma.groupchat.findUnique({
             where: {
-                expiresAt: { lte: new Date(Date.now()) },
+                id: id,
+            },
+            select: {
+                superadmin: true,
             },
         });
-        usermute.forEach(element => {
-            this.prisma.usermute.delete({
+        //delete all messages of the groupchat
+        await this.prisma.messagegb.deleteMany({
+            where: {
+                idgp: id,
+            },
+        });
+        if (superadmin.superadmin.id == iduserconnected) {
+            return await this.prisma.groupchat.delete({
                 where: {
-                    id: element.id,
+                    id: id,
                 },
             });
+        }
+        else {
+            return "You are not the superadmin of this groupchat";
+        }
+    }
+
+    //delete a user from a groupchat
+    async removeuser(id: string, iduser: string, iduserconnected: string) {
+        //get all admins of the groupchat
+        const admins = await this.prisma.groupchat.findUnique({
+            where: {
+                id: id,
+            },
+            select: {
+                admins: true,
+            },
         });
+        //check if the userconnected  is an admin of the groupchat
+        var admin = false;
+        admins.admins.forEach(element => {
+            if (element.id == iduserconnected) {
+                admin = true;
+            }
+        });
+        //check if the user not an admin of the groupchat
+        var notadmin = true;
+        admins.admins.forEach(element => {
+            if (element.id == iduser) {
+                notadmin = false;
+            }
+        });
+        if (admin || iduserconnected == iduser || notadmin) {
+            return await this.prisma.groupchat.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    usersgb: { disconnect: [{ id: iduser }] },
+                },
+            });
+        }
     }
-    catch (error) {
+    
+    //exit a groupchat
+    async exit(id: string, iduserconnected: string) {
+        try {
+            //check if the userconnected  is a superadmin of the groupchat
+            const superadmin = await this.findSuperUser(id);
+            if(superadmin.superadmin.id == iduserconnected){
+                return await this.prisma.groupchat.delete({
+                    where: {
+                        id: id,
+                    },
+                });
+            }
+            
+            // get all admins of the groupchat
+            const admins = await this.findAllAdmins(id);
+            //check if the userconnected  is an admin of the groupchat
+            if(admins.admins.includes(iduserconnected)){
+                return await this.prisma.groupchat.update({
+                    where: {
+                        id: id,
+                    },
+                    data: {
+                        admins: { disconnect: [{ id: iduserconnected }] },
+                    },
+                });
+            }
+
+
+            return await this.prisma.groupchat.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    usersgb: { disconnect: [{ id: iduserconnected }] },
+                },
+            });
+        } catch (error) {
+            return null;
+        }
     }
-}
+
+    //delete an admin from a groupchat
+    async removeadmin(id: string, iduser: string, iduserconnected: string) {
+
+        try { //get sueperadmin of the groupchat
+            const superadmin = await this.prisma.groupchat.findUnique({
+                where: {
+                    id: id,
+                },
+                select: {
+                    superadmin: true,
+                },
+            });
+            if ((superadmin.superadmin.id == iduserconnected || iduserconnected == iduser) && iduserconnected != superadmin.superadmin.id) {
+                return await this.prisma.groupchat.update({
+                    where: {
+                        id: id,
+                    },
+                    data: {
+                        admins: { disconnect: [{ id: iduser }] },
+                    },
+                });
+            }
+            else {
+                return "You are not the superadmin of this groupchat";
+            }
+        } catch (error) {
+            return null;
+        }
+    }
+
+
+    //////check if user is expired mute ///////
+
+    @Cron('*/5 * * * * *')
+    async expiremute() {
+        try {
+
+            const usermute = await this.prisma.usermute.findMany({
+                where: {
+                    expiresAt: { lte: new Date(Date.now()) },
+                },
+            });
+            usermute.forEach(element => {
+                this.prisma.usermute.delete({
+                    where: {
+                        id: element.id,
+                    },
+                });
+            });
+        }
+        catch (error) {
+        }
+    }
 }
 
