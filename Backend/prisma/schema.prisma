@@ -29,7 +29,6 @@ datasource db {
   // game
   achievements Achievements[] @relation("achievements")
   matchhistory MatchHistory[] @relation("matchhistory") 
-  matchhistoryloser MatchHistory[] @relation("matchhistoryloser") 
 
   //relations
   friends   User [] @relation("friends")
@@ -119,6 +118,16 @@ model Notification{
   updatedAt DateTime @updatedAt
 }
 
+model Stats {
+  level     Int?    @default(0)
+  wins      Int?    @default(0)
+  loses     Int?    @default(0)
+  user      User     @relation("stats", fields: [userId], references: [id])
+  userId    String     
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([userId])
+}
 
 model Requestjoingroup{
   id        String    @id @default(uuid()) @unique
@@ -142,20 +151,7 @@ enum  UserStatus {
   OFFLINE
   AWAY
   BUSY
-} 
-model Stats{
-  id       Int    @id @default(autoincrement()) @unique
-  level    Int  @default(0)
-  user     User     @relation("stats", fields: [userId], references: [id])
-  userId   String     
-  wins     Int  @default(0)
-  loses    Int  @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId])
 }
-
 
 model Achievements{
   id        Int    @id @default(autoincrement()) @unique
@@ -182,13 +178,13 @@ enum Type {
 
 model MatchHistory {
   id        Int    @id @default(autoincrement()) @unique
-  message      String
+  message      String?
   numberOfMatches        Int      @default(0)
   user      User     @relation("matchhistory", fields: [userId], references: [id])
   userId    String
-  loser      User     @relation("matchhistoryloser", fields: [loserId], references: [id])
-  loserId    String      
+  level    Int?  @default(0)
+  wins     Int?  @default(0)
+  loses    Int?  @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }

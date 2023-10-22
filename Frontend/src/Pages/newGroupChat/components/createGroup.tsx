@@ -88,7 +88,7 @@ const CreateGroup = () => {
 					<input style={{background: '#E9E9ED'}} onChange={(e) => setUpdate(e.target.value)}	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>
 				</div>
 				<label>Select Privacy</label>
-				<div className="nes-select" style={{ marginLeft: '10px', width:' 300px'}}>
+				<div className="nes-select" style={{ width:' 300px'}}>
 					<select required id="default_privacy" onChange={(e) => setProtected(e.target.value == "2")} >
 						<option value="" disabled selected hidden>Choose Privacy</option>
 						<option value="0" title={privacy[0]}>Public</option>
@@ -98,10 +98,10 @@ const CreateGroup = () => {
 				</div>
 				{isProtected && (
 					<div style={{margin: '10px'}} className="nes-field">
-						<input  style={{background: '#E9E9ED'}} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} required className="nes-input" />
+						<input  style={{background: '#E9E9ED',width: '300px'}} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} required className="nes-input" />
 					</div>
 				)}
-				<label style={{margin: '10px'}}>Group Avatar</label>
+				<label style={{marginTop: '10px'}}>Group Avatar</label>
 				<label style={{margin: '10px'}} className="nes-btn">
 					<span>Click to upload</span>
 					<input formMethod="post" type="file" name="avatarUpload1" accept="image/*"/>

@@ -90,21 +90,18 @@ const UpdateGroup = (id : string) => {
 
 
 const ListingUsersAdmins = ({group}) => {
-
 	let choice : number		= document.getElementById('muteSelect')?.value
 	const [users, setUsers] = useState([]);
 	const [admins, setAdmins] = useState([]);
 	const [options, setOptions] = useState<boolean>(false);
 
-
 	const [selectedMember , setSelectedMember] = useState("ID-XXXX");
-	console.log("Admins Are =====> ", admins);
-	console.log("Users Are =====> ", users);
 	if (group) {
 		useEffect(() => {
 			axios.get(`http://localhost:3000/groupchat/${group.id}/users`, { withCredentials: true })
 			.then((response) => {
-				setUsers(response.data);
+				console.log("USERS ARE ARE -> ", response.data.usersgb);
+				setUsers(response.data.usersgb);
 			})
 			.catch((error) => {
 				console.log("Error fetching users:", error);
@@ -114,7 +111,8 @@ const ListingUsersAdmins = ({group}) => {
 		useEffect(() => {
 			axios.get(`http://localhost:3000/groupchat/${group.id}/admins`, { withCredentials: true })
 			.then((response) => {
-				setAdmins(response.data);
+				console.log("Admin ARE ARE -> ", response.data.admins);
+				setAdmins(response.data.admins);
 			})
 			.catch((error) => {
 				console.log("Error fetching admins:", error);
@@ -127,7 +125,6 @@ const ListingUsersAdmins = ({group}) => {
 		const dialog = document.getElementById('dialog_members');
 		dialog?.showModal();
 	}
-
 	return (
 		<section>
 		<button style={{margin: '10px', width: 'auto'}} type="button" className="nes-btn" onClick={openMembersDialog}>Manage Members</button>
@@ -143,13 +140,15 @@ const ListingUsersAdmins = ({group}) => {
 				</div>
 				<div style={{ height: 'fit-content'}}>
 				<div style={{borderBottom: "1px solid" }}></div>
-				{
+				{ admins &&
 					// Listing Admins and Owner
-					Object.keys(admins).map((idx) => {
+					Object.keys(admins).map((idx) => { 
 						return (
-						<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} key={idx}>
+							<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} key={idx}>
 							<div>
-								<img src={admins[idx].profileImage} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
+								<a>
+								<img src={`http://localhost:3000/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
+								</a>
 							</div>
 							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{admins[idx].username}</span>
 
@@ -165,11 +164,14 @@ const ListingUsersAdmins = ({group}) => {
 
 					<div style={{ height: 'fit-content', overflow: 'auto' }}>
 					{
+						users && 
 						// Listing Members
 						Object.keys(users).map((idx) => {
 							return (
 								<div onClick={() => {setSelectedMember(users[idx].id); setOptions(true)}} style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} key={idx}>
-									<img src={users[idx].profileImage} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
+									<a>
+									<img src={`http://localhost:3000/auth/avatar/${users[idx].id}`} style={{ borderRadius: '20px', width: '40px', height: '40px', marginTop: '10px'}} alt="avatar" />
+									</a>
 									<span style={{ marginLeft: '30px', marginRight: 'auto' }}>{users[idx].username}</span>
 									{
 										options ? 
@@ -256,18 +258,18 @@ const ManageGroup = () => {
 
 
 	return (
-	<div className="chatDmDiv" style={{border: "1px solid",overflow: 'auto', background: "#e5f0ff" ,borderRadius: "10px"}}>
+	<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff",borderRadius: "10px"}}>
 		{
 			amIAdmin ? 
 			(
-				<div className="groupSettings" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center', alignItems: 'center'}}>
+				<div className="groupSettings" style={{display: 'flex', flexDirection: 'column',justifyContent: 'space-between', alignItems: 'center'}}>
 
-					<div style={{display: 'flex', justifyContent: "space-around"}}>
+					<div>
 						{
-							groupsList.map((group : any, index : number) => {
+							groupsList.map((group, idx) => {
 								return (
-									<a>
-										<img onClick={() => {setSelecting(group); setFlag(true)}} src={`http://localhost:3000/groupchat/getimage/${group.id}`} title={group.namegb} style={{ borderRadius: '50%', width: '60px', height: '60px', margin: '10px' }} className="GroupAvataraa" alt="avatar" key={index} />
+									<a key={idx}>
+										<img onClick={() => {setSelecting(group); setFlag(true)}} src={`http://localhost:3000/groupchat/getimage/${group.id}`} title={group.namegb} style={{borderRadius: '50%', width: '55px', height: '55px', margin: '10px' }} className="GroupAvataraa" alt="avatar"  />
 									</a>
 								)})
 						}
@@ -276,7 +278,7 @@ const ManageGroup = () => {
 					flag ? (
 					<>
 						<div className="nes-field" style={{margin: '10px', width: 'auto'}} >
-							<input  style={{background: '#E9E9ED'}} type="text" id="name_field" placeholder={selecting.namegb} onChange={(e) => setUpdate(e.target.value)} className="nes-input"/>
+							<input  style={{background: '#E9E9ED',width: '300px'}} type="text" id="name_field" placeholder={selecting.namegb} onChange={(e) => setUpdate(e.target.value)} className="nes-input"/>
 						</div>
 						<div style={{ margin: '10px', width:'auto'}} className="nes-select">
 							<select required id="default_select"  onChange={(e) => {setProtected(e.target.value == "2"); setUpdate(e.target.value)}}>
@@ -289,7 +291,7 @@ const ManageGroup = () => {
 							
         				{isProtected && (
 							<div style={{margin: '10px', width: 'auto'}} className="nes-field">
-        				    <input  style={{background: '#E9E9ED'}} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" />
+        				    <input  style={{background: '#E9E9ED',width: '300px'}} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} className="nes-input" />
         				  </div>
         				)}
 						<label onChange={(e) => setUpdate(e)} style={{margin: '10px', width: 'auto'}}  className="nes-btn">
@@ -302,11 +304,11 @@ const ManageGroup = () => {
 							<img src={erase} style={{width: '40px', height: '40px', marginRight: '10px'}}  onClick={() => {
 								axios.delete(`http://localhost:3000/groupchat/${selecting.id}`, {withCredentials: true})
 								.then(() => {
-									console.log("Deleted GRou ID -> ", selecting.id)
+									console.log("Deleted Group ID -> ", selecting.id)
 									toast.success("Delete Success", {style: {textAlign: "center", width: '300px'}, position: "top-right"});
 								})
 								.catch(() => {
-									console.log("Deleted GRou ID -> ", selecting.id)
+									console.log("Deleted Group ID -> ", selecting.id)
 
 									toast.error("Delete Failed", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 								})}}

@@ -26,36 +26,36 @@ import { User } from '@prisma/client';
 @UseGuards(JwtGuard)
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly socket: SocketGateway,
+	private readonly usersService: UsersService,
+	private readonly socket: SocketGateway,
   ) {}
   @Get('all')
   findAll() {
-    try{
-    const users = this.usersService.findAll();
-    if (!users) {
-      throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
-    }
-    return users;
+	try {
+	  const users = this.usersService.findAll();
+	if (!users) {
+	  throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+	}
+	return users;
   }
   catch(error){
-    console.log(error.message)
+	console.log(error.message)
   }
   }
 
   @Get('profil')
   async findOne(@Req() req) {
-    try
-    {
-    const user = await this.usersService.findOne(req.user.id);
-    if (!user) {
-      console.log("im herererererer 3678")
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-    return user;
+	try
+	{
+	const user = await this.usersService.findOne(req.user.id);
+	if (!user) {
+	  console.log("im herererererer 3678")
+	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+	}
+	return user;
   }
   catch(error){
-    console.log(error.message);
+	console.log(error.message);
   }
   }
 
@@ -65,31 +65,31 @@ async removeFriend(
   @Req() req: any
 ): Promise<void> {
   try {
-    await this.usersService.removefriend(req.user.id, body.from);
+	await this.usersService.removefriend(req.user.id, body.from);
   } catch (error) {
-    console.error(error.message); // Log the error for debugging
+	console.error(error.message); // Log the error for debugging
   }
 }
 
 @Delete('delete')
 async deleteOne(@Req() req: any): Promise<void> {
   try {
-    const user = await this.usersService.DeleteOne(req.user.id);
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
+	const user = await this.usersService.DeleteOne(req.user.id);
+	if (!user) {
+	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+	}
   } catch (error) {
-    console.error(error.message);
+	console.error(error.message);
   }
 }
 
 @Put('update')
 async updateOne(@Req() req: any, @Body() body: UserDto): Promise<User | null> {
   try {
-    const { username } = body;
-    return await this.usersService.UpdateforOne(req.user.id, username);
+	const { username } = body;
+	return await this.usersService.UpdateforOne(req.user.id, username);
   } catch (error) {
-    console.error(error.message); // Log the error for debugging
+	console.error(error.message); // Log the error for debugging
   }
 }
 
@@ -99,39 +99,39 @@ async blockFriend(
   @Body('friendId', ParseUUIDPipe) body: FriendrequestDto
 ): Promise<void> {
   try {
-    await this.usersService.blockfriend(req.user.id, body.from);
+	await this.usersService.blockfriend(req.user.id, body.from);
   } catch (error) {
-    console.error(error.message); // Log the error for debuggin
+	console.error(error.message); // Log the error for debuggin
   }
 }
 
 @Get('profil/:username')
 async findOneByUsername(@Param('username') username: string, @Req() req){
   try {
-    console.log("i am here ? !")
-    const user = await this.usersService.findByName(username);
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-    console.log("im herererererer 3678", user)
+	console.log("i am here ? !")
+	const user = await this.usersService.findByName(username);
+	if (!user) {
+	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+	}
+	console.log("im herererererer 3678", user)
 
-    return user;
+	return user;
   } catch (error) {
-    console.error(error.message); // Log the error for debugging
+	console.error(error.message); // Log the error for debugging
   }
 }
 
 @Get('profile/:id')
 async findOneByid(@Param('id') id: string){
   try {
-    const user = await this.usersService.findById(id);
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-    return user;
+	const user = await this.usersService.findById(id);
+	if (!user) {
+	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+	}
+	return user;
   } catch (error) {
-    console.error(error.message); // Log the error for debugging
-    // throw new HttpException('Failed to fetch user', HttpStatus.INTERNAL_SERVER_ERROR);
+	console.error(error.message); // Log the error for debugging
+	// throw new HttpException('Failed to fetch user', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -141,79 +141,79 @@ async unblockFriend(
   @Body('friendId', ParseUUIDPipe) body: FriendrequestDto
 ): Promise<void> {
   try {
-    await this.usersService.unblockfriend(req.user.id, body.from);
+	await this.usersService.unblockfriend(req.user.id, body.from);
   } catch (error) {
-    console.error(error); // Log the error for debugging
+	console.error(error); // Log the error for debugging
   }
 }
 
 @Get('friends')
 async getFriends(@Req() req: any) {
   try {
-    return await this.usersService.getFriends(req.user.id);
+	return await this.usersService.getFriends(req.user.id);
   } catch (error) {
-    console.error(error); // Log the error for debugging
+	console.error(error); // Log the error for debugging
   }
 }
 
 @Get('friends/:id')
 async getFriendsOfOther(@Param('id') id: string) {
   try {
-    return await this.usersService.getFriends(id);
+	return await this.usersService.getFriends(id);
   } catch (error) {
-    console.error(error); // Log the error for debugging
+	console.error(error); // Log the error for debugging
   }
 }
 
 @Get('notifications')
 async getallNotifications(@Req() req: any){
   try {
-    return await this.usersService.getallNotifications(req.user.id);
+	return await this.usersService.getallNotifications(req.user.id);
   } catch (error) {
-    console.error(error); // Log the error for debugging
+	console.error(error); // Log the error for debugging
   }
 }
 
 @Post('sendFriendRequest')
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
   try {
-    const user = await this.usersService.findOne(req.user.id);
-    const data : FriendrequestDto =  {
-      userId: req.user.id,
-      type: 'friendrequestreceived',
-      photo: user.profileImage,
-      message: `${req.user.username} sent you a friend request`,
-      to: body.userId,
-      from: user.username,
-    }
-    await this.socket.hanldleSendNotification(body.userId, req.user.id,data);
-    const notification = await this.usersService.sendFriendRequest(req.user.id, data);
-    return notification;
+	const user = await this.usersService.findOne(req.user.id);
+	const data : FriendrequestDto =  {
+	  userId: req.user.id,
+	  type: 'friendrequestreceived',
+	  photo: user.profileImage,
+	  message: `${req.user.username} sent you a friend request`,
+	  to: body.userId,
+	  from: user.username,
+	}
+	await this.socket.hanldleSendNotification(body.userId, req.user.id,data);
+	const notification = await this.usersService.sendFriendRequest(req.user.id, data);
+	return notification;
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    throw new HttpException('Failed to send friend request', HttpStatus.INTERNAL_SERVER_ERROR);
+	console.error(error); // Log the error for debugging
+	throw new HttpException('Failed to send friend request', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
 @Patch('acceptFriendRequest')
 async acceptFriendRequest(@Body() body: FriendrequestDto) {
   try {
-    const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
-    console.log('Bodyyyy', body);
-    const find = await this.usersService.acceptFriendRequest(friendrequest, body.userId, body.from);
-    return find;
+	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
+	console.log('Bodyyyy', body);
+	const find = await this.usersService.acceptFriendRequest(friendrequest, body.userId, body.from);
+	return find;
   } catch (error) {
-    console.error(error); // Log the error for debugging
+	console.error(error); // Log the error for debugging
   }
 }
 
 @Patch('refuseFriendRequest/')
 async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
   try {
-    const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
-    return await this.usersService.refuseFriendRequest(friendrequest);
+	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
+	return await this.usersService.refuseFriendRequest(friendrequest);
   } catch (error) {
-    console.error(error); // Log the error for debugging
+	console.error(error); // Log the error for debugging
   }
 }
 
