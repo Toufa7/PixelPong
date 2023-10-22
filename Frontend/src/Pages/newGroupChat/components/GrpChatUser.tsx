@@ -6,6 +6,7 @@ import info from '../assets/info.svg'
 import jwtDecode from 'jwt-decode'
 import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
+import toast from 'react-hot-toast'
 
 
 const ChatUser = (props : any) => {
@@ -94,14 +95,25 @@ const ChatUser = (props : any) => {
                         //Conditional rendring to display the control buttons or not based on the presence of groupRoom.profileImage
                         groupRoom.namegb ?  (<div className="GrpchatControlButtons">
                                                         <button className='GrpuserControlButtons'>
-                                                            <img src={info} onClick={openDialogUsers} width={50} height={50} title='Group Info' ></img>
+                                                            <img src={info} onClick={openDialogUsers} width={50} height={50} title='Group Info'></img>
                                                         </button>
                                                         <button className='GrpuserControlButtons'>
 
-    {/* //exit a groupchat
-    @Delete(":id/exit") */}
+                                                            {/* //exit a groupchat
+                                                            @Delete(":id/exit") */}
 
-                                                            <img src={exit} width={50} height={50} title='Leave Group' ></img>
+                                                            <img src={exit} onClick={() => {
+                                                                axios.delete(`http://localhost:3000/groupchat/${props.pcurrentUserId}/exit`, { withCredentials: true })
+                                                                .then((reseponse) => {
+                                                                    console.log("Response Exiting Group -> ", reseponse);
+                                                                    toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+
+                                                                })
+                                                                .catch((error) => {
+                                                                    console.log("Reseponse Exiting Group -> ", error)
+                                                                })
+                                                            }
+                                                            }   width={50} height={50} title='Leave Group' ></img>
                                                         </button>
 
                                             </div>)

@@ -87,8 +87,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       console.log("wtffff",clientId)
 
       if (sockets) {
-        console.log('sending  ');
-        this.server.to(sockets).emit('notification', data);
+        console.log('sending');
+        this.server.emit('notification', data);
       }
     } catch (error) {
       //console.log(error);

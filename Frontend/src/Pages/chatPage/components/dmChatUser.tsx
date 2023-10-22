@@ -14,7 +14,7 @@ const dmChatUser = ({userName ,pic ,userId , id}: any) => {
 
     return (
         <div className="userChat" onClick={handleOnClick}>
-            <img src={pic} alt="user-photo" />
+            <img src={`http://localhost:3000/auth/avatar/${id}`} alt="user-photo" />
             <div className="userChatinfo">
                 <span>{userName}</span>
             </div>
