@@ -56,33 +56,53 @@ export class UsersService {
       });
   }
   async blockfriend(userId: string, blockedId: string): Promise<void> {
-    await this.prisma.$transaction([
-      this.prisma.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          friends: {
-            disconnect: {
-              id: blockedId,
+    console.log("blockfriend", blockedId, "  ", userId);
+    try {
+      await this.prisma.$transaction([
+        this.prisma.user.update({
+          where: {
+            id: userId,
+          },
+          data: {
+            friends: {
+              disconnect: {
+                id: blockedId,
+              },
             },
           },
-        },
-      }),
-      this.prisma.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          blocked: {
-            connect: {
-              id: blockedId,
+        }),
+        this.prisma.user.update({
+          where: {
+            id: blockedId,
+          },
+          data: {
+            friends: {
+              disconnect: {
+                id: userId,
+              },
             },
           },
-        },
-      }),
-    ]);
+        }),
+        this.prisma.user.update({
+          where: {
+            id: userId,
+          },
+          data: {
+            blocked: {
+              connect: {
+                id: blockedId,
+              },
+            },
+          },
+        }),
+      ]);
+    } catch (error) {
+      // Handle the error here, e.g., log the error or provide user feedback.
+      console.error("Error blocking friend:", error);
+      throw new Error("Failed to block friend");
+    }
   }
+  
   async UpdateforOne(id: string, username: string) {
     const user = await this.prisma.user.update({
       where: {

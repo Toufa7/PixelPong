@@ -96,10 +96,11 @@ async updateOne(@Req() req: any, @Body() body: UserDto): Promise<User | null> {
 @Patch('blocked')
 async blockFriend(
   @Req() req: any,
-  @Body('friendId', ParseUUIDPipe) body: FriendrequestDto
+  @Body() body: FriendrequestDto
 ): Promise<void> {
   try {
-	await this.usersService.blockfriend(req.user.id, body.from);
+	console.log("body", body);
+	await this.usersService.blockfriend(req.user.id, body.to);
   } catch (error) {
 	console.error(error.message); // Log the error for debuggin
   }
