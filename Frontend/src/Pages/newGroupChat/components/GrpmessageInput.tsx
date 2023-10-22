@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useRef, useEffect, useContext } from 'react'
+import { useRef, useEffect, useContext } from 'react'
 import { grpSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg';
@@ -39,7 +39,7 @@ function makeid(length: number) :string {
 //This componenet is responsible for displaying a conversation, it take an array of messages  
 const Conversation = (props: any) =>
 {
-    const mesaageEndRef = useRef(null);
+    const mesaageEndRef = useRef<null | HTMLDivElement>(null);
 
     //Handle scroll to bottom
     useEffect(() => {
@@ -68,7 +68,7 @@ const Conversation = (props: any) =>
 const messageInput = (props: any) => {
 
     //Refering to the dummy div
-    const firstRef = useRef(null);
+    const firstRef = useRef<HTMLInputElement>(null);
     
     //Our chat socket
     const roomSocket = useContext(grpSocketContext);
@@ -105,26 +105,22 @@ const messageInput = (props: any) => {
             .catch(Error)
             console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
     }, [props.groupInfo.id])
-
-    // console.log("Group user are : ", groupUsers);
     
     //Getting the old conversation
     useEffect(() => {
         axios
             .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/messages`, { withCredentials: true })
-        
             .then((res:any) => {
-                console.log(res.data)
-                //fillMap(res.data.messagesgb);
+                fillMap(res.data);
             })
             .catch(Error)
-                console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+                console.log('%cAn error happened in : Conversation: messageInput(): 119', 'color: red')
     }, [props.groupInfo.id])
     
     const fillMap = (axiosResponse: any) => {
 
         map.clear();
-        console.log("Axios response is : ", axiosResponse);
+        console.log("[fillMap:125] Axios response is : ", axiosResponse);
 
         let molLmessageId: any = 'n/a';
         let molLmessage: any = 'n/a';
@@ -134,7 +130,7 @@ const messageInput = (props: any) => {
         
         for (let i: number = 0; i < axiosResponse.length; i++)
         {
-
+            console.log("%%%%%%%%>", axiosResponse[i])
             if (axiosResponse[i].senderid == props.Sender.id)
             {
                 molLmessageId = axiosResponse[i].senderId;
@@ -204,7 +200,7 @@ const messageInput = (props: any) => {
         e.preventDefault();
         
         //Getting the message from input box
-        const inputMessage = document.querySelector('.GrpmessageInputBox')?.value;
+        const inputMessage = (document.querySelector('.GrpmessageInputBox') as HTMLInputElement).value;
         
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
@@ -229,7 +225,10 @@ const messageInput = (props: any) => {
                 message: inputMessage,
                 timestamp: "n/a",
             }
-            firstRef.current.value = '';
+
+            if (firstRef.current != null) {
+                firstRef.current.value = '';
+            }
             handleNewMessage(tmpMsgObj);
         }
     }
