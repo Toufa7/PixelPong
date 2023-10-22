@@ -114,7 +114,8 @@ const messageInput = (props: any) => {
             .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/messages`, { withCredentials: true })
         
             .then((res:any) => {
-                fillMap(res.data.messagesgb);
+                console.log(res.data)
+                //fillMap(res.data.messagesgb);
             })
             .catch(Error)
                 console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
