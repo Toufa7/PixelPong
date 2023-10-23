@@ -88,20 +88,20 @@ const UpdateGroup = (id : string) => {
 	}
 }
 
-
 const ListingUsersAdmins = ({group}) => {
 	let choice : number		= document.getElementById('muteSelect')?.value
 	const [users, setUsers] = useState([]);
 	const [admins, setAdmins] = useState([]);
 	const [options, setOptions] = useState<boolean>(false);
+	console.log("Group IIDDDD -> ", group.id);
 
 	const [selectedMember , setSelectedMember] = useState("ID-XXXX");
 	if (group) {
 		useEffect(() => {
 			axios.get(`http://localhost:3000/groupchat/${group.id}/users`, { withCredentials: true })
 			.then((response) => {
-				console.log("USERS ARE ARE -> ", response.data.usersgb);
-				setUsers(response.data.usersgb);
+				console.log("USERS ARE ARE -> ", response.data);
+				setUsers(response.data);
 			})
 			.catch((error) => {
 				console.log("Error fetching users:", error);
@@ -121,6 +121,44 @@ const ListingUsersAdmins = ({group}) => {
 	}
   
 	
+	const kickingMember = (memberId : string, groupId : string) => {
+		axios.delete(`http://localhost:3000/groupchat/${groupId}/${memberId}/user`, { withCredentials: true })
+		.then((reseponse) => {
+			console.log("KICKING USER -> ", reseponse.data);
+		})
+		.catch((err) => {
+			console.error("KICKING Error -> ", err);
+		})
+	}
+
+	const baningMember = (memberId : string, groupId : string) => {
+		axios.patch(`http://localhost:3000/groupchat/${groupId}/${memberId}/ban`, {}, { withCredentials: true })
+		.then((reseponse) => {
+			console.log("BANING USER -> ", reseponse);
+		})
+		.catch((err) => {
+			console.error("BANING Error -> ", err);
+		})
+	}
+
+	function handleMuteSelect(event,memberId : string, groupId : string ) {
+		const duration = event.target.value;
+		if (duration && duration != 'Mute') {
+			let timeer : number = 0;
+			duration == 0 ? timeer = (5 * 300000) : timeer = (15 * 300000);
+			console.log('Duration -> Time ', duration, timeer);
+			axios.post(`http://localhost:3000/groupchat/${groupId}/${memberId}/mute`,{ time: timeer },{ withCredentials: true })
+			.then((response) => {
+				console.log('MUTING USER -> ', response.data);
+			})
+			.catch((error) => {
+				console.error('MUTING Error -> ', error);
+			});
+		}
+	}
+
+
+
 	const openMembersDialog = () => {
 		const dialog = document.getElementById('dialog_members');
 		dialog?.showModal();
@@ -177,38 +215,15 @@ const ListingUsersAdmins = ({group}) => {
 										options ? 
 										(
 											<>
-												<div className="nes-select" style={{ width: '140px', height: 'auto'}}>
-													<select style={{ marginRight: '30px'}} required id="muteSelect">	
-														<option disabled selected hidden>Mute</option>
-														<option value="0">5min</option>
-														<option value="1">15min</option>
-													</select>
+												<div className="nes-select" style={{ width: '140px', height: 'auto' }}>
+												<select style={{ marginRight: '30px' }} required id="muteSelect" onChange={(event) => handleMuteSelect(event, selectedMember,group.id)}>
+													<option disabled selected hidden>Mute</option>
+													<option value="0">5min</option>
+													<option value="1">15min</option>
+												</select>
 												</div>
-												<button  className="nes-btn is-warning" style={{ margin: '10px', width: '100px'}}
-													onClick={() => {
-														axios.delete(`http://localhost:3000/groupchat/${group.id}/${selectedMember}/user`, { withCredentials: true })
-														.then((reseponse) => {
-															console.log("Response Deleting user -> ", reseponse);
-														})
-														.catch((err) => {
-															console.log("Error -> ", err);
-														})
-													}}
-													>Kick
-												</button>
-												<button className="nes-btn is-error" style={{ margin: '10px', width: '80px' }}
-													onClick={() => {
-														axios.patch(`http://localhost:3000/groupchat/${selectedMember}/userban`, { withCredentials: true })
-														.then((reseponse) => {
-															toast.success("Delete Success", {style: {textAlign: "center", width: '300px'}, position: "top-right"});
-															console.log("Response Deleting user -> ", reseponse);
-														})
-														.catch((err) => {
-															console.log("Error -> ", err);
-														})
-													}}
-													>Ban
-												</button>
+												<button  className="nes-btn is-warning" style={{ margin: '10px', width: '100px'}} onClick={() => kickingMember(selectedMember,group.id)}>Kick</button>
+												<button className="nes-btn is-error" style={{ margin: '10px', width: '80px' }}onClick={() => baningMember(selectedMember,group.id)}>Ban</button>
 											</>
 										)
 										:
@@ -255,7 +270,7 @@ const ManageGroup = () => {
 	// image:
 	// namegb:
 	// password:
-
+	console.log("Group List Map -> ", groupsList);
 
 	return (
 	<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff",borderRadius: "10px"}}>

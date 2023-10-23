@@ -43,7 +43,6 @@ export class GroupchatController {
         return this.GroupchatService.findAllGp();
     }
 
-
     
     //get groupchats where not a member
     @Get("notmember")
@@ -176,8 +175,8 @@ export class GroupchatController {
    
     // mute a user from a groupchats
     @Post(":id/:iduser/mute")
-    mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any, @Body() time : number ): any {
-        return this.GroupchatService.muteuser(id, iduser, req.user.id, time);
+    mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req : any, @Body() data :any ): any {
+        return this.GroupchatService.muteuser(id, iduser, req.user.id, data.time);
     }
 
 
@@ -195,7 +194,7 @@ export class GroupchatController {
 
     /////////////////////-------add an user to a groupchat private----////////////////////
     //send request to join a groupchat
-    @Get(":id/request")
+    @Post(":id/request")
     sendrequest(@Param('id') id: string, @Req() req : any): any {
         console.log("sendrequest");
         this.GroupchatGateway.sendrequest(id, req.user.id);

@@ -1,8 +1,9 @@
 import "./Notifications.scss"
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {socket} from '../../Pages/socket-client'
+import {socket, socketgp} from '../../Pages/socket-client'
 import NavBar from "../addons/NavBar";
+
 
 
 
@@ -80,13 +81,16 @@ const FriendRequest = ({ myData } : {myData: myDataTypes }) => {
 function Notifications() {
 	const [friendRequests, setFriendRequests] = useState([]);
 	const [flag, setFlag] = useState(false);
-  
+	console.log("I Enter in Receiving Notification")
 	useEffect(() => {
+		socketgp.on('notificationgp', (datagrp) => {
+			console.log("GROUP ->>> ", datagrp);
+		})
 		socket.on('notification', (data) => {
 			if (data) {
 				document.title = 'Friend Request';
 		}
-		console.log('Received notification:', data);
+		// console.log('Received notification Groups:', data);
 		setFriendRequests(data);
 		setFlag(true);
 		});
@@ -98,9 +102,9 @@ function Notifications() {
   
 	useEffect(() => {
 		const fetchNotifications = () => {
-		axios.get('http://localhost:3000/users/notifications', {withCredentials: true})
+		axios.get('http://localhost:3000/groupchat/requestjoingroup', {withCredentials: true})
 		.then((response) => {
-			console.log('Response fetching notifications:', response.data);
+			console.log('Response fetching  Groups :', response.data);
 			setFriendRequests(response.data);
 		})
 		.catch((error) => {
@@ -124,7 +128,7 @@ function Notifications() {
 			) : (
 			  <>
 				{friendRequests.map((request, idx) => (
-				  <FriendRequest key={idx} myData={request} />
+				  <FriendRequest key={idx} myData={request}/>
 				))}
 			  </>
 			)}

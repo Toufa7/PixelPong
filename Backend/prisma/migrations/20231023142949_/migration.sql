@@ -106,6 +106,9 @@ CREATE TABLE "Requestjoingroup" (
     "id" TEXT NOT NULL,
     "senderId" TEXT NOT NULL,
     "receiverId" TEXT NOT NULL,
+    "groupchatId" TEXT NOT NULL,
+    "namegp" TEXT NOT NULL,
+    "from" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Requestjoingroup_pkey" PRIMARY KEY ("id")
@@ -262,6 +265,9 @@ ALTER TABLE "Requestjoingroup" ADD CONSTRAINT "Requestjoingroup_senderId_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "Requestjoingroup" ADD CONSTRAINT "Requestjoingroup_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Requestjoingroup" ADD CONSTRAINT "Requestjoingroup_groupchatId_fkey" FOREIGN KEY ("groupchatId") REFERENCES "Groupchat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Achievements" ADD CONSTRAINT "Achievements_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

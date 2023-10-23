@@ -295,7 +295,7 @@ async handleDisconnect(Player: Socket) {
           if (RandHit)
             Room.GameBall.ball_speed_x = -4;
           else
-            Room.GameBall.ball_speed_x = -4;
+            Room.GameBall.ball_speed_x = 4;
           Room.GameBall.ball_speed_y = 2;
           
           Room.Player1.x = 0;
@@ -349,12 +349,12 @@ async handleDisconnect(Player: Socket) {
         || (x_ball > Player2_x && x_ball < Player2_x + Player2_width - 10 && y_ball > Player2_y && y_ball < Player2_y + Player2_height))){
             if (x_ball < Game_Data.Scaled_width / 2){
                 console.log("hit left half")
-                if(y_ball > (Player1_y + 15) && y_ball < (Player1_y + Player1_height - 11)){
+                if(y_ball > (Player1_y + 8) && y_ball < (Player1_y + Player1_height - 8)){
                     console.log("P1---hit mid !!");
                     Room.GameBall.x = Room.GameBall.x + 4;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
                     Room.GameBall.ball_speed_x *= speed_increase;
-                    if (RandomHit == 0)
+                    // if (RandomHit == 0)
                       Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
                     // else{
                     //   Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x + speed_increase;
@@ -378,12 +378,12 @@ async handleDisconnect(Player: Socket) {
             }
             else{
                 console.log("right half");
-                if(y_ball > (Player2_y + 15) && y_ball < (Player2_y + Player2_height - 11)){
+                if(y_ball > (Player2_y + 8) && y_ball < (Player2_y + Player2_height - 8)){
                     Room.GameBall.x = Room.GameBall.x - 4;
                   // this.collision_happend = true;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
                     Room.GameBall.ball_speed_x *= speed_increase;
-                    if (RandomHit == 0)
+                    // if (RandomHit == 0)
                       Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
                     console.log("P2---hit mid !!");
                     return(true);

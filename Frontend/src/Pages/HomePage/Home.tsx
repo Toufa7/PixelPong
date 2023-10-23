@@ -257,7 +257,8 @@ const TopContainer = () => {
 					} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
 					) : privacy == "PRIVATE" ? (
 						<button onClick={() => {
-							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
+							console.log("Private Join ===== ", theOne.id);
+							axios.post(`http://localhost:3000/groupchat/${theOne.id}/request`, {}, { withCredentials: true })
 							.then((res) => {
 								console.log("Private Join -> ", res.data);
 								toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
@@ -501,6 +502,7 @@ const BottomRight= () => {
 function Notification () {
 	const [isFriend, setIsFriend] = useState(true);
 	const [friendStatus, setFriendStatus] = useState(false);
+
 	useEffect(() => {
 	socket.on('notification', (data) => {
 	console.log('Received notification:', data);
@@ -516,6 +518,7 @@ function Notification () {
 		catch (error) {
 			console.log("Error Catched ", error);
 		}
+		return (null);
 	}
 	const RefuseFriend = async () => {
 		try {
@@ -532,17 +535,17 @@ function Notification () {
 	audio.play();
 	toast.custom(
 		<div style={{ display: 'flex', alignItems: 'center', background: "#F2ECFF", color: 'black', borderRadius: '10px', zIndex: '-1'}}>
-			<div style={{ width: '400px', height: '120px' }} className="nes-container with-title is-centered">
-				<p style={{ background: '#ffeeca', border: '2px solid black'}} className="title">Invitation Request</p>
-			<div style={{ display: 'flex', alignItems: 'center' }}>
-				<img src={`http://localhost:3000/auth/avatar/${data.photo}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
-				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.username}</span>	
+			<div className="nes-container with-title">
+				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }}  className="title">Invitation Request</p>
+				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+				<img src={`http://localhost:3000/auth/avatar/${data.userId}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.from}</span>	
 				{isFriend ?
 						(
-							<>
-								<button style={{ marginLeft: '10px' }} onClick={AcceptFriend}>Accept</button>
-								<button style={{ marginLeft: '10px' }} onClick={RefuseFriend}>Deny</button>
-							</>
+							<div>
+								<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={AcceptFriend}>Accept</button>
+								<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={RefuseFriend}>Deny</button>
+							</div>
 						) : 
 						(
 							<button style={{ marginLeft: '10px' }} onClick={() => setIsFriend(true)}>Accepted</button>

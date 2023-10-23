@@ -34,6 +34,9 @@ export class Rooms{
     }
 
     SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_height){
+        //there is a challenge (boolean)
+
+
         if (!this.is_Rooms_Available()){
             console.log("there is no room available or there are no rooms");
             this.create_room_for_player();

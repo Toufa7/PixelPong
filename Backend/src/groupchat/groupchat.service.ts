@@ -686,6 +686,12 @@ export class GroupchatService {
                 idgp: id,
             },
         });
+        //delete all useersmute of the groupchat
+        await this.prisma.usermute.deleteMany({
+            where: {
+                groupchatId: id,
+            },
+        });
         if (superadmin.superadmin.id == iduserconnected) {
             return await this.prisma.groupchat.delete({
                 where: {

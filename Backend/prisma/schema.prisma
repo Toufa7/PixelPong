@@ -74,6 +74,7 @@ model Groupchat{
     password String?
     image String?
     messagesgb Messagegb[] @relation("GBMessage")
+    requestjoinsender Requestjoingroup[] @relation("requestjoinsender")
     }
 
 
@@ -137,6 +138,10 @@ model Requestjoingroup{
   senderId  String
   receiver  User      @relation("requestjoinrecever", fields: [receiverId], references: [id])
   receiverId  String
+  groupchat Groupchat @relation("requestjoinsender", fields: [groupchatId], references: [id])
+  groupchatId String
+  namegp String
+  from String
   createdAt DateTime @default(now())
 }
 
