@@ -11,6 +11,7 @@ import { JwtGuard } from '../guards/jwt.guards';
 import { JwtStrategy } from '../passport/jwt-startegy/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { TokenBlacklistService } from './token-blacklist.service';
+import { achievementService } from 'src/users/gamedata/acheievement.service';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -24,6 +25,7 @@ import { TokenBlacklistService } from './token-blacklist.service';
   ],
   providers: [
     AuthService,
+    achievementService,
     PrismaService,
     PassportModule,
     TokenBlacklistService,
