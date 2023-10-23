@@ -257,6 +257,7 @@ const TopContainer = () => {
 					} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
 					) : privacy == "PRIVATE" ? (
 						<button onClick={() => {
+							console.log("Private Join ===== ", theOne.id);
 							axios.post(`http://localhost:3000/groupchat/${theOne.id}/request`, {}, { withCredentials: true })
 							.then((res) => {
 								console.log("Private Join -> ", res.data);

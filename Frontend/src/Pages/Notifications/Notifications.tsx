@@ -1,7 +1,7 @@
 import "./Notifications.scss"
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {socket, socketGrp} from '../../Pages/socket-client'
+import {socket, socketgp} from '../../Pages/socket-client'
 import NavBar from "../addons/NavBar";
 
 
@@ -83,7 +83,7 @@ function Notifications() {
 	const [flag, setFlag] = useState(false);
 	console.log("I Enter in Receiving Notification")
 	useEffect(() => {
-		socketGrp.on('notificationgrp', (datagrp) => {
+		socketgp.on('notificationgp', (datagrp) => {
 			console.log("GROUP ->>> ", datagrp);
 		})
 		socket.on('notification', (data) => {
