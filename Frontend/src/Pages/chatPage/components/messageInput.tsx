@@ -78,13 +78,16 @@ const messageInput = (props: any) => {
 
     //Getting the old converstion
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
-            .then((res) => {
-                fillMap(res.data);
-            })
-            .catch(Error)
-                console.log('%cAn error happened in : Conversation: messageInput(): 72', 'color: red')
+        if (props.Receiver.id != undefined)
+        {
+            axios
+                .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
+                .then((res) => {
+                    fillMap(res.data);
+                })
+                .catch(Error)
+                    console.log('%cAn error happened in : Conversation: messageInput(): 72', 'color: red')
+        }
     }, [props.Receiver.id])
     
     
