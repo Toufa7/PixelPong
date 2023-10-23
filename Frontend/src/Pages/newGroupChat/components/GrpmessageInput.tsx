@@ -4,12 +4,11 @@ import { grpSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg';
 import axios from 'axios';
-// import '../GrpchatPage.scss'
 import MessageComponent from './GrpmessageComponenet'
 import MessageRightComponenet from './GrpmessageRightComponenet ';
 
 
-// Class chatAgent responsible for defining the properties of each person onthe conversation
+// Class chatAgent responsible for defining the properties of each person on the conversation
 interface chatAgent
 {
     id: string;
@@ -70,16 +69,16 @@ const messageInput = (props: any) => {
     //Refering to the dummy div
     const firstRef = useRef<HTMLInputElement>(null);
     
-    //Our chat socket
+    //Chat socket
     const roomSocket = useContext(grpSocketContext);
     
     //Creating the messages map to be rendred
     let map = useMap();
 
-    //Our group users
+    //Group users map
     let groupUsers = useMap();
 
-    //Join the room
+    //Joining the room
     if (props.groupInfo.id != undefined)
     {
         useEffect(() => {
@@ -114,7 +113,6 @@ const messageInput = (props: any) => {
     const fillMap = (axiosResponse: any[]) => {
 
         map.clear();
-        console.log("[fillMap:125] Axios response is : ", axiosResponse);
 
         let molLmessageId: any = 'n/a';
         let molLmessage: any = 'n/a';
@@ -126,7 +124,7 @@ const messageInput = (props: any) => {
             {
                 molLmessageId = element.senderId;
                 molLmessage = props.Sender.username;
-                molMsgPic = `http://localhost:3000/auth/avatar/${element.senderid}`
+                molMsgPic = `http://localhost:3000/auth/avatar/${props.Sender.id}`;
                 molMsgSide = 0;
             }
             else
@@ -175,15 +173,13 @@ const messageInput = (props: any) => {
             id: newMessage.roomid,
             senderid: newMessage.idsender,
             username: newMessage.username,
-            pic: newMessage.pic,
+            pic: `http://localhost:3000/auth/avatar/${newMessage.idsender}`,
             side: messageSide,
             message: newMessage.message,
             timestamp: "n/a",
         }
         map.set(makeid(37), tmpMsgObj);
     }
-    
-
 
     const onSubmitHandler = (e: any) => {
         //Prevent browser from refreshing each time we hit enter on the from input
@@ -194,7 +190,8 @@ const messageInput = (props: any) => {
         
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
-            roomSocket.emit('msgToRoom', {
+            roomSocket.emit('msgToRoom',
+            {
                 roomid :  props.groupInfo.id,
                 messageid : `${makeid(37)}`,
                 message : newMessage.message,
