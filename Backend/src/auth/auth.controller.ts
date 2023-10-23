@@ -20,7 +20,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from 'src/users/users.service';
 import { authenticator } from 'otplib';
 import { diskStorage } from 'multer';
-import { User, UserStatus } from '@prisma/client';
+import { Type, User, UserStatus } from '@prisma/client';
 import { createReadStream, promises as fsPromises } from 'fs';
 import * as qrcode from 'qrcode';
 
@@ -28,6 +28,7 @@ import { join } from 'path';
 import { UserDto } from 'src/authdto/user.dto';
 import { PrismaService } from './prisma.service';
 import { inputDto } from 'src/authdto/input.dto';
+import { achievementService } from 'src/users/gamedata/acheievement.service';
  
 @Controller('auth')
 export class AuthController {
@@ -35,6 +36,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private usersService: UsersService,
     private Prismaservice: PrismaService,
+    private achievementService: achievementService
     // private readonly user: User,
   ) {}
   @Get('google')
@@ -71,8 +73,12 @@ export class AuthController {
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
       if (user.firstlogin)
+      {
+        this.achievementService.createAchievement(req.user.id, Type.WELCOME);
         return res.redirect('http://localhost:5173/settings');
+      }
       else{
+        this.achievementService.updateAchievement(req.user.id, Type.FIRSTLOSE);
         if(user.twofa)
           return res.redirect('http://localhost:5173/two-factor-authentication');
         return res.redirect('http://localhost:5173/home');

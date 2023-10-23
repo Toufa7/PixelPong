@@ -157,8 +157,8 @@ enum  UserStatus {
 
 model Achievements{
   id        Int    @id @default(autoincrement()) @unique
-  name      String
-  achievementType    Type
+  name      String?
+  achievementType    Type[]
   user      User     @relation("achievements", fields: [userId], references: [id])
   userId    String     
   createdAt DateTime @default(now())
@@ -168,14 +168,12 @@ model Achievements{
 }
 
 enum Type {
-  ADDFRIEND
+  WELCOME
   FIRSTWIN
   FIRSTLOSE
-  FIRSTMATCH
-  STRIKES
-  LEVEL1
-  LEVEL5
-  LEVEL10
+  WINSTRIKE
+  WIN5
+  WIN10
 }
 
 model MatchHistory {
