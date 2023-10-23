@@ -62,11 +62,19 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 
   async handleDisconnect(client: Socket) {
-    //console.log('A client disconnected');
-    if (this.connectedUsers.has(client.id)) {
-      const jwt = await this.getUser(client);
-      if (!jwt) {
-        this.connectedUsers.delete(client.id);
+    const jwt = await this.getUser(client);
+
+    if(jwt)
+    {
+      const user = decode(jwt);
+      console.log('A client disconnected');
+      const index = this.connectedUsers.get(user['id']).indexOf(client.id);
+      if(index != -1)
+      this.connectedUsers.get(user['id']).splice(index, 1);
+    if (this.connectedUsers.get(user['id']).length === 0) {
+        this.connectedUsers.delete(user['id'])
+        console.log("i dont know ! ===============================> ",this.connectedUsers.get(user['id']))
+        this.userservice.updatestatus(user,UserStatus.OFFLINE);
       }
     }
   }
