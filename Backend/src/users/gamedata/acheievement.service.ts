@@ -32,6 +32,12 @@ export class achievementService {
         userId: userId,
       },
     })
+
+    for(let i = 0; i < achievement.achievementType.length; i++)
+    {
+      if(achievement.achievementType[i] === type)
+        return;
+    }
     const update = await this.prisma.achievements.update({
       where: {
         id: achievement.id,
