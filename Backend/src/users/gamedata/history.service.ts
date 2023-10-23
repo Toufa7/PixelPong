@@ -1,6 +1,8 @@
 // import { StatsUncheckedUpdateInput } from '@prisma/client';
 import {Injectable} from '@nestjs/common';
+import { Type } from '@prisma/client';
 import { PrismaService } from 'src/auth/prisma.service';
+import { achievementService } from './acheievement.service';
 
 
 
@@ -9,7 +11,8 @@ import { PrismaService } from 'src/auth/prisma.service';
 
 @Injectable()
 export class HistoryService {
-    constructor(private readonly prisma: PrismaService){
+    constructor(private readonly prisma: PrismaService,
+        private readonly achiev: achievementService){
     }
 
 async addMatchHistory(userId:string){
@@ -40,8 +43,9 @@ async addMatchHistory(userId:string){
             },
         }); 
     } 
-    else stats = find;
-        return {newMatchHistory, stats};
+    else
+        stats = find;
+    return {newMatchHistory, stats};
 }
  async updateMatchHistory(winnerId:string, loserId:string){
     const winner = await this.prisma.user.findUnique({
@@ -89,7 +93,7 @@ async addMatchHistory(userId:string){
                 userId: loserId,
             },
             data: {
-                loses: {
+                loses: {  
                     increment: 1,
                 },
                 numberOfMatches:{
@@ -97,10 +101,12 @@ async addMatchHistory(userId:string){
                 }
             },
         }),
-    ]);
+    ])
+    this.achiev.updateAchievement(winnerId, null);
+    this.achiev.updateAchievement(loserId, null);
 }
 async getMatchHistory(userId:string){
-    const matchHistory = await this.prisma.matchHistory.findMany({
+    const matchHistory = await this.prisma.matchHistory.findFirst({
         where: {
             userId: userId,
         },

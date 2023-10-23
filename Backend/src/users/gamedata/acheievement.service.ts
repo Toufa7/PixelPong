@@ -27,21 +27,43 @@ export class achievementService {
   }
   }
   async updateAchievement(userId: string, type: Type){
+    const find = await this.prisma.stats.findFirst({
+        where: {
+            userId: userId,
+        }
+      });
+      let acheievement : Type;
+      if(find.wins === 5)
+          acheievement = Type.WIN5;
+      else if(find.wins === 10)
+          acheievement = Type.WIN10;
+      else if(find.wins === 1)
+          acheievement = Type.FIRSTWIN;
+      else if(find.loses === 1)
+          acheievement = Type.FIRSTLOSE;
+      else
+          acheievement = type;
     const achievement = await this.prisma.achievements.findFirst({
       where: {
         userId: userId,
       },
     })
+    for(let i = 0; i < achievement.achievementType.length; i++)
+    {
+      if(achievement.achievementType[i] === acheievement)
+        return;
+    }
     const update = await this.prisma.achievements.update({
       where: {
         id: achievement.id,
         },
       data: {
         achievementType: {
-          set: [...achievement.achievementType, type],
+          set: [...achievement.achievementType, acheievement],
         }
       }
   })
+
 }}
 //chekc with khalil how we will do this
   

@@ -124,9 +124,9 @@ export class GroupchatService {
                 }
             );
             if (data) {
-                console.log("---------------------+++++++++++----------------", iduser);
-                console.log(data);
-                console.log("---------------------++-------++++----------------");
+                // console.log("---------------------+++++++++++----------------", iduser);
+                // console.log(data);
+                // console.log("---------------------++-------++++----------------");
 
                 return data;
             }
@@ -684,6 +684,12 @@ export class GroupchatService {
         await this.prisma.messagegb.deleteMany({
             where: {
                 idgp: id,
+            },
+        });
+        //delete all useersmute of the groupchat
+        await this.prisma.usermute.deleteMany({
+            where: {
+                groupchatId: id,
             },
         });
         if (superadmin.superadmin.id == iduserconnected) {

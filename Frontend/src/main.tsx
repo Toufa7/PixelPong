@@ -44,11 +44,9 @@ export const NotificationComponents = () => {
 const ProfilComponents = () => {
 	return (
 		<>
-		{/* <socketContext.Provider value={socket}> */}
 			<Stars/>
 			<NavBar/>
 			<ProfilPage/>
-		{/* </socketContext.Provider> */}
 		</>
 	);
 }
@@ -75,9 +73,12 @@ const HomeComponents = () => {
 	return (
 		<>
 			<socketContext.Provider value={socket}>
+		
+
 				<Stars/>
 				<NavBar/>
 				<Home/>
+	
 			</socketContext.Provider>
 		</>
 	);
