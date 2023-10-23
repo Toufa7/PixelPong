@@ -6,7 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
 node_modules
 dist
 dist-ssr
@@ -14,6 +13,8 @@ dist-ssr
 Backend/uploads
 Backend/node_modules
 Backend/.env
+Backend/migrations
+
 # Editor directories and files
 .vscode/*
 .vite/*

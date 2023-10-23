@@ -163,7 +163,7 @@ const TopContainer = () => {
 			const friends = response.data;
 			const foundFriend = friends.find(friend => friend.username === query);
 			if (foundFriend) {
-				console.log("Friend Found");
+				console.log("Friend Found -> ", foundFriend);
 				setTheOne(foundFriend);
 				setFriendGroup("friend");
 				setIsFound(true);
@@ -210,8 +210,8 @@ const TopContainer = () => {
 						(<Link to={`/profil/${theOne.username}`}>
 							<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', textDecoration: 'none'}}>
 								<div>
-									<img src={theOne.profileImage} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-									<span style={{ marginLeft: '20px' }}>{theOne.username}</span>
+									<img src={`http://localhost:3000/auth/avatar/${theOne.id}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+									<span style={{ marginLeft: '20px', color: "black"}}>{theOne.username}</span>
 								</div>
 							</div>		
 						</Link>)
@@ -294,9 +294,6 @@ const TopContainer = () => {
 			</section>
 
 		</div>
-
-
-
 
 		<div className="headerBox">
 		<div className="topLoginBox">

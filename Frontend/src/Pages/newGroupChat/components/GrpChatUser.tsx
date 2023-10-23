@@ -37,9 +37,9 @@ const ChatUser = (props : any) => {
 
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
-    // if (props.pcurrentUserId) 
-    // {
-        useEffect(() => {
+    useEffect(() => {
+        if (props.pcurrentUserId != '') 
+        {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
             .then((response) => {
                 console.log("Admins -> ", response.data)
@@ -49,9 +49,12 @@ const ChatUser = (props : any) => {
             .catch((error) => {
                 console.log("Error fetching users:", error);
             });
-        }, []);
-        
-        useEffect(() => {
+        }
+    }, []);
+    
+    useEffect(() => {
+        if (props.pcurrentUserId != '') 
+        {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/admins`, { withCredentials: true })
             .then((response) => {
                 console.log("Admins -> ", response.data)
@@ -59,10 +62,9 @@ const ChatUser = (props : any) => {
             })
             .catch((error) => {
                 console.log("Error fetching admins:", error);
-
             });
-        }, []);
-    // }
+        }
+    }, []);
 
 
     const openDialogUsers = () => {
@@ -77,7 +79,7 @@ const ChatUser = (props : any) => {
                         <div className="GrpchatUser">
                             {
                                 //Conditional rendring to display the profile image or not based on the presence of groupRoom.profileImage
-                                groupRoom.image ?   <img src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="user-photo"/>
+                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="user-photo"/>
                                                         :   <img src={info} alt="user-photo" />
                             }
                             <div className="GrpchatUserName">

@@ -7,6 +7,7 @@ import axios from 'axios';
 import MessageComponent from './messageComponenet'
 import MessageRightComponenet from './messageRightComponenet ';
 
+//<*-----------------------------------------------< Common Funcion and definitions >--------------------------------------------------*>
 // Class chatAgent responsible for defining the properties of each person onthe conversation
 interface chatAgent
 {
@@ -19,12 +20,26 @@ interface chatAgent
     timestamp: string;
 }
 
+//function to generate message id in the map
+function makeid(length: number) :string {
+    
+    let result: string = '';
+    const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength: number = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
+
 //<*-----------------------------------------------------------------------------------------------------------------------------------*>
 
 //This componenet is responsible for displaying a conversation, it take an array of messages  
 const Conversation = (props: any) =>
 {
-    const mesaageEndRef = useRef(null);
+    const mesaageEndRef = useRef<null | HTMLDivElement>(null);
 
     //Handle scroll to bottom
     useEffect(() => {
@@ -53,7 +68,7 @@ const Conversation = (props: any) =>
 const messageInput = (props: any) => {
 
     //Refering to the dummy div
-    const firstRef = useRef(null);
+    const firstRef = useRef<HTMLInputElement>(null);
     
     //Our chat socket
     const conversationsSocket = useContext(chatSocketContext);
@@ -61,15 +76,18 @@ const messageInput = (props: any) => {
     //Creating the messages map to be rendred
     let map = useMap();
 
+    //Getting the old converstion
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
-        
-            .then((res) => {
-                fillMap(res.data);
-            })
-            .catch(Error)
-                console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+        if (props.Receiver.id != undefined)
+        {
+            axios
+                .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
+                .then((res) => {
+                    fillMap(res.data);
+                })
+                .catch(Error)
+                    console.log('%cAn error happened in : Conversation: messageInput(): 72', 'color: red')
+        }
     }, [props.Receiver.id])
     
     
@@ -85,19 +103,18 @@ const messageInput = (props: any) => {
         
         for (let i: number = 0; i < axiosResponse.length; i++)
         {
-
             if (axiosResponse[i].senderId == props.Sender.id)
             {
                 molLmessageId = axiosResponse[i].senderId;
                 molLmessage = props.Sender.username;
-                molMsgPic = props.Sender.image;
+                molMsgPic = `http://localhost:3000/auth/avatar/${props.Sender.id}`;
                 molMsgSide = 0;
             }
             else
             {
                 molLmessageId = axiosResponse[i].receiverId;
                 molLmessage = props.Receiver.username;
-                molMsgPic = props.Receiver.profileImage;
+                molMsgPic = `http://localhost:3000/auth/avatar/${props.Receiver.id}`;
                 molMsgSide = 1;
             }
             
@@ -110,25 +127,11 @@ const messageInput = (props: any) => {
                 message: axiosResponse[i].messageDMs,
                 timestamp: axiosResponse[i].createdAt,
             }
-
             map.set(axiosResponse[i].id, tmpMsgObj);
         }
         
     };
     
-    //function to generate message id in the map
-    function makeid(length: number) :string {
-        
-        let result: string = '';
-        const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength: number = characters.length;
-        let counter = 0;
-        while (counter < length) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          counter += 1;
-        }
-        return result;
-    }
 
     useEffect(() => {
         //Recieving message from socket
@@ -150,17 +153,11 @@ const messageInput = (props: any) => {
             id: newMessage.id,
             senderid: newMessage.idsender,
             username: newMessage.username,
-            pic: newMessage.pic,
+            pic: `http://localhost:3000/auth/avatar/${newMessage.idsender}`,
             side: 1,
             message: newMessage.message,
             timestamp: "n/a",
         }
-
-        //Don't forget to replace username with id
-        // if (props.Receiver.username == tmpMsgObj.username)
-        // {
-        //     map.set(makeid(37), tmpMsgObj);
-        // }
 
         if (props.Receiver.id == tmpMsgObj.senderid)
         {
@@ -177,12 +174,12 @@ const messageInput = (props: any) => {
         e.preventDefault();
         
         //Getting the message from input box
-        const inputMessage = document.querySelector('.messageInputBox')?.value;
+        //https://stackoverflow.com/questions/12989741/the-property-value-does-not-exist-on-value-of-type-htmlelement
+        const inputMessage = (document.querySelector('.messageInputBox') as HTMLInputElement).value;
 
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
             conversationsSocket.emit('msgToServer', newMessage)
-            // conversationsSocket.emit('getOldCnv')
         };
         
         if (inputMessage != '')
@@ -191,28 +188,30 @@ const messageInput = (props: any) => {
                 id: props.Receiver.id,
                 senderid: props.Sender.id,
                 username: props.Sender.username,
-                pic: props.Sender.image,
+                pic: `http://localhost:3000/auth/avatar/${props.Sender.id}`,
                 side: 0,
                 message: inputMessage,
                 timestamp: "n/a",
             }
-            firstRef.current.value = '';
+            if (firstRef.current != null) {
+                firstRef.current.value = '';
+            }
             handleNewMessage(tmpMsgObj);
             map.set(makeid(37), tmpMsgObj);
         }
     }
 
-    return (
-    <>
-        <Conversation MessagesArr={Array.from(map.values())}/>
-        <div className="messageInput">
-            <form className='messageform' onSubmit={onSubmitHandler}>
-                <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
-                <button className='sendButton'><img src={Send}></img></button>
-            </form>
-        </div>
-    </>
-    )
+    return  (
+                <>
+                    <Conversation MessagesArr={Array.from(map.values())}/>
+                    <div className="messageInput">
+                        <form className='messageform' onSubmit={onSubmitHandler}>
+                            <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
+                            <button className='sendButton'><img src={Send}></img></button>
+                        </form>
+                    </div>
+                </>
+            )
 }
 
 export default messageInput

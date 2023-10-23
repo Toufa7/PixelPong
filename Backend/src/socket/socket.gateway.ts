@@ -34,7 +34,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly userservice: UsersService,
     private readonly gatewayservice: GateWayService,
   ) {}
-  connectedUsers: Map<string, string> = new Map();
+  connectedUsers: Map<string, string[]> = new Map();
 
   //handle connection and deconnection
 
@@ -47,7 +47,11 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
       // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
-      this.connectedUsers.set(user['id'], client.id);
+      if(this.connectedUsers.has(user['id']))
+        this.connectedUsers.get(user['id']).push(client.id);
+      else
+        this.connectedUsers.set(user['id'], [client.id]);
+        
       const status = UserStatus.ONLINE;
       // //console.log(
       //   'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
@@ -58,11 +62,19 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 
   async handleDisconnect(client: Socket) {
-    //console.log('A client disconnected');
-    if (this.connectedUsers.has(client.id)) {
-      const jwt = await this.getUser(client);
-      if (!jwt) {
-        this.connectedUsers.delete(client.id);
+    const jwt = await this.getUser(client);
+
+    if(jwt)
+    {
+      const user = decode(jwt);
+      console.log('A client disconnected');
+      const index = this.connectedUsers.get(user['id']).indexOf(client.id);
+      if(index != -1)
+      this.connectedUsers.get(user['id']).splice(index, 1);
+    if (this.connectedUsers.get(user['id']).length === 0) {
+        this.connectedUsers.delete(user['id'])
+        console.log("i dont know ! ===============================> ",this.connectedUsers.get(user['id']))
+        this.userservice.updatestatus(user,UserStatus.OFFLINE);
       }
     }
   }
@@ -88,7 +100,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       if (sockets) {
         console.log('sending');
-        this.server.emit('notification', data);
+        this.server.to(sockets).emit('notification', data);
       }
     } catch (error) {
       //console.log(error);

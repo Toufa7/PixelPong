@@ -18,21 +18,11 @@ const GrpChatNavBar = () => {
   );
   return (
 	<div className="chatNavBarDivGroup"  style={{background: '#FFFFFF',flex:  '5',display: 'flex',flexDirection: 'column',overflow: 'hidden',zIndex: '0'}}>
-		<div className="chatsContainerGroup" style={{flex: '10', display: 'flex', flexDirection: 'column', borderRadius: '5px', border: '3px solid', zIndex: '0'}} >
+		<div className="chatsContainerGroup" style={{flex: '10', display: 'flex', flexDirection: 'column', zIndex: '0'}} >
 			<div className="choice" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 				<button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
 				<button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
-			</div>
-			{	data.label ?
-				(
-					data.createOrmanage ?
-					(<ManageGroup/>)
-					:
-					(<CreateGroup/>)
-				)
-				:
-				""
-			}
+			</div>{	data.label ? (data.createOrmanage ? (<ManageGroup/>) : (<CreateGroup/>)) : "" }
 			{/* Listing the groups your in or own */}
 		</div>
 			<GroupsList />
