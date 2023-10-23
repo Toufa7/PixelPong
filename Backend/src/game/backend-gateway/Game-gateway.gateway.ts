@@ -9,6 +9,7 @@ import { JwtGuard, WSGuard } from 'src/guards/jwt.guards';
 import { JwtService } from '@nestjs/jwt';
 import { decode } from 'jsonwebtoken';
 import { HistoryService } from 'src/users/gamedata/history.service';
+import { achievementService } from 'src/users/gamedata/acheievement.service';
 
 
 @WebSocketGateway({
@@ -27,7 +28,8 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       private readonly Rooms : Rooms ,
       private readonly userService : UsersService,
       private readonly historyService : HistoryService,
-      private readonly jwt : JwtService) {}
+      private readonly jwt : JwtService,
+      private readonly achiev : achievementService) {}
 
   @WebSocketServer()
   public server : Server;
