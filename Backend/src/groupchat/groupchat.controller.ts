@@ -79,12 +79,10 @@ export class GroupchatController {
     //get all messages of a groupchat
     
     @Get(":id/messages")
-    findAllMessages(@Param('id') id: string, @Req() req : any ): any {
-        const data =  this.GroupchatService.findAllMessages(id, req.user.id);
-        // console.log("-------------findAllMessages------------------");
-        // // console.log(data.then((res) => { console.log(res); }));
-        // console.log(data);
-        // console.log("-------------end  findAllMessages------------------");
+    async findAllMessages(@Param('id') id: string, @Req() req : any ) : Promise<any[]> {
+        const data =  await this.GroupchatService.findAllMessages(id, req.user.id);
+        console.log(data);
+   
 
         return data;
     }

@@ -79,12 +79,6 @@ const messageInput = (props: any) => {
     //Our group users
     let groupUsers = useMap();
 
-    //Keeping track of the entered groups
-    // const [roomsHistory, setRoomsHistory] = useState<string[]>([]);
-
-    // setRoomsHistory(props.groupInfo.id);
-    // console.log("Rooms hisory is : ", roomsHistory);
-
     //Join the room
     if (props.groupInfo.id != undefined)
     {
@@ -98,12 +92,12 @@ const messageInput = (props: any) => {
         axios
             .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/users`, { withCredentials: true })
             .then((res: any) => {
-                for (let i: number = 0; i < res.data.usersgb.length; i++) {
-                    groupUsers.set(res.data.usersgb[i].id, res.data.usersgb[i]);
+                for (let i: number = 0; i < res.data.length; i++) {
+                    groupUsers.set(res.data[i].id, res.data[i]);
                 }
             })
             .catch(Error)
-            console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+            console.log('%cAn error happened in : Conversation: messageInput(): 106', 'color: red')
     }, [props.groupInfo.id])
     
     //Getting the old conversation
@@ -117,7 +111,7 @@ const messageInput = (props: any) => {
                 console.log('%cAn error happened in : Conversation: messageInput(): 119', 'color: red')
     }, [props.groupInfo.id])
     
-    const fillMap = (axiosResponse: any) => {
+    const fillMap = (axiosResponse: any[]) => {
 
         map.clear();
         console.log("[fillMap:125] Axios response is : ", axiosResponse);
@@ -126,37 +120,34 @@ const messageInput = (props: any) => {
         let molLmessage: any = 'n/a';
         let molMsgPic: any = 'n/a';
         let molMsgSide: number = 0;
-        
-        
-        for (let i: number = 0; i < axiosResponse.length; i++)
-        {
-            console.log("%%%%%%%%>", axiosResponse[i])
-            if (axiosResponse[i].senderid == props.Sender.id)
+
+        axiosResponse.forEach((element:any) => {
+            if (element.senderid == props.Sender.id)
             {
-                molLmessageId = axiosResponse[i].senderId;
+                molLmessageId = element.senderId;
                 molLmessage = props.Sender.username;
-                molMsgPic = props.Sender.image;
+                molMsgPic = `http://localhost:3000/auth/avatar/${element.senderid}`
                 molMsgSide = 0;
             }
             else
             {
-                molLmessageId = axiosResponse[i].receiverId;
+                molLmessageId = element.receiverId;
                 molLmessage = props.groupInfo.username;
-                molMsgPic = groupUsers.get(axiosResponse[i].senderid).profileImage;
+                molMsgPic = `http://localhost:3000/auth/avatar/${element.senderid}`;
                 molMsgSide = 1;
             }
             
             const tmpMsgObj: chatAgent = {
                 id: molLmessageId,
-                senderid: axiosResponse[i].senderId, 
+                senderid: element.senderId, 
                 username: molLmessage,
                 pic: molMsgPic,
                 side: molMsgSide,
-                message: axiosResponse[i].message,
-                timestamp: axiosResponse[i].createdAt,
+                message: element.message,
+                timestamp: element.createdAt,
             }
-            map.set(axiosResponse[i].id, tmpMsgObj);
-        }
+            map.set(element.id, tmpMsgObj);
+        });
     };
     
     useEffect(() => {
@@ -189,7 +180,6 @@ const messageInput = (props: any) => {
             message: newMessage.message,
             timestamp: "n/a",
         }
-        
         map.set(makeid(37), tmpMsgObj);
     }
     
@@ -204,7 +194,6 @@ const messageInput = (props: any) => {
         
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
-            console.log("I sent a message.")
             roomSocket.emit('msgToRoom', {
                 roomid :  props.groupInfo.id,
                 messageid : `${makeid(37)}`,
