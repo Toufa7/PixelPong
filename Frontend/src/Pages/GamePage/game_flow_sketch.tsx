@@ -332,12 +332,13 @@ p5_ob.draw = () =>{
 
 
                   
-
+                if (Frontroom.Player2){
                 Frontroom.Player2.Paddle.pos.x = Backroom.P2_x_scaled;
                 Frontroom.Player2.Paddle.pos.y = Backroom.P2_y_scaled;
                 Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
                 Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
                 Frontroom.Player2.Health_points = Backroom.Health_points_P2;
+                }
 
                 // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
                 // Frontroom.Player2.username = Backroom.Player2.username;
@@ -353,12 +354,14 @@ p5_ob.draw = () =>{
               // Frontroom.Player1.username = Backroom.Player1.username;
 
               // P2_scaled_y = Backroom.P2_y_scaled;
-
+            
+            if (Frontroom.Player1){
             Frontroom.Player1.Paddle.pos.x = Backroom.P1_x_scaled;
             Frontroom.Player1.Paddle.pos.y = Backroom.P1_y_scaled;
             Frontroom.Player1.Paddle.paddle_width = (2 / 100) * scaled_width;
             Frontroom.Player1.Paddle.paddle_height = (20 / 100) * scaled_height;
             Frontroom.Player1.Health_points = Backroom.Health_points_P1;
+            }
             
             // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
             // Frontroom.Player2.username = Backroom.Player2.username;
