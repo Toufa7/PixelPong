@@ -2,7 +2,7 @@ import { Controller, Get, Param, Req, UseGuards , Patch, Body} from '@nestjs/com
 import { ChatService } from './chat.service';
 import { JwtGuard } from 'src/guards/jwt.guards';
 import { ChatGateway } from './chat.gateway';
-
+import {v4 as uuid} from 'uuid';
 
 @UseGuards(JwtGuard)
 @Controller('chat')
@@ -12,12 +12,12 @@ export class ChatController {
 
     //get old messages from dmschat
     @Get('getOldMessages/:idrecever')
-    async getOldMessages(@Req() req: any ,@Param('idrecever') idrecever: string) {
+    async getOldMessages(@Req() req: any ,@Param('idrecever') idrecever: uuid) {
         return await this.ChatService.getOldMessages(req.user.id, idrecever);
     }
     //send request to join game
     @Get(':idrecever/requestjoingame')
-    async requestjoingame(@Req() req: any ,@Param('idrecever') idrecever: string) {
+    async requestjoingame(@Req() req: any ,@Param('idrecever') idrecever: uuid) {
         return await this.ChatGateway.requestjoingame(req.user.username ,req.user.id, idrecever);
     }
     // accept request to join game
