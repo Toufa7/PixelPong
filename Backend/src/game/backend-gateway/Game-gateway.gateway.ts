@@ -9,6 +9,7 @@ import { JwtGuard, WSGuard } from 'src/guards/jwt.guards';
 import { JwtService } from '@nestjs/jwt';
 import { decode } from 'jsonwebtoken';
 import { HistoryService } from 'src/users/gamedata/history.service';
+import { achievementService } from 'src/users/gamedata/acheievement.service';
 
 
 @WebSocketGateway({
@@ -27,7 +28,8 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       private readonly Rooms : Rooms ,
       private readonly userService : UsersService,
       private readonly historyService : HistoryService,
-      private readonly jwt : JwtService) {}
+      private readonly jwt : JwtService,
+      private readonly achiev : achievementService) {}
 
   @WebSocketServer()
   public server : Server;
@@ -54,6 +56,7 @@ export class BackendGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
 handleConnection(Player: Socket) {
     Player.on("PlayerEntered",async (Data)=> {
+          this.Check_forfait = true;
           this.User = await this.getUser(Player);
           console.log("i am a, : ", this.User);
           console.log("First----> " + JSON.stringify(this.Players.players));
@@ -231,8 +234,8 @@ async handleDisconnect(Player: Socket) {
             let right = (local_Ball_x + local_Ball_diameter / 2);
 
             if (this.check_collision_Ball_with_players(local_Ball_x,local_Ball_y,local_Ball_diameter,Room.Player1,Game_Data,Player)){
-              Room.GameBall.x += Room.GameBall.ball_speed_x;
-              Room.GameBall.y += Room.GameBall.ball_speed_y;
+              Room.GameBall.x = Room.GameBall.x + Room.GameBall.ball_speed_x;
+              Room.GameBall.y = Room.GameBall.y + Room.GameBall.ball_speed_y;
               break;
             }
 
@@ -257,14 +260,14 @@ async handleDisconnect(Player: Socket) {
     }
 
     Win_Lose_Management(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room) : boolean{
-      if (Ball_left_point < -20){
-        Room.Player1.Health_points -=100;
+      if (Ball_left_point < -100){
+        Room.Player1.Health_points -= 100;
         console.log("I got Hit --->" + Room.Player1?.username);
         
         return (true);
       }
-      else if (Ball_right_point > Game_Data.Scaled_width + 20){
-        Room.Player2.Health_points -=100;
+      else if (Ball_right_point > Game_Data.Scaled_width + 100){
+        Room.Player2.Health_points -= 100;
         console.log("I got Hit --->" + Room.Player2?.username);
         
         return (true);
@@ -275,6 +278,7 @@ async handleDisconnect(Player: Socket) {
 
     Catch_Win_Lost_Reset_Game(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room){
         if (this.Win_Lose_Management(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_right_point,Player1,Player2,Room)){
+
           let RandHit : number = Math.floor(Math.random() * 2);
             if (Room.Player1.Health_points == 0){
               console.log("the Game Sould end Player 2 Wins!!");
@@ -292,11 +296,14 @@ async handleDisconnect(Player: Socket) {
             }
           Room.GameBall.x = Game_Data.Scaled_width / 2;
           Room.GameBall.y = Game_Data.Scaled_height / 2;
-          if (RandHit)
+          if (RandHit){
             Room.GameBall.ball_speed_x = -4;
-          else
+            Room.GameBall.ball_speed_y = 2;
+          }
+          else{
             Room.GameBall.ball_speed_x = 4;
-          Room.GameBall.ball_speed_y = 2;
+            Room.GameBall.ball_speed_y = -2;
+          }
           
           Room.Player1.x = 0;
           Room.Player1.y = (Game_Data.Scaled_height / 2) - (Game_Data.P1_paddle_height / 2);
@@ -321,21 +328,17 @@ async handleDisconnect(Player: Socket) {
             Game_Data.P2_paddle_x,Game_Data.P2_paddle_y,Game_Data.P2_paddle_width,Game_Data.P2_paddle_height
             ,Room.Player1.Scaled_width,Ball_x,Game_Data));
         }
-        // }else if (Room.Player2.id == Player_socket.id){
-        //     let Ball_x = Room.GameBall.x;
-        //     // let radius = Room.GameBall.diameter / 2;
-        //     let Ball_reverse_x = Player.Scaled_width - Room.GameBall.x;
-        //     return (this.Ball_points_check(radius,Room,Room.Player2,Player.Scaled_width,Ball_reverse_x));
-        //   }
-        }
-    }
+      }
+  }
 
 
     Ball_points_check(radius : number,Room,Player1_x,Player1_y,Player1_width,Player1_height,Player2_x,Player2_y,Player2_width,Player2_height,screen_width,Ball_x,Game_Data) : boolean{
       let RandomHit : number;
+      let RandHit_speed_y : number;
       let speed_increase : number = 1.5;
 
       RandomHit = Math.floor(Math.random() * 2);
+      RandHit_speed_y = Math.floor(Math.random() * 2);
       // console.log("Using Random in numbers ---> " + RandomHit);
       let r : number  = 0;
         for(let i = 0; i < 16 ; i++){
@@ -348,56 +351,57 @@ async handleDisconnect(Player: Socket) {
           if (((x_ball > Player1_x && x_ball < Player1_x + Player1_width - 10 && y_ball > Player1_y && y_ball < Player1_y + Player1_height) 
         || (x_ball > Player2_x && x_ball < Player2_x + Player2_width - 10 && y_ball > Player2_y && y_ball < Player2_y + Player2_height))){
             if (x_ball < Game_Data.Scaled_width / 2){
-                console.log("hit left half")
-                if(y_ball > (Player1_y + 8) && y_ball < (Player1_y + Player1_height - 8)){
+                console.log("hit left half");
+                if(y_ball > (Player1_y + 15) && y_ball < (Player1_y + Player1_height - 11)){
                     console.log("P1---hit mid !!");
-                    Room.GameBall.x = Room.GameBall.x + 4;
+                    Room.GameBall.x = Room.GameBall.x + 8;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-                    Room.GameBall.ball_speed_x *= speed_increase;
-                    // if (RandomHit == 0)
+                    if (Room.GameBall.ball_speed_y == 0)
+                    {
+                      if (RandHit_speed_y)
+                        Room.GameBall.ball_speed_y = 1;
+                      else
+                      Room.GameBall.ball_speed_y = 2;
                       Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-                    // else{
-                    //   Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x + speed_increase;
-                    //   Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-                    // }
+                    }
+                    Room.GameBall.ball_speed_x *= speed_increase;
+
                     return(true);
                 }
                 else{
                     console.log("P1---hit corner !!");
-                    console.log(Player1_y);
                     Room.GameBall.x = Room.GameBall.x + 4;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
                     Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-                    // this.r = this.ball_ob.random(0,2);
-                    // console.log("r--->" + this.r);
-                    // if (Math.floor(this.r))
-                    //     this.ball_speed_y = -this.ball_speed_y;
+                    Room.GameBall.ball_speed_x *= speed_increase;
 
                     return(true);
                 }
             }
             else{
                 console.log("right half");
-                if(y_ball > (Player2_y + 8) && y_ball < (Player2_y + Player2_height - 8)){
-                    Room.GameBall.x = Room.GameBall.x - 4;
-                  // this.collision_happend = true;
-                    Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
-                    Room.GameBall.ball_speed_x *= speed_increase;
-                    // if (RandomHit == 0)
+                if(y_ball > (Player2_y + 15) && y_ball < (Player2_y + Player2_height - 11)){
+                  console.log("P2---hit mid !!");
+                  Room.GameBall.x = Room.GameBall.x - 8;
+                  Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
+                  if (Room.GameBall.ball_speed_y == 0)
+                    {
+                      if (RandHit_speed_y)
+                        Room.GameBall.ball_speed_y = 1;
+                      else
+                      Room.GameBall.ball_speed_y = 2;
                       Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-                    console.log("P2---hit mid !!");
+                    }
+                    Room.GameBall.ball_speed_x *= speed_increase;
+
                     return(true);
                 }
                 else{
-                  // this.collision_happend = true;
-                  Room.GameBall.x = Room.GameBall.x - 4;
-                    console.log("P2---hit corner !!");
+                  console.log("P2---hit corner !!");
+                    Room.GameBall.x = Room.GameBall.x - 4;
                     Room.GameBall.ball_speed_x = -Room.GameBall.ball_speed_x;
                     Room.GameBall.ball_speed_y = -Room.GameBall.ball_speed_y;
-                    // this.r = this.ball_ob.random(0,2);
-                    // console.log("r--->" + this.r);
-                    // if (Math.floor(this.r))
-                    //     this.ball_speed_y = -this.ball_speed_y;
+                    Room.GameBall.ball_speed_x *= speed_increase;
 
                     return(true);
                 }

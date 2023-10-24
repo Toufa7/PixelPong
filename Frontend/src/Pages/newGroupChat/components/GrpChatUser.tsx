@@ -3,40 +3,59 @@ import axios from 'axios'
 import MessageInput from './GrpmessageInput'
 import exit from '../assets/exit.svg'
 import info from '../assets/info.svg'
-import jwtDecode from 'jwt-decode'
 import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
 import toast from 'react-hot-toast'
 
+interface localUserClass
+{
+    id: string,
+    email: string,
+    profileImage: string,
+    status: string,
+    username: string,
+}
 
 const ChatUser = (props : any) => {
+    
     //Fetching current user (Receiver) data each time the prop gets new value
     const [groupRoom, setgroupRoom] = useState({});
+    const [localUser, setLocalUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
+
     useEffect(() => {
-        const fetchCurrentUserInfo = (id: any) => {
-            if (id)
-            {
-                axios.get(`http://localhost:3000/groupchat/${id}/groupinfo`, { withCredentials: true })
-                .then((response) => {
-                    setgroupRoom(response.data);
-                    console.log("rese -> ", response.data);
-                })
-                .catch((erro) => {
-                    console.log("erro -> ", erro);
-                })
-                }
+        if (props.pcurrentUserId != undefined)
+        {
+            axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
+            .then((response) => {
+                setgroupRoom(response.data);
+                console.log("rese -> ", response.data);
+            })
+            .catch((erro) => {
+                console.log("erro -> ", erro);
+            })
         }
-        fetchCurrentUserInfo(props.pcurrentUserId);
     }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
 
     // const [showing, setShowing] = useState(false);
+    
     //Identifying local user (Sender)
-    const cookieJwt = document.cookie;
-    const jwtArr:string[] =  cookieJwt.split("=");
-    let localUser: any = jwtDecode(jwtArr[1]);
+    // const cookieJwt = document.cookie;
+    // const jwtArr:string[] =  cookieJwt.split("=");
+    // let localUser: any = jwtDecode(jwtArr[1]);
+    
+    useEffect(() => {
+        axios
+            .get(`http://localhost:3000/users/profil`, { withCredentials: true })
+            .then((res:any) =>  {
+                setLocalUser(res.data);
+            })
+            .catch(Error)
+                console.log("Error happened when feching local user data");
+    }, [])
 
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
+    
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {

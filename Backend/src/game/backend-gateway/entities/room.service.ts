@@ -34,7 +34,42 @@ export class Rooms{
     }
 
     SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_height){
-        //there is a challenge (boolean)
+        //------------------There is a Token_for_matching------------------------------------------
+        /*
+
+        if (Players.players[Player.id].token_for_matching){
+            console.log("Player_comming from chat dm");
+            this.create_room_for_player();
+            for(const id in this.rooms){
+                const Room = this.rooms[id];
+                if (Room.client_count == 0 && !Room.Player1){
+                    Room.Player1 = Players.players[Player.id];
+                    Room.Player1.room_id = Room.id;
+                    Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+                    Room.client_count++;
+                    Player.join(Room.id);
+                }else if (Room.client_count == 1 && Room.Player1 || Room.Player2){
+                    if (Room.Player1 && (Room.Player1.token_for_matching == Players.players[Player.id]){
+                        Room.Player2 = Players.players[Player.id];
+                        Room.Player2.room_id = Room.id;
+                        Room.GameBall.x = Room.Player1?.Scaled_width / 2;
+                        Room.GameBall.y = Room.Player1?.Scaled_height / 2;
+                        Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
+                        Room.client_count++;
+                        Player.join(Room.id);
+                    }
+                    else if (Room.Player2 && (Room.Player2.token_for_matching == Players.players[Player.id]){
+                        Room.Player1 = Players.players[Player.id];
+                        Room.Player1.room_id = Room.id;
+                        Room.GameBall.x = Room.Player1?.Scaled_width / 2;
+                        Room.GameBall.y = Room.Player1?.Scaled_height / 2;
+                        Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
+                    }
+                }
+            }
+        }else{
+        */
+       //-----------------------------------------End---------------------------------------
 
 
         if (!this.is_Rooms_Available()){
@@ -43,7 +78,7 @@ export class Rooms{
             for(const id in this.rooms){
                 const Room = this.rooms[id];
                 if ((Room.client_count == 0 && !Room.Player1) && Players.players[Player.id]){
-                    console.log("Room enterd ["+Room.id+"]")
+                    console.log("Room enterd ["+Room.id+"]");
                     Room.Player1 = Players.players[Player.id];
                     Room.Player1.room_id = Room.id;
                     // let scale_ball = (2.4 / 100) * screen_width;
@@ -64,8 +99,8 @@ export class Rooms{
                     }
                 }
             }
-            
         }
+//}
         console.log(this.rooms);
     }
 

@@ -10,6 +10,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { UsersService } from './users/users.service';
 import { PrismaService } from './auth/prisma.service';
 import { GroupchatModule } from './groupchat/groupchat.module';
+import { achievementService } from './users/gamedata/acheievement.service';
 
 @Module({
   imports: [GroupchatModule, AuthModule, UsersModule, ChatModule, GateWayModule, BackendGatewayModule , ScheduleModule.forRoot(), GroupchatModule],

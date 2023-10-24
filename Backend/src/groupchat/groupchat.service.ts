@@ -207,7 +207,7 @@ export class GroupchatService {
     }
 
     //get all messages of a groupchat
-    async findAllMessages(id: string, iduserconnected: string): Promise<any> {
+    async findAllMessages(id: string, iduserconnected: string): Promise<any[]> {
         try {
             //get user is blocked
             const userblock = await this.prisma.user.findUnique({
