@@ -27,13 +27,13 @@ export class GroupchatController {
 
     //check if a user is a superuser of a groupchat
     @Get(":id/checksuperuser")
-    checksuperuser(@Param('id') id: string, @Req() req : any): any {
+    checksuperuser(@Param('id') id: uuid, @Req() req : any): any {
         return this.GroupchatService.checksuperuser(id, req.user.id);
     }
 
     //get a groupchat
     @Get(":id/groupinfo")
-    getinfo(@Param('id') id: string): any {
+    getinfo(@Param('id') id: uuid): any {
         return this.GroupchatService.findOne(id);
     }
 
@@ -66,24 +66,21 @@ export class GroupchatController {
 
     //get all users of a groupchat
     @Get(":id/users")
-    findAllUsers(@Param('id') id: string): any {
+    findAllUsers(@Param('id') id: uuid): any {
         return this.GroupchatService.findAllUsers(id);
     }
 
     //get all admins of a groupchat
     @Get(":id/admins")
-    findAllAdmins(@Param('id') id: string): any {
+    findAllAdmins(@Param('id') id: uuid): any {
         return this.GroupchatService.findAllAdmins(id);
     }
 
     //get all messages of a groupchat
     
     @Get(":id/messages")
-    async findAllMessages(@Param('id') id: string, @Req() req : any ) : Promise<any[]> {
+    async findAllMessages(@Param('id') id: uuid, @Req() req : any ) : Promise<any[]> {
         const data =  await this.GroupchatService.findAllMessages(id, req.user.id);
-        console.log(data);
-   
-
         return data;
     }
 

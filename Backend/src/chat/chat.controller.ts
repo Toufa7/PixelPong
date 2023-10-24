@@ -21,13 +21,13 @@ export class ChatController {
         return await this.ChatGateway.requestjoingame(req.user.username ,req.user.id, idrecever);
     }
     // accept request to join game
-    @Patch('acceptrequestjoingame')
-    async acceptrequestjoingame(@Req() req: any , @Body() data : any) {
-        return await this.ChatService.acceptrequestjoingame(req.user.id, data.token);
+    @Patch(':idrecever/acceptrequestjoingame')
+    async acceptrequestjoingame(@Req() req: any , @Body() data : any, @Param('idrecever') idrecever: string) {
+        return await this.ChatGateway.acceptrequestjoingame(req.user.id, data.token, idrecever);
     }
     // refuse request to join game
-    @Patch('refuserequestjoingame')
-    async refuserequestjoingame(@Req() req: any) {
-        return await this.ChatService.refuserequestjoingame(req.user.id);
+    @Patch(':idrecever/refuserequestjoingame')
+    async refuserequestjoingame(@Req() req: any, @Param('idrecever') idrecever: string) {
+        return await this.ChatGateway.refuserequestjoingame(req.user, idrecever);
     }
 }

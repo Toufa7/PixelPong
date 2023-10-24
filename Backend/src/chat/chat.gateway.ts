@@ -18,7 +18,7 @@ let map = new Map <any , any>();
 
 @WebSocketGateway({
     cors: {
-      origin: '*',
+      origin: 'http://localhost:5173',
       credentials: true,
     },
     namespace: 'chat',
@@ -140,6 +140,9 @@ let map = new Map <any , any>();
             this.server.to(idUs).emit('postOldCnv'  , await this.oldcnv(body.id));
         // }
     }
+
+
+
     //////////////////////request to join game //////////////////////////
     async requestjoingame(namesender: string, idsender: string, idrecever: string) {
       console.log("requestjoingame");
@@ -156,6 +159,39 @@ let map = new Map <any , any>();
         from : namesender,
         token : token,
         idsender : idsender
+      });
+    }
+    //accept request to join game
+    async acceptrequestjoingame(idrequest: string, token: string, idrecever: string) {
+      await this.prisma.user.update({
+        where: { id: idrequest },
+        data: {
+          tokenjoingame : token,
+        },
+      });
+      const idUs = await map.get(idrecever);
+      this.server.to(idUs).emit('acceptrequestjoingame', {
+        message : "accept",
+      });
+    }
+
+    //refuse request to join game
+    async refuserequestjoingame(user : any, idrecever: string) {
+      await this.prisma.user.update({
+        where: { id:idrecever },
+        data: {
+          tokenjoingame : null,
+        },
+      });
+      const idUs = await map.get(idrecever);
+      this.server.to(idUs).emit('msgToClient', {
+        id : idrecever,
+        username: user.username,
+        pic: user.image,
+        side: 1,
+        message: "refuse request to join game",
+        idsender : user.id,
+        timestamp: new Date().toISOString()
       });
     }
 
