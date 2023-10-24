@@ -10,8 +10,6 @@ import { join } from 'path';
 import { createReadStream } from 'fs';
 import { promises as fsPromises } from 'fs';
 import { GroupchatGateway } from './groupchat.gateway';
-import {v4 as  uuid } from 'uuid';
-
 
 @UseGuards(JwtGuard)
 @Controller('groupchat')
@@ -20,20 +18,20 @@ export class GroupchatController {
 
     //get number user of a groupchat
     @Get(":id/numberuser")
-    numberuser(@Param('id') id : uuid): Promise<number> {
+    numberuser(@Param('id') id :string): Promise<number> {
         return this.GroupchatService.numberuser(id);
     }
 
 
     //check if a user is a superuser of a groupchat
     @Get(":id/checksuperuser")
-    checksuperuser(@Param('id') id: uuid, @Req() req : any): any {
+    checksuperuser(@Param('id') id: string, @Req() req : any): Promise<boolean>{
         return this.GroupchatService.checksuperuser(id, req.user.id);
     }
 
     //get a groupchat
     @Get(":id/groupinfo")
-    getinfo(@Param('id') id: uuid): any {
+    getinfo(@Param('id') id: string): any {
         return this.GroupchatService.findOne(id);
     }
 
@@ -66,20 +64,20 @@ export class GroupchatController {
 
     //get all users of a groupchat
     @Get(":id/users")
-    findAllUsers(@Param('id') id: uuid): any {
+    findAllUsers(@Param('id') id: string): any {
         return this.GroupchatService.findAllUsers(id);
     }
 
     //get all admins of a groupchat
     @Get(":id/admins")
-    findAllAdmins(@Param('id') id: uuid): any {
+    findAllAdmins(@Param('id') id: string): any {
         return this.GroupchatService.findAllAdmins(id);
     }
 
     //get all messages of a groupchat
     
     @Get(":id/messages")
-    async findAllMessages(@Param('id') id: uuid, @Req() req : any ) : Promise<any[]> {
+    async findAllMessages(@Param('id') id: string, @Req() req : any ) : Promise<any[]> {
         const data =  await this.GroupchatService.findAllMessages(id, req.user.id);
         return data;
     }

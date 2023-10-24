@@ -27,7 +27,12 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   @WebSocketServer() server : Server;
   private logger : Logger = new  Logger('gorupChatGateway');
 
-  ////////////////////////////////// -----dis-- ////////////////////////////////
+  ////////////////////////////////// -----init-- ////////////////////////////////
+  afterInit(server: any) {
+    this.logger.log("initialized");
+  }
+
+  ////////////////////////////////// -----disconnected-- ////////////////////////////////
   async handleDisconnect(client: Socket, ...args: any[]) {
     this.logger.log(`Client disconnected: ${client.id}`);
     const user = await this.getUser(client);
@@ -36,7 +41,8 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       mapclient.delete(user.id);
     }
   } 
-
+  
+  ////////////////////////////////// -----connected-- ////////////////////////////////
   async handleConnection(client: any, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
     const user = await this.getUser(client);
@@ -52,9 +58,8 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       }
     }
   }
-  afterInit(server: any) {
-    this.logger.log("initialized");
-  }
+
+  
 
 
 
@@ -78,7 +83,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
 
 
 
-  ////////////////////////////////// -----ROOM-- ////////////////////////////////
+  ////////////////////////////////// -----join  ROOM-- ////////////////////////////////
   @SubscribeMessage('joinRoom')
   async handlenJoinRoom(client : Socket , data : any)
   {
@@ -100,7 +105,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       }
   }
 
-
+  ////////////////////////////////// -----send message to groupchat-- ////////////////////////////////
   @SubscribeMessage('msgToRoom')
   async handleMessageRoom(client : Socket, body : any) {
     const user = await this.getUser(client);
@@ -153,7 +158,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
 
       this.server.to(body.roomid).emit(body.roomid, {
         roomid: body.roomid,
-        timestamp: body.timestamp,
+        timestamp: new Date(),
         side: body.side,
         messageid: body.messageId,
         message: body.message,
@@ -175,6 +180,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     }
   }
 
+  ////////////////////////////////// -----leave room-- ////////////////////////////////
   @SubscribeMessage('leaveRoom')
   async handleLeaveRoom(client : Socket, data : any)
   {
@@ -191,8 +197,9 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       client.leave(data.roomid);
     }
   }
-
-
+  
+  
+  ////////////////////////////////// -----request to join groupchat-- ////////////////////////////////
   async sendrequest(id : string , idsender : string){
     console.log("map  :: ", mapclient);
     //check if user in groupchat
@@ -215,10 +222,11 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         usersblock: true,
       },
     });
+    
     //check if user is ban
     if(userban.usersblock.some((user) => user.id == idsender)){
       console.log("user is ban");
-      return ;
+      return("user is ban");
     }
     const datagp = await this.prisma.groupchat.findUnique({
       where: { id: id },
@@ -241,7 +249,8 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       },
     });
     if(notification.length != 0){
-      return;
+      console.log("notification already exist");
+      return ("notification already exist");
     }
     //get user 
     const user = await this.prisma.user.findUnique({
@@ -257,10 +266,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         from: user.username,
       },
     });
-    
-    console.log("superuser :: ", superadmin.superadmin.id);
-    console.log("user:: ", user.id);
-    console.log("mapclient :: ", mapclient);
+    //send notification to superadmin
     this.server.to(mapclient.get(superadmin.superadmin.id)).emit('notificationgp', {
       userId: idsender,
       type: 'join groupchat',

@@ -15,7 +15,7 @@ export class GroupchatService {
 
 
     //get number user of a groupchat
-    async numberuser(id: string): Promise<any> {
+    async numberuser(id: string): Promise<number> {
         try {
             const data = await this.prisma.groupchat.findUnique({
                 where: {
@@ -32,7 +32,7 @@ export class GroupchatService {
         }
     }
     //check if a user is a superuser of a groupchat
-    async checksuperuser(id: string, iduserconnected: string): Promise<any> {
+    async checksuperuser(id: string, iduserconnected: string): Promise<boolean> {
         try {
             const data = await this.prisma.groupchat.findUnique({
                 where: {
@@ -112,7 +112,7 @@ export class GroupchatService {
 
 
     //get all groupchat of a useradmin
-    async findgpadmin(iduser: string) {
+    async findgpadmin(iduser: string) : Promise<any>{
         try {
             //get all groupchat where user is admin
             const data = await this.prisma.groupchat.findMany(
@@ -134,7 +134,7 @@ export class GroupchatService {
     }
 
     // get one groupchat
-    async findOne(id: string) {
+    async findOne(id: string) : Promise<any> {
         try {
 
             const data = await this.prisma.groupchat.findUnique({
@@ -153,7 +153,7 @@ export class GroupchatService {
     }
 
     //get all users of a groupchat if not admin
-    async findAllUsers(id: string) {
+    async findAllUsers(id: string) : Promise<any> {
         try {
             const data = await this.prisma.groupchat.findUnique({
                 where: {

@@ -134,7 +134,7 @@ let map = new Map <any , any>();
               side: body.side,
               message: body.message,
               idsender : user.id,
-              timestamp: body.timestamp
+              timestamp: new Date()
             });
             this.getConv(client);
             this.server.to(idUs).emit('postOldCnv'  , await this.oldcnv(body.id));
@@ -191,7 +191,7 @@ let map = new Map <any , any>();
         side: 1,
         message: "refuse request to join game",
         idsender : user.id,
-        timestamp: new Date().toISOString()
+        timestamp: new Date()
       });
     }
 
