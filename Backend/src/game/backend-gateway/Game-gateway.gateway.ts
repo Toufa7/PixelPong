@@ -148,12 +148,14 @@ async handleDisconnect(Player: Socket) {
 
           if (this.Room_dl.Player1 && this.Check_forfait){
             console.log("The Player 1 Won by Forfait ---> " + this.Room_dl.Player1?.username);
-            this.Reset_Token_to_null(this.Room_dl.Player1?.user_id);
+            this.Reset_Token_to_null(id_Player1);
+            this.Reset_Token_to_null(id_Player2);
             this.historyService.updateMatchHistory(id_Player1,id_Player2);
           }
           else if (this.Room_dl.Player2 && this.Check_forfait){
             console.log("The Player 2 Won by Forfait ---> " + this.Room_dl.Player2?.username);
-            this.Reset_Token_to_null(this.Room_dl.Player2?.user_id);
+            this.Reset_Token_to_null(id_Player1);
+            this.Reset_Token_to_null(id_Player2);
             this.historyService.updateMatchHistory(id_Player2,id_Player1);
           }
           console.log("-------!!!!!!!!!!!!!!!!!!!!!!!!!!!------------");
