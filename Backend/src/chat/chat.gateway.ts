@@ -155,7 +155,7 @@ let map = new Map <any , any>();
           tokenjoingame : token,
         },
       });
-      this.server.to(idUs).emit('requestjoingame', {
+      return this.server.to(idUs).emit('requestjoingame', {
         from : namesender,
         token : token,
         idsender : idsender

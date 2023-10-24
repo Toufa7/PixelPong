@@ -23,24 +23,25 @@ const NavBarBody = () => {
 	};
 
 	return (
-	<div className="nav-content">
+		<div className="nav-content">
+
+		<div className="nav-item">
+			<Link to="/notifications" title="Notifications">
+					<img src={notificationLogo}/>
+			</Link>
+		</div>
+		<div className="nav-item">
+			<Link to="/chat" title="Chat">
+				<img src={msgLogo}/>
+			</Link>
+		</div>	
+
 		<div className="nav-item">
 			<Link to="/groups" title="Groups">
 				<img src={groups}/>
 			</Link>
 		</div>
 
-		<div className="nav-item">
-		<Link to="/notifications" title="Notifications">
-				<img src={notificationLogo}/>
-		</Link>
-		</div>
-
-		<div className="nav-item">
-			<Link to="/chat" title="Chat">
-				<img src={msgLogo}/>
-			</Link>
-		</div>
 		<div className="nav-item">
 			<Link to="/settings" title="Settings">
 				<img src={settingsLogo}/>

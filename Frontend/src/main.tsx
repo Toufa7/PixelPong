@@ -23,6 +23,13 @@ const Notification = lazy(() => import('./Pages/Notifications/Notifications'));
 import GroupPage from './Pages/newGroupChat/GrpChatPage';
 import Dogo from "./Pages/dogo.gif";
 
+const BackgroudGame = () => {
+	return (
+		<div style={{height: '100vh', background: "#333C54"}}>
+		</div>
+	);
+}
+
 export const OtherUser = () => {
 	return (
 		<>
@@ -87,9 +94,11 @@ const HomeComponents = () => {
 const GameComponents = () => {
 	return (
 		<>
-			{/* <Stars/> */}
+		<div style={{height: '100vh', background: "#333C54"}}>
+			<BackgroudGame/>
 			<Setup/>
-		</>
+		</div>
+	</>
 	);
 }
 
