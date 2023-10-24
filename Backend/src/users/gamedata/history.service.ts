@@ -102,8 +102,8 @@ async addMatchHistory(userId:string){
             },
         }),
     ])
-    this.achiev.updateAchievement(winnerId, null);
-    this.achiev.updateAchievement(loserId, null);
+    await this.achiev.updateAchievement(winnerId, null);
+    await this.achiev.updateAchievement(loserId, null);
 }
 async getMatchHistory(userId:string){
     const matchHistory = await this.prisma.matchHistory.findFirst({

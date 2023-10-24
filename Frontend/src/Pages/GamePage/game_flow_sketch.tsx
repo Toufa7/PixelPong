@@ -224,35 +224,35 @@ p5_ob.preload = () =>{
           let Rnd_ball_asset = Math.floor(Math.random() * 4);
           let Random_loading_page = Math.floor(Math.random() * 2);
 
-          if (Random_loading_page == 0)
+          // if (Random_loading_page == 0)
             MatchmakingPage = p5_ob.loadImage(gifMatch);
-          else
-            MatchmakingPage = p5_ob.loadImage(akumaloading);
+          // else
+          //   MatchmakingPage = p5_ob.loadImage(akumaloading);
           font  = p5_ob.loadFont(f);
           ovp = p5_ob.loadImage(over_g);
           win = p5_ob.loadImage(Win);
           lose = p5_ob.loadImage(Lose);
           Dim = p5_ob.loadImage(Dimension);
-          if (Rnd_background)
+          // if (Rnd_background)
             GameBackgrund = p5_ob.loadImage(BackgroundGame);
-          else
-            GameBackgrund = p5_ob.loadImage(BackgroundGame2);
+          // else
+          //   GameBackgrund = p5_ob.loadImage(BackgroundGame2);
 
-          if(Rnd_paddle_asset == 0){
+          // if(Rnd_paddle_asset == 0){
             pd_asset = p5_ob.loadImage(pd);
-          }else if (Rnd_paddle_asset == 1){
-            pd_asset = p5_ob.loadImage(yellow_pd);
-          }else if (Rnd_paddle_asset == 2){
-            pd_asset = p5_ob.loadImage(red_pd);
-          }
+          // }else if (Rnd_paddle_asset == 1){
+          //   pd_asset = p5_ob.loadImage(yellow_pd);
+          // }else if (Rnd_paddle_asset == 2){
+          //   pd_asset = p5_ob.loadImage(red_pd);
+          // }
 
-          if (Rnd_ball_asset == 0){
+          // if (Rnd_ball_asset == 0){
             ball_asset = p5_ob.loadImage(ball);
-          }else if (Rnd_ball_asset == 1){
-            ball_asset = p5_ob.loadImage(blue_ball);
-          }else if (Rnd_ball_asset == 2){
-            ball_asset = p5_ob.loadImage(red_ball);
-          }
+          // }else if (Rnd_ball_asset == 1){
+          //   ball_asset = p5_ob.loadImage(blue_ball);
+          // }else if (Rnd_ball_asset == 2){
+          //   ball_asset = p5_ob.loadImage(red_ball);
+          // }
 
           // user_image = p5_ob.loadImage(Get_user_image);
 

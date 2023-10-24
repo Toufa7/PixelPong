@@ -11,10 +11,10 @@ import { InfoBorad } from './info_board'
 
 export default function Setup(){
   return (
-    <>
+    <div id = "global_div">
       <Game_instance/>
       <InfoBorad/>
-    </>
+    </div>
   )
 
 }
