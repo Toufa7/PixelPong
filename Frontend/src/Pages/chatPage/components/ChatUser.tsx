@@ -5,6 +5,7 @@ import play from '../assets/images/playgame.svg'
 import block from '../assets/images/block.svg'
 import info from '../assets/info.svg'
 import tree from '../assets/giblyTree.gif'
+import { Link } from 'react-router-dom'
 
 interface localUserClass
 {
@@ -46,6 +47,17 @@ const ChatUser = (props:any) => {
         }
     }, [props.pcurrentUserId]);
 
+    const onClickHandler = () => {
+        axios
+            .get(`http://localhost:3000/chat/${remoteUser.id}/requestjoingame`, { withCredentials: true })
+            .then((res:any) => {
+                console.log(" joingame on click handler ==============>",res.data);
+            })
+            .catch(Error)
+                console.log("Error happened when requesting to join the game", Error);
+
+    }
+
     return (
         <div className='usrProfileConversation'>
                 <div className="chatUserDiv">
@@ -70,7 +82,9 @@ const ChatUser = (props:any) => {
                     {
                         //Conditional rendring to display the control buttons or not based on the presence of remoteUser.profileImage
                         remoteUser.profileImage ?  (<div className="chatControlButtons">
-                                                        <button className='userControlButtons'><img src={play} width={50} height={50}></img></button>
+                                                    {/* <Link to={'/game'}> */}
+                                                        <button className='userControlButtons' onClick={onClickHandler}><img src={play} width={50} height={50}></img></button>
+                                                    {/* </Link> */}
                                                         <button className='userControlButtons'><img src={block} width={50} height={50}></img></button>
                                                     </div>)
                                                 :   (<></>)

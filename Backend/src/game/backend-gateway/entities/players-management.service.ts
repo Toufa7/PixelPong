@@ -39,7 +39,7 @@ export class Players_Management {
     // console.log("Before -->" + Object.keys(this.players).length);
     if (!this.SearchForExsitentUserID(user_id)){
       this.SetRoom = true;
-      this.players[player_id] = new PlayerDto(player_id,x,y,width , height , screen_width , screen_height, 600, room_id,user_id,username);
+      this.players[player_id] = new PlayerDto(player_id,x,y,width , height , screen_width , screen_height, 100, room_id,user_id,username);
       console.log("Player In game Setting up stats ...");
       await this.userService.ChangeStateInGame(user_id,true); // Updating Database Field in Game state
       console.log(" " + this.Player_Game_Info.inGame + " " + this.Player_Game_Info.userId);

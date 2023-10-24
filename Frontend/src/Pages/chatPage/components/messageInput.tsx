@@ -6,6 +6,7 @@ import Send from '../../../assets/images/send.svg'
 import axios from 'axios';
 import MessageComponent from './messageComponenet'
 import MessageRightComponenet from './messageRightComponenet ';
+import toast, { Toaster } from 'react-hot-toast';
 
 //<*-----------------------------------------------< Common Funcion and definitions >--------------------------------------------------*>
 // Class chatAgent responsible for defining the properties of each person onthe conversation
@@ -131,7 +132,50 @@ const messageInput = (props: any) => {
         }
         
     };
-    
+
+    useEffect(() => {
+        conversationsSocket.on('requestjoingame', (payload:any) => {
+            // console.log('request to join ---->', payload);
+            toast.custom(
+                <div style={{ display: 'flex', alignItems: 'center', background: "#F2ECFF", color: 'black', borderRadius: '10px', zIndex: '-1'}}>
+                    <div className="nes-container with-title">
+                        <p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Game Request</p>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <img src={`http://localhost:3000/auth/avatar/${payload.idsender}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+                        <span style={{ marginLeft: '10px', marginRight: 'auto' }}>{payload.from}</span>	
+                            <div>
+                                <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={() => {
+                                    axios
+                                        .patch(`http://localhost:3000/chat/${payload.idsender}/acceptrequestjoingame`, {token: payload.token}, { withCredentials: true });
+                                }}>Accept</button>
+
+                                <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error"
+                                onClick={() => {
+                                    axios
+                                        .patch(`http://localhost:3000/chat/${payload.idsender}/refuserequestjoingame`, {}, { withCredentials: true });
+                                }}>Deny</button>
+                            </div>
+                    </div>
+                    </div>
+                </div>,
+                { duration: 5000, position: 'top-right' });
+        });
+        return () => {
+            conversationsSocket.off('requestjoingame');
+        }
+    }, [props.Receiver.username])
+
+    /* case of accept
+        acceptrequestjoingame
+        axios
+            .Patch('localhost:3000/chat/acceptrequestjoingame', {token: payload.token}, {with credentials})
+     */
+
+     /* case of deny
+        refuserequestjoingame
+        axios
+            .Patch('localhost:3000/chat/refuserequestjoingame', {}, {with credentials})
+     */    
 
     useEffect(() => {
         //Recieving message from socket
@@ -204,6 +248,7 @@ const messageInput = (props: any) => {
     return  (
                 <>
                     <Conversation MessagesArr={Array.from(map.values())}/>
+                    <Toaster/>
                     <div className="messageInput">
                         <form className='messageform' onSubmit={onSubmitHandler}>
                             <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
