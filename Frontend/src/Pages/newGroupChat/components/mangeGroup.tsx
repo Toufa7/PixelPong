@@ -145,7 +145,7 @@ const ListingUsersAdmins = ({group}) => {
 		const duration = event.target.value;
 		if (duration && duration != 'Mute') {
 			let timeer : number = 0;
-			duration == 0 ? timeer = (5 * 300000) : timeer = (15 * 300000);
+			duration == 0 ? timeer = (5 * 60000) : timeer = (15 * 60000);
 			console.log('Duration -> Time ', duration, timeer);
 			axios.post(`http://localhost:3000/groupchat/${groupId}/${memberId}/mute`,{ time: timeer },{ withCredentials: true })
 			.then((response) => {

@@ -31,7 +31,6 @@ export class GroupchatService {
             console.log(error);
         }
     }
-
     //check if a user is a superuser of a groupchat
     async checksuperuser(id: string, iduserconnected: string): Promise<any> {
         try {
@@ -124,10 +123,6 @@ export class GroupchatService {
                 }
             );
             if (data) {
-                // console.log("---------------------+++++++++++----------------", iduser);
-                // console.log(data);
-                // console.log("---------------------++-------++++----------------");
-
                 return data;
             }
             else
@@ -489,7 +484,7 @@ export class GroupchatService {
                 data: {
                     user: { connect: { id: iduser } },
                     groupchat: { connect: { id: id } },
-                    expiresAt: new Date(Date.now() + time + 3600000),
+                    expiresAt: new Date(Date.now() + time),
                 },
             });
         }
@@ -825,14 +820,13 @@ export class GroupchatService {
     @Cron('*/5 * * * * *')
     async expiremute() {
         try {
-
             const usermute = await this.prisma.usermute.findMany({
                 where: {
-                    expiresAt: { lte: new Date(Date.now()) },
+                    expiresAt: { lte: new Date() },
                 },
             });
             usermute.forEach(element => {
-                this.prisma.usermute.delete({
+                const data = this.prisma.usermute.delete({
                     where: {
                         id: element.id,
                     },

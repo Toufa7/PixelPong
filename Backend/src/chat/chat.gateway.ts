@@ -18,7 +18,7 @@ let map = new Map <any , any>();
 
 @WebSocketGateway({
     cors: {
-      origin: 'http://localhost:5173',
+      origin: '*',
       credentials: true,
     },
     namespace: 'chat',
@@ -90,7 +90,6 @@ let map = new Map <any , any>();
       }
     }
 
-
     ///////////////////////////////// disconnection ////////////////////////////////
     async handleDisconnect(client: Socket, ...args: any[]) {
         this.logger.log(`Disconnect : ${client.id}`  );
@@ -102,11 +101,7 @@ let map = new Map <any , any>();
         } 
     }
 
-
-
-
     ////////////////////////////////// -----DM-- ////////////////////////////////
-
     ///////////////   -----get old convetation----- ///////////////////////
     @SubscribeMessage('getOldCnv')
     async getConv(client : Socket) {
@@ -115,12 +110,7 @@ let map = new Map <any , any>();
       
       this.server.to(map.get(user.id)).emit('postOldCnv'  , await this.oldcnv(user.id));
     }
-    // how to use this in front end
-    // emit using this event ('getOldCnv')
-    // receive on ('postOldCnv')
 
-
-    
     //////////////////     -------send messages------  ///////////////////////
     @SubscribeMessage('msgToServer')
     async handleMessage(client : Socket, body : any) {
@@ -150,7 +140,37 @@ let map = new Map <any , any>();
             this.server.to(idUs).emit('postOldCnv'  , await this.oldcnv(body.id));
         // }
     }
+    //////////////////////request to join game //////////////////////////
+    async requestjoingame(namesender: string, idsender: string, idrecever: string) {
+      console.log("requestjoingame");
+      const idUs = await map.get(idrecever);
+      const token = this.generate_Random_id(10);
 
+      await this.prisma.user.update({
+        where: { id: idsender },
+        data: {
+          tokenjoingame : token,
+        },
+      });
+      this.server.to(idUs).emit('requestjoingame', {
+        from : namesender,
+        token : token,
+        idsender : idsender
+      });
+    }
+
+
+    //genarate token for game
+    generate_Random_id(lenght : number) : string{
+      let result = "";
+      let charachters : string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456759_";
+      let count  = 0;
+      while (count <= lenght){
+          result += charachters[Math.floor(Math.random() * charachters.length)];
+          count++;
+      }
+      return (result);
+  }
 
     
 }

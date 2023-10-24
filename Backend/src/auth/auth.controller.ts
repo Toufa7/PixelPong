@@ -170,7 +170,7 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
   async getImage(@Param('id') id: string, @Res() res) {
     try {
       const user = await this.usersService.findOne(id);
-      console.log("id",id);
+      //console.log("id",id);
       const path = join('./uploads/', user.profileImage);
       console.log("path"+path);
       await fsPromises.access(path, fsPromises.constants.F_OK);

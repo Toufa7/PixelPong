@@ -8,7 +8,7 @@ CREATE TYPE "Status" AS ENUM ('ACCEPTED', 'PENDING', 'DECLINED');
 CREATE TYPE "UserStatus" AS ENUM ('ONLINE', 'OFFLINE', 'AWAY', 'BUSY');
 
 -- CreateEnum
-CREATE TYPE "Type" AS ENUM ('ADDFRIEND', 'FIRSTWIN', 'FIRSTLOSE', 'FIRSTMATCH', 'STRIKES', 'LEVEL1', 'LEVEL5', 'LEVEL10');
+CREATE TYPE "Type" AS ENUM ('WELCOME', 'FIRSTWIN', 'FIRSTLOSE', 'WINSTRIKE', 'WIN5', 'WIN10');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -23,6 +23,7 @@ CREATE TABLE "User" (
     "twofa" BOOLEAN DEFAULT false,
     "status" "UserStatus",
     "authenticated" BOOLEAN NOT NULL DEFAULT false,
+    "tokenjoingame" TEXT,
     "firstlogin" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -117,8 +118,8 @@ CREATE TABLE "Requestjoingroup" (
 -- CreateTable
 CREATE TABLE "Achievements" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "achievementType" "Type" NOT NULL,
+    "name" TEXT,
+    "achievementType" "Type"[],
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -142,6 +143,12 @@ CREATE TABLE "MatchHistory" (
 
 -- CreateTable
 CREATE TABLE "_friends" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_blocked" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -213,6 +220,12 @@ CREATE UNIQUE INDEX "_friends_AB_unique" ON "_friends"("A", "B");
 CREATE INDEX "_friends_B_index" ON "_friends"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_blocked_AB_unique" ON "_blocked"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_blocked_B_index" ON "_blocked"("B");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_GroupChat_AB_unique" ON "_GroupChat"("A", "B");
 
 -- CreateIndex
@@ -280,6 +293,12 @@ ALTER TABLE "_friends" ADD CONSTRAINT "_friends_A_fkey" FOREIGN KEY ("A") REFERE
 
 -- AddForeignKey
 ALTER TABLE "_friends" ADD CONSTRAINT "_friends_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_blocked" ADD CONSTRAINT "_blocked_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_blocked" ADD CONSTRAINT "_blocked_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_GroupChat" ADD CONSTRAINT "_GroupChat_A_fkey" FOREIGN KEY ("A") REFERENCES "Groupchat"("id") ON DELETE CASCADE ON UPDATE CASCADE;

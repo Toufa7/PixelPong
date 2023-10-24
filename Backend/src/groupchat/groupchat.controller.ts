@@ -81,11 +81,6 @@ export class GroupchatController {
     @Get(":id/messages")
     findAllMessages(@Param('id') id: string, @Req() req : any ): any {
         const data =  this.GroupchatService.findAllMessages(id, req.user.id);
-        // console.log("-------------findAllMessages------------------");
-        // // console.log(data.then((res) => { console.log(res); }));
-        // console.log(data);
-        // console.log("-------------end  findAllMessages------------------");
-
         return data;
     }
 
@@ -196,7 +191,6 @@ export class GroupchatController {
     //send request to join a groupchat
     @Post(":id/request")
     sendrequest(@Param('id') id: string, @Req() req : any): any {
-        console.log("sendrequest");
         this.GroupchatGateway.sendrequest(id, req.user.id);
     }
     //accept a request to join a groupchat
