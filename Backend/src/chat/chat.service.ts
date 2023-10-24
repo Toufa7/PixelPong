@@ -51,26 +51,7 @@ export class ChatService {
     });
 
   }
-  //accept request to join game
-  acceptrequestjoingame(idrequest: string, token: string) {
-    return this.prisma.user.update({
-      where: { id: idrequest },
-      data: {
-        tokenjoingame : token,
-      },
 
-    });
-  }
-
-  //refuse request to join game
-  refuserequestjoingame(idrequest: string) {
-    return this.prisma.user.update({
-      where: { id: idrequest },
-      data: {
-        tokenjoingame : null,
-      },
-    });
-  }
   
 
 }
