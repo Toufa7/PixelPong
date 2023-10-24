@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import {socket, socketgp} from '../../Pages/socket-client'
 import NavBar from "../addons/NavBar";
+import toast from "react-hot-toast";
 
 
 
@@ -15,11 +16,7 @@ interface myDataTypes {
 
 const FriendRequest = ({ myData } : {myData: myDataTypes }) => {
 	const [friendStatus, setFriendStatus] = useState(false);
-	const [showInvitation, setShowInvitation] = useState(true);
 	
-	if (!showInvitation) {
-		return null;
-	}
 	console.log("FriendRequest Data ", myData);
 	let object = {};
 	if (myData) {
@@ -30,7 +27,6 @@ const FriendRequest = ({ myData } : {myData: myDataTypes }) => {
 	}
 	
 	const acceptFriend = async () => {
-		setShowInvitation(false);
 		console.log("Accepted Sent Object -> ", object);
 		try {
 		await axios.patch("http://localhost:3000/users/acceptFriendRequest", object, { withCredentials: true })
@@ -42,10 +38,10 @@ const FriendRequest = ({ myData } : {myData: myDataTypes }) => {
 		catch (error) {
 			console.log("Error Caught ", error);
 	  	}
+		toast.remove();
 	};
   
 	const refuseFriend = async () => {
-		setShowInvitation(false);
 		try {
 		await axios.patch("http://localhost:3000/users/refuseFriendRequest", object, { withCredentials: true })
 		.then((rese) => {
@@ -57,6 +53,7 @@ const FriendRequest = ({ myData } : {myData: myDataTypes }) => {
 		catch (error) {
 			console.log("Error Caught ", error);
 		}
+		toast.remove();
 	};
   
 	return (

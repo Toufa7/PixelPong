@@ -515,7 +515,7 @@ function Notification () {
 		catch (error) {
 			console.log("Error Catched ", error);
 		}
-		return (null);
+		toast.remove();
 	}
 	const RefuseFriend = async () => {
 		try {
@@ -527,6 +527,8 @@ function Notification () {
 		} catch (error) {
 			console.log("Error Catched ", error);
 		}
+		toast.remove();
+
 	}
 	const audio = new Audio(notification);
 	audio.play();
