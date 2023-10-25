@@ -126,6 +126,18 @@ let map = new Map <any , any>();
                 messageDMs : body.message
               },
           });
+           const blocked =  await this.prisma.user.findUnique({
+            where: { id: user.id },
+            select: {
+              blocked: true,
+              blockedby: true,
+            },
+          });
+          //check if user is blocked
+          if(blocked.blocked.some((user1) => user1.id == user.id) || blocked.blockedby.some((user1) => user1.id == user.id)){
+            console.log("user is blocked");
+            return ;
+          }
 
             this.server.to(idUs).emit('msgToClient', {
               id :body.id,

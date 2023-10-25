@@ -1,13 +1,15 @@
 import '../chatPage.scss'
-import { useRef, useEffect, useContext } from 'react'
+import { useRef, useEffect, useContext, useState } from 'react'
 import { chatSocketContext } from './socketContext'
-import { useMap } from "@uidotdev/usehooks";
+import { useMap, useScript } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg'
 import axios from 'axios';
 import MessageComponent from './messageComponenet'
 import MessageRightComponenet from './messageRightComponenet ';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom'
+import '@dmester/sffjs'
+
 
 //<*-----------------------------------------------< Common Funcion and definitions >--------------------------------------------------*>
 // Class chatAgent responsible for defining the properties of each person onthe conversation
@@ -54,8 +56,8 @@ const Conversation = (props: any) =>
             {
                 props.MessagesArr.map((message: chatAgent, index:number) => (
                     message.side == 1
-                        ? <MessageComponent key={index} content={message.message} pic={message.pic} />
-                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} />
+                        ? <MessageComponent key={index} content={message.message} pic={message.pic} time={message.timestamp}/>
+                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} time={message.timestamp}/>
                     ))
                 }
             <div ref={mesaageEndRef}/>
@@ -105,6 +107,7 @@ const messageInput = (props: any) => {
         
         for (let i: number = 0; i < axiosResponse.length; i++)
         {
+            
             if (axiosResponse[i].senderId == props.Sender.id)
             {
                 molLmessageId = axiosResponse[i].senderId;
@@ -119,6 +122,8 @@ const messageInput = (props: any) => {
                 molMsgPic = `http://localhost:3000/auth/avatar/${props.Receiver.id}`;
                 molMsgSide = 1;
             }
+
+            const   messageDate = new Date(axiosResponse[i].createdAt)
             
             const tmpMsgObj: chatAgent = {
                 id: molLmessageId,
@@ -127,7 +132,7 @@ const messageInput = (props: any) => {
                 pic: molMsgPic,
                 side: molMsgSide,
                 message: axiosResponse[i].messageDMs,
-                timestamp: axiosResponse[i].createdAt,
+                timestamp: `${messageDate.getHours()}:${messageDate.format("mm")}`,
             }
             map.set(axiosResponse[i].id, tmpMsgObj);
         }
@@ -135,32 +140,36 @@ const messageInput = (props: any) => {
     };
 
     useEffect(() => {
+
         conversationsSocket.on('requestjoingame', (payload:any) => {
             toast.custom(
                 <div style={{ display: 'flex', alignItems: 'center', background: "#F2ECFF", color: 'black', borderRadius: '10px', zIndex: '-1'}}>
-                    <div className="nes-container with-title">
-                        <p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Game Request</p>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <img src={`http://localhost:3000/auth/avatar/${payload.idsender}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
-                        <span style={{ marginLeft: '10px', marginRight: 'auto' }}>{payload.from}</span>	
-                            <div>
-                                <Link to={'/game'}>
-                                    <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={() => {
-                                        axios
-                                            .patch(`http://localhost:3000/chat/${payload.idsender}/acceptrequestjoingame`, {token: payload.token}, { withCredentials: true });
-                                    }}>Accept</button>
-                                </Link>
-                                <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error"
-                                onClick={() => {
+                <div className="nes-container with-title">
+                    <p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Game Request</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <img src={`http://localhost:3000/auth/avatar/${payload.idsender}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+                    <span style={{ marginLeft: '10px', marginRight: 'auto' }}>{payload.from}</span>	
+                        <div>
+                            <Link to={'/game'}>
+                                <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={() => {
                                     axios
-                                        .patch(`http://localhost:3000/chat/${payload.idsender}/refuserequestjoingame`, {}, { withCredentials: true });
-                                }}>Deny</button>
-                            </div>
-                    </div>
-                    </div>
-                </div>,
-                { duration: 5000, position: 'top-right' });
+                                        .patch(`http://localhost:3000/chat/${payload.idsender}/acceptrequestjoingame`, {token: payload.token}, { withCredentials: true });
+                                    toast.remove();
+                                }}>Accept</button>
+                            </Link>
+                            <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error"
+                            onClick={() => {
+                                axios
+                                    .patch(`http://localhost:3000/chat/${payload.idsender}/refuserequestjoingame`, {}, { withCredentials: true });
+                                toast.remove();
+                            }}>Deny</button>
+                        </div>
+                </div>
+                </div>
+            </div>,
+            { duration: 9000, position: 'top-right'});
         });
+
         return () => {
             conversationsSocket.off('requestjoingame');
         }
@@ -183,7 +192,7 @@ const messageInput = (props: any) => {
 
     useEffect(() => {
         //Recieving message from socket
-        conversationsSocket.on('acceptrequestjoingame', (payload: chatAgent) => {
+        conversationsSocket.on('acceptrequestjoingame', () => {
             navigate('/game');
         });
 
@@ -196,6 +205,8 @@ const messageInput = (props: any) => {
     //Handling newly received message 
     const receiveMessage = (newMessage: any) => {
 
+        const currentTime:Date = new Date(newMessage.timestamp);
+
         const tmpMsgObj: chatAgent = {
             id: newMessage.id,
             senderid: newMessage.idsender,
@@ -203,7 +214,7 @@ const messageInput = (props: any) => {
             pic: `http://localhost:3000/auth/avatar/${newMessage.idsender}`,
             side: 1,
             message: newMessage.message,
-            timestamp: "n/a",
+            timestamp: `${currentTime.getHours()}:${currentTime.format("mm")}`,
         }
 
         if (props.Receiver.id == tmpMsgObj.senderid)
@@ -231,6 +242,9 @@ const messageInput = (props: any) => {
         
         if (inputMessage != '')
         {
+            
+            const currentTime:Date = new Date();
+            
             const tmpMsgObj: chatAgent = {
                 id: props.Receiver.id,
                 senderid: props.Sender.id,
@@ -238,8 +252,9 @@ const messageInput = (props: any) => {
                 pic: `http://localhost:3000/auth/avatar/${props.Sender.id}`,
                 side: 0,
                 message: inputMessage,
-                timestamp: "n/a",
+                timestamp: `${currentTime.getHours()}:${currentTime.format("mm")}`,
             }
+
             if (firstRef.current != null) {
                 firstRef.current.value = '';
             }

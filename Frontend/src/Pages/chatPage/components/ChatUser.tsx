@@ -51,11 +51,21 @@ const ChatUser = (props:any) => {
         axios
             .get(`http://localhost:3000/chat/${remoteUser.id}/requestjoingame`, { withCredentials: true })
             .then((res:any) => {
-                console.log(" joingame on click handler ==============>",res.data);
+                console.log(" joingame on click handler",res.data);
             })
             .catch(Error)
                 console.log("Error happened when requesting to join the game", Error);
 
+    }
+
+    const blockOnClickHandler = () => {
+        axios
+            .patch(`http://localhost:3000/users/blocked`, {to: remoteUser.id}, { withCredentials: true })
+            .then(() => {
+                console.log("im here");
+            })
+            .catch(Error)
+                console.log("Error hapened when blocking the user")
     }
 
     return (
@@ -85,7 +95,7 @@ const ChatUser = (props:any) => {
                                                     {/* <Link to={'/game'}> */}
                                                         <button className='userControlButtons' onClick={onClickHandler}><img src={play} width={50} height={50}></img></button>
                                                     {/* </Link> */}
-                                                        <button className='userControlButtons'><img src={block} width={50} height={50}></img></button>
+                                                        <button className='userControlButtons' onClick={blockOnClickHandler} ><img src={block} width={50} height={50}></img></button>
                                                     </div>)
                                                 :   (<></>)
                     }

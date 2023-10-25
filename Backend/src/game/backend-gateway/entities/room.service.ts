@@ -35,30 +35,38 @@ export class Rooms{
 
 SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_height){
         //------------------There is a Token_for_matching------------------------------------------
+        // if (!this.Look_for_Tokened_Player(Players,Player)){
+        //     console.log("you can create a room !!");
+        //     this.create_room_for_player();
+        // }
 
     //     if (Players.players[Player.id].token_for_matching){
         if (Players.players[Player.id].token_for_matching){
             console.log("Matching with token");
             console.log("My token for matching --> " + Players.players[Player.id].token_for_matching);
-            if (!this.Look_for_Tokened_Player(Players,Player)){
-                console.log("you can create a room !!");
+            if (!this.is_Room_Empty(Players,Player)){
+                console.log("Creting Room!!");
                 this.create_room_for_player();
+                for(const id in this.rooms){
+                    const Room = this.rooms[id];
+                    if ((Room.client_count == 0 && !Room.Player1) && Players.players[Player.id]){
+                        console.log("Room enterd ["+Room.id+"]");
+                        Room.Player1 = Players.players[Player.id];
+                        Room.Player1.room_id = Room.id;
+                        // let scale_ball = (2.4 / 100) * screen_width;
+                        Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+                        Room.client_count++;
+                        Player.join(Room.id);
+                        break;
+                    }
+                }
             }
+            else{
+            console.log("Looking for my Pair!!");
             for(const id in this.rooms){
                 const Room = this.rooms[id];
-                if (Room.client_count == 0 && !Room.Player1 && !Room.Player2){
-                    console.log("Found Spot in Token Matching Mode!!");
-                    Room.Player1 = Players.players[Player.id];
-                    Room.Player1.room_id = Room.id;
-                    // let scale_ball = (2.4 / 100) * screen_width;
-                    Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
-                    Room.client_count++;
-                    Player.join(Room.id);
-                    break;
-                }
-                else if (Room.client_count == 1 && Room.Player1 && !Room.Player2){
-                    if (Players.players[Player.id]?.token_for_matching == Room.Player1?.token_for_matching){
-                        console.log("Matched With tokens!!!");
+                if (Room.client_count == 1){
+                    if (Room.Player1 && !Room.Player2 && Players.players[Player.id].token_for_matching == Room.Player1.token_for_matching){
                         Room.Player2 = Players.players[Player.id];
                         Room.Player2.room_id = Room.id;
                         // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
@@ -71,10 +79,51 @@ SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_
                         Player.join(Room.id);
                         break;
                     }
-                }
-            }
+                    // else if (Room.Player2 && !Room.Player1 && Players.players[Player.id].token_for_matching == Room.Player2.token_for_matching){
+                    //     Room.Player1 = Players.players[Player.id];
+                    //     Room.Player1.room_id = Room.id;
 
+                    //     // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+
+                    //     Room.GameBall.x = Room.Player1?.Scaled_width / 2;
+                    //     Room.GameBall.y = Room.Player1?.Scaled_height / 2;
+                    //     Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
+
+                    //     Room.client_count++;
+                    //     Player.join(Room.id);
+                    //     break;
+                    // }
+                }
+                // if (Room.client_count == 1 && !Room.Player1 && !Room.Player2){
+                //     console.log("Found Spot in Token Matching Mode!!");
+                //     Room.Player1 = Players.players[Player.id];
+                //     Room.Player1.room_id = Room.id;
+                //     // let scale_ball = (2.4 / 100) * screen_width;
+                //     Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+                //     Room.client_count++;
+                //     Player.join(Room.id);
+                //     break;
+                // }
+                // else if (Room.client_count == 1 && Room.Player1 && !Room.Player2){
+                //     if (Players.players[Player.id]?.token_for_matching == Room.Player1?.token_for_matching){
+                //         console.log("Matched With tokens!!!");
+                //         Room.Player2 = Players.players[Player.id];
+                //         Room.Player2.room_id = Room.id;
+                //         // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+
+                //         Room.GameBall.x = Room.Player1?.Scaled_width / 2;
+                //         Room.GameBall.y = Room.Player1?.Scaled_height / 2;
+                //         Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
+
+                //         Room.client_count++;
+                //         Player.join(Room.id);
+                //         break;
+                //     }
+                // }
+            }
         }
+
+    }
         else{
 
         console.log("Random Matching!!");
@@ -228,5 +277,29 @@ SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_
                 return (true);
         }
         return (false);
+    }
+
+    is_Room_Empty(Players : Players_Management,Player : Socket) : boolean{
+        for(const id in this.rooms){
+            const Room = this.rooms[id];
+            if (Room.client_count == 1){
+                if (Room.Player1 && Players.players[Player.id].token_for_matching == Room.Player1.token_for_matching){
+                    return(true);
+                }else if (Room.Player2 && Players.players[Player.id].token_for_matching == Room.Player1.token_for_matching){
+                    return (true);
+                }
+            }
+        }
+        return (false);
+    }
+
+Delete_Empty_Rooms(){
+        for(const id in this.rooms){
+            if (this.rooms[id].client_count == 0 && !this.rooms[id].Player1 && !this.rooms[id].Player2){
+                console.log("Room [" + this.rooms[id].id + "] is Empty Deleting ...");
+                delete this.rooms[id];
+                break;
+            }
+        }
     }
 }

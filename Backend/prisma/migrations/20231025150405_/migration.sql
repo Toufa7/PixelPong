@@ -69,6 +69,7 @@ CREATE TABLE "Messagegb" (
     "senderid" TEXT NOT NULL,
     "message" TEXT NOT NULL,
     "idgp" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Messagegb_pkey" PRIMARY KEY ("id")
 );

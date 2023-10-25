@@ -11,3 +11,4 @@ npm i react-draggable --force
 npm i react-hot-toast --force
 npm i react-scroll-horizontal --force
 npm i @uidotdev/usehooks --force
+npm i @dmester/sffjs --force
