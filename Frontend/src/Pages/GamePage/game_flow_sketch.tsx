@@ -238,21 +238,21 @@ p5_ob.preload = () =>{
           else
             GameBackgrund = p5_ob.loadImage(BackgroundGame2);
 
-          // if(Rnd_paddle_asset == 0){
+          if(Rnd_paddle_asset == 0){
             pd_asset = p5_ob.loadImage(pd);
-          // }else if (Rnd_paddle_asset == 1){
-          //   pd_asset = p5_ob.loadImage(yellow_pd);
-          // }else if (Rnd_paddle_asset == 2){
-          //   pd_asset = p5_ob.loadImage(red_pd);
-          // }
+          }else if (Rnd_paddle_asset == 1){
+            pd_asset = p5_ob.loadImage(yellow_pd);
+          }else if (Rnd_paddle_asset == 2){
+            pd_asset = p5_ob.loadImage(red_pd);
+          }
 
-          // if (Rnd_ball_asset == 0){
+          if (Rnd_ball_asset == 0){
             ball_asset = p5_ob.loadImage(ball);
-          // }else if (Rnd_ball_asset == 1){
-          //   ball_asset = p5_ob.loadImage(blue_ball);
-          // }else if (Rnd_ball_asset == 2){
-          //   ball_asset = p5_ob.loadImage(red_ball);
-          // }
+          }else if (Rnd_ball_asset == 1){
+            ball_asset = p5_ob.loadImage(blue_ball);
+          }else if (Rnd_ball_asset == 2){
+            ball_asset = p5_ob.loadImage(red_ball);
+          }
 
           // user_image = p5_ob.loadImage(Get_user_image);
 
@@ -423,9 +423,9 @@ p5_ob.draw = () =>{
         if (Screen_display === "on_going"){
 
           // for(const id in Frontroom){
-            p5_ob.background(GameBackgrund);
             
-          if (Frontroom.Player1 && Frontroom.Player2){
+            if (Frontroom.Player1 && Frontroom.Player2){
+            p5_ob.background(GameBackgrund);
             Update_screen = true;
             const id_of_player1 = Frontroom.Player1?.id;
             const id_of_player2 = Frontroom.Player2?.id;
