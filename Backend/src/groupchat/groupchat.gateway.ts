@@ -37,9 +37,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     this.logger.log(`Client disconnected: ${client.id}`);
     const user = await this.getUser(client);
     if(user)
-    {
       mapclient.delete(user.id);
-    }
   } 
   
   ////////////////////////////////// -----connected-- ////////////////////////////////
@@ -49,13 +47,9 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     if(user)
     {
       if(mapclient.has(user.id))
-      {
         mapclient.get(user.id).push(client.id);
-      }
       else
-      {
         mapclient.set(user.id , [client.id]);
-      }
     }
   }
 
@@ -143,9 +137,14 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         where: { id: user.id },
         select: {
           blocked: true,
+          blockedby: true,
         },
       });
-
+      //check if user is blocked
+      if(blocked.blocked.some((user1) => user1.id == user.id)){
+        console.log("user is blocked");
+        return ;
+      }
       const allsocket = await this.server.in(body.roomid).fetchSockets();
       allsocket.forEach((socket) => {
         blocked.blocked.forEach((block) => {
@@ -153,8 +152,12 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
             socket.leave(body.roomid);
           }
         });
+        blocked.blockedby.forEach((block) => {
+          if (socket.id == map.get(body.roomid + block.id)) {
+            socket.leave(body.roomid);
+          }
+        });
       });
-
 
       this.server.to(body.roomid).emit(body.roomid, {
         roomid: body.roomid,
@@ -167,10 +170,14 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         pic: user.image,
 
       });
-      
 
       allsocket.forEach((socket) => {
         blocked.blocked.forEach((block) => {
+          if (socket.id == map.get(body.roomid + block.id)) {
+            socket.join(body.roomid);
+          }
+        });
+        blocked.blockedby.forEach((block) => {
           if (socket.id == map.get(body.roomid + block.id)) {
             socket.join(body.roomid);
           }

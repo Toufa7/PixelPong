@@ -88,9 +88,9 @@ p5_ob.draw = () =>{
             p5_ob.textSize((4 / 100) * Scaled_width);
 
             //Details of Player 1
+            // p5_ob.text(Player1_HealthPoints,Player1_coord_x + (26 / 100) * Scaled_width ,Scaled_height - (9 / 100) * Scaled_height);
             p5_ob.image(Health_system_array[Player1_HealthPoints / 100],Player1_coord_x + (16 / 100) * Scaled_width ,Scaled_height - (13 / 100) * Scaled_height,(14 / 100) * Scaled_width,(8 / 100) * Scaled_height);
             p5_ob.image(H_board,Player1_coord_x + (16 / 100) * Scaled_width ,Scaled_height - (13 / 100) * Scaled_height,(14 / 100) * Scaled_width,(10 / 100) * Scaled_height);
-            // p5_ob.text(Player1_HealthPoints,Player1_coord_x + (26 / 100) * Scaled_width ,Scaled_height - (9 / 100) * Scaled_height);
             p5_ob.text(Player1_username, Player1_coord_x + (26 / 100) * Scaled_width, Scaled_height - (22 / 100) * Scaled_height);
             p5_ob.image(Player1,0 + (2 / 100) * Scaled_width, Scaled_height - (33 / 100) * Scaled_height,(10 / 100) * Scaled_width,(30 / 100) * Scaled_height);
 
