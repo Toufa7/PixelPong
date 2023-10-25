@@ -515,7 +515,6 @@
     .chatPage .chatMessage .userProfileAndMessages {
         flex: 6;
         display: flex;
-        justify-content: space-around;
     }
 
     .chatControlButtons
@@ -593,10 +592,54 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        overflow-y: scroll;
+        // overflow-y: scroll;
+        min-width: 75px;
         z-index: 0;
     }
     .chatPage .chatMessage .chatNavBarDiv .chatSearchDiv span {
         visibility: hidden;
+    }
+
+    chatPage .chatMessage .userProfileAndMessages .usrProfileConversation .chatUserDiv {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        width: 79vw;
+    }
+
+    .chatPage .chatMessage .userProfileAndMessages .usrProfileConversation .chatUserDiv {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        width: 78vw;
+    }
+    
+    .chatPage .chatMessage .userProfileAndMessages .usrProfileConversation .MessagingBodyDiv {
+        flex: 12;
+        display: flex;
+        flex-direction: column;
+        background-color: black;
+        background-color: #C1CAE7;
+        width: 74vw;
+        margin: 5px;
+        padding: 15px;
+        border: 5px solid;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .chatPage .chatMessage .chatNavBarDiv .chatLowerRibbon
+    {
+        display: none;
+    }
+
+    .chatPage .chatMessage .chatNavBarDiv .chatSearchDiv
+    {
+        display: none;
+    }
+
+    .chatPage .chatMessage .userProfileAndMessages .usrProfileConversation .chatBodyLowerRibbon
+    {
+        display: none;
     }
 }
