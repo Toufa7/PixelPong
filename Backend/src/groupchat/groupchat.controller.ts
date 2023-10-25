@@ -10,6 +10,7 @@ import { join } from 'path';
 import { createReadStream } from 'fs';
 import { promises as fsPromises } from 'fs';
 import { GroupchatGateway } from './groupchat.gateway';
+import { Groupchat } from '@prisma/client';
 
 @UseGuards(JwtGuard)
 @Controller('groupchat')
@@ -58,7 +59,7 @@ export class GroupchatController {
 
     //get all groupchat of a useradmin
     @Get("lifihomanaadmin")
-    findgpadmin(@Req() req : any): any {
+    findgpadmin(@Req() req : any) :  Promise<Groupchat[]>{
         return this.GroupchatService.findgpadmin(req.user.id);
     }
 

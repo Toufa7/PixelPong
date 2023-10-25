@@ -3,6 +3,7 @@ import { PrismaService } from 'src/auth/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Cron } from '@nestjs/schedule';
+import { Groupchat, Messagegb, User } from '@prisma/client';
 
 @Injectable()
 export class GroupchatService {
@@ -55,7 +56,7 @@ export class GroupchatService {
     }
 
     //get a all groupchat
-    async findAllGp(): Promise<any> {
+    async findAllGp(): Promise<Groupchat[]> {
         try {
             const data = await this.prisma.groupchat.findMany();
             if (data)
@@ -70,7 +71,7 @@ export class GroupchatService {
     }
 
     //get a all groupchat is not member
-    async findAllGpnotmember(iduser: string): Promise<any> {
+    async findAllGpnotmember(iduser: string): Promise<Groupchat[]> {
         try {
             const data = await this.prisma.groupchat.findMany(
                 {
@@ -90,7 +91,7 @@ export class GroupchatService {
     }
 
     //get all groupchat of a user
-    async findAll(iduser: string) {
+    async findAll(iduser: string) : Promise<Groupchat[]>{
         try {
 
             const data = await this.prisma.groupchat.findMany(
@@ -112,7 +113,7 @@ export class GroupchatService {
 
 
     //get all groupchat of a useradmin
-    async findgpadmin(iduser: string) : Promise<any>{
+    async findgpadmin(iduser: string) : Promise<Groupchat[]>{
         try {
             //get all groupchat where user is admin
             const data = await this.prisma.groupchat.findMany(
@@ -134,7 +135,7 @@ export class GroupchatService {
     }
 
     // get one groupchat
-    async findOne(id: string) : Promise<any> {
+    async findOne(id: string) : Promise<Groupchat> {
         try {
 
             const data = await this.prisma.groupchat.findUnique({
@@ -153,7 +154,7 @@ export class GroupchatService {
     }
 
     //get all users of a groupchat if not admin
-    async findAllUsers(id: string) : Promise<any> {
+    async findAllUsers(id: string) : Promise<User[]> {
         try {
             const data = await this.prisma.groupchat.findUnique({
                 where: {
@@ -207,7 +208,7 @@ export class GroupchatService {
     }
 
     //get all messages of a groupchat
-    async findAllMessages(id: string, iduserconnected: string): Promise<any[]> {
+    async findAllMessages(id: string, iduserconnected: string): Promise<Messagegb[]> {
         try {
             //get user is blocked
             const userblock = await this.prisma.user.findUnique({
@@ -216,8 +217,10 @@ export class GroupchatService {
                 },
                 select: {
                     blocked: true,
+                    blockedby: true,
                 },
             });
+            console.log(userblock);
             const messages = await this.prisma.groupchat.findUnique({
                 where: {
                     id: id,
@@ -228,13 +231,20 @@ export class GroupchatService {
             });
             var messagessend = [];
             messages.messagesgb.forEach(element => {
-                let check = false;
+                let check = true;
                 userblock.blocked.forEach(user => {
-                    if (element.senderid != user.id) {
-                        check = true;
+
+                    console.log("element id ::",element.senderid, "user id ::",user.id);
+                    if (element.senderid == user.id) {
+                        check = false;
                     }
                 });
-                if (!check) {
+                userblock.blockedby.forEach(user => {
+                    if (element.senderid == user.id) {
+                        check = false;
+                    }
+                });
+                if (check) {
                     messagessend.push(element);
                 }
             });
