@@ -499,8 +499,13 @@ Catch_Win_Lost_Reset_Game(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_rig
       }
     }
 
+    @Interval(1000)
+    Delete_Empty_Rooms(){
+      this.Rooms.Delete_Empty_Rooms();
+    }
 
- async Reset_Token_to_null(Player_userid : string){
+
+async Reset_Token_to_null(Player_userid : string){
 
   console.log("im hererer");
     await this.prisma.user.update({
