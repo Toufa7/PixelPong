@@ -6,6 +6,7 @@ import Send from '../../../assets/images/send.svg';
 import axios from 'axios';
 import MessageComponent from './GrpmessageComponenet'
 import MessageRightComponenet from './GrpmessageRightComponenet ';
+import '@dmester/sffjs'
 
 
 // Class chatAgent responsible for defining the properties of each person on the conversation
@@ -51,8 +52,8 @@ const Conversation = (props: any) =>
             {
                 props.MessagesArr.map((message: chatAgent, index:number) => (
                     message.side == 1
-                        ? <MessageComponent key={index} content={message.message} pic={message.pic} />
-                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} />
+                        ? <MessageComponent key={index} content={message.message} pic={message.pic} time={message.timestamp}/>
+                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} time={message.timestamp}/>
                     ))
                 }
             <div ref={mesaageEndRef}/>
@@ -88,6 +89,7 @@ const messageInput = (props: any) => {
     
     //Get group users and fill them in the map
     useEffect(() => {
+        
         axios
             .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/users`, { withCredentials: true })
             .then((res: any) => {
@@ -135,6 +137,8 @@ const messageInput = (props: any) => {
                 molMsgSide = 1;
             }
             
+            const messageTimeStamp:Date = new Date(element.createdAt);
+
             const tmpMsgObj: chatAgent = {
                 id: molLmessageId,
                 senderid: element.senderId, 
@@ -142,7 +146,7 @@ const messageInput = (props: any) => {
                 pic: molMsgPic,
                 side: molMsgSide,
                 message: element.message,
-                timestamp: element.createdAt,
+                timestamp: `${messageTimeStamp.getHours()}:${messageTimeStamp.format("mm")}`,
             }
             map.set(element.id, tmpMsgObj);
         });
@@ -169,6 +173,8 @@ const messageInput = (props: any) => {
         if (newMessage.idsender == props.Sender.id)
             messageSide = 0;
 
+        const messageTimeStamp:Date = new Date();
+
         const tmpMsgObj: chatAgent = {
             id: newMessage.roomid,
             senderid: newMessage.idsender,
@@ -176,8 +182,9 @@ const messageInput = (props: any) => {
             pic: `http://localhost:3000/auth/avatar/${newMessage.idsender}`,
             side: messageSide,
             message: newMessage.message,
-            timestamp: "n/a",
+            timestamp: `${messageTimeStamp.getHours()}:${messageTimeStamp.format("mm")}`,
         }
+
         map.set(makeid(37), tmpMsgObj);
     }
 

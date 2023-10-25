@@ -22,8 +22,10 @@ const ChatUser = (props : any) => {
     const [groupRoom, setgroupRoom] = useState({});
     const [localUser, setLocalUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
 
+
+    //Fetching selcted group info
     useEffect(() => {
-        if (props.pcurrentUserId != undefined)
+        if (props.pcurrentUserId != '')
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
             .then((response) => {
@@ -37,11 +39,6 @@ const ChatUser = (props : any) => {
     }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
 
     // const [showing, setShowing] = useState(false);
-    
-    //Identifying local user (Sender)
-    // const cookieJwt = document.cookie;
-    // const jwtArr:string[] =  cookieJwt.split("=");
-    // let localUser: any = jwtDecode(jwtArr[1]);
     
     useEffect(() => {
         axios

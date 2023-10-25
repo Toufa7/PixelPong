@@ -10,8 +10,6 @@ export class CreateGroupchatDto {
     @IsString()
     grouptype: string;
 
-    @IsNotEmpty()
-    @IsString()
     password? : string;
 }
 

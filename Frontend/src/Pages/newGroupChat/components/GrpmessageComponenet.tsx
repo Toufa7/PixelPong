@@ -9,7 +9,7 @@ const messageComponenet = (props: any) => {
         <div className="GrpmessageComponent">
             <div className="GrpmessageInfo">
                 <img src={props.pic} alt="message-fromLeft" />
-                <span>10:30 AM</span>
+                <span>{props.time}</span>
             </div>
             <div className="GrpmessageContent">
                 <div className="nes-balloon from-left">

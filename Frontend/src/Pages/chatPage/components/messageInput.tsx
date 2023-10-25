@@ -132,7 +132,7 @@ const messageInput = (props: any) => {
                 pic: molMsgPic,
                 side: molMsgSide,
                 message: axiosResponse[i].messageDMs,
-                timestamp: messageDate.format("hh:mm"),
+                timestamp: `${messageDate.getHours()}:${messageDate.format("mm")}`,
             }
             map.set(axiosResponse[i].id, tmpMsgObj);
         }
@@ -192,7 +192,7 @@ const messageInput = (props: any) => {
 
     useEffect(() => {
         //Recieving message from socket
-        conversationsSocket.on('acceptrequestjoingame', (payload: chatAgent) => {
+        conversationsSocket.on('acceptrequestjoingame', () => {
             navigate('/game');
         });
 
@@ -205,7 +205,7 @@ const messageInput = (props: any) => {
     //Handling newly received message 
     const receiveMessage = (newMessage: any) => {
 
-        // console.log("", newMessage);
+        const currentTime:Date = new Date(newMessage.timestamp);
 
         const tmpMsgObj: chatAgent = {
             id: newMessage.id,
@@ -214,7 +214,7 @@ const messageInput = (props: any) => {
             pic: `http://localhost:3000/auth/avatar/${newMessage.idsender}`,
             side: 1,
             message: newMessage.message,
-            timestamp: "n/a",
+            timestamp: `${currentTime.getHours()}:${currentTime.format("mm")}`,
         }
 
         if (props.Receiver.id == tmpMsgObj.senderid)
@@ -252,7 +252,7 @@ const messageInput = (props: any) => {
                 pic: `http://localhost:3000/auth/avatar/${props.Sender.id}`,
                 side: 0,
                 message: inputMessage,
-                timestamp: currentTime.format("hh:mm tt"),
+                timestamp: `${currentTime.getHours()}:${currentTime.format("mm")}`,
             }
 
             if (firstRef.current != null) {

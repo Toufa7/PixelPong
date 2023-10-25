@@ -95,6 +95,7 @@ model Messagegb {
   message String
   idgp String
   groupchat Groupchat @relation("GBMessage", fields: [idgp], references: [id])
+  createdAt DateTime @default(now())
 }
 
 enum Grouptype{
