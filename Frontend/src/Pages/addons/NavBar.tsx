@@ -1,8 +1,7 @@
 import "./NavBar.scss";
 /******************* Packages  *******************/
 import axios from "axios";
-import Cookies from "universal-cookie";
-import {Link, useNavigate} from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 /******************* Images  *******************/
 import msgLogo from './assets/msgLogo.svg';
@@ -56,39 +55,26 @@ const NavBarHeader = () => {
 
 const NavBarFooter = () => {
 	const navigate = useNavigate();
-	const logout = () => {
-		axios.post("http://localhost:3000/auth/logout",{}, {withCredentials: true})
-		.then(() => {
-			navigate("/login");
-		})
-		.catch(() => {});
-	};
-    
-    const [check, setUserData] = useState(false);
-    useEffect(() => {
-        function fetchData() {
-			axios.get(`http://localhost:3000/users/profil`, {withCredentials: true})
-				.then(() => 
-				{
-					setUserData(true)
-				})
-				.catch(((error) => {
-					console.log("Error in NavBar " ,error);
-				}))
-        	}
-		fetchData();
-    }, [])
-
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<Link to="/profil" title="Profil">
-				<img src={`http://localhost:3000/auth/avatar/${check.id}`} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+				<img src={`http://localhost:3000/auth/avatar/id`} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</Link>
 		</div>
 		<div className="nav-item">
-			<Link to="/login" title="Logout">
-				<img onClick={logout} src={logoutLogo} alt="Logout" />
+			<Link to="/welcome" title="Logout">
+				<img onClick={() => {
+						axios.post("http://localhost:3000/auth/logout",{}, {withCredentials: true})
+						.then((res) => {
+							console.log("Response Logout -> ", res.data);
+							window.location.href = '/welcome';
+							navigate("/welcome");
+						})
+						.catch((err) => {
+							console.error("Cannot Logout -> ", err);
+						});
+				}} src={logoutLogo} alt="Logout" />
 			</Link>
 		</div>
 		</div>

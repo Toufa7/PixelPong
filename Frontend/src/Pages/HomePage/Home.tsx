@@ -262,7 +262,32 @@ const TopContainer = () => {
 						{textInfos[1]}
 					</AnimatedText>
 					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="/game">Vamos</a>
+                    {/* <a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" onClick={() => {
+                        document.getElementById('howtoplay').showModal();
+                    }} >How To Play</a> */}
 				</div>
+				{/* <section>
+                    <dialog class = 'example' style={{height: '700px', width: '700px', background: 'white' , borderRadius:"20px"}} id="howtoplay">
+
+                    <button style={{display: 'flex', alignItems:'left'}} class="nes-btn is-error"  onClick={() => {
+                        document.getElementById('howtoplay')?.close();
+                    }} >X</button>
+						<h1>Pixel Pong</h1>
+						<div style = {{backgroundColor : "#e0a43d"}} class="nes-container is-dark with-title">
+						Pixel Pong was originally founded on September 2023, it was the idea of Omar Toufah and was encouraged later by the other members of our team who were Ayoub Bensguia, Mohamed Amella,
+						Ibrahim Nada, and Mohamed Khalil Naqqad.
+						Our design was heavily by Pixel art which is a form of digital art, our website is structured on the idea of foolishness that paid tribute the this
+						kind of art as it is based on pixels and playing with colors to create a childish yet very artsy design,
+						everything in this web site that you will experience and hope you'll enjoy was made from scratch using frameworks that facilitates the use of pixel art style in CSS and Html.
+						</div>
+						<h2 style={{marginTop : '50px'}}>How To Play</h2>
+						<i class="snes-logo"></i>
+						<div class="nes-container with-title is-centered">
+							{/* <img src= {handshake}></img> */}
+							To move Your Paddle you can use eaither the up and down arrows , Or use your mouse.
+						{/* </div> */} 
+                    {/* </dialog> */}
+                {/* </section> */}
 				{/* <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[1]}
@@ -362,19 +387,40 @@ const TopRight = (props : {winRate: number, wins: number, loses: number}) => {
 }
 
 const BottomLeft = () => {
-	const achivements = [bomb,joystick,dpad,handshake,box,shield,mail,caution,medal,savage,knife,flag,key,fire,folder];
+	const [achivements, setAchivements] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/achievements` , {withCredentials: true})
+		.then((response) => {
+			setAchivements(response.data.achievementType);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
+
 	return (
 		<div className="loginBox achievements">
 			<div className="loginBoxHeader achievements1">LOGROS</div>
 			<div className="loginBoxOutside achievements2">
-			<HorizontalScroll>
-				{
-					achivements.map((key, idx) => {
-						return (
-							<img src={key} key={idx}/>
-					)})
-				}
-			</HorizontalScroll>
+				{/* <HorizontalScroll> */}
+					{
+					achivements &&
+						achivements.map((item, idx) => {
+							if (item == "WELCOME")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={handshake} key={idx}/>)
+							if (item == "FIRSTWIN")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={medal} key={idx}/>)
+							if (item == "FIRSTLOSE")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={bomb} key={idx}/>)
+							if (item == "WINSTRIKE")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={savage} key={idx}/>)
+							if (item == "WIN5")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={key} key={idx}/>)	
+							if (item == "WIN10")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={joystick} key={idx}/>)
+						})
+					}
+				{/* </HorizontalScroll> */}
 			</div>
 		</div>
 	);
@@ -403,6 +449,20 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 
 
 
 const BottomRight= () => {
+
+	const [matchHistory, setMatchHistory] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/history` , {withCredentials: true})
+		.then((response) => {
+			console.log("Response Histroy -> ", response.data.level);
+			setMatchHistory(response.data);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
+
+	
 	const userData = GetUserData();
 	const win = "#ff7670";
 	const lose = "#009e73";

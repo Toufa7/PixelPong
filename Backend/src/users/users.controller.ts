@@ -20,6 +20,8 @@ import { UserDto } from 'src/authdto/user.dto';
 import { FriendrequestDto } from 'src/authdto/relation.dto';
 import { SocketGateway } from 'src/socket/socket.gateway';
 import { User } from '@prisma/client';
+import { HistoryService } from './gamedata/history.service';
+import { achievementService } from './gamedata/acheievement.service';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 // import { User } from '@prisma/client';
 
@@ -29,6 +31,8 @@ export class UsersController {
   constructor(
 	private readonly usersService: UsersService,
 	private readonly socket: SocketGateway,
+	private readonly history: HistoryService,
+	private readonly achievement : achievementService
   ) {}
   @Get('all')
   findAll() {
@@ -223,6 +227,19 @@ async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
   } catch (error) {
 	console.error(error); // Log the error for debugging
   }
+}
+
+
+@Get('history')
+async getHistory(@Req() req)
+{
+	return await this.history.getMatchHistory(req.user?.id);
+}
+
+@Get('achievements')
+async getAchievement(@Req() req)
+{
+	return await this.achievement.getAchievement(req.user?.id)
 }
 
 }
