@@ -223,10 +223,7 @@ const Achivements = () => {
 function OtherProfilPage() {
     const location = useLocation();   
     const [userExist, isUserExist] = useState<string>(""); 
-    const [theOne, setTheOne] = useState<string>(""); 
-
     const currUser = useParams();
-
     useEffect(() => {
 	const searchInFriends = async () => {
 		try {

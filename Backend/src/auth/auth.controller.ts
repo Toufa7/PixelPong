@@ -57,7 +57,7 @@ export class AuthController {
           return res.redirect('http://localhost:5173/two-factor-authentication');
         return res.redirect('http://localhost:5173/home');
       }
-    } catch (err) {
+    } catch (err) {    
       console.log(err);
       res.status(HttpStatus.BAD_REQUEST).json({ error: 'Something went wrong' });
     }

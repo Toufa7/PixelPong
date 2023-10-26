@@ -122,7 +122,6 @@ const Routing = () => {
             })
             .catch(() => {
 				setUnlogged(true);
-            	// console.log("Error -> ", error);
         })
     	}
 		fetchData();
@@ -153,9 +152,9 @@ const Routing = () => {
 					<Route path="/groups" 			element={<GroupPage/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
 					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
-					{/* <Route path="/login" 			element={<Navigate to="/" replace/>}/>
+					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
-					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/> */}
+					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}
@@ -178,7 +177,6 @@ const Routing = () => {
 		</BrowserRouter>
 	);
 };
-
 	
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
