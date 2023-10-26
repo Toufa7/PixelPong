@@ -208,9 +208,9 @@ const Routing = () => {
 
 	
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
+	// <React.StrictMode>
 		<Suspense>
 			<Routing/>
 		</Suspense>
-	</React.StrictMode>
+	// </React.StrictMode>
 )

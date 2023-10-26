@@ -325,5 +325,32 @@ async isauthenticated(id: string, isauth: boolean)
     where:{id : id},
     data:{authenticated: isauth}
   })
-} 
+}
+
+async getBlocklist(id: string){
+  const data =  await this.prisma.user.findUnique({
+      where:{
+            id: id,
+        },
+        select:
+        {
+          blocked: true,
+        }
+
+  });
+  return  data?.blocked;
+}
+async getwhoBlockme(id: string){
+  const data =  await this.prisma.user.findUnique({
+      where:{
+            id: id,
+        },
+        select:
+        {
+          blockedby: true,
+        }
+
+  });
+  return  data?.blockedby;
+}
 }

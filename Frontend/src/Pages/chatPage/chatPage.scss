@@ -9,6 +9,7 @@
     .mainNavBarDiv
     {
         flex: 1.6;
+        z-index: 1;
     }
     
     .chatMessage
@@ -151,7 +152,7 @@
                 border-left: 3px solid;
                 border-bottom: 3px solid;
                 border-right: 3px solid;
-                
+                background-color: #333C54;
             }    
         }
         
@@ -519,7 +520,7 @@
 
     .chatControlButtons
     {
-        visibility: hidden;
+        visibility: visible;
     }
 
     .chatPage .chatMessage .chatNavBarDiv .chatsContainer .chatDmDiv
@@ -642,4 +643,15 @@
     {
         display: none;
     }
+
+    // .red-square {
+    //     background-color: red;
+    //     display: flex;
+    //     flex: 0;
+    //     width: 90vw;
+    //     height: 5vh;
+    //     position: relative;
+    //     top: 5%;
+    //     right: 50%;
+    // }
 }

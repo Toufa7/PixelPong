@@ -221,4 +221,16 @@ async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
   }
 }
 
+@Get('blocklist')
+async getBlocklist(@Req() req)
+{
+	return await this.usersService.getBlocklist(req.user.id);
+}
+@Get('blockme')
+async getwhoBlockme(@Req() req)
+{
+	return await this.usersService.getwhoBlockme(req.user.id);
+}
+//get('local/users/blockme',with)
+//get('local/users/blocklist',with)
 }
