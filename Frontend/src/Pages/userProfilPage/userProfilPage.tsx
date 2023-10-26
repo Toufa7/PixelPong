@@ -1,7 +1,5 @@
 import './userProfilPage.scss'
 /******************* Packages  *******************/
-import jwt_decode from 'jwt-decode';
-import Cookies from 'universal-cookie';
 import { lazy, useEffect, useState } from "react";
 import axios from "axios";
 /******************* Includes  *******************/
@@ -134,39 +132,21 @@ const Profil = () => {
 
 const GroupsAndFriends = () => {
     const info = useLocation();
-
-    console.log("Info Of User -> ", info);
     const [thisId, setId] = useState();
-    const endpoint = `http://localhost:3000/users${info.pathname}`;
-    axios.get(endpoint, {withCredentials: true})
+    const [friendData, setFriendData] = useState<string[]>([]);
+    const [label, setlabel] = useState<boolean>(true);
+    
+    axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
     .then((res) => {
         setId(res.data.id);
     })
 
-
-
-
-    const [friendData, setFriendData] = useState<string[]>([]);
     useEffect(() => {
         axios.get(`http://localhost:3000/users/friends/${thisId}`, {withCredentials: true})
         .then((response) => {
-            console.log("Friend List Remote -> ", response.data);
             setFriendData(response.data);
         })
     },[thisId])
- 
-
-
-
-
-
-
-
-
-
-
-    const [label, setlabel] = useState<boolean>(true);
-    console.log("friendData -> ", friendData)
       return (
           <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
@@ -276,7 +256,6 @@ function OtherProfilPage() {
     })
     .catch((erro) => {
         console.error("Erro -> ", erro);
-
     })
 
     console.log("Is User Exist -> ", currUser.userId , user);
@@ -290,8 +269,8 @@ function OtherProfilPage() {
     else
         return (
             <div style={{height: '100h'}}>
-                <Stars/>
-			    <NavBar/>
+                    <Stars/>
+			        <NavBar/>
                 <div className="topContainer">
                     <Profil/>
                 </div>
