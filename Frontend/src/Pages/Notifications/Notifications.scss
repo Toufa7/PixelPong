@@ -55,5 +55,15 @@ body {
 @media only screen and (max-width: 600px) {
     .notification {
         margin-top: 90px;
+
+    }
+
+    .loginBoxOutside {
+        .notificationBox {
+            .nes-container {
+                background: red;
+            }
+        }
+
     }
 }

@@ -59,6 +59,7 @@ async addMatchHistory(userId:string){
                     },
                 },
                 other: loser.username,
+                otherid: loser.id,
                 message: `WIN`,
             },
         }),
@@ -83,7 +84,8 @@ async addMatchHistory(userId:string){
                     },
                 },
                 other:winner.username,
-                message: `lose`,
+                otherid: winner.id, 
+                message: `LOSE`,
             },
         }),
         this.prisma.stats.updateMany({

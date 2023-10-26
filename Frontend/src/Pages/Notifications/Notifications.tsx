@@ -6,29 +6,12 @@ import NavBar from "../addons/NavBar";
 import toast from "react-hot-toast";
 
 
-
-
-
 const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
-	const [friendStatus, setFriendStatus] = useState(false);
-	
-	// console.log("group Data ", myData);
-	// let object = {};
-	// if (myData) {
-	// 	object = {
-	// 		userId: myData.userId,
-	// 		to: myData.to,
-	// 	}
-	// }
-	
-
-	console.log("myData Entered -> ",myData);
 	const acceptFriend = async () => {
 		try {
 		await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
 		.then((rese) => {
 			console.log("Notification Acceptted ", rese);
-			setFriendStatus(friendStatus);
 		});
 	  	} 
 		catch (error) {
@@ -42,7 +25,6 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 		await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
 		.then((rese) => {
 			console.log("Notification Refuse ", rese);
-			setFriendStatus(friendStatus);
 		});
 		}
 		catch (error) {
@@ -54,14 +36,12 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	return (
 		<div style={{ padding: '5px' }}>
 			<div className="nes-container with-title">
-				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request</p>
+				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request : {myData.namegp}</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 				<div>
 					<img src={`http://localhost:3000/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-
-					
-					<span style={{ marginLeft: '20px' }}>From : {myData.from}</span>
-					<span style={{ marginLeft: '20px' }}>Wanna Join : {myData.namegp}</span>
+					<span style={{ marginLeft: '20px' }}>{myData.from}</span>
+					<img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px'}} alt="avatar" />
 				</div>
 				<div>
 					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={acceptFriend}>Accept</button>
@@ -147,9 +127,37 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 };
 
 function Notifications() {
+	const [flag, setFlag] = useState(false);
 	const [friendRequests, setFriendRequests] = useState([]);
 	const [groupRequests, setGroupRequests] = useState([]);
-	const [flag, setFlag] = useState(false);
+  
+	useEffect(() => {
+	  const fetchFriendRequests = () => {
+		axios
+		  .get('http://localhost:3000/users/notifications', { withCredentials: true })
+		  .then((response) => {
+			setFriendRequests(response.data);
+		  })
+		  .catch((error) => {
+			console.error('Error fetching friend requests:', error);
+		  });
+	  };
+  
+	  const fetchGroupRequests = () => {
+		axios
+		  .get('http://localhost:3000/groupchat/requestjoingroup', { withCredentials: true })
+		  .then((response) => {
+			setGroupRequests(response.data);
+		  })
+		  .catch((error) => {
+			console.error('Error fetching group requests:', error);
+		  });
+	  };
+  
+	  fetchFriendRequests();
+	  fetchGroupRequests();
+	}, []);
+  
 
 
 	useEffect(() => {
@@ -168,34 +176,6 @@ function Notifications() {
 	}, []);
   
 	
-	useEffect(() => {
-		const fetchFriendsRequests = () => {
-		axios.get('http://localhost:3000/users/notifications', {withCredentials: true})
-		.then((response) => {
-			// console.log('Response fetching Friends :', response.data);
-			setFriendRequests(response.data);
-		})
-		.catch((error) => {
-			console.error('Error fetching notifications:', error);
-		});
-	};
-		fetchFriendsRequests();
-	}, []);
-
-
-	useEffect(() => {
-		const fetchGroupsRequests = () => {
-		axios.get('http://localhost:3000/groupchat/requestjoingroup', {withCredentials: true})
-		.then((response) => {
-			console.log('Response fetching  Groups :', response.data);
-			setGroupRequests(response.data);
-		})
-		.catch((error) => {
-			console.error('Error fetching notifications:', error);
-		});
-	};
-	fetchGroupsRequests();
-	}, []);
 
 	console.log("groupRequests.length -> ", groupRequests.length);
   

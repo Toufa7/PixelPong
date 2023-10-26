@@ -13,13 +13,25 @@ import fire from './assets/firelogo.svg';
 import bomb from './assets/bomblogo.svg';
 import joystick from './assets/joystic.svg';
 import handshake from './assets/handshake.png';
-import box from './assets/box.svg';
-import shield from './assets/shield.svg';
-import mail from './assets/mail.svg';
-import caution from './assets/caution.svg';
-import folder from './assets/folder.svg';
 
 const States = (props : {winRate: number, wins: number, loses: number, streak: number}) => {
+
+	const [states, setStates] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/history` , {withCredentials: true})
+		.then((response) => {
+			console.log("Response Histroy -> ", response.data);
+			setStates(response.data);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
+
+
+
+
+
     return (
             <div className="headStatesBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
