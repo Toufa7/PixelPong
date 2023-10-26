@@ -8,7 +8,7 @@ const ErrorPage = lazy(() => import('../errorPage/errorPage'))
 import Stars from '../addons/Stars';
 import NavBar from '../addons/NavBar';
 
-const States = (props : {winRate: number, wins: number, loses: number, streak: number}) => {
+const States = (props : {winRate: number, wins: number, loses: number, matchplayed: number}) => {
     return (
         <div className="headStatesBox">
             <div style={{textAlign: 'center', fontSize: 'x-large'}} className="statesBoxHeader">States</div>
@@ -22,8 +22,8 @@ const States = (props : {winRate: number, wins: number, loses: number, streak: n
                     <span className="value">{props.wins}</span>
                 </div>
                 <div>
-                    <span className="key">Win Streak Record</span>
-                    <span className="value">{props.streak}</span>
+                    <span className="key">Total Matches</span>
+                    <span className="value">{props.matchplayed}</span>
                 </div>
                 <div>
                     <span className="key">Loses</span>
@@ -263,6 +263,29 @@ function OtherProfilPage() {
         searchInFriends();
     }, [])
 
+	const [states, setStates] = useState([]);
+    const [thisId, setId] = useState();
+    const info = useLocation();
+    axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
+    .then((res) => {
+        console.log("res.data.id = ", res.data.id);
+        setId(res.data.id);
+    })
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/stats/${thisId}` , {withCredentials: true})
+		.then((response) => {
+			console.log("Response States  Other -> ", response.data);
+			setStates(response.data);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
+
+
+
+
 
     const [user, setUser] = useState<string>("");
     axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
@@ -281,7 +304,6 @@ function OtherProfilPage() {
     else if (userExist != "NotFound" && currUser.userId == user) {
         return (<ErrorPage title={"Localhost"} errorType={'Oops!couldn\'t found 127.0.0.1'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />)
     }
-
     else
         return (
             <div style={{height: '100h'}}>
@@ -292,7 +314,11 @@ function OtherProfilPage() {
                 </div>
                 <div className="downContainer">
                     <GroupsAndFriends/>
-                    <States winRate={0.00} wins={0} loses={0} streak={0}/>
+                    {
+                        Object.keys(states).map((idx) => (
+                            <States winRate={(states[idx].wins / states[idx].numberOfMatches) * 100} wins={states[idx].wins} loses={states[idx].loses} matchplayed={states[idx].numberOfMatches}/>
+                        ))
+                    }
                 </div>
                 <div className="downContainer">
                     <Achivements/>

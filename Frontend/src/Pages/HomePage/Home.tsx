@@ -407,17 +407,17 @@ const BottomLeft = () => {
 					achivements &&
 						achivements.map((item, idx) => {
 							if (item == "WELCOME")
-							return (<img style={{width: '100px', height: 'fit-content'}} src={handshake} key={idx}/>)
+							return (<img style={{width: '150px', height: '150px'}} src={handshake} key={idx}/>)
 							if (item == "FIRSTWIN")
-							return (<img style={{width: '100px', height: 'fit-content'}} src={medal} key={idx}/>)
+							return (<img style={{width: '150px', height: '150px'}} src={medal} key={idx}/>)
 							if (item == "FIRSTLOSE")
-							return (<img style={{width: '100px', height: 'fit-content'}} src={bomb} key={idx}/>)
+							return (<img style={{width: '150px', height: '150px'}} src={bomb} key={idx}/>)
 							if (item == "WINSTRIKE")
-							return (<img style={{width: '100px', height: 'fit-content'}} src={savage} key={idx}/>)
+							return (<img style={{width: '150px', height: '150px'}} src={savage} key={idx}/>)
 							if (item == "WIN5")
-							return (<img style={{width: '100px', height: 'fit-content'}} src={key} key={idx}/>)	
+							return (<img style={{width: '150px', height: '150px'}} src={key} key={idx}/>)	
 							if (item == "WIN10")
-							return (<img style={{width: '100px', height: 'fit-content'}} src={joystick} key={idx}/>)
+							return (<img style={{width: '150px', height: '150px'}} src={joystick} key={idx}/>)
 						})
 					}
 				{/* </HorizontalScroll> */}
@@ -445,6 +445,7 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2A
 	</div>
   );
 }
+
 
 const BottomRight= () => {
 	const [matchHistory, setMatchHistory] = useState([]);
@@ -555,19 +556,18 @@ function Notification () {
 export default function Home() {
 	Notification();	
 	const [states, setStates] = useState([]);
-	useEffect(() => {
-		axios.get("states", {withCredentials: true})
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
 		.then((response) => {
+			console.log("USER -> ", response.data);
 			setStates(response.data);
 		})
-		.catch((erro) => {
-			console.log("Error in States -> ", erro);
-		}) 
-	}, [])
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
 
-	states.map((match) => {
-		console.log(match)
-	})
+
 
 	return (
 		<div style={{ height: '100vh'}}>
@@ -576,7 +576,11 @@ export default function Home() {
 				<TopContainer/>
 				<div className="top-containers">
 					<TopLeft/>
-					<TopRight winRate={0.01} wins={0} loses={0}/>
+					{
+						Object.keys(states).map((idx) => (
+							<TopRight winRate={((states[idx].wins / states[idx].numberOfMatches) * 100).toFixed(2)} wins={states[idx].wins} loses={states[idx].loses}/>
+						))
+					}
 				</div>
 				<div className="bottom-containers">
 					<BottomLeft/>

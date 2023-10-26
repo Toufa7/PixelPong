@@ -9,15 +9,15 @@ import toast from "react-hot-toast";
 const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	const acceptFriend = async () => {
 		try {
-		await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
-		.then((rese) => {
-			console.log("Notification Acceptted ", rese);
-		});
-	  	} 
-		catch (error) {
-			console.log("Error Caught ", error);
-	  	}
-		toast.remove();
+			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
+			.then((rese) => {
+				console.log("Notification Acceptted ", rese);
+			});
+	  		} 
+			catch (error) {
+				console.log("Error Caught ", error);
+	  		}
+			toast.remove();
 	};
   
 	const refuseFriend = async () => {
@@ -52,9 +52,6 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 		</div>
 	  );
 };
-
-
-
 
 
 

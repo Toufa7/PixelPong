@@ -113,12 +113,12 @@ async getMatchHistory(userId:string){
     });
     return matchHistory;
 }
-async getStats(userId:string){
-    const stats = await this.prisma.stats.findMany({
+async getStats(id:string){
+    const status = await this.prisma.stats.findMany({
         where: {
-            userId: userId,
+            userId: id,
         },
     });
-    return stats;
-}
+    return status;
+} 
 } 
