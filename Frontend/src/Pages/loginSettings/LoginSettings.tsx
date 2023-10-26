@@ -5,7 +5,6 @@ import {Toaster, toast } from 'react-hot-toast';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Anime from 'react-anime';
-import { Cookies } from "react-cookie";
 import { Link } from "react-router-dom";
 
 /******************* Includes  *******************/
@@ -78,7 +77,7 @@ export default function LoginSettings() {
         }
     }
 
-    const [userInfo, setUserInfo] = useState(true);
+    const [userInfo, setUserInfo] = useState("");
     useEffect(() => {
         const fetchData = () => {
             axios.get("http://localhost:3000/users/profil", { withCredentials: true })
@@ -129,7 +128,8 @@ export default function LoginSettings() {
                                 else {
                                     RetrieveCheckSendData();
                                 }
-                                }} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update</button>
+                                }} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update
+                            </button>
                         </div>
                     </div>
                     {/* A dialog show up for the 1st time and ask the user if he want to go with the default username & avatar */}

@@ -72,13 +72,11 @@ export class AuthController {
       const acces_token = this.authService.fourtwoLogin(req.user);
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
-      if (user.firstlogin)
-      {
+      if (user.firstlogin) {
         this.achievementService.createAchievement(req.user.id, Type.WELCOME);
         return res.redirect('http://localhost:5173/settings');
       }
-      else{
-        this.achievementService.updateAchievement(req.user.id, Type.FIRSTLOSE);
+      else {
         if(user.twofa)
           return res.redirect('http://localhost:5173/two-factor-authentication');
         return res.redirect('http://localhost:5173/home');

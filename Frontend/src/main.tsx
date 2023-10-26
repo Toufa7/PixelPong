@@ -80,8 +80,6 @@ const HomeComponents = () => {
 	return (
 		<>
 			<socketContext.Provider value={socket}>
-		
-
 				<Stars/>
 				<NavBar/>
 				<Home/>
@@ -102,12 +100,6 @@ const GameComponents = () => {
 	);
 }
 
-const ErrorTextPage = () => {
-	return (
-		<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '200px'}}>404</h1>
-	);
-}
-
 const AlreadyInGame = () => {
 	return (
 		<div>
@@ -118,52 +110,35 @@ const AlreadyInGame = () => {
 	);
 }
 
-const Routing = () => {
-	const cookies = new Cookies();
-	const logged = cookies.get('jwt');
-	const [userData, setUserData] = useState({
-		twofaStatus: false,
-		isAuthenticated : false,
-		ingame: false
-	});
-	const [twoFAStatuss, setTwoFAStatus] = useState(false);
-	if (logged){
-		useEffect(() => {
-			axios.get(`http://localhost:3000/users/profil`, {withCredentials: true})
-			.then((response) => {
-				setUserData({
-					twofaStatus: response.data.twofa,
-					isAuthenticated: response.data.authenticated,
-					ingame: response.data.ingame
-			})})
-			.catch((error) => {
-				console.log(error)
-			})
-		}, [])
 
-		useEffect(() => {
-			const fetchTwoFAVerification = async () => {
-			try {
-				const response = await axios.get('http://localhost:3000/auth/2fa/get2FAstatus', { withCredentials: true });
-				setTwoFAStatus(response.data);
-			}
-			catch (error) {
-				console.log(error);
-			}
-		};
-		fetchTwoFAVerification();
-		}, []);
-	}
-	// console.log("User Logged and 2FA Disabled -> ", logged && !userData.twofaStatus)
-	// console.log("User Logged and 2FA Enabled -> ", logged && userData.twofaStatus)
-	// console.log("User Logged and 2FA Enabled And Code Valid -> ", logged && userData.twofaStatus && twoFAStatuss)
-	// console.log("User is not Logged in -> ", !logged )
+const Routing = () => {
+	const [userData, setUserInfo] = useState();
+	const [unlogged, setUnlogged] = useState(false);
+    useEffect(() => {
+        const fetchData = () => {
+            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+            .then((response) => {
+                setUserInfo(response.data)
+            })
+            .catch(() => {
+				setUnlogged(true);
+            	// console.log("Error -> ", error);
+        })
+    	}
+		fetchData();
+	}, [])
+	console.log("unlogged status -> ", unlogged);
+	console.log("Is User Logged ==> ", userData) 
+
+
 	return (
 		<BrowserRouter>
-		<Suspense fallback={<div><img src={'https://64.media.tumblr.com/02f1e684630962dfde601535ca66c7ec/4f559fadb3dc32b2-db/s1280x1920/b30ed1f7179224fc6c882fc432975dea793cf25a.gifv'}/> </div>}>
+		<Suspense fallback={<div>
+								<img src={'https://64.media.tumblr.com/02f1e684630962dfde601535ca66c7ec/4f559fadb3dc32b2-db/s1280x1920/b30ed1f7179224fc6c882fc432975dea793cf25a.gifv'}/>
+							</div>}>
 		<Routes>
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
-			{logged && !userData.twofaStatus && (
+			{userData != undefined && !userData.twofa && (
 				<>
 					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 			element={<HomeComponents/>}/>
@@ -177,22 +152,20 @@ const Routing = () => {
 					<Route path="/notifications" 	element={<NotificationComponents/>}/>
 					<Route path="/groups" 			element={<GroupPage/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
-					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
-					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
-					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
-
-
+					{/* <Route path="/login" 			element={<Navigate to="/" replace/>}/>
+					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
+					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/> */}
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}
-			{logged && userData.twofaStatus && (
+			{userData != undefined && userData.twofa && (
 				<>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
 				</>
 			)}
 			{/* User is not logged in */}
-			{!logged && (
+			{unlogged == true && (
 				<>
 					<Route path="/"			element={<WelcomePage/>}/>
 					<Route path="/welcome"	element={<WelcomePage/>}/>

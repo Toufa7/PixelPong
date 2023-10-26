@@ -362,19 +362,40 @@ const TopRight = (props : {winRate: number, wins: number, loses: number}) => {
 }
 
 const BottomLeft = () => {
-	const achivements = [bomb,joystick,dpad,handshake,box,shield,mail,caution,medal,savage,knife,flag,key,fire,folder];
+	const [achivements, setAchivements] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/achievements` , {withCredentials: true})
+		.then((response) => {
+			setAchivements(response.data.achievementType);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
+
 	return (
 		<div className="loginBox achievements">
 			<div className="loginBoxHeader achievements1">LOGROS</div>
 			<div className="loginBoxOutside achievements2">
-			<HorizontalScroll>
-				{
-					achivements.map((key, idx) => {
-						return (
-							<img src={key} key={idx}/>
-					)})
-				}
-			</HorizontalScroll>
+				{/* <HorizontalScroll> */}
+					{
+					achivements &&
+						achivements.map((item, idx) => {
+							if (item == "WELCOME")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={handshake} key={idx}/>)
+							if (item == "FIRSTWIN")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={medal} key={idx}/>)
+							if (item == "FIRSTLOSE")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={bomb} key={idx}/>)
+							if (item == "WINSTRIKE")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={savage} key={idx}/>)
+							if (item == "WIN5")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={key} key={idx}/>)	
+							if (item == "WIN10")
+							return (<img style={{width: '150px', height: 'fit-content'}} src={joystick} key={idx}/>)
+						})
+					}
+				{/* </HorizontalScroll> */}
 			</div>
 		</div>
 	);
@@ -403,6 +424,20 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 
 
 
 const BottomRight= () => {
+
+	const [matchHistory, setMatchHistory] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/history` , {withCredentials: true})
+		.then((response) => {
+			console.log("Response Histroy -> ", response.data.level);
+			setMatchHistory(response.data);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
+
+	
 	const userData = GetUserData();
 	const win = "#ff7670";
 	const lose = "#009e73";
