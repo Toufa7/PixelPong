@@ -4,12 +4,12 @@ import { grpSocketContext } from './GrpsocketContext'
 import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg';
 import axios from 'axios';
-// import '../GrpchatPage.scss'
 import MessageComponent from './GrpmessageComponenet'
 import MessageRightComponenet from './GrpmessageRightComponenet ';
+import '@dmester/sffjs'
 
 
-// Class chatAgent responsible for defining the properties of each person onthe conversation
+// Class chatAgent responsible for defining the properties of each person on the conversation
 interface chatAgent
 {
     id: string;
@@ -52,8 +52,8 @@ const Conversation = (props: any) =>
             {
                 props.MessagesArr.map((message: chatAgent, index:number) => (
                     message.side == 1
-                        ? <MessageComponent key={index} content={message.message} pic={message.pic} />
-                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} />
+                        ? <MessageComponent key={index} content={message.message} pic={message.pic} time={message.timestamp}/>
+                        : <MessageRightComponenet key={index} content={message.message} pic={message.pic} time={message.timestamp}/>
                     ))
                 }
             <div ref={mesaageEndRef}/>
@@ -70,22 +70,16 @@ const messageInput = (props: any) => {
     //Refering to the dummy div
     const firstRef = useRef<HTMLInputElement>(null);
     
-    //Our chat socket
+    //Chat socket
     const roomSocket = useContext(grpSocketContext);
     
     //Creating the messages map to be rendred
     let map = useMap();
 
-    //Our group users
+    //Group users map
     let groupUsers = useMap();
 
-    //Keeping track of the entered groups
-    // const [roomsHistory, setRoomsHistory] = useState<string[]>([]);
-
-    // setRoomsHistory(props.groupInfo.id);
-    // console.log("Rooms hisory is : ", roomsHistory);
-
-    //Join the room
+    //Joining the room
     if (props.groupInfo.id != undefined)
     {
         useEffect(() => {
@@ -95,15 +89,16 @@ const messageInput = (props: any) => {
     
     //Get group users and fill them in the map
     useEffect(() => {
+        
         axios
             .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/users`, { withCredentials: true })
             .then((res: any) => {
-                for (let i: number = 0; i < res.data.usersgb.length; i++) {
-                    groupUsers.set(res.data.usersgb[i].id, res.data.usersgb[i]);
+                for (let i: number = 0; i < res.data.length; i++) {
+                    groupUsers.set(res.data[i].id, res.data[i]);
                 }
             })
             .catch(Error)
-            console.log('%cAn error happened in : Conversation: messageInput(): 63', 'color: red')
+            console.log('%cAn error happened in : Conversation: messageInput(): 106', 'color: red')
     }, [props.groupInfo.id])
     
     //Getting the old conversation
@@ -117,46 +112,44 @@ const messageInput = (props: any) => {
                 console.log('%cAn error happened in : Conversation: messageInput(): 119', 'color: red')
     }, [props.groupInfo.id])
     
-    const fillMap = (axiosResponse: any) => {
+    const fillMap = (axiosResponse: any[]) => {
 
         map.clear();
-        console.log("[fillMap:125] Axios response is : ", axiosResponse);
 
         let molLmessageId: any = 'n/a';
         let molLmessage: any = 'n/a';
         let molMsgPic: any = 'n/a';
         let molMsgSide: number = 0;
-        
-        
-        for (let i: number = 0; i < axiosResponse.length; i++)
-        {
-            console.log("%%%%%%%%>", axiosResponse[i])
-            if (axiosResponse[i].senderid == props.Sender.id)
+
+        axiosResponse.forEach((element:any) => {
+            if (element.senderid == props.Sender.id)
             {
-                molLmessageId = axiosResponse[i].senderId;
+                molLmessageId = element.senderId;
                 molLmessage = props.Sender.username;
-                molMsgPic = props.Sender.image;
+                molMsgPic = `http://localhost:3000/auth/avatar/${props.Sender.id}`;
                 molMsgSide = 0;
             }
             else
             {
-                molLmessageId = axiosResponse[i].receiverId;
+                molLmessageId = element.receiverId;
                 molLmessage = props.groupInfo.username;
-                molMsgPic = groupUsers.get(axiosResponse[i].senderid).profileImage;
+                molMsgPic = `http://localhost:3000/auth/avatar/${element.senderid}`;
                 molMsgSide = 1;
             }
             
+            const messageTimeStamp:Date = new Date(element.createdAt);
+
             const tmpMsgObj: chatAgent = {
                 id: molLmessageId,
-                senderid: axiosResponse[i].senderId, 
+                senderid: element.senderId, 
                 username: molLmessage,
                 pic: molMsgPic,
                 side: molMsgSide,
-                message: axiosResponse[i].message,
-                timestamp: axiosResponse[i].createdAt,
+                message: element.message,
+                timestamp: `${messageTimeStamp.getHours()}:${messageTimeStamp.format("mm")}`,
             }
-            map.set(axiosResponse[i].id, tmpMsgObj);
-        }
+            map.set(element.id, tmpMsgObj);
+        });
     };
     
     useEffect(() => {
@@ -180,20 +173,20 @@ const messageInput = (props: any) => {
         if (newMessage.idsender == props.Sender.id)
             messageSide = 0;
 
+        const messageTimeStamp:Date = new Date();
+
         const tmpMsgObj: chatAgent = {
             id: newMessage.roomid,
             senderid: newMessage.idsender,
             username: newMessage.username,
-            pic: newMessage.pic,
+            pic: `http://localhost:3000/auth/avatar/${newMessage.idsender}`,
             side: messageSide,
             message: newMessage.message,
-            timestamp: "n/a",
+            timestamp: `${messageTimeStamp.getHours()}:${messageTimeStamp.format("mm")}`,
         }
-        
+
         map.set(makeid(37), tmpMsgObj);
     }
-    
-
 
     const onSubmitHandler = (e: any) => {
         //Prevent browser from refreshing each time we hit enter on the from input
@@ -204,8 +197,8 @@ const messageInput = (props: any) => {
         
         //Emtting the newly typed message in the socket
         const handleNewMessage = (newMessage: chatAgent) => {
-            console.log("I sent a message.")
-            roomSocket.emit('msgToRoom', {
+            roomSocket.emit('msgToRoom',
+            {
                 roomid :  props.groupInfo.id,
                 messageid : `${makeid(37)}`,
                 message : newMessage.message,

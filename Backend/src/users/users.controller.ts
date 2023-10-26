@@ -107,6 +107,7 @@ async blockFriend(
   }
 }
 
+
 @Get('profil/:username')
 async findOneByUsername(@Param('username') username: string, @Req() req){
   try {

@@ -14,6 +14,7 @@ import jwt_decode from 'jwt-decode';
 //y------------------------------------------
 
 import gifMatch from './assets/rescaled_tv.gif';
+import akumaloading from "./assets/street-fighter-pixel-art.gif";
 import f from "./assets/cubecavern_memesbruh03.ttf";
 // import jwt_decode from "jwt-decode";
 // import loading from "./assets/loading.gif";
@@ -25,7 +26,11 @@ import { Socket, io } from 'socket.io-client';
 import BackgroundGame from "./assets/bc_mini.png";
 import BackgroundGame2 from "./assets/bckg2.png";
 import pd from "./assets/blue_paddle.png";
+import yellow_pd from "./assets/fr_yellow_paddle.png";
+import red_pd from "./assets/red_paddle.png";
 import ball from "./assets/yellow_ball.png";
+import red_ball from "./assets/red_bl.png";
+import blue_ball from "./assets/blue_ball.png";
 import { socket } from '../socket-client';
 
 // import axios from 'axios';
@@ -215,8 +220,15 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         //r- Loading Images
 p5_ob.preload = () =>{
           let Rnd_background = Math.floor(Math.random() * 2);
-          MatchmakingPage = p5_ob.loadImage(gifMatch);
-          font = p5_ob.loadFont(f);
+          let Rnd_paddle_asset = Math.floor(Math.random() * 4);
+          let Rnd_ball_asset = Math.floor(Math.random() * 4);
+          let Random_loading_page = Math.floor(Math.random() * 2);
+
+          if (Random_loading_page == 0)
+            MatchmakingPage = p5_ob.loadImage(gifMatch);
+          else
+            MatchmakingPage = p5_ob.loadImage(akumaloading);
+          font  = p5_ob.loadFont(f);
           ovp = p5_ob.loadImage(over_g);
           win = p5_ob.loadImage(Win);
           lose = p5_ob.loadImage(Lose);
@@ -225,8 +237,22 @@ p5_ob.preload = () =>{
             GameBackgrund = p5_ob.loadImage(BackgroundGame);
           else
             GameBackgrund = p5_ob.loadImage(BackgroundGame2);
-          pd_asset = p5_ob.loadImage(pd);
-          ball_asset = p5_ob.loadImage(ball);
+
+          if(Rnd_paddle_asset == 0){
+            pd_asset = p5_ob.loadImage(pd);
+          }else if (Rnd_paddle_asset == 1){
+            pd_asset = p5_ob.loadImage(yellow_pd);
+          }else if (Rnd_paddle_asset == 2){
+            pd_asset = p5_ob.loadImage(red_pd);
+          }
+
+          if (Rnd_ball_asset == 0){
+            ball_asset = p5_ob.loadImage(ball);
+          }else if (Rnd_ball_asset == 1){
+            ball_asset = p5_ob.loadImage(blue_ball);
+          }else if (Rnd_ball_asset == 2){
+            ball_asset = p5_ob.loadImage(red_ball);
+          }
 
           // user_image = p5_ob.loadImage(Get_user_image);
 
@@ -306,12 +332,13 @@ p5_ob.draw = () =>{
 
 
                   
-
+                if (Frontroom.Player2){
                 Frontroom.Player2.Paddle.pos.x = Backroom.P2_x_scaled;
                 Frontroom.Player2.Paddle.pos.y = Backroom.P2_y_scaled;
                 Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
                 Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
                 Frontroom.Player2.Health_points = Backroom.Health_points_P2;
+                }
 
                 // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
                 // Frontroom.Player2.username = Backroom.Player2.username;
@@ -327,12 +354,14 @@ p5_ob.draw = () =>{
               // Frontroom.Player1.username = Backroom.Player1.username;
 
               // P2_scaled_y = Backroom.P2_y_scaled;
-
+            
+            if (Frontroom.Player1){
             Frontroom.Player1.Paddle.pos.x = Backroom.P1_x_scaled;
             Frontroom.Player1.Paddle.pos.y = Backroom.P1_y_scaled;
             Frontroom.Player1.Paddle.paddle_width = (2 / 100) * scaled_width;
             Frontroom.Player1.Paddle.paddle_height = (20 / 100) * scaled_height;
             Frontroom.Player1.Health_points = Backroom.Health_points_P1;
+            }
             
             // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
             // Frontroom.Player2.username = Backroom.Player2.username;
@@ -394,9 +423,9 @@ p5_ob.draw = () =>{
         if (Screen_display === "on_going"){
 
           // for(const id in Frontroom){
-            p5_ob.background(GameBackgrund);
             
-          if (Frontroom.Player1 && Frontroom.Player2){
+            if (Frontroom.Player1 && Frontroom.Player2){
+            p5_ob.background(GameBackgrund);
             Update_screen = true;
             const id_of_player1 = Frontroom.Player1?.id;
             const id_of_player2 = Frontroom.Player2?.id;

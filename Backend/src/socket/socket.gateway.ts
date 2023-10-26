@@ -43,11 +43,11 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     //console.log('client connected -->' + client.id, '  ', jwt);
     this.server.emit('checkout', { msg: 'hello' });
     if (jwt) {
-      const user = decode(jwt);
+      const user = decode(jwt); 
       // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
       // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
-      if(this.connectedUsers.has(user['id']))
+      if(this.connectedUsers.has(user['id'] ))
         this.connectedUsers.get(user['id']).push(client.id);
       else
         this.connectedUsers.set(user['id'], [client.id]);
@@ -59,7 +59,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.userservice.updatestatus(user, status);
     }
   }
-
 
   async handleDisconnect(client: Socket) {
     const jwt = await this.getUser(client);

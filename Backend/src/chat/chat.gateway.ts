@@ -90,7 +90,6 @@ let map = new Map <any , any>();
       }
     }
 
-
     ///////////////////////////////// disconnection ////////////////////////////////
     async handleDisconnect(client: Socket, ...args: any[]) {
         this.logger.log(`Disconnect : ${client.id}`  );
@@ -102,11 +101,7 @@ let map = new Map <any , any>();
         } 
     }
 
-
-
-
     ////////////////////////////////// -----DM-- ////////////////////////////////
-
     ///////////////   -----get old convetation----- ///////////////////////
     @SubscribeMessage('getOldCnv')
     async getConv(client : Socket) {
@@ -115,12 +110,7 @@ let map = new Map <any , any>();
       
       this.server.to(map.get(user.id)).emit('postOldCnv'  , await this.oldcnv(user.id));
     }
-    // how to use this in front end
-    // emit using this event ('getOldCnv')
-    // receive on ('postOldCnv')
 
-
-    
     //////////////////     -------send messages------  ///////////////////////
     @SubscribeMessage('msgToServer')
     async handleMessage(client : Socket, body : any) {
@@ -136,6 +126,18 @@ let map = new Map <any , any>();
                 messageDMs : body.message
               },
           });
+           const blocked =  await this.prisma.user.findUnique({
+            where: { id: user.id },
+            select: {
+              blocked: true,
+              blockedby: true,
+            },
+          });
+          //check if user is blocked
+          if(blocked.blocked.some((user1) => user1.id == user.id) || blocked.blockedby.some((user1) => user1.id == user.id)){
+            console.log("user is blocked");
+            return ;
+          }
 
             this.server.to(idUs).emit('msgToClient', {
               id :body.id,
@@ -144,13 +146,79 @@ let map = new Map <any , any>();
               side: body.side,
               message: body.message,
               idsender : user.id,
-              timestamp: body.timestamp
+              timestamp: new Date()
             });
             this.getConv(client);
             this.server.to(idUs).emit('postOldCnv'  , await this.oldcnv(body.id));
         // }
     }
 
+
+
+    //////////////////////request to join game //////////////////////////
+    async requestjoingame(namesender: string, idsender: string, idrecever: string) {
+      console.log("requestjoingame");
+      const idUs = await map.get(idrecever);
+      const token = this.generate_Random_id(10);
+
+      await this.prisma.user.update({
+        where: { id: idsender },
+        data: {
+          tokenjoingame : token,
+        },
+      });
+      return this.server.to(idUs).emit('requestjoingame', {
+        from : namesender,
+        token : token,
+        idsender : idsender
+      });
+    }
+    //accept request to join game
+    async acceptrequestjoingame(idrequest: string, token: string, idrecever: string) {
+      await this.prisma.user.update({
+        where: { id: idrequest },
+        data: {
+          tokenjoingame : token,
+        },
+      });
+      const idUs = await map.get(idrecever);
+      this.server.to(idUs).emit('acceptrequestjoingame', {
+        message : "accept",
+      });
+    }
+
+    //refuse request to join game
+    async refuserequestjoingame(user : any, idrecever: string) {
+      await this.prisma.user.update({
+        where: { id:idrecever },
+        data: {
+          tokenjoingame : null,
+        },
+      });
+      const idUs = await map.get(idrecever);
+      this.server.to(idUs).emit('msgToClient', {
+        id : idrecever,
+        username: user.username,
+        pic: user.image,
+        side: 1,
+        message: "refuse request to join game",
+        idsender : user.id,
+        timestamp: new Date()
+      });
+    }
+
+
+    //genarate token for game
+    generate_Random_id(lenght : number) : string{
+      let result = "";
+      let charachters : string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456759_";
+      let count  = 0;
+      while (count <= lenght){
+          result += charachters[Math.floor(Math.random() * charachters.length)];
+          count++;
+      }
+      return (result);
+  }
 
     
 }

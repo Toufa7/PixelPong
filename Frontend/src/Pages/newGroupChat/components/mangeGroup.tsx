@@ -100,7 +100,7 @@ const ListingUsersAdmins = ({group}) => {
 		useEffect(() => {
 			axios.get(`http://localhost:3000/groupchat/${group.id}/users`, { withCredentials: true })
 			.then((response) => {
-				console.log("USERS ARE ARE -> ", response.data);
+				console.log("Users Response -> ", response.data);
 				setUsers(response.data);
 			})
 			.catch((error) => {
@@ -111,8 +111,8 @@ const ListingUsersAdmins = ({group}) => {
 		useEffect(() => {
 			axios.get(`http://localhost:3000/groupchat/${group.id}/admins`, { withCredentials: true })
 			.then((response) => {
-				console.log("Admin ARE ARE -> ", response.data.admins);
-				setAdmins(response.data.admins);
+				console.log("Admins Response -> ", response.data);
+				setAdmins(response.data);
 			})
 			.catch((error) => {
 				console.log("Error fetching admins:", error);
@@ -141,11 +141,11 @@ const ListingUsersAdmins = ({group}) => {
 		})
 	}
 
-	function handleMuteSelect(event,memberId : string, groupId : string ) {
+	function handleMuteSelect(event , memberId : string, groupId : string ) {
 		const duration = event.target.value;
 		if (duration && duration != 'Mute') {
 			let timeer : number = 0;
-			duration == 0 ? timeer = (5 * 300000) : timeer = (15 * 300000);
+			duration == 0 ? timeer = (5 * 60000) : timeer = (15 * 60000);
 			console.log('Duration -> Time ', duration, timeer);
 			axios.post(`http://localhost:3000/groupchat/${groupId}/${memberId}/mute`,{ time: timeer },{ withCredentials: true })
 			.then((response) => {
@@ -168,7 +168,7 @@ const ListingUsersAdmins = ({group}) => {
 		<button style={{margin: '10px', width: 'auto'}} type="button" className="nes-btn" onClick={openMembersDialog}>Manage Members</button>
 		<dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="dialog_members">
 			<form method="dialog">
-				{/* <button>X</button> */}
+			<button onClick={() => {document.getElementById('dialog_members').close();}}>X</button>
 				<menu className="dialog-menu">
 				<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 					<label style={{fontSize: 'large'}}>
@@ -185,7 +185,7 @@ const ListingUsersAdmins = ({group}) => {
 							<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} key={idx}>
 							<div>
 								<a>
-								<img src={`http://localhost:3000/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
+									<img src={`http://localhost:3000/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
 								</a>
 							</div>
 							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{admins[idx].username}</span>
@@ -244,7 +244,7 @@ const ListingUsersAdmins = ({group}) => {
 const ManageGroup = () => {
 	const privacy = ["Group Chat Visibility: Limited to Members","Exclusive Access: Only Members Allowed","Enhanced Security: Password-Protected Group"]
 	const [isProtected , setProtected] = useState<boolean>(false);
-	const [update , setUpdate] = useState("");
+	const [update , setUpdate] = useState<string>("");
     const [groupsList, setGroupsList] = useState<string[]>([]);
 	const [amIAdmin, setamIAdmin] = useState<boolean>(false);
     useEffect(() => {   
@@ -264,14 +264,7 @@ const ManageGroup = () => {
 		namegb: "Group Name",
 	});
 	const [flag, setFlag] = useState<boolean>(false);
-	// grouptype:
-	// id:
-	// idsuperadmin:
-	// image:
-	// namegb:
-	// password:
 	console.log("Group List Map -> ", groupsList);
-
 	return (
 	<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff",borderRadius: "10px"}}>
 		{
@@ -336,23 +329,12 @@ const ManageGroup = () => {
 				(<></>)
 			
 			}
-
-
-
 				</div>
-			
-			
 			)
 			:
 			(<></>)
 		}
-
-
-
-
 	</div>
-
-
 	)
 }
 

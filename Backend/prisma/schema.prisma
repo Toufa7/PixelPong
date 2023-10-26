@@ -29,6 +29,7 @@ datasource db {
   // game
   achievements Achievements[] @relation("achievements")
   matchhistory MatchHistory[] @relation("matchhistory") 
+  tokenjoingame String?
 
   //relations
   friends   User [] @relation("friends")
@@ -94,6 +95,7 @@ model Messagegb {
   message String
   idgp String
   groupchat Groupchat @relation("GBMessage", fields: [idgp], references: [id])
+  createdAt DateTime @default(now())
 }
 
 enum Grouptype{

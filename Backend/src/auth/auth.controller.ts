@@ -177,7 +177,7 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
       if(typeof id !== 'string')
         throw new ExceptionsHandler
       const user = await this.usersService.findOne(id);
-      console.log("id",id);
+      //console.log("id",id);
       const path = join('./uploads/', user.profileImage);
       console.log("path"+path);
       await fsPromises.access(path, fsPromises.constants.F_OK);

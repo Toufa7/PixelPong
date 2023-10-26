@@ -5,6 +5,8 @@ import play from '../assets/images/playgame.svg'
 import block from '../assets/images/block.svg'
 import info from '../assets/info.svg'
 import tree from '../assets/giblyTree.gif'
+import kirby from '../assets/kirby-hit-the-screen.gif'
+import { Link } from 'react-router-dom'
 
 interface localUserClass
 {
@@ -46,6 +48,27 @@ const ChatUser = (props:any) => {
         }
     }, [props.pcurrentUserId]);
 
+    const onClickHandler = () => {
+        axios
+            .get(`http://localhost:3000/chat/${remoteUser.id}/requestjoingame`, { withCredentials: true })
+            .then((res:any) => {
+                console.log(" joingame on click handler",res.data);
+            })
+            .catch(Error)
+                console.log("Error happened when requesting to join the game", Error);
+
+    }
+
+    const blockOnClickHandler = () => {
+        axios
+            .patch(`http://localhost:3000/users/blocked`, {to: remoteUser.id}, { withCredentials: true })
+            .then(() => {
+                console.log("im here");
+            })
+            .catch(Error)
+                console.log("Error hapened when blocking the user")
+    }
+
     return (
         <div className='usrProfileConversation'>
                 <div className="chatUserDiv">
@@ -53,15 +76,19 @@ const ChatUser = (props:any) => {
                         <div className="chatUser">
                             {
                                 //Conditional rendring to display the profile image or not based on the presence of remoteUser.profileImage
-                                remoteUser.profileImage ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/auth/avatar/${remoteUser.id}`} alt="user-photo"/>
-                                                        :   <img src={info} alt="user-photo" />
+                                remoteUser.profileImage ?   (<Link to={`/profil/${remoteUser.username}`}>
+                                                                <a style={{color: 'black', textDecoration: 'none'}}>
+                                                                    <img style={{border: '3px solid'}} src={`http://localhost:3000/auth/avatar/${remoteUser.id}`} alt="user-photo"/>
+                                                                </a>
+                                                            </Link>)
+                                                        :   (<img src={info} alt="user-photo" />)
                             }
                             <div className="chatUserName">
                                 <span>
                                     {
                                         //Conditional rendring to display the profile username or not based on the presence of remoteUser.username
-                                        remoteUser.username ?   remoteUser.username
-                                                            :   'Start a conversation'
+                                        remoteUser.username ?   (<Link to={`/profil/${remoteUser.username}`}><a style={{color: 'black', textDecoration: 'none'}}>{remoteUser.username}</a></Link>)
+                                                            :   ('Start a conversation')
                                     }
                                 </span>
                             </div>
@@ -70,8 +97,9 @@ const ChatUser = (props:any) => {
                     {
                         //Conditional rendring to display the control buttons or not based on the presence of remoteUser.profileImage
                         remoteUser.profileImage ?  (<div className="chatControlButtons">
-                                                        <button className='userControlButtons'><img src={play} width={50} height={50}></img></button>
-                                                        <button className='userControlButtons'><img src={block} width={50} height={50}></img></button>
+                                                    {/* <Link to={'/game'}> */}
+                                                        <button className='userControlButtons' onClick={onClickHandler}><img src={play} width={50} height={50}></img></button>
+                                                    {/* </Link> */}
                                                     </div>)
                                                 :   (<></>)
                     }
@@ -93,7 +121,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child <MessageInput> (localUser and remoteUser) */}
         {
             props.remoteUser.profileImage   ? (<MessageInput Sender={props.localUser} Receiver={props.remoteUser}/>)
-                                            : <img className='imagePlaceHolder' src={tree} width={650} height={870} alt="user-photo" />
+                                            : <img className='imagePlaceHolder' src={kirby} width={664} height={622} alt="user-photo" />
         }
     </div>
     )

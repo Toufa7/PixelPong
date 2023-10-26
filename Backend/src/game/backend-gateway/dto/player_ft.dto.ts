@@ -11,13 +11,12 @@ export class PlayerDto{
     room_id?: string;
     token_for_matching? : string;
     Health_points : number;
-    special_power : number;
 
 
     Scaled_width : number;
     Scaled_height : number;
 
-    constructor(id : string , x : number , y : number ,width : number , height : number,Scaled_width : number , Scaled_height : number , Hp : number , room_id? : string , user_id? : string, username? : string){
+    constructor(id : string , x : number , y : number ,width : number , height : number,Scaled_width : number , Scaled_height : number , Hp : number , room_id? : string , user_id? : string, username? : string , Token_matching? : string){
         this.id = id;
         this.x  = x;
         this.y  = y;
@@ -29,5 +28,6 @@ export class PlayerDto{
         this.Health_points = Hp;
         this.Scaled_width = Scaled_width;
         this.Scaled_height  = Scaled_height;
+        this.token_for_matching = Token_matching;
     }
 }

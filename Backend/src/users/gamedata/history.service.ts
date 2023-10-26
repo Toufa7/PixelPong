@@ -44,22 +44,8 @@ async addMatchHistory(userId:string){
         }); 
     } 
     else
-    {
-        let acheievement : Type;
-        if(find.wins === 5)
-            acheievement = Type.WIN5;
-        else if(find.wins === 10)
-            acheievement = Type.WIN10;
-        else if(find.wins === 1)
-            acheievement = Type.FIRSTWIN;
-        else if(find.loses === 1)
-            acheievement = Type.FIRSTLOSE;
-        else
-            return {newMatchHistory, stats};
-        this.achiev.updateAchievement(userId, acheievement);
-    } 
-    stats = find;
-        return {newMatchHistory, stats};
+        stats = find;
+    return {newMatchHistory, stats};
 }
  async updateMatchHistory(winnerId:string, loserId:string){
     const winner = await this.prisma.user.findUnique({
@@ -107,7 +93,7 @@ async addMatchHistory(userId:string){
                 userId: loserId,
             },
             data: {
-                loses: {
+                loses: {  
                     increment: 1,
                 },
                 numberOfMatches:{
@@ -115,7 +101,9 @@ async addMatchHistory(userId:string){
                 }
             },
         }),
-    ]);
+    ])
+    await this.achiev.updateAchievement(winnerId, null);
+    await this.achiev.updateAchievement(loserId, null);
 }
 async getMatchHistory(userId:string){
     const matchHistory = await this.prisma.matchHistory.findFirst({
