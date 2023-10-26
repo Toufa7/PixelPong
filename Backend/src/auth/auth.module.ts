@@ -10,7 +10,7 @@ import { fourtwoStrategy } from '../passport/42-Strategy/42.strategy';
 import { JwtGuard } from '../guards/jwt.guards';
 import { JwtStrategy } from '../passport/jwt-startegy/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
-import { TokenBlacklistService } from './token-blacklist.service';
+// import { TokenBlacklistService } from './token-blacklist.service';
 import { achievementService } from 'src/users/gamedata/acheievement.service';
 @Module({
   imports: [
@@ -28,7 +28,6 @@ import { achievementService } from 'src/users/gamedata/acheievement.service';
     achievementService,
     PrismaService,
     PassportModule,
-    TokenBlacklistService,
     GoogleStrategy,
     fourtwoStrategy,
     JwtGuard,
@@ -40,7 +39,6 @@ import { achievementService } from 'src/users/gamedata/acheievement.service';
     JwtModule,
     JwtStrategy,
     PassportModule,
-    TokenBlacklistService,
   ],
 })
 export class AuthModule {}

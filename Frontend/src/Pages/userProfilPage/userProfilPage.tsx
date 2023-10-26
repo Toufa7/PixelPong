@@ -110,7 +110,7 @@ const Profil = () => {
                                 <div>
                                     <a className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
                                     <a className="nes-btn is-error" href="#" onClick={() => {
-                                        axios.patch("http://localhost:3000/users/blocked", {frienId: userData.userId}, { withCredentials: true })
+                                        axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
                                         .then(() => {})
                                         .catch(() => {})
                                     }}>Block</a>

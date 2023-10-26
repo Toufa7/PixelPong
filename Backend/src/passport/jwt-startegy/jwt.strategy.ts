@@ -1,12 +1,12 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { configDotenv } from 'dotenv';
-import { TokenBlacklistService } from '../../auth/token-blacklist.service';
+// import { TokenBlacklistService } from '../../auth/token-blacklist.service';
 
 configDotenv();
 
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(private readonly banedtoken: TokenBlacklistService) {
+  constructor() {
     super({
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,

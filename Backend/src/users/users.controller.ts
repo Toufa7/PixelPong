@@ -22,6 +22,7 @@ import { SocketGateway } from 'src/socket/socket.gateway';
 import { User } from '@prisma/client';
 import { HistoryService } from './gamedata/history.service';
 import { achievementService } from './gamedata/acheievement.service';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 // import { User } from '@prisma/client';
 
 
@@ -66,8 +67,8 @@ export class UsersController {
 
  @Patch('remove')
 async removeFriend(
-  @Body('friendId', ParseUUIDPipe) body: FriendrequestDto,
-  @Req() req: any
+  @Body('friendId') body: FriendrequestDto,
+  @Req() req
 ): Promise<void> {
   try {
 	await this.usersService.removefriend(req.user.id, body.from);
@@ -89,7 +90,7 @@ async deleteOne(@Req() req: any): Promise<void> {
 }
 
 @Put('update')
-async updateOne(@Req() req: any, @Body() body: UserDto): Promise<User | null> {
+async updateOne(@Req() req, @Body() body: UserDto): Promise<User | null> {
   try {
 	const { username } = body;
 	return await this.usersService.UpdateforOne(req.user.id, username);
@@ -100,7 +101,7 @@ async updateOne(@Req() req: any, @Body() body: UserDto): Promise<User | null> {
 
 @Patch('blocked')
 async blockFriend(
-  @Req() req: any,
+  @Req() req,
   @Body() body: FriendrequestDto
 ): Promise<void> {
   try {
@@ -110,6 +111,7 @@ async blockFriend(
 	console.error(error.message); // Log the error for debuggin
   }
 }
+
 
 @Get('profil/:username')
 async findOneByUsername(@Param('username') username: string, @Req() req){
@@ -130,6 +132,8 @@ async findOneByUsername(@Param('username') username: string, @Req() req){
 @Get('profile/:id')
 async findOneByid(@Param('id') id: string){
   try {
+	if(typeof id !== 'string')
+		throw ExceptionsHandler
 	const user = await this.usersService.findById(id);
 	if (!user) {
 	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -143,8 +147,8 @@ async findOneByid(@Param('id') id: string){
 
 @Patch('unblocked')
 async unblockFriend(
-  @Req() req: any,
-  @Body('friendId', ParseUUIDPipe) body: FriendrequestDto
+  @Req() req,
+  @Body('friendId') body: FriendrequestDto
 ): Promise<void> {
   try {
 	await this.usersService.unblockfriend(req.user.id, body.from);
@@ -154,7 +158,7 @@ async unblockFriend(
 }
 
 @Get('friends')
-async getFriends(@Req() req: any) {
+async getFriends(@Req() req) {
   try {
 	return await this.usersService.getFriends(req.user.id);
   } catch (error) {
