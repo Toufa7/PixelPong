@@ -39,43 +39,43 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   //handle connection and deconnection
 
   async handleConnection(client: Socket) {
-    // const jwt = await this.getUser(client);
-    // //console.log('client connected -->' + client.id, '  ', jwt);
-    // this.server.emit('checkout', { msg: 'hello' });
-    // if (jwt) {
-    //   const user = decode(jwt); 
-    //   // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
-    //   // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
+    const jwt = await this.getUser(client);
+    //console.log('client connected -->' + client.id, '  ', jwt);
+    this.server.emit('checkout', { msg: 'hello' });
+    if (jwt) {
+      const user = decode(jwt); 
+      // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
+      // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
-    //   if(this.connectedUsers.has(user['id'] ))
-    //     this.connectedUsers.get(user['id']).push(client.id);
-    //   else
-    //     this.connectedUsers.set(user['id'], [client.id]);
+      if(this.connectedUsers.has(user['id'] ))
+        this.connectedUsers.get(user['id']).push(client.id);
+      else
+        this.connectedUsers.set(user['id'], [client.id]);
         
-    //   const status = UserStatus.ONLINE;
-    //   // //console.log(
-    //   //   'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
-    //   // );
-    //   this.userservice.updatestatus(user, status);
-    // }
+      const status = UserStatus.ONLINE;
+      // //console.log(
+      //   'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
+      // );
+      this.userservice.updatestatus(user, status);
+    }
   }
 
   async handleDisconnect(client: Socket) {
-    // const jwt = await this.getUser(client);
+    const jwt = await this.getUser(client);
 
-    // if(jwt)
-    // {
-    //   const user = decode(jwt);
-    //   console.log('A client disconnected');
-    //   const index = this.connectedUsers.get(user['id']).indexOf(client.id);
-    //   if(index != -1)
-    //   this.connectedUsers.get(user['id']).splice(index, 1);
-    // if (this.connectedUsers.get(user['id']).length === 0) {
-    //     this.connectedUsers.delete(user['id'])
-    //     console.log("i dont know ! ===============================> ",this.connectedUsers.get(user['id']))
-    //     this.userservice.updatestatus(user,UserStatus.OFFLINE);
-    //   }
-    // }
+    if(jwt)
+    {
+      const user = decode(jwt);
+      console.log('A client disconnected');
+      const index = this.connectedUsers.get(user['id']).indexOf(client.id);
+      if(index != -1)
+      this.connectedUsers.get(user['id']).splice(index, 1);
+    if (this.connectedUsers.get(user['id']).length === 0) {
+        this.connectedUsers.delete(user['id'])
+        console.log("i dont know ! ===============================> ",this.connectedUsers.get(user['id']))
+        this.userservice.updatestatus(user,UserStatus.OFFLINE);
+      }
+    }
   }
 
   // handle friend request
@@ -104,7 +104,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } catch (error) {
       //console.log(error);
     }
-  }
+  } 
   getUser(client: Socket) {
     const session = client.handshake.headers.cookie;
     if (session) {
