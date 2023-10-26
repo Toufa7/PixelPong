@@ -71,7 +71,7 @@ export class GroupchatController {
 
     //get all admins of a groupchat
     @Get(":id/admins")
-    findAllAdmins(@Param('id') id: string) {
+    findAllAdmins(@Param('id') id: string) : Promise<User[]> {
         return this.GroupchatService.findAllAdmins(id);
     }
 
