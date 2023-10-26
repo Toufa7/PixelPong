@@ -62,7 +62,7 @@ const Profil = () => {
     useEffect(() => {
         async function fetchData() {
             const cookie = new Cookies();
-            const token = jwt_decode(cookie.get('jwt'));
+            // const token = jwt_decode(cookie.get('jwt'));
             console.log("Toekn -> ", token);
             const endpoints = [
                 `http://localhost:3000/auth/avatar/${token.id}`,

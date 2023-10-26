@@ -21,7 +21,7 @@ import { GateWayService } from './socket.service';
 
 @WebSocketGateway({
   cors: {
-    origin: ['localhost:5173', 'localhost:3000'],
+    origin: [`${process.env.FRONT_URL}`, 'localhost:3000'],
     credentials: true,
   },
   namespace: 'user',
@@ -82,7 +82,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // handle friend request
   handleFriendRequest(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: any,
+    @MessageBody() data,
   ) {
     // Handle the friend request and send notifications as needed
     const { receiverId, type } = data;

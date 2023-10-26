@@ -449,14 +449,13 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 
 
 const BottomRight= () => {
 	const userData = GetUserData();
-
     const [check, setUserData] = useState(false);
-	const cookie = new Cookies();
-	const token = jwt_decode(cookie.get('jwt'));
+	// const cookie = new Cookies();
+	// const token = jwt_decode(cookie.get('jwt'));
     useEffect(() => {
         async function fetchData() {
-            const cookie = new Cookies();
-            const token = jwt_decode(cookie.get('jwt'));
+            // const cookie = new Cookies();
+            // const token = jwt_decode(cookie.get('jwt'));
             if (token) {
 				try {
 					await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})

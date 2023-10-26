@@ -16,7 +16,7 @@ let mapclient = new Map <string , string[]>();
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:5173',
+    origin: `${process.env.FRONT_URL}`,
     credentials: true,
   },
   namespace: 'groupchat',
@@ -236,7 +236,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         AND: [
           { senderId : idsender },
           { receiverId : superadmin.superadmin.id },
-          {groupchatId : id},
+          // {groupchatId : id},
         ],
       },
     });
@@ -252,9 +252,9 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
       data: {
         sender: {connect: {id: idsender}},
         receiver: {connect: {id: superadmin.superadmin.id}},
-        groupchat: {connect: {id: id}},
-        namegp : datagp.namegb,
-        from: user.username,
+        // groupchat: {connect: {id: id}},
+        // namegp : datagp.namegb,
+        // from: user.username,
       },
     });
     

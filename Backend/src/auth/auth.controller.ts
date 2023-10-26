@@ -29,7 +29,10 @@ import { UserDto } from 'src/authdto/user.dto';
 import { PrismaService } from './prisma.service';
 import { inputDto } from 'src/authdto/input.dto';
 import { achievementService } from 'src/users/gamedata/acheievement.service';
- 
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+import { config } from 'dotenv';
+
+config();
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -51,11 +54,14 @@ export class AuthController {
       const user = await this.usersService.findOne(req.user.id);
       // Relace every hardcode URL with env variable that contain that url
       if (user.firstlogin)
-        return res.redirect('http://localhost:5173/settings');
+      {
+        this.achievementService.createAchievement(req.user.id, Type.WELCOME);
+        return res.redirect(`${process.env.FRONT_URL}/settings`);
+      }
       else{
         if(user.twofa)
-          return res.redirect('http://localhost:5173/two-factor-authentication');
-        return res.redirect('http://localhost:5173/home');
+          return res.redirect(`${process.env.FRONT_URL}/two-factor-authentication`);
+        return res.redirect(`${process.env.FRONT_URL}/home`);
       }
     } catch (err) {
       console.log(err);
@@ -68,30 +74,29 @@ export class AuthController {
   fourtwLogin() {}
   @Get('42/redirect')
   @UseGuards(AuthGuard('42'))
-  async fourtwoLogin(@Req() req: any, @Res() res: any) {
+  async fourtwoLogin(@Req() req, @Res() res) {
       const acces_token = this.authService.fourtwoLogin(req.user);
       this.setResandCookie(res, req.user.id, acces_token.access_token);
       const user = await this.usersService.findOne(req.user.id);
       if (user.firstlogin)
       {
         this.achievementService.createAchievement(req.user.id, Type.WELCOME);
-        return res.redirect('http://localhost:5173/settings');
+        return res.redirect(`${process.env.FRONT_URL}/settings`);
       }
       else{
-        this.achievementService.updateAchievement(req.user.id, Type.FIRSTLOSE);
         if(user.twofa)
-          return res.redirect('http://localhost:5173/two-factor-authentication');
-        return res.redirect('http://localhost:5173/home');
+          return res.redirect(`${process.env.FRONT_URL}/two-factor-authentication`);
+        return res.redirect(`${process.env.FRONT_URL}/home`);
       }
   }
-  private setResandCookie(res : any, id: string, accessToken: string) {
+  private setResandCookie(res, id: string, accessToken: string) {
     res
-      .cookie('jwt', accessToken, { maxage: 3854654684, secure: false })
+      .cookie('jwt', accessToken, {httpOnly: true, path: '/', })
       .status(200)
   }
   @Get('2fa/set2fa')
   @UseGuards(JwtGuard)
-  async setTwoFA(@Req() req: any) : Promise<string> {
+  async setTwoFA(@Req() req) : Promise<string> {
     const secret = authenticator.generateSecret();
     const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
     const qr = await qrcode.toDataURL(otpauth);
@@ -110,7 +115,7 @@ export class AuthController {
 
   }
   @Put('2fa/enable')
-async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
+async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
   try {
     await this.authService.change2FAStatus(req.user.id);
     return { status: true };
@@ -169,6 +174,8 @@ async enable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
   @UseGuards(JwtGuard)
   async getImage(@Param('id') id: string, @Res() res) {
     try {
+      if(typeof id !== 'string')
+        throw new ExceptionsHandler
       const user = await this.usersService.findOne(id);
       console.log("id",id);
       const path = join('./uploads/', user.profileImage);

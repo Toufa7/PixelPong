@@ -3,6 +3,7 @@ import { PrismaService } from './prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { User, UserStatus } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 //import { exit } from "process";
 // import { CookiesService } from '@nestjsplus/cookies';
 
@@ -68,6 +69,13 @@ export class AuthService {
 
   async updateinfo(id: string, username: string): Promise<User | null> {
     try {
+      const find = await this.prisma.user.findFirst({
+        where: {
+          username: username,
+        }
+      });
+      if(find  && find.id !== id)
+        throw new Error("username already exist");
       const user = await this.prisma.user.update({
         where: {
           id: id,

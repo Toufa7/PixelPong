@@ -75,13 +75,13 @@ const NavBarFooter = () => {
 	};
   
     const cookie = new Cookies();
-    const token = jwt_decode(cookie.get('jwt'));
+    // const token = jwt_decode(cookie.get('jwt'));
     const [check, setUserData] = useState(false);
     
     useEffect(() => {
         async function fetchData() {
             const cookie = new Cookies();
-            const token = jwt_decode(cookie.get('jwt'));
+            // const token = jwt_decode(cookie.get('jwt'));
             if (token) {
 				try {
 					await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})

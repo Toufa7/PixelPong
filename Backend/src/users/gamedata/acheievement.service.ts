@@ -33,10 +33,13 @@ export class achievementService {
       },
     })
 
-    for(let i = 0; i < achievement.achievementType.length; i++)
+    if(achievement)
     {
-      if(achievement.achievementType[i] === type)
-        return;
+      for(let i = 0; i < achievement?.achievementType.length; i++)
+      {
+        if(achievement.achievementType[i] === type)
+          return;
+      }
     }
     const update = await this.prisma.achievements.update({
       where: {

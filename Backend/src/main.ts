@@ -2,15 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
+import  {config} from 'dotenv'
 
+config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // app.useStaticAssets('assets');
   app.enableCors({
     origin: [
-      'http://localhost:5173',
+      `${process.env.FRONT_URL}`,
       // 'http://localhost:3000',
-      'localhost:5173',
+      `${process.env.FRONT_URL}`,
     ],
     credentials: true,
   });

@@ -110,19 +110,18 @@ const AlreadyInGame = () => {
 }
 
 const Routing = () => {
-	const cookies = new Cookies();
-	const logged = cookies.get('jwt');
 	const [userData, setUserData] = useState({
+		logged: false,
 		twofaStatus: false,
 		isAuthenticated : false,
 		ingame: false
 	});
 	const [twoFAStatuss, setTwoFAStatus] = useState(false);
-	if (logged){
 		useEffect(() => {
 			axios.get(`http://localhost:3000/users/profil`, {withCredentials: true})
 			.then((response) => {
 				setUserData({
+					logged: true,
 					twofaStatus: response.data.twofa,
 					isAuthenticated: response.data.authenticated,
 					ingame: response.data.ingame
@@ -144,7 +143,7 @@ const Routing = () => {
 		};
 		fetchTwoFAVerification();
 		}, []);
-	}
+	
 	// console.log("User Logged and 2FA Disabled -> ", logged && !userData.twofaStatus)
 	// console.log("User Logged and 2FA Enabled -> ", logged && userData.twofaStatus)
 	// console.log("User Logged and 2FA Enabled And Code Valid -> ", logged && userData.twofaStatus && twoFAStatuss)
@@ -154,7 +153,7 @@ const Routing = () => {
 		<Suspense fallback={<div><img src={'https://64.media.tumblr.com/02f1e684630962dfde601535ca66c7ec/4f559fadb3dc32b2-db/s1280x1920/b30ed1f7179224fc6c882fc432975dea793cf25a.gifv'}/> </div>}>
 		<Routes>
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
-			{logged && !userData.twofaStatus && (
+			{userData.logged && !userData.twofaStatus && (
 				<>
 					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 			element={<HomeComponents/>}/>
@@ -177,13 +176,13 @@ const Routing = () => {
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}
-			{logged && userData.twofaStatus && (
+			{userData.logged  && userData.twofaStatus && (
 				<>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
 				</>
 			)}
 			{/* User is not logged in */}
-			{!logged && (
+			{!userData.logged  && (
 				<>
 					<Route path="/"			element={<WelcomePage/>}/>
 					<Route path="/welcome"	element={<WelcomePage/>}/>
