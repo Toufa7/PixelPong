@@ -26,6 +26,16 @@ export class achievementService {
     return achievement;
   }
   }
+
+  async getAchievement(id: string)
+  {
+    const achievemnet = await this.prisma.achievements.findFirst({
+      where: {
+          userId: id,
+      },
+  });
+  return achievemnet;
+  }
   async updateAchievement(userId: string, type: Type){
     const find = await this.prisma.stats.findFirst({
         where: {

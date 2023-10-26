@@ -46,7 +46,7 @@ const States = (props : {winRate: number, wins: number, loses: number, streak: n
 }
 
 const Profil = () => {
-    const [userInfo, setUserInfo] = useState(true);
+    const [userInfo, setUserInfo] = useState("");
     useEffect(() => {
         const fetchData = () => {
             axios.get("http://localhost:3000/users/profil", { withCredentials: true })
@@ -121,16 +121,15 @@ const GroupsAndFriends = () => {
             <div className="gAndFContent">
                 <div className="listParent">
                     {label ? (
-                    groups.map((friend : string) => (
-                        <div className='list' key={friend.id}>
-                            <img className="avatar" src={`http://localhost:3000/groupchat/getimage/${friend.id}`} alt="avatar" />
-                            <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
-                                <span className='name'>{friend.namegb}</span>
+                        groups.map((friend) => (
+                            <div className='list' key={friend.id}>
+                                <img className="avatar" src={`http://localhost:3000/groupchat/getimage/${friend.id}`} alt="avatar" />
+                                <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
+                                    <span className='name'>{friend.namegb}</span>
+                                </div>
                             </div>
-                        </div>
                     ))
                     ) : (
-                        // Friends
                         friends.map((friend : string) => (
                             <div className='list' key={friend.id}>
                                 <img className="avatar" src={`http://localhost:3000/auth/avatar/${friend.id}`} alt="avatar" />
@@ -147,24 +146,29 @@ const GroupsAndFriends = () => {
     );
 }
 
-
 const Achivements = () => {
     const achivements: Map<string, string> = new Map();
-    achivements.set(flag, "Win a match against different players");
-    achivements.set(key, "Unlock a feature in the game");
-    achivements.set(savage, "Win 5 games with confidence and flair");
-    achivements.set(medal, "Claim the top spot on the leaderboard");
-    achivements.set(knife, "Never conceding a damage in a full match");
-    achivements.set(dpad, "Win a match without losing a single point");
-    achivements.set(fire, "Score 10 consecutive points with powerful smashes");
-    achivements.set(bomb, "Perform a tricky serve that your opponent fails to return");
-    achivements.set(handshake, "Mer7ba");
-    achivements.set(joystick, "Reach a ranking of top 10 players");
-    achivements.set(shield, "Block 50 opponent shots with a perfect defensive block");
-    achivements.set(box, "Hit the ball with exceptional spin 50 times");
-    achivements.set(mail, "Chat with a friend");
-    achivements.set(caution, "Win a match without committing any fouls");
-    achivements.set(folder, "Unlock all hidden paddle designs");
+    achivements.set(handshake, "Welcome");
+    achivements.set(medal, "First Win");
+    achivements.set(bomb, "FIRSTLOSE");
+    achivements.set(savage, "WINSTRIKE");
+    achivements.set(key, "WIN5");
+    achivements.set(joystick, "WIN10");
+
+
+
+
+
+
+    // achivements.set(flag, "Win a match against different players");
+    // achivements.set(knife, "Never conceding a damage in a full match");
+    // achivements.set(dpad, "Win a match without losing a single point");
+    // achivements.set(fire, "Score 10 consecutive points with powerful smashes");
+    // achivements.set(shield, "Block 50 opponent shots with a perfect defensive block");
+    // achivements.set(box, "Hit the ball with exceptional spin 50 times");
+    // achivements.set(mail, "Chat with a friend");
+    // achivements.set(caution, "Win a match without committing any fouls");
+    // achivements.set(folder, "Unlock all hidden paddle designs");
 
     return (    
             <div className="fullAchivementsBox">
@@ -180,9 +184,9 @@ const Achivements = () => {
                             </div>
                             ))
                         }
-                    </div>
+                        </div>
                 </div>
-            </div>
+                </div>
             </div>
     );
 }   
