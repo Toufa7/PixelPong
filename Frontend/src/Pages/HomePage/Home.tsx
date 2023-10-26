@@ -307,13 +307,38 @@ const TopContainer = () => {
 						{textInfos[0]}
 					</AnimatedText>
 					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="/game">Vamos</a>
+                    {/* <a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" onClick={() => {
+                        document.getElementById('howtoplay').showModal();
+                    }} >How To Play</a> */}
 				</div>
-				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
+				{/* <section>
+                    <dialog class = 'example' style={{height: '700px', width: '700px', background: 'white' , borderRadius:"20px"}} id="howtoplay">
+
+                    <button style={{display: 'flex', alignItems:'left'}} class="nes-btn is-error"  onClick={() => {
+                        document.getElementById('howtoplay')?.close();
+                    }} >X</button>
+						<h1>Pixel Pong</h1>
+						<div style = {{backgroundColor : "#e0a43d"}} class="nes-container is-dark with-title">
+						Pixel Pong was originally founded on September 2023, it was the idea of Omar Toufah and was encouraged later by the other members of our team who were Ayoub Bensguia, Mohamed Amella,
+						Ibrahim Nada, and Mohamed Khalil Naqqad.
+						Our design was heavily by Pixel art which is a form of digital art, our website is structured on the idea of foolishness that paid tribute the this
+						kind of art as it is based on pixels and playing with colors to create a childish yet very artsy design,
+						everything in this web site that you will experience and hope you'll enjoy was made from scratch using frameworks that facilitates the use of pixel art style in CSS and Html.
+						</div>
+						<h2 style={{marginTop : '50px'}}>How To Play</h2>
+						<i class="snes-logo"></i>
+						<div class="nes-container with-title is-centered">
+							{/* <img src= {handshake}></img> */}
+							To move Your Paddle you can use eaither the up and down arrows , Or use your mouse.
+						{/* </div> */} 
+                    {/* </dialog> */}
+                {/* </section> */}
+				{/* <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[1]}
 					</AnimatedText>
 					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="#">Arriba</a>
-				</div>
+				</div> */}
 			</div>
 		</div>
 		</div>

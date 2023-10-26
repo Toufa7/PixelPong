@@ -14,7 +14,7 @@ import jwt_decode from 'jwt-decode';
 //y------------------------------------------
 
 import gifMatch from './assets/rescaled_tv.gif';
-import akumaloading from "./assets/street-fighter-pixel-art.gif";
+import akumaloading from "./assets/sc.gif";
 import f from "./assets/cubecavern_memesbruh03.ttf";
 // import jwt_decode from "jwt-decode";
 // import loading from "./assets/loading.gif";
@@ -222,12 +222,9 @@ p5_ob.preload = () =>{
           let Rnd_background = Math.floor(Math.random() * 2);
           let Rnd_paddle_asset = Math.floor(Math.random() * 4);
           let Rnd_ball_asset = Math.floor(Math.random() * 4);
-          let Random_loading_page = Math.floor(Math.random() * 2);
+          // let Random_loading_page = Math.floor(Math.random() * 2);
 
-          if (Random_loading_page == 0)
-            MatchmakingPage = p5_ob.loadImage(gifMatch);
-          else
-            MatchmakingPage = p5_ob.loadImage(akumaloading);
+          MatchmakingPage = p5_ob.loadImage(gifMatch);
           font  = p5_ob.loadFont(f);
           ovp = p5_ob.loadImage(over_g);
           win = p5_ob.loadImage(Win);
@@ -424,8 +421,8 @@ p5_ob.draw = () =>{
 
           // for(const id in Frontroom){
             
-            if (Frontroom.Player1 && Frontroom.Player2){
             p5_ob.background(GameBackgrund);
+            if (Frontroom.Player1 && Frontroom.Player2){
             Update_screen = true;
             const id_of_player1 = Frontroom.Player1?.id;
             const id_of_player2 = Frontroom.Player2?.id;
