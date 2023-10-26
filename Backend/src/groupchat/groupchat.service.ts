@@ -109,6 +109,25 @@ export class GroupchatService {
             return [];
         }
     }
+    //get groupchats of a user pasing  iduser
+    async findAllGpuser(iduser: string): Promise<Groupchat[]> {
+        try {
+            const data = await this.prisma.groupchat.findMany(
+                {
+                    where: {
+                        usersgb: { some: { id: iduser } },
+                    },
+                }
+            );
+            if (data)
+                return data;
+            else
+                console.log("no groupchat found");
+        }
+        catch (error) {
+            return [];
+        }
+    }
 
     //get all groupchat of a user
     async findAll(iduser: string) : Promise<Groupchat[]>{

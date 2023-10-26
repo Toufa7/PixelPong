@@ -133,9 +133,7 @@ CREATE TABLE "MatchHistory" (
     "id" SERIAL NOT NULL,
     "message" TEXT,
     "userId" TEXT NOT NULL,
-    "level" INTEGER DEFAULT 0,
-    "wins" INTEGER DEFAULT 0,
-    "loses" INTEGER DEFAULT 0,
+    "other" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
