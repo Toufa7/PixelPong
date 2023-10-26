@@ -110,7 +110,7 @@ const Profil = () => {
                                 <div>
                                     <a className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
                                     <a className="nes-btn is-error" href="#" onClick={() => {
-                                        axios.patch("http://localhost:3000/users/blocked", {frienId: userData.userId}, { withCredentials: true })
+                                        axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
                                         .then(() => {})
                                         .catch(() => {})
                                     }}>Block</a>
@@ -134,6 +134,7 @@ const GroupsAndFriends = () => {
     const info = useLocation();
     const [thisId, setId] = useState();
     const [friendData, setFriendData] = useState<string[]>([]);
+    const [groupData, setGroupsData] = useState<string[]>([]);
     const [label, setlabel] = useState<boolean>(true);
     
     axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
@@ -147,6 +148,20 @@ const GroupsAndFriends = () => {
             setFriendData(response.data);
         })
     },[thisId])
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/groupchat/${thisId}/allgpuser`, {withCredentials: true})
+        .then((response) => {
+            setGroupsData(response.data);
+        })
+    },[thisId])
+
+
+
+
+
+
+
       return (
           <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
@@ -157,10 +172,14 @@ const GroupsAndFriends = () => {
             <div className="gAndFContent">
                 <div className="listParent">
                 {label ? (
-                        (
-                        <>
-                        </>
-                    )
+                    groupData.map((group : string) => (
+                        <div className='list' key={group.id}>
+                            <img className="avatar" src={`http://localhost:3000/groupchat/getimage/${group.id}`} alt="avatar" />
+                            <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
+                                <span className='name'>{group.namegb}</span>
+                            </div>
+                        </div>
+                    ))
                     ) : (
                         friendData.map((friend : string) => (
                             <div className='list' key={friend.id}>
@@ -223,10 +242,7 @@ const Achivements = () => {
 function OtherProfilPage() {
     const location = useLocation();   
     const [userExist, isUserExist] = useState<string>(""); 
-    const [theOne, setTheOne] = useState<string>(""); 
-
     const currUser = useParams();
-
     useEffect(() => {
 	const searchInFriends = async () => {
 		try {

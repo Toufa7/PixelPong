@@ -583,7 +583,7 @@ export class GroupchatService {
         //delete the request
         await this.prisma.requestjoingroup.delete({
             where: {
-                id: request[0].id,
+                id: request.id,
             },
         });
         if (superadmin.id == iduserconnected) {

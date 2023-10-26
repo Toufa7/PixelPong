@@ -407,17 +407,17 @@ const BottomLeft = () => {
 					achivements &&
 						achivements.map((item, idx) => {
 							if (item == "WELCOME")
-							return (<img style={{width: '150px', height: 'fit-content'}} src={handshake} key={idx}/>)
+							return (<img style={{width: '100px', height: 'fit-content'}} src={handshake} key={idx}/>)
 							if (item == "FIRSTWIN")
-							return (<img style={{width: '150px', height: 'fit-content'}} src={medal} key={idx}/>)
+							return (<img style={{width: '100px', height: 'fit-content'}} src={medal} key={idx}/>)
 							if (item == "FIRSTLOSE")
-							return (<img style={{width: '150px', height: 'fit-content'}} src={bomb} key={idx}/>)
+							return (<img style={{width: '100px', height: 'fit-content'}} src={bomb} key={idx}/>)
 							if (item == "WINSTRIKE")
-							return (<img style={{width: '150px', height: 'fit-content'}} src={savage} key={idx}/>)
+							return (<img style={{width: '100px', height: 'fit-content'}} src={savage} key={idx}/>)
 							if (item == "WIN5")
-							return (<img style={{width: '150px', height: 'fit-content'}} src={key} key={idx}/>)	
+							return (<img style={{width: '100px', height: 'fit-content'}} src={key} key={idx}/>)	
 							if (item == "WIN10")
-							return (<img style={{width: '150px', height: 'fit-content'}} src={joystick} key={idx}/>)
+							return (<img style={{width: '100px', height: 'fit-content'}} src={joystick} key={idx}/>)
 						})
 					}
 				{/* </HorizontalScroll> */}
@@ -449,7 +449,6 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 
 
 
 const BottomRight= () => {
-
 	const [matchHistory, setMatchHistory] = useState([]);
     useEffect(() => {
         axios.get(`http://localhost:3000/users/history` , {withCredentials: true})
@@ -462,6 +461,7 @@ const BottomRight= () => {
 		})
     },[])
 
+	console.log("matchHistory -> ", matchHistory);
 	
 	const userData = GetUserData();
 	const win = "#ff7670";
@@ -548,6 +548,21 @@ function Notification () {
 
 export default function Home() {
 	Notification();	
+	const [states, setStates] = useState([]);
+	useEffect(() => {
+		axios.get("states", {withCredentials: true})
+		.then((response) => {
+			setStates(response.data);
+		})
+		.catch((erro) => {
+			console.log("Error in States -> ", erro);
+		}) 
+	}, [])
+
+	states.map((match) => {
+		console.log(match)
+	})
+
 	return (
 		<div style={{ height: '100vh'}}>
 			<title>Home</title>
