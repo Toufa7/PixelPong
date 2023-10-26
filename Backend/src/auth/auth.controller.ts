@@ -63,7 +63,7 @@ export class AuthController {
           return res.redirect(`${process.env.FRONT_URL}/two-factor-authentication`);
         return res.redirect(`${process.env.FRONT_URL}/home`);
       }
-    } catch (err) {
+    } catch (err) {    
       console.log(err);
       res.status(HttpStatus.BAD_REQUEST).json({ error: 'Something went wrong' });
     }

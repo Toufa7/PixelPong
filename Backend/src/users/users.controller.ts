@@ -25,6 +25,7 @@ import { achievementService } from './gamedata/acheievement.service';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 // import { User } from '@prisma/client';
 
+
 @Controller('users')
 @UseGuards(JwtGuard)
 export class UsersController {
