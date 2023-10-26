@@ -113,7 +113,7 @@ async getMatchHistory(userId:string){
     });
     return matchHistory;
 }
-async getSoloStats(userId:string){
+async getStats(userId:string){
     const stats = await this.prisma.stats.findMany({
         where: {
             userId: userId,
