@@ -5,6 +5,7 @@ import axios from 'axios'
 import ChatUser from '../components/ChatUser'
 import DmChatUser from './dmChatUser'
 import ChatSearch from './chatSearch'
+import { useMediaPredicate } from 'react-media-hook'
 
 interface chatUser {
     userName: string;
@@ -15,19 +16,21 @@ interface chatUser {
 const chatNavBar = () => {
     
     const [currentUserId, setCurrentUserId] = useState('');
-    
+    const isMobile = useMediaPredicate('(min-width: 700px)');
+
     const getCurentUserDms = (data: any) => {
         setCurrentUserId(data);
     }
+    // {isMobile ? (<></>) : (<ChatSearch userFound={getCurentUserDms} />)}
     
     return (
         <div className="chatMessage">
             <div className="chatNavBarDiv">
                 <ChatSearch userFound={getCurentUserDms} />
                 <div className="chatsContainer"><Dms cu={getCurentUserDms}/></div>
-                <div className="chatLowerRibbon"></div>
+                <div className="chatLowerRibbon"></div></div>
+            <div className="userProfileAndMessages"><ChatUser pcurrentUserId={currentUserId}/>
             </div>
-            <div className="userProfileAndMessages"><ChatUser pcurrentUserId={currentUserId}/></div>
         </div>
   )
 }

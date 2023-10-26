@@ -5,43 +5,39 @@ import {Toaster, toast } from 'react-hot-toast';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Anime from 'react-anime';
-import { Cookies } from "react-cookie";
-import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
 
 /******************* Includes  *******************/
 
 const RetrieveCheckSendData =  () => {
-    const avatar = document.querySelector('[name="avatarUpload"]').files[0];
-    const nicknameInput = document.querySelector('[name="nickname"]').value;
+    const avatar        = document.querySelector('[name="avatarUpload"]')?.files[0];
+    const nicknameInput = document.querySelector('[name="nickname"]')?.value;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
     if (avatar) {
-       const data = new FormData();
-       data.append('file', avatar);
-       toast.promise(
-           axios.all([
-               axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
-            ]).then(axios.spread((responseNickname) => {
+        const data = new FormData();
+        data.append('file', avatar);
+        toast.promise(
+            axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
+            .then((responseNickname) => {
                 console.log(responseNickname);
-            })),
+            }),
             {
                 loading: "Sending data...",
                 success: "Success Settings!", 
                 error: "An error occurred",
             }
-            ,{ duration: 5000, position: 'top-right' });           
+        ,{ duration: 5000, position: 'top-right' });           
     }
     if (usernameCheck.test(nicknameInput)) {
         toast.promise(
-            axios.all([
-                axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true }),
-             ]).then(axios.spread((responseNickname) => {
-                 console.log(responseNickname);
-             })),
+            axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true })
+            .then((responseNickname) => {
+                console.log(responseNickname);
+             }),
              {
-                 loading: "Sending data...",
-                 success: "Success Settings!",
-                 error: "An error occurred",
+                loading: "Sending data...",
+                success: "Success Settings!",
+                error: "An error occurred",
              }
              ,{ duration: 5000, position: 'top-right' });           
     }
@@ -57,29 +53,6 @@ const RetrieveCheckSendData =  () => {
     }
 }
 
-const Avatars = () => {
-    const cookies = new Cookies();
-    const logged = cookies.get('jwt');
-    const [userData, setUserData] = useState({});
-    if (logged)
-    {
-        const token = jwt_decode(logged);
-        useEffect(() => {
-            try {
-                axios.get(`http://localhost:3000/users/profil`, {withCredentials : true})
-                .then((rese) => {
-                    console.log("user Data =>  ", rese);
-                    setUserData(rese.data)
-                })
-            }
-            catch (error) {
-                console.log("Error Catched ", error);
-            }
-        },[])
-    }
-};
-
-
 export default function LoginSettings() {   
     const [isChecked, set2FAStatus] = useState(false);
     const handle2FAChange = () => {
@@ -90,46 +63,33 @@ export default function LoginSettings() {
         .then (() => {})
         .catch(() => {});
     }
-    interface Token {
-        username : string
-    }
-    const cookie = new Cookies();
-    const token : Token = jwt_decode(cookie.get('jwt'));
 	const [update , setUpdate] = useState("");
-
-        const [imagePreview, setImagePreview] = useState('');
-      
-        const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const file = e.target.files?.[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-              setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-          }
+    const [imagePreview, setImagePreview] = useState('');
+    
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
         }
+    }
 
-
-
-        const [isFirstLogging, setIsFirstLogging] = useState(true);
-
-        useEffect(() => {
-          const fetchData = () => {
-              axios.get("http://localhost:3000/users/profil", { withCredentials: true })
-              .then((response) => {
-                  console.log("USER INFO -> ", response.data)
-                  setIsFirstLogging(response.data.firstlogin)
-              })
-              .catch((error) => {
-              console.log("Error -> ", error);
+    const [userInfo, setUserInfo] = useState("");
+    useEffect(() => {
+        const fetchData = () => {
+            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+            .then((response) => {
+                setUserInfo(response.data)
             })
-            }
-      
-          fetchData();
-        }, []);
-
-
+            .catch((error) => {
+            console.log("Error -> ", error);
+        })
+    }
+    fetchData();
+    }, []);
 
     return (
         <div style={{height: '100vh'}}>
@@ -146,10 +106,9 @@ export default function LoginSettings() {
                         </div>
                             <div className="uploadContainer">
                                 <div>
-                                        <img src={imagePreview} alt="Preview" style={{width: '100px', height: '100px', borderRadius: '50px'}}/>
+                                    <img src={imagePreview} alt="Preview" style={{width: '100px', height: '100px', borderRadius: '50px'}}/>
                                 </div>
-                                <label className="nes-btn">
-                                    Upload your image
+                                <label className="nes-btn">Upload your image
                                     <input onChange={handleImageChange} formMethod="post" type="file" alt="Upload your avatar" name="avatarUpload" accept="image/*"/>
                                 </label>
                             </div>
@@ -163,20 +122,14 @@ export default function LoginSettings() {
                      </div>
                         <div className="startContainer">
                             <button style={{width: 'fit-content'}} onClick={() => {
-                                if (!document.querySelector('[name="avatarUpload"]')?.files[0] && !document.querySelector('[name="nickname"]')?.value && isFirstLogging == true) {
-                                    console.log("isFirstLogging -> ",isFirstLogging);
-                                    console.log("avatarUpload -> ",document.querySelector('[name="avatarUpload"]')?.files[0]);
-                                    console.log("nickname -> ",document.querySelector('[name="nickname"]')?.value);
-
+                                if (!document.querySelector('[name="avatarUpload"]')?.files[0] && !document.querySelector('[name="nickname"]')?.value && userInfo.firstlogin == true) {
                                     document.getElementById('warning')?.showModal();
                                 }
-                                else
-                                {
-                                    console.log("===== Retrving =====")
+                                else {
                                     RetrieveCheckSendData();
-
                                 }
-                                }} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update</button>
+                                }} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`}>Update
+                            </button>
                         </div>
                     </div>
                     {/* A dialog show up for the 1st time and ask the user if he want to go with the default username & avatar */}
@@ -188,7 +141,7 @@ export default function LoginSettings() {
                                 <Anime translateY={['-100%', '0%']} duration={3000}>
                                     <div>
                                         <img style={{width: '100px', height: '100px', borderRadius: '50%', margin: '10px'}} src={`http://localhost:3000/auth/avatar/default-image`}></img>
-                                        <a style={{fontWeight: "bold"}}>{token.username}</a>
+                                        <a style={{fontWeight: "bold"}}>{userInfo.username}</a>
                                     </div>
                                 </Anime>
                                 <div>

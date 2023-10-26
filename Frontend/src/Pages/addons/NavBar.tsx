@@ -1,9 +1,7 @@
 import "./NavBar.scss";
 /******************* Packages  *******************/
-import jwt_decode from "jwt-decode";
 import axios from "axios";
-import Cookies from "universal-cookie";
-import {Link, useNavigate} from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 /******************* Images  *******************/
 import msgLogo from './assets/msgLogo.svg';
@@ -14,17 +12,9 @@ import groups from './assets/groups.svg'
 import randomLogo from './assets/logo.svg'
 /******************************************/  
 
-
 const NavBarBody = () => {
-	const [showNotification, setShowNotification] = useState(false);
-
-	const toggleNotification = () => {
-	  setShowNotification(!showNotification);
-	};
-
 	return (
 		<div className="nav-content">
-
 		<div className="nav-item">
 			<Link to="/notifications" title="Notifications">
 					<img src={notificationLogo}/>
@@ -64,54 +54,27 @@ const NavBarHeader = () => {
 }
 
 const NavBarFooter = () => {
-	const coo = new Cookies();
 	const navigate = useNavigate();
-  
-	const logout = () => {
-		axios.post("http://localhost:3000/auth/logout",{}, {withCredentials: true})
-		.then(() => {
-			navigate("/login");
-		})
-		.catch(() => {});
-	};
-  
-    const cookie = new Cookies();
-    const token = jwt_decode(cookie.get('jwt'));
-    const [check, setUserData] = useState(false);
-    
-    useEffect(() => {
-        async function fetchData() {
-            const cookie = new Cookies();
-            const token = jwt_decode(cookie.get('jwt'));
-            if (token) {
-				try {
-					await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
-					.then(() => 
-					{
-						setUserData(true)
-					})
-					.catch(((error) => {
-						console.log("Error in NavBar " ,error);
-					}))
-					
-				} catch (error) {
-					console.log("Error in NavBar " ,error);
-				}
-            }
-        }
-		fetchData();
-    }, [])
-
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<Link to="/profil" title="Profil">
-				<img src={check ? `http://localhost:3000/auth/avatar/${token.id}` : '/public/profile-default.png'} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+				<img src={`http://localhost:3000/auth/avatar/id`} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</Link>
 		</div>
 		<div className="nav-item">
-			<Link to="/login" title="Logout">
-				<img onClick={logout} src={logoutLogo} alt="Logout" />
+			<Link to="/welcome" title="Logout">
+				<img onClick={() => {
+						axios.post("http://localhost:3000/auth/logout",{}, {withCredentials: true})
+						.then((res) => {
+							console.log("Response Logout -> ", res.data);
+							window.location.href = '/welcome';
+							navigate("/welcome");
+						})
+						.catch((err) => {
+							console.error("Cannot Logout -> ", err);
+						});
+				}} src={logoutLogo} alt="Logout" />
 			</Link>
 		</div>
 		</div>

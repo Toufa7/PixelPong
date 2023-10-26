@@ -1,8 +1,5 @@
 import './profilPage.scss'
-
 /******************* Packages  *******************/
-import jwt_decode from 'jwt-decode';
-import Cookies from 'universal-cookie';
 import { useEffect, useState } from "react";
 import axios from "axios";
 /******************* Includes  *******************/
@@ -49,50 +46,27 @@ const States = (props : {winRate: number, wins: number, loses: number, streak: n
 }
 
 const Profil = () => {
-
-    const cookie = new Cookies();
-    const token : string = jwt_decode(cookie.get('jwt'));
-
-    const [userData, setUserData] = useState({
-        avatar: '',
-        username: token.username,
-        check: true
-    });
-    
+    const [userInfo, setUserInfo] = useState("");
     useEffect(() => {
-        async function fetchData() {
-            const cookie = new Cookies();
-            const token = jwt_decode(cookie.get('jwt'));
-            console.log("Toekn -> ", token);
-            const endpoints = [
-                `http://localhost:3000/auth/avatar/${token.id}`,
-                `http://localhost:3000/users/profil`
-            ]
-            if (token) {
-
-                await axios.all(endpoints.map((idx) =>
-                axios.get(idx, {withCredentials: true})))
-                .then(axios.spread((avatarRes, userRes) => 
-                {
-                    setUserData(() => ({
-                        avatar: `http://localhost:3000/auth/avatar/${token.id}`,
-                        username: userRes.data.username,
-                        check: false
-                    }))
-                }))
-            }
-        }
-        fetchData();
-    }, [])
-
+        const fetchData = () => {
+            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+            .then((response) => {
+                setUserInfo(response.data)
+            })
+            .catch((error) => {
+            console.log("Error -> ", error);
+        })
+    }
+    fetchData();
+    }, []);
 
     return (
         <div className="profilRectangle">
           <div className="avatar">
             <div className="left">
-              <img src={`http://localhost:3000/auth/avatar/${token.id}`} style={{width: '100px',height: '100px',marginRight: '10px',marginLeft: '10px',borderRadius: '50px'}} className="playerAvatar"/>
+              <img src={`http://localhost:3000/auth/avatar/${userInfo.id}`} style={{width: '100px',height: '100px',marginRight: '10px',marginLeft: '10px',borderRadius: '50px'}} className="playerAvatar"/>
             <div>
-              <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
+              <span className="playerName" style={{marginBottom: '10px'}}>{userInfo.username}</span>
               <div>
                 <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
               </div>
@@ -109,17 +83,20 @@ const Profil = () => {
 }
 
 const GroupsAndFriends = () => {
-    interface friendInfo {
-        id: string, 
-        profileImage : string
-    }
-    const [friendData, setFriendData] = useState<string[]>([]);
-
+    const [friends, setFriends] = useState<string[]>([]);
     useEffect(() => {
         axios.get(`http://localhost:3000/users/Friends`, {withCredentials: true})
             .then((response) => {
-                console.log("Friend List -> ", response.data);
-                setFriendData(response.data);
+                setFriends(response.data);
+            });
+    }, []);
+
+    const [groups, setGroups] = useState<string[]>([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
+            .then((response) => {
+                console.log("Resp _> ", response);
+                setGroups(response.data);
             });
     }, []);
 
@@ -129,7 +106,7 @@ const GroupsAndFriends = () => {
         axios.patch(endpoint, {friendId: remote}, {withCredentials: true})
             .then((response) => {
                 console.log("Removing Response", response);
-                setFriendData(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
+                setFriends(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
             });
     }
 
@@ -144,10 +121,16 @@ const GroupsAndFriends = () => {
             <div className="gAndFContent">
                 <div className="listParent">
                     {label ? (
-                        <></>
+                        groups.map((friend) => (
+                            <div className='list' key={friend.id}>
+                                <img className="avatar" src={`http://localhost:3000/groupchat/getimage/${friend.id}`} alt="avatar" />
+                                <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
+                                    <span className='name'>{friend.namegb}</span>
+                                </div>
+                            </div>
+                    ))
                     ) : (
-                        // Friends
-                        friendData.map((friend : string) => (
+                        friends.map((friend : string) => (
                             <div className='list' key={friend.id}>
                                 <img className="avatar" src={`http://localhost:3000/auth/avatar/${friend.id}`} alt="avatar" />
                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
@@ -163,24 +146,29 @@ const GroupsAndFriends = () => {
     );
 }
 
-
 const Achivements = () => {
     const achivements: Map<string, string> = new Map();
-    achivements.set(flag, "Win a match against different players");
-    achivements.set(key, "Unlock a feature in the game");
-    achivements.set(savage, "Win 5 games with confidence and flair");
-    achivements.set(medal, "Claim the top spot on the leaderboard");
-    achivements.set(knife, "Never conceding a damage in a full match");
-    achivements.set(dpad, "Win a match without losing a single point");
-    achivements.set(fire, "Score 10 consecutive points with powerful smashes");
-    achivements.set(bomb, "Perform a tricky serve that your opponent fails to return");
-    achivements.set(handshake, "Mer7ba");
-    achivements.set(joystick, "Reach a ranking of top 10 players");
-    achivements.set(shield, "Block 50 opponent shots with a perfect defensive block");
-    achivements.set(box, "Hit the ball with exceptional spin 50 times");
-    achivements.set(mail, "Chat with a friend");
-    achivements.set(caution, "Win a match without committing any fouls");
-    achivements.set(folder, "Unlock all hidden paddle designs");
+    achivements.set(handshake, "Welcome");
+    achivements.set(medal, "First Win");
+    achivements.set(bomb, "FIRSTLOSE");
+    achivements.set(savage, "WINSTRIKE");
+    achivements.set(key, "WIN5");
+    achivements.set(joystick, "WIN10");
+
+
+
+
+
+
+    // achivements.set(flag, "Win a match against different players");
+    // achivements.set(knife, "Never conceding a damage in a full match");
+    // achivements.set(dpad, "Win a match without losing a single point");
+    // achivements.set(fire, "Score 10 consecutive points with powerful smashes");
+    // achivements.set(shield, "Block 50 opponent shots with a perfect defensive block");
+    // achivements.set(box, "Hit the ball with exceptional spin 50 times");
+    // achivements.set(mail, "Chat with a friend");
+    // achivements.set(caution, "Win a match without committing any fouls");
+    // achivements.set(folder, "Unlock all hidden paddle designs");
 
     return (    
             <div className="fullAchivementsBox">
@@ -196,9 +184,9 @@ const Achivements = () => {
                             </div>
                             ))
                         }
-                    </div>
+                        </div>
                 </div>
-            </div>
+                </div>
             </div>
     );
 }   
