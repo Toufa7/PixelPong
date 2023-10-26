@@ -24,6 +24,7 @@ import { HistoryService } from './gamedata/history.service';
 import { achievementService } from './gamedata/acheievement.service';
 // import { User } from '@prisma/client';
 
+
 @Controller('users')
 @UseGuards(JwtGuard)
 export class UsersController {

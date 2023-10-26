@@ -126,9 +126,6 @@ const Routing = () => {
     	}
 		fetchData();
 	}, [])
-	console.log("unlogged status -> ", unlogged);
-	console.log("Is User Logged ==> ", userData) 
-
 
 	return (
 		<BrowserRouter>

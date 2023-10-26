@@ -104,7 +104,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } catch (error) {
       //console.log(error);
     }
-  }
+  } 
   getUser(client: Socket) {
     const session = client.handshake.headers.cookie;
     if (session) {
