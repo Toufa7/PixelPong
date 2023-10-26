@@ -241,5 +241,36 @@ async getAchievement(@Req() req)
 {
 	return await this.achievement.getAchievement(req.user?.id)
 }
+@Get('stats')
+async getStats(@Req() req)
+{
+	return await this.history.getStats(req.user?.id);
+}
 
+@Get('history/:id')
+async getotherHistory(@Req() req,@Param() id: string)
+{
+	return await this.history.getMatchHistory(id);
+}
+
+@Get('achievements/:id')
+async getotherAchievement(@Req() req,@Param() id: string)
+{
+	return await this.achievement.getAchievement(id)
+}
+@Get('stats/:id')
+async getotherStats(@Req() req,@Param() id: string)
+{
+	return await this.history.getStats(id);
+}
+
+
+@Get('checkfriend')
+async checkfriend(@Req() req, @Body() body: FriendrequestDto){
+	const friends = await this.usersService.getFriends(req.user.id);
+	const find = friends.find((item) => item.id === body.to);
+	if(find)
+		return true;
+	return false;
+}
 }
