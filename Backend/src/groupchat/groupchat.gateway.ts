@@ -54,10 +54,6 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
   }
 
   
-
-
-
-
   async getUser(client: Socket)  {
     const session = client.handshake.headers.cookie;
     if (session) {
@@ -273,9 +269,9 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         from: user.username,
       },
     });
-    //send notification to superadmin
+    //send notification to superadmin of groupchat
     this.server.to(mapclient.get(superadmin.superadmin.id)).emit('notificationgp', {
-      snederId: idsender,
+      senderId: idsender,
       receiverId: superadmin.superadmin.id,
       type: 'join groupchat',
       photo: user.profileImage,

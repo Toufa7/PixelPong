@@ -253,16 +253,12 @@ export class GroupchatService {
             messages.messagesgb.forEach(element => {
                 let check = true;
                 userblock.blocked.forEach(user => {
-
-                    console.log("element id ::",element.senderid, "user id ::",user.id);
-                    if (element.senderid == user.id) {
+                    if (element.senderid == user.id) 
                         check = false;
-                    }
                 });
                 userblock.blockedby.forEach(user => {
-                    if (element.senderid == user.id) {
+                    if (element.senderid == user.id)
                         check = false;
-                    }
                 });
                 if (check) {
                     messagessend.push(element);
@@ -362,7 +358,7 @@ export class GroupchatService {
                     const saltOrRounds = 10;
                     createGroupchatDto.password = await bcrypt.hash(createGroupchatDto.password, saltOrRounds);
                 }
-                if(createGroupchatDto.namegb.trim() === true){
+                // if(createGroupchatDto.namegb.trim() === true){
 
                     return await this.prisma.groupchat.create({
                         data: {
@@ -374,10 +370,10 @@ export class GroupchatService {
                             password: createGroupchatDto.password,
                         },
                     });
-                }else{
-                    console .log("==========>>>> :: name is not valide");
-                    throw new HttpException('name is not valide', HttpStatus.BAD_REQUEST);
-                }
+                // }else{
+                //     console .log("==========>>>> :: name is not valide");
+                //     throw new HttpException('name is not valide', HttpStatus.BAD_REQUEST);
+                // }
             }
             else {
                 throw new HttpException('name of Groupchat already exist', HttpStatus.BAD_REQUEST);
@@ -576,7 +572,6 @@ export class GroupchatService {
     //accept a request to join a groupchat
     async acceptrequest(id: string, iduser: string, iduserconnected: string) {
         const superadmin = await this.findSuperUser(id);
-
         //select the request
         const request = await this.prisma.requestjoingroup.findFirst({
             where: {
@@ -624,7 +619,7 @@ export class GroupchatService {
         //delete the request
         await this.prisma.requestjoingroup.delete({
             where: {
-                id: request[0].id,
+                id: request.id,
             },
         });
         if (superadmin.id == iduserconnected) {
