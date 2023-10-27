@@ -377,11 +377,7 @@ const ManageGroup = () => {
 										<span>Change Avatar</span>
 										<input formMethod="post" type="file" name="avatarUpload" accept="image/*"/>
 									</label>
-
-
 											<ListingUsersAdmins group={selecting} />
-
-
 									<a style={{color: '#333C54', margin: '10px'} }>
 										<img src={erase} style={{width: '40px', height: '40px', marginRight: '10px'}}  onClick={() => {
 											axios.delete(`http://localhost:3000/groupchat/${selecting.id}`, {withCredentials: true})
