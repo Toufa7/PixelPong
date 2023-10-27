@@ -275,4 +275,13 @@ async checkfriend(@Req() req, @Body() body: FriendrequestDto){
 		return true;
 	return false;
 }
+// check if user in blocklist
+@Post('checkblock')
+async checkblock(@Req() req, @Body() body: FriendrequestDto){
+    const blocked = await this.usersService.getblocked(req.user.id);
+    const find = blocked.blocked.find((item) => item.id === body.to);
+    if(find)
+        return true;
+    return false;
+}
 }
