@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, Link} from "react-router-dom";
 import Cookies from 'universal-cookie';
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
@@ -22,13 +22,23 @@ const Error = lazy(() => import('./Pages/errorPage/errorPage'));
 const Notification = lazy(() => import('./Pages/Notifications/Notifications'));
 import GroupPage from './Pages/newGroupChat/GrpChatPage';
 import Dogo from "./Pages/dogo.gif";
+import randomLogo from './Pages/addons/assets/logo.svg'
 
 const BackgroudGame = () => {
-	return (
-		<div style={{height: '100vh', background: "#333C54"}}>
-		</div>
-	);
-}
+	const animationStyle = `
+		@keyframes rotate {
+			50% { transform: rotate(360deg); }
+		}`;
+  return (
+    <div style={{height: '100vh', background: '#333C54',display: 'flex', justifyContent: 'flex-start',alignItems: 'flex-start'}}>
+      	<Link to="/home" title="Home">
+  		<style>{animationStyle}</style>
+        	<img src={randomLogo} title={"Back To Home"} style={{ margin: '20px',width: '50px',height: '50px',animation: 'rotate 10s infinite'}}/>
+      	</Link>
+    </div>
+  );
+};
+
 
 export const OtherUser = () => {
 	return (
@@ -92,11 +102,9 @@ const HomeComponents = () => {
 const GameComponents = () => {
 	return (
 		<>
-		<div style={{height: '100vh', background: "#333C54"}}>
 			<BackgroudGame/>
 			<Setup/>
-		</div>
-	</>
+		</>
 	);
 }
 

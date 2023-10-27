@@ -59,6 +59,7 @@ async addMatchHistory(userId:string){
                     },
                 },
                 other: loser.username,
+                otherid: loser.id,
                 message: `WIN`,
             },
         }),
@@ -83,7 +84,8 @@ async addMatchHistory(userId:string){
                     },
                 },
                 other:winner.username,
-                message: `lose`,
+                otherid: winner.id, 
+                message: `LOSE`,
             },
         }),
         this.prisma.stats.updateMany({
@@ -111,12 +113,12 @@ async getMatchHistory(userId:string){
     });
     return matchHistory;
 }
-async getSoloStats(userId:string){
-    const stats = await this.prisma.stats.findMany({
+async getStats(id:string){
+    const status = await this.prisma.stats.findMany({
         where: {
-            userId: userId,
+            userId: id,
         },
     });
-    return stats;
-}
+    return status;
+} 
 } 
