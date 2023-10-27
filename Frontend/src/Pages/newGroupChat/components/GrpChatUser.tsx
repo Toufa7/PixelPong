@@ -8,7 +8,8 @@ import crown from '../assets/crown.svg'
 import toast from 'react-hot-toast'
 import dudley from '../assets/Dudley.gif'
 import manage from '../assets/manage.svg'
-
+import ManageGroup from './mangeGroup'
+import CreateGroup from './createGroup'
 interface localUserClass
 {
     id: string,
@@ -54,7 +55,13 @@ const ChatUser = (props : any) => {
 
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
-    
+    const [data, setLabel] = useState({
+		label : false,
+		createOrmanage : false
+	})
+
+    const [isCreated, setIsCreated] = useState<boolean>(false)
+
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {
@@ -89,7 +96,7 @@ const ChatUser = (props : any) => {
 
     const openDialogUsers = () => {
         console.log("Clicked On Info")
-        const dialog = document.getElementById('dialogMembers');
+        const dialog = document.getElementById('manageGroup');
 		dialog?.showModal();
     }
 
@@ -98,6 +105,8 @@ const ChatUser = (props : any) => {
         const dialog = document.getElementById('dialogMembers');
 		dialog?.showModal();
     }
+
+    
 
     return (
         <div className='GrpusrProfileConversation'>
@@ -150,57 +159,85 @@ const ChatUser = (props : any) => {
                     </div>
                 </div> 
             </div>
+
+        <section>
+            <dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="manageGroup">
+                <button onClick={() => {document.getElementById('manageGroup')?.close()}} >X</button>
+                <form method="dialog">
+                <menu className="dialog-menu">
+
+                    
+                    <div>
+                        <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
+                        <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
+                        {
+                            data.label ?
+                            (
+                                data.createOrmanage ?
+                                (<ManageGroup/>)
+                                :
+                                (<CreateGroup setIsCreated={setIsCreated} />)
+                                )
+                                :
+                                (
+                                    <></>
+                                )
+                            }
+                    </div>
+                </menu>
+                </form>
+            </dialog>
+        </section>
  
-            <section>
-		<dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="dialogMembers">
+        <section>
+		    <dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="dialogMembers">
+                <form method="dialog">
+                    <button>X</button>
+                        <menu className="dialog-menu">
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <label style={{fontSize: 'large'}}>
+                            Admins
+                            <img style={{ height: '30px',   position: "relative", marginLeft: "5px" , top: '-3px',width: '30px'}}src={crown}></img>
+                        </label>
+                    </div>
+                    <div style={{ height: 'fit-content'}}>
+                    <div style={{borderBottom: "1px solid" }}></div>
+                    {
+                        // Listing Admins and Owner
+                        Object.keys(admins).map((idx) => {
+                            return (
+                                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} key={idx}>
+                                <div>
+                                    <img src={`http://localhost:3000/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
+                                </div>
+                                <span style={{ marginLeft: '10px', marginRight: 'auto' }}>{admins[idx].username}</span>
 
-            <form method="dialog">
-        <button>X</button>
-				<menu className="dialog-menu">
-				<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-					<label style={{fontSize: 'large'}}>
-						Admins
-						<img style={{ height: '30px',   position: "relative", marginLeft: "5px" , top: '-3px',width: '30px'}}src={crown}></img>
-					</label>
-				</div>
-				<div style={{ height: 'fit-content'}}>
-				<div style={{borderBottom: "1px solid" }}></div>
-				{
-					// Listing Admins and Owner
-					Object.keys(admins).map((idx) => {
-						return (
-						<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} key={idx}>
-							<div>
-								<img src={`http://localhost:3000/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
-							</div>
-							<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{admins[idx].username}</span>
+                            </div>
+                            )
+                            ;})
+                        }
+                        </div>
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <label style={{fontSize: 'large'}}>Members</label>
+                    </div>
+                        <div style={{borderBottom: "1px solid" }}></div>
 
-						</div>
-						)
-					;})
-				}
-					</div>
-					<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-					<label style={{fontSize: 'large'}}>Members</label>
-				</div>
-					<div style={{borderBottom: "1px solid" }}></div>
-
-					<div style={{ height: 'fit-content', overflow: 'auto', marginTop: '10px' }}>
-					{
-						// Listing Members
-						Object.keys(users).map((idx) => {
-							return (
-								<div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} key={idx}>
-									<img src={`http://localhost:3000/auth/avatar/${users[idx].id}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
-									<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{users[idx].username}</span>
-								</div>
-							)
-							;})
-					}
-					</div>
-				</menu>
-			</form>
-		</dialog>
+                        <div style={{ height: 'fit-content', overflow: 'auto', marginTop: '10px' }}>
+                        {
+                            // Listing Members
+                            Object.keys(users).map((idx) => {
+                                return (
+                                    <div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} key={idx}>
+                                        <img src={`http://localhost:3000/auth/avatar/${users[idx].id}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
+                                        <span style={{ marginLeft: '10px', marginRight: 'auto' }}>{users[idx].username}</span>
+                                    </div>
+                                )
+                                ;})
+                            }
+                        </div>
+                    </menu>
+                </form>
+            </dialog>
 		</section>
 
             {/* Sending LocalUser (Sender) and groupRoom (Receiver) objects to Messaging Body component */}
