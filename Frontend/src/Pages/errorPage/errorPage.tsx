@@ -3,15 +3,17 @@ import "xp.css/dist/XP.css";
 import ErrorIcon from './assets/error_icon.png'
 import Draggable from 'react-draggable';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import React, { useRef } from 'react';
 
 
 const ErrorPage = (props : {title: string , errorType: string, msg: string}) => {
 
     const navigate = useNavigate();
+    const nodeRef = useRef(null)
     return (
         <div className="container">
-        <Draggable>
-        <div className="window">
+        <Draggable nodeRef={nodeRef}>
+        <div ref={nodeRef} className="window">
             <div className="title-bar">
                 <div className="title-bar-text">{props.title}</div>
                     <div className="title-bar-controls">
