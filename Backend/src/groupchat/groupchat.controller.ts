@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Redirect, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Redirect, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { GroupchatService } from './groupchat.service';
 import { updateGroupchatDto } from 'src/dto/UpdateGroupchat.dto';
 import { CreateGroupchatDto } from 'src/dto/CreateGroupchat.dto';
@@ -11,12 +11,12 @@ import { createReadStream } from 'fs';
 import { promises as fsPromises } from 'fs';
 import { GroupchatGateway } from './groupchat.gateway';
 import { Groupchat, Messagegb, Requestjoingroup, User, usermute } from '@prisma/client';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
 @UseGuards(JwtGuard)
 @Controller('groupchat')
 export class GroupchatController {
     constructor(private readonly GroupchatService : GroupchatService, private readonly  GroupchatGateway : GroupchatGateway) {}
-
     //get number user of a groupchat
     @Get(":id/numberuser")
     numberuser(@Param('id') id :string): Promise<number> {
@@ -50,7 +50,11 @@ export class GroupchatController {
     }
 
 
-
+    //get groupchats of a user pasing  iduser
+    @Get(":iduser/allgpuser")
+    findallGpuser(@Param('iduser') iduser : string) : Promise<Groupchat[]>{
+        return this.GroupchatService.findAllGpuser(iduser);
+    }
     //get all groupchat of a user
     @Get()
     findAll(@Req() Request) :  Promise<Groupchat[]> {
@@ -71,7 +75,7 @@ export class GroupchatController {
 
     //get all admins of a groupchat
     @Get(":id/admins")
-    findAllAdmins(@Param('id') id: string) {
+    findAllAdmins(@Param('id') id: string) : Promise<User[]> {
         return this.GroupchatService.findAllAdmins(id);
     }
 

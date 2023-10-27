@@ -11,12 +11,14 @@ import { decode } from 'jsonwebtoken';
 import { HistoryService } from 'src/users/gamedata/history.service';
 import { achievementService } from 'src/users/gamedata/acheievement.service';
 import { PrismaService } from 'src/auth/prisma.service';
+import {config} from 'dotenv';
 
 
+config();
 @WebSocketGateway({
 namespace :"/game",
 cors : {
-origin : ['http://localhost:5173' , 'http://10.14.8.4:5173'] , 
+origin : [`${process.env.FRONT_URL}` , 'http://10.14.8.4:5173'] , 
 methods: ["GET", "POST"],
 credentials: true , transports : 'websocket'
 },
@@ -86,7 +88,7 @@ handleConnection(Player: Socket) {
         })
   }
 
-  async getUser(client: Socket)  {
+  async getUser(client: Socket){
     const session = client.handshake.headers.cookie;
     if (session) {
       const jwt = session.split('=')[1];
@@ -347,7 +349,7 @@ Catch_Win_Lost_Reset_Game(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_rig
     Ball_points_check(radius : number,Room,Player1_x,Player1_y,Player1_width,Player1_height,Player2_x,Player2_y,Player2_width,Player2_height,screen_width,Ball_x,Game_Data) : boolean{
       let RandomHit : number;
       let RandHit_speed_y : number;
-      let speed_increase : number = 1.5;
+      let speed_increase : number = 1.2;
 
       RandomHit = Math.floor(Math.random() * 2);
       RandHit_speed_y = Math.floor(Math.random() * 2);

@@ -66,7 +66,8 @@ const Images = () => {
         <div className="retroImage">
         <motion.img src={pingPongGif} className="pingPongGif"
             drag
-            dragElastic={0.5}/>
+            dragElastic={0.5}
+            />
     </div>
 
   );

@@ -1,6 +1,5 @@
 import "./Home.scss";
 /******************* Packages  *******************/
-import jwt_decode from 'jwt-decode';
 import {useEffect, useRef, useState } from "react";
 import { Cookies } from "react-cookie";
 import axios from "axios";
@@ -37,75 +36,29 @@ import NavBar from "../addons/NavBar";
 /*************************************************/
 
 const GetUserData = () => {
-	interface Token {
-		id : string
-	}
-	const [userData, setUserData] = useState({
-		username: "",
-		avatar: ""
-	});
-	useEffect(() => {
-		async function fetchData () {
-			const cookie = new Cookies();
-			const token : Token = jwt_decode(cookie.get('jwt'));
-			if (token) {
-				const endpoint = "http://localhost:3000/users/profil"
-				const response = await axios.get(endpoint, { withCredentials: true });
-				setUserData(response.data);
-			}
-		}
-		fetchData();
-	}, []);
-	return (userData);
+    const [userInfo, setUserInfo] = useState(true);
+    useEffect(() => {
+        const fetchData = () => {
+            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+            .then((response) => {
+                setUserInfo(response.data)
+            })
+            .catch((error) => {
+            console.log("Error -> ", error);
+        })
+    }
+    fetchData();
+    }, []);
+	return (userInfo);
 }
 
-// const TopContainer = () => {
-// 	const userData = GetUserData();
-// 	const textInfos = [
-// 	  "Perfecciona tus habilidades en nuestra área de práctica exclusiva",
-// 	  "Desafía a tus amigos a emocionantes partidos de ping pong"
-// 	];
-	
-// 	const [friends, setFriends] = useState({}); // Move the useState hook outside of the event handler
-  
-// 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-// 	  e.preventDefault();
-// 	  const searchValue = document.querySelector('.nes-input')?.value;
-// 	  console.log(searchValue);
-  
-// 	  axios.get(`http://localhost:3000/users/Friends/`, { withCredentials: true })
-// 		.then((rese) => {
-// 		  setFriends(rese.data);
-// 		})
-// 		.catch((error) => {
-// 		  console.log(error);
-// 		});
-// 	};
-  
-// 	return (
-// 	  <div className="search">
-// 		<form onSubmit={handleSubmit}>
-// 		  <input type="text" id="name_field" placeholder='Search for a group or user' className="nes-input"/>
-// 		</form>
-// 	  </div>
-// 	);
-//   };
-
-
-
-
 const TopContainer = () => {
-
-	interface groupInfo {
-
-	}
 
 	const userData = GetUserData();
 	const textInfos = [
 		"Perfecciona tus habilidades en nuestra área de práctica exclusiva",
 		"Desafía a tus amigos a emocionantes partidos de ping pong"
 	];
-
 	interface theOneTypes {
 		username : string,
 		profileImage : string,
@@ -122,7 +75,6 @@ const TopContainer = () => {
 		id: "",
 
 	});
-	const [friends, setFriends] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [privacy, setPrivacy] = useState();
 	const [isFound, setIsFound] = useState<boolean>(false);
@@ -131,7 +83,6 @@ const TopContainer = () => {
 	const firstRef = useRef(null);
 	const [visibility, setVisibility] = useState(true);
 
-  
 	const searchInGroups = async (query : string) => {
 		try {
 			const response = await axios.get("http://localhost:3000/groupchat/notmember", {withCredentials: true});
@@ -195,6 +146,44 @@ const TopContainer = () => {
 		setIsFound(false);
 	};
 
+
+	const handleJoinRequest = (privacy : string) => {
+		if (privacy == "public") {
+			axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
+			.then(() => {
+				toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+				document.getElementById('joinGroup').close();
+			})
+			.catch(() => {});
+		}
+		else if (privacy == "private")
+		{
+			axios.post(`http://localhost:3000/groupchat/${theOne.id}/request`, {}, { withCredentials: true })
+			.then((res) => {
+				toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+				document.getElementById('joinGroup').close();
+			})
+			.catch(() => {})
+		}
+		else if (privacy == "protected") {
+			const password = document.getElementById("password_join")?.value;
+			console.log("Password Entered Is => ", password);
+			axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userprotected`, {pass :password} , { withCredentials: true })
+			.then((res) => {
+				if (res.data == "no")
+					toast.error("Invalid Password", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
+				else {
+					document.getElementById('joinGroup').close();
+					toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
+				}
+			})
+			.catch((err) => {
+				console.error("Error -> ", err);
+			})
+		}
+		
+	}
+
 	return (
 		<>
 		<div className="search">
@@ -220,79 +209,45 @@ const TopContainer = () => {
 							<img src={avatar} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
 							<span style={{ marginLeft: '20px' }}>{theOne.namegb}</span>
 							{
-										privacy == "PUBLIC" ? (
-											<img src={publicGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Public Group" />
-										) : privacy == "PRIVATE" ? (
-											<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Private Group" />
-										) : (
-											<img src={protectedGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Protected Group" />
-										)
-									}
+								privacy == "PUBLIC" ? (
+									<img src={publicGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Public Group" />
+								) : privacy == "PRIVATE" ? (
+									<img src={privateGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Private Group" />
+								) : (
+									<img src={protectedGroup} style={{ height: '30px', width: '30px', marginLeft: '10px' }} alt="Protected Group" />
+								)
+							}
 					</div>)
 				) :
 				('0 results matched')}
 			</div>
 			)}
 		</form>
-		
 		<section>
-
-		<form method="dialog">
-
-			<dialog style={{height: 'fitContent', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
-			<h1 className="groupName">{theOne.namegb}</h1>
-				<h5 className="grouptype">{theOne.grouptype}</h5>
-				<img style={{borderRadius: '50%',width: '20%',height: '100px', marginBottom: '20px'}} className="groupAvatar" src={avatar} />
-				<p className="group-members">Total Members: {users}</p>
-				{
-					privacy == "PUBLIC" ? (
-						<button onClick={() => {
-							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
-								.then(() => {
-									toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
-									document.getElementById('joinGroup').close();
-								})
-								.catch(() => {});
-						}
-					} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
-					) : privacy == "PRIVATE" ? (
-						<button onClick={() => {
-							console.log("Private Join ===== ", theOne.id);
-							axios.post(`http://localhost:3000/groupchat/${theOne.id}/request`, {}, { withCredentials: true })
-							.then((res) => {
-								console.log("Private Join -> ", res.data);
-								toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
-								document.getElementById('joinGroup').close();
-							})
-							.catch(() => {})
-						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Request To Join</button>
-						) : (
-						<>
-						<input style={{ background: '#E9E9ED', marginBottom: '10px' }} type="password" placeholder="P@55w0rd" maxLength={18} id="password_join" className="nes-input" />
-						<button onClick={() => {
-							const password = document.getElementById("password_join")?.value;
-							console.log("Password Entered Is => ", password);
-							axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userprotected`, {pass :password} , { withCredentials: true })
-							.then((res) => {
-								if (res.data == 'no')
-									toast.error("Invalid Password", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
-								else {
-									document.getElementById('joinGroup').close();
-									toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
-								}
-							})
-							.catch(() => {
-
-							})
-						}} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Join Group</button>
-						</>
+			<form method="dialog">
+				<dialog style={{height: 'fitContent', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
+				<h1 className="groupName">{theOne.namegb}</h1>
+					<h5 className="grouptype">{theOne.grouptype}</h5>
+					<img style={{borderRadius: '50%',width: '20%',height: '100px', marginBottom: '20px'}} className="groupAvatar" src={avatar} />
+					<p className="group-members">Total Members: {users}</p>
+					{
+						privacy == "PUBLIC" ? (
+							<button onClick={() => handleJoinRequest("public")} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Join Immediately</button>
+							) :
+						privacy == "PRIVATE" ? (
+							<button onClick={() => handleJoinRequest("private")} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}}>Request To Join</button>
+						) :
+						(
+							<>
+								<input style={{ background: '#E9E9ED', marginBottom: '10px' }} type="password" placeholder="P@55w0rd" maxLength={18} id="password_join" className="nes-input" />
+								<button onClick={() => handleJoinRequest("protected")} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Join Group</button>
+							</>
 						)
-				}
-			</dialog>
+					}
+				</dialog>
 
 			</form>
-			</section>
-
+		</section>
 		</div>
 
 		<div className="headerBox">
@@ -304,16 +259,42 @@ const TopContainer = () => {
 			<div className="playRaw">
 					<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Friend">
 					<AnimatedText duration={2} animationType="bounce">
-						{textInfos[0]}
+						{textInfos[1]}
 					</AnimatedText>
 					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="/game">Vamos</a>
+                    {/* <a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" onClick={() => {
+                        document.getElementById('howtoplay').showModal();
+                    }} >How To Play</a> */}
 				</div>
-				<div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
+				{/* <section>
+                    <dialog class = 'example' style={{height: '700px', width: '700px', background: 'white' , borderRadius:"20px"}} id="howtoplay">
+
+                    <button style={{display: 'flex', alignItems:'left'}} class="nes-btn is-error"  onClick={() => {
+                        document.getElementById('howtoplay')?.close();
+                    }} >X</button>
+						<h1>Pixel Pong</h1>
+						<div style = {{backgroundColor : "#e0a43d"}} class="nes-container is-dark with-title">
+						Pixel Pong was originally founded in September 2023, it was the idea of Omar Toufah and was encouraged later by other members of our team who were Ayoub Bensguia, Mohamed Amella,
+						Ibrahim Nada, and Mohamed Khalil Naqqad.
+						Our design was heavily inspired by Pixel art which is a form of digital art, our website is structured on the idea of foolishness that paid tribute to this
+						kind of art as it is based on pixels and playing with colors to create a childish yet very artsy design,
+						everything in this web site that you will experience and hope you'll enjoy was made from scratch using frameworks that facilitates the use of pixel art style in CSS and Html.
+						Hadouken!!!
+						</div>
+						<h2 style={{marginTop : '50px'}}>How To Play</h2>
+						<i class="snes-logo"></i>
+						<div class="nes-container with-title is-centered">
+							{/* <img src= {handshake}></img> */}
+							{/* To move Your Paddle you can use eaither the up and down arrows , Or use your mouse. */}
+						{/* </div> 
+                    </dialog>
+                </section> */}
+				{/* <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
 					<AnimatedText duration={2} animationType="bounce">
 						{textInfos[1]}
 					</AnimatedText>
 					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="#">Arriba</a>
-				</div>
+				</div> */}
 			</div>
 		</div>
 		</div>
@@ -407,26 +388,47 @@ const TopRight = (props : {winRate: number, wins: number, loses: number}) => {
 }
 
 const BottomLeft = () => {
-	const achivements = [bomb,joystick,dpad,handshake,box,shield,mail,caution,medal,savage,knife,flag,key,fire,folder];
+	const [achivements, setAchivements] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/achievements` , {withCredentials: true})
+		.then((response) => {
+			setAchivements(response.data.achievementType);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
+
 	return (
 		<div className="loginBox achievements">
 			<div className="loginBoxHeader achievements1">LOGROS</div>
 			<div className="loginBoxOutside achievements2">
-			<HorizontalScroll>
-				{
-					achivements.map((key, idx) => {
-						return (
-							<img src={key} key={idx}/>
-					)})
-				}
-			</HorizontalScroll>
+				{/* <HorizontalScroll> */}
+					{
+					achivements &&
+						achivements.map((item, idx) => {
+							if (item == "WELCOME")
+							return (<img style={{width: '150px', height: '150px'}} src={handshake} key={idx}/>)
+							if (item == "FIRSTWIN")
+							return (<img style={{width: '150px', height: '150px'}} src={medal} key={idx}/>)
+							if (item == "FIRSTLOSE")
+							return (<img style={{width: '150px', height: '150px'}} src={bomb} key={idx}/>)
+							if (item == "WINSTRIKE")
+							return (<img style={{width: '150px', height: '150px'}} src={savage} key={idx}/>)
+							if (item == "WIN5")
+							return (<img style={{width: '150px', height: '150px'}} src={key} key={idx}/>)	
+							if (item == "WIN10")
+							return (<img style={{width: '150px', height: '150px'}} src={joystick} key={idx}/>)
+						})
+					}
+				{/* </HorizontalScroll> */}
 			</div>
 		</div>
 	);
 }
 
 
-const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 : string, color : string, rslt : string}) => {
+const MatchResult = (props: {player1 : string,  player1Avatar : string, player2Avatar : string, player2 : string, color : string, rslt : string}) => {
   return (
 	<div className="match1" style={{background: props.color, border: '1px solid black'}}>
 		<div className="left">
@@ -439,57 +441,48 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2 
 	</div>
 	<div className="right">
 		<span>{props.player2}</span>
-			<img style={{width: '50px', height: '50px', borderRadius: '50%', margin: '10px'}} src={props.player1Avatar} className="player2"></img>
+			<img style={{width: '50px', height: '50px', borderRadius: '50%', margin: '10px'}} src={props.player2Avatar} className="player2"></img>
 		</div>
 	</div>
   );
 }
 
 
-
 const BottomRight= () => {
-	const userData = GetUserData();
-
-    const [check, setUserData] = useState(false);
-	const cookie = new Cookies();
-	const token = jwt_decode(cookie.get('jwt'));
+	const [matchHistory, setMatchHistory] = useState([]);
     useEffect(() => {
-        async function fetchData() {
-            const cookie = new Cookies();
-            const token = jwt_decode(cookie.get('jwt'));
-            if (token) {
-				try {
-					await axios.get(`http://localhost:3000/auth/avatar/${token.id}`, {withCredentials: true})
-					.then(() => 
-					{
-						setUserData(true)
-					})
-					.catch(((error) => {
-						console.log("Error in NavBar " ,error);
-					}))
-					
-				} catch (error) {
-					console.log("Error in NavBar " ,error);
-				}
-            }
-        }
-		fetchData();
-    }, [])
-
-	const avatarIs = /*check ?*/ `http://localhost:3000/auth/avatar/${token.id}` /*: token.image;*/;
+        axios.get(`http://localhost:3000/users/history` , {withCredentials: true})
+		.then((response) => {
+			console.log("Response Histroy -> ", response.data);
+			setMatchHistory(response.data);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
 
 
-	const win = "#ff7670";
-	const lose = "#009e73";
-	const draw = "#178ee1";
+	const userData = GetUserData();
+	const lose = "#ff7670";
+	const win = "#009e73";
 	return (
 	<div className="loginBox latest-matches">
 		<div className="loginBoxHeader latest-matches1">ULTIMOS PARTIDOS</div>
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"win"} color={win}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"lose"} color={lose}/>
-				<MatchResult player1={userData.username}  player1Avatar={avatarIs ? avatarIs : '/public/profile-default.png'} player2="Oppenent" rslt={"draw"} color={draw}/>
+				{
+					// Check for color in history msg , give 
+					Object.keys(matchHistory).map((idx) => (
+						matchHistory[idx].message == "WIN" ?
+						(
+							<MatchResult player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={win}/>
+						)
+						:
+						(
+							<MatchResult player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={lose}/>
+						)
+					))
+				}
 			</div>
 			</div>
 	</div>
@@ -499,7 +492,6 @@ const BottomRight= () => {
 function Notification () {
 	const [isFriend, setIsFriend] = useState(true);
 	const [friendStatus, setFriendStatus] = useState(false);
-
 	useEffect(() => {
 	socket.on('notification', (data) => {
 	console.log('Received notification:', data);
@@ -564,6 +556,20 @@ function Notification () {
 
 export default function Home() {
 	Notification();	
+	const [states, setStates] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
+		.then((response) => {
+			console.log("USER -> ", response.data);
+			setStates(response.data);
+		})
+		.catch((error) => {
+			console.log("Error -> ", error);
+		})
+    },[])
+
+
+
 	return (
 		<div style={{ height: '100vh'}}>
 			<title>Home</title>
@@ -571,7 +577,11 @@ export default function Home() {
 				<TopContainer/>
 				<div className="top-containers">
 					<TopLeft/>
-					<TopRight winRate={0.01} wins={0} loses={0}/>
+					{
+						Object.keys(states).map((idx) => (
+							<TopRight winRate={((states[idx].wins / states[idx].numberOfMatches) * 100).toFixed(2)} wins={states[idx].wins} loses={states[idx].loses}/>
+						))
+					}
 				</div>
 				<div className="bottom-containers">
 					<BottomLeft/>

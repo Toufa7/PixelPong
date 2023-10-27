@@ -35,102 +35,57 @@ export class Rooms{
 
 SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_height){
         //------------------There is a Token_for_matching------------------------------------------
-        // if (!this.Look_for_Tokened_Player(Players,Player)){
-        //     console.log("you can create a room !!");
-        //     this.create_room_for_player();
-        // }
 
     //     if (Players.players[Player.id].token_for_matching){
-        if (Players.players[Player.id].token_for_matching){
-            console.log("Matching with token");
-            console.log("My token for matching --> " + Players.players[Player.id].token_for_matching);
-            if (!this.is_Room_Empty(Players,Player)){
-                console.log("Creting Room!!");
-                this.create_room_for_player();
-                for(const id in this.rooms){
-                    const Room = this.rooms[id];
-                    if ((Room.client_count == 0 && !Room.Player1) && Players.players[Player.id]){
-                        console.log("Room enterd ["+Room.id+"]");
-                        Room.Player1 = Players.players[Player.id];
-                        Room.Player1.room_id = Room.id;
-                        // let scale_ball = (2.4 / 100) * screen_width;
-                        Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
-                        Room.client_count++;
-                        Player.join(Room.id);
-                        break;
-                    }
-                }
-            }
-            else{
-            console.log("Looking for my Pair!!");
-            for(const id in this.rooms){
-                const Room = this.rooms[id];
-                if (Room.client_count == 1){
-                    if (Room.Player1 && !Room.Player2 && Players.players[Player.id].token_for_matching == Room.Player1.token_for_matching){
-                        Room.Player2 = Players.players[Player.id];
-                        Room.Player2.room_id = Room.id;
-                        // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+    //         console.log("Matching with token");
+    //         console.log("My token for matching --> " + Players.players[Player.id].token_for_matching);
+    //         if (!this.is_Room_Empty(Players,Player)){
+    //             console.log("Creting Room!!");
+    //             this.create_room_for_player();
+    //             for(const id in this.rooms){
+    //                 const Room = this.rooms[id];
+    //                 if ((Room.client_count == 0 && !Room.Player1) && Players.players[Player.id]){
+    //                     console.log("Room enterd ["+Room.id+"]");
+    //                     Room.Player1 = Players.players[Player.id];
+    //                     Room.Player1.room_id = Room.id;
+    //                     // let scale_ball = (2.4 / 100) * screen_width;
+    //                     Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+    //                     Room.client_count++;
+    //                     Player.join(Room.id);
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         else{
+    //         console.log("Looking for my Pair!!");
+    //         for(const id in this.rooms){
+    //             const Room = this.rooms[id];
+    //             if (Room.client_count == 1){
+    //                 if (Room.Player1 && !Room.Player2 && Players.players[Player.id].token_for_matching == Room.Player1.token_for_matching){
+    //                     Room.Player2 = Players.players[Player.id];
+    //                     Room.Player2.room_id = Room.id;
+    //                     // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
 
-                        Room.GameBall.x = Room.Player1?.Scaled_width / 2;
-                        Room.GameBall.y = Room.Player1?.Scaled_height / 2;
-                        Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
+    //                     Room.GameBall.x = Room.Player1?.Scaled_width / 2;
+    //                     Room.GameBall.y = Room.Player1?.Scaled_height / 2;
+    //                     Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
 
-                        Room.client_count++;
-                        Player.join(Room.id);
-                        break;
-                    }
-                    // else if (Room.Player2 && !Room.Player1 && Players.players[Player.id].token_for_matching == Room.Player2.token_for_matching){
-                    //     Room.Player1 = Players.players[Player.id];
-                    //     Room.Player1.room_id = Room.id;
+    //                     Room.client_count++;
+    //                     Player.join(Room.id);
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     }
 
-                    //     // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+    // }
+        // else{
 
-                    //     Room.GameBall.x = Room.Player1?.Scaled_width / 2;
-                    //     Room.GameBall.y = Room.Player1?.Scaled_height / 2;
-                    //     Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
-
-                    //     Room.client_count++;
-                    //     Player.join(Room.id);
-                    //     break;
-                    // }
-                }
-                // if (Room.client_count == 1 && !Room.Player1 && !Room.Player2){
-                //     console.log("Found Spot in Token Matching Mode!!");
-                //     Room.Player1 = Players.players[Player.id];
-                //     Room.Player1.room_id = Room.id;
-                //     // let scale_ball = (2.4 / 100) * screen_width;
-                //     Room.GameBall = new BallDto(-4,0,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
-                //     Room.client_count++;
-                //     Player.join(Room.id);
-                //     break;
-                // }
-                // else if (Room.client_count == 1 && Room.Player1 && !Room.Player2){
-                //     if (Players.players[Player.id]?.token_for_matching == Room.Player1?.token_for_matching){
-                //         console.log("Matched With tokens!!!");
-                //         Room.Player2 = Players.players[Player.id];
-                //         Room.Player2.room_id = Room.id;
-                //         // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
-
-                //         Room.GameBall.x = Room.Player1?.Scaled_width / 2;
-                //         Room.GameBall.y = Room.Player1?.Scaled_height / 2;
-                //         Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
-
-                //         Room.client_count++;
-                //         Player.join(Room.id);
-                //         break;
-                //     }
-                // }
-            }
-        }
-
-    }
-        else{
-
-        console.log("Random Matching!!");
-
-        if (!this.is_Rooms_Available()){
-            console.log("there is no room available or there are no rooms");
+            
+    if (!this.is_Rooms_Available() || !this.is_Room_Has_tokened_Player(Players,Player)){
             this.create_room_for_player();
+            // console.log("Random Matching!!");
+            console.log("there is no room available or there are no rooms");
             for(const id in this.rooms){
                 const Room = this.rooms[id];
                 if ((Room.client_count == 0 && !Room.Player1) && Players.players[Player.id]){
@@ -156,13 +111,48 @@ SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_
                 }
             }
         }
-    }
+    // }
     console.log(this.rooms);
 }
 
     CheckForRooms(Room,Player : Socket , Players : Players_Management) : number{
+        if (Players.players[Player.id].token_for_matching && this.is_Room_Has_tokened_Player(Players,Player)){
+            console.log("Enetered for Tokeeeeeen!!!!");
+            if (Room.client_count == 1){
+                if (Room.Player1 && Players.players[Player.id] && Players.players[Player.id].token_for_matching == Room.Player1.token_for_matching){
+                console.log("Found My Pair with Token");
+                Room.Player2 = Players.players[Player.id];
+                Room.Player2.room_id = Room.id;
+                // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+
+                Room.GameBall.x = Room.Player1?.Scaled_width / 2;
+                Room.GameBall.y = Room.Player1?.Scaled_height / 2;
+                Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
+
+                Room.client_count++;
+                Player.join(Room.id);
+                console.log(this.rooms);
+                return (1);
+                }
+                else if (Room.Player2 && Players.players[Player.id] && Players.players[Player.id].token_for_matching == Room.Player2.token_for_matching){
+                console.log("Found My Pair with Token");
+                Room.Player1 = Players.players[Player.id];
+                Room.Player1.room_id = Room.id;
+                // Room.GameBall = new BallDto(-2,2,(2.4  / 100) * Room.Player1?.Scaled_width, Room.Player1?.Scaled_width / 2 , Room.Player1?.Scaled_height / 2);
+
+                Room.GameBall.x = Room.Player1?.Scaled_width / 2;
+                Room.GameBall.y = Room.Player1?.Scaled_height / 2;
+                Room.GameBall.diameter = (2.4  / 100) * Room.Player1?.Scaled_width;
+
+                Room.client_count++;
+                Player.join(Room.id);
+                console.log(this.rooms);
+                return (1);
+                }
+            }
+        }else{
         if (Room.client_count == 1){
-            if (!Room.Player1 && Players.players[Player.id]){
+            if (!Room.Player1 && Players.players[Player.id] && !Players.players[Player.id].token_for_matching){
                 console.log("Player 1 spot is available in Room["+Room.id+"]");
                 Room.Player1 = Players.players[Player.id];
                 Room.Player1.room_id = Room.id;
@@ -176,7 +166,7 @@ SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_
                 console.log(this.rooms);
                 return (1);
             }
-            else if (!Room.Player2 && Players.players[Player.id]){
+            else if (!Room.Player2 && Players.players[Player.id] && !Players.players[Player.id].token_for_matching){
                 console.log("Player 2 spot is available in Room["+Room.id+"]");
                 Room.Player2 = Players.players[Player.id];
                 Room.Player2.room_id = Room.id;
@@ -193,7 +183,7 @@ SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_
             }
         }
         else if (Room.client_count == 0){
-            if (!Room.Player1 && Players.players[Player.id]){
+            if (!Room.Player1 && Players.players[Player.id] && !Players.players[Player.id].token_for_matching){
                 console.log("Player 1 spot is available in Room["+Room.id+"]");
                 Room.Player1 = Players.players[Player.id];
                 Room.Player1.room_id = Room.id;
@@ -207,7 +197,7 @@ SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_
                 console.log(this.rooms);
                 return (1);
             }
-            else if (!Room.Player2 && Players.players[Player.id]){
+            else if (!Room.Player2 && Players.players[Player.id] && !Players.players[Player.id].token_for_matching){
                 console.log("Player 2 spot is available in Room["+Room.id+"]");
                 Room.Player2 = Players.players[Player.id];
                 Room.Player2.room_id = Room.id;
@@ -222,6 +212,7 @@ SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_
                 return (1);
             }
         }
+    }
         console.log("From Many Rooms Condition --> ");
         console.log(this.rooms);
         return (0);
@@ -269,23 +260,13 @@ SetupRooms(Player : Socket , Players : Players_Management,screen_width , screen_
         return false;
     }
 
-    Look_for_Tokened_Player(Players : Players_Management,Player : Socket) : boolean{
-        for(const id in this.rooms){
-            const Room = this.rooms[id];
-            if (Players.players[Player.id].token_for_matching == Room.Player1?.token_for_matching
-                || Players.players[Player.id].token_for_matching == Room.Player2?.token_for_matching)
-                return (true);
-        }
-        return (false);
-    }
-
-    is_Room_Empty(Players : Players_Management,Player : Socket) : boolean{
+    is_Room_Has_tokened_Player(Players : Players_Management,Player : Socket) : boolean{
         for(const id in this.rooms){
             const Room = this.rooms[id];
             if (Room.client_count == 1){
                 if (Room.Player1 && Players.players[Player.id].token_for_matching == Room.Player1.token_for_matching){
                     return(true);
-                }else if (Room.Player2 && Players.players[Player.id].token_for_matching == Room.Player1.token_for_matching){
+                }else if (Room.Player2 && Players.players[Player.id].token_for_matching == Room.Player2.token_for_matching){
                     return (true);
                 }
             }

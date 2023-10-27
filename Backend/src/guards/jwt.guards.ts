@@ -10,8 +10,12 @@ import { Observable } from 'rxjs';
 import { Socket } from 'socket.io';
 
 @Injectable()
-export class JwtGuard extends AuthGuard('jwt') {}
-// create a websocket guard
+export class JwtGuard extends AuthGuard('jwt') {
+  constructor() {
+    super();
+  }
+}
+
 
 @Injectable()
 export class WSGuard implements CanActivate {
