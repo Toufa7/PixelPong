@@ -128,7 +128,7 @@ model Stats {
   loses     Int?    @default(0)
   numberOfMatches        Int      @default(0)
   user      User     @relation("stats", fields: [userId], references: [id])
-  userId    String     
+  userId    String  @unique   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   // @@unique([userId])
@@ -188,9 +188,8 @@ model MatchHistory {
   message      String?
   user      User     @relation("matchhistory", fields: [userId], references: [id])
   userId    String
-  level    Int?  @default(0)
-  wins     Int?  @default(0)
-  loses    Int?  @default(0)
+  otherid   String
+  other     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

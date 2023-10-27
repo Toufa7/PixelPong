@@ -16,7 +16,7 @@ let mapclient = new Map <string , string[]>();
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:5173',
+    origin: `${process.env.FRONT_URL}`,
     credentials: true,
   },
   namespace: 'groupchat',
@@ -251,7 +251,7 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
         AND: [
           { senderId : idsender },
           { receiverId : superadmin.superadmin.id },
-          {groupchatId : id},
+          // {groupchatId : id},
         ],
       },
     });
@@ -275,11 +275,14 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
     });
     //send notification to superadmin
     this.server.to(mapclient.get(superadmin.superadmin.id)).emit('notificationgp', {
-      userId: idsender,
+      snederId: idsender,
+      receiverId: superadmin.superadmin.id,
       type: 'join groupchat',
       photo: user.profileImage,
       namegp : datagp.namegb,
       from: user.username,
+      groupchatId : id,
+      createdAt: new Date(),
     });
   }
 }

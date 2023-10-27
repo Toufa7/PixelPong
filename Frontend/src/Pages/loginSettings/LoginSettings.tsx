@@ -91,6 +91,7 @@ export default function LoginSettings() {
     fetchData();
     }, []);
 
+    console.log("userInfo -> ", userInfo);
     return (
         <div style={{height: '100vh'}}>
             <Toaster/>

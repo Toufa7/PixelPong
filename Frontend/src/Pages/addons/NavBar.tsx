@@ -17,7 +17,7 @@ const NavBarBody = () => {
 		<div className="nav-content">
 		<div className="nav-item">
 			<Link to="/notifications" title="Notifications">
-					<img src={notificationLogo}/>
+				<img src={notificationLogo}/>
 			</Link>
 		</div>
 		<div className="nav-item">

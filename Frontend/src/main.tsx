@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, Link} from "react-router-dom";
 import Cookies from 'universal-cookie';
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
@@ -22,13 +22,23 @@ const Error = lazy(() => import('./Pages/errorPage/errorPage'));
 const Notification = lazy(() => import('./Pages/Notifications/Notifications'));
 import GroupPage from './Pages/newGroupChat/GrpChatPage';
 import Dogo from "./Pages/dogo.gif";
+import randomLogo from './Pages/addons/assets/logo.svg'
 
 const BackgroudGame = () => {
-	return (
-		<div style={{height: '100vh', background: "#333C54"}}>
-		</div>
-	);
-}
+	const animationStyle = `
+		@keyframes rotate {
+			50% { transform: rotate(360deg); }
+		}`;
+  return (
+    <div style={{height: '100vh', background: '#333C54',display: 'flex', justifyContent: 'flex-start',alignItems: 'flex-start'}}>
+      	<Link to="/home" title="Home">
+  		<style>{animationStyle}</style>
+        	<img src={randomLogo} title={"Back To Home"} style={{ margin: '20px',width: '50px',height: '50px',animation: 'rotate 10s infinite'}}/>
+      	</Link>
+    </div>
+  );
+};
+
 
 export const OtherUser = () => {
 	return (
@@ -92,11 +102,9 @@ const HomeComponents = () => {
 const GameComponents = () => {
 	return (
 		<>
-		<div style={{height: '100vh', background: "#333C54"}}>
 			<BackgroudGame/>
 			<Setup/>
-		</div>
-	</>
+		</>
 	);
 }
 
@@ -122,14 +130,10 @@ const Routing = () => {
             })
             .catch(() => {
 				setUnlogged(true);
-            	// console.log("Error -> ", error);
         })
     	}
 		fetchData();
 	}, [])
-	console.log("unlogged status -> ", unlogged);
-	console.log("Is User Logged ==> ", userData) 
-
 
 	return (
 		<BrowserRouter>
@@ -153,9 +157,9 @@ const Routing = () => {
 					<Route path="/groups" 			element={<GroupPage/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
 					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
-					{/* <Route path="/login" 			element={<Navigate to="/" replace/>}/>
+					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
-					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/> */}
+					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}
@@ -178,7 +182,6 @@ const Routing = () => {
 		</BrowserRouter>
 	);
 };
-
 	
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>

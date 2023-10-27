@@ -11,12 +11,14 @@ import { decode } from 'jsonwebtoken';
 import { HistoryService } from 'src/users/gamedata/history.service';
 import { achievementService } from 'src/users/gamedata/acheievement.service';
 import { PrismaService } from 'src/auth/prisma.service';
+import {config} from 'dotenv';
 
 
+config();
 @WebSocketGateway({
 namespace :"/game",
 cors : {
-origin : ['http://localhost:5173' , 'http://10.14.8.4:5173'] , 
+origin : [`${process.env.FRONT_URL}` , 'http://10.14.8.4:5173'] , 
 methods: ["GET", "POST"],
 credentials: true , transports : 'websocket'
 },
