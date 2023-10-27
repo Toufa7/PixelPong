@@ -29,7 +29,7 @@ const GrpchatNavBar = () => {
         <div className="GrpchatMessage">
             <div className="GrpchatNavBarDiv">
                 <ChatSearch/>
-                <div className="chatNavBarDivGroup" style={{border: "3px solid", borderRadius: "5px", background:"#FFFFFF", flex: "5", display: "flex", flexDirection: "column" , overflow: "hidden", zIndex: "0"}}>
+                <div className="chatNavBarDivGroup" style={{border: "3px solid", borderRadius: "5px", background:"#FFFFFF", flex: "5", display: "flex", flexDirection: "column" , overflow: "hidden", zIndex: "0", minWidth: '150px'}}>
 		            <div className="chatsContainerGroup" style={{display: "flex",flexDirection: "column", zIndex: "0"}}>
 			            <div className="choice" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 				            <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
