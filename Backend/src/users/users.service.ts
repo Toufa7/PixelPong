@@ -325,5 +325,18 @@ async isauthenticated(id: string, isauth: boolean)
     where:{id : id},
     data:{authenticated: isauth}
   })
-} 
+}
+//add getblocked
+async getblocked(id: string)
+{
+  const blocked = await this.prisma.user.findUnique({
+    where:{
+      id: id,
+    },
+    select:{
+      blocked: true,
+    }
+  })
+  return blocked;
+}
 }
