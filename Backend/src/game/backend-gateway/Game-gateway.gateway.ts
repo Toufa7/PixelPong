@@ -88,7 +88,7 @@ handleConnection(Player: Socket) {
         })
   }
 
-  async getUser(client: Socket)  {
+  async getUser(client: Socket){
     const session = client.handshake.headers.cookie;
     if (session) {
       const jwt = session.split('=')[1];

@@ -230,58 +230,16 @@ async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
   }
 }
 
-
-@Get('history')
-async getHistory(@Req() req)
+@Get('blocklist')
+async getBlocklist(@Req() req)
 {
-	return await this.history.getMatchHistory(req.user?.id);
+	return await this.usersService.getBlocklist(req.user.id);
 }
-
-@Get('achievements')
-async getAchievement(@Req() req)
+@Get('blockme')
+async getwhoBlockme(@Req() req)
 {
-	return await this.achievement.getAchievement(req.user?.id)
+	return await this.usersService.getwhoBlockme(req.user.id);
 }
-@Get('stats')
-async getStats(@Req() req)
-{
-	return await this.history.getStats(req.user?.id);
-}
-
-@Get('history/:id')
-async getotherHistory(@Req() req,@Param() id: string)
-{
-	return await this.history.getMatchHistory(id);
-}
-
-@Get('achievements/:id')
-async getotherAchievement(@Req() req,@Param() id: string)
-{
-	return await this.achievement.getAchievement(id)
-}
-@Get('stats/:id')
-async getotherStats(@Req() req,@Param() param: any)
-{
-	console.log("param", param)
-	return await this.history.getStats(param.id);
-}
-
-
-@Post('checkfriend')
-async checkfriend(@Req() req, @Body() body: FriendrequestDto){
-	const friends = await this.usersService.getFriends(req.user.id);
-	const find = friends.find((item) => item.id === body.to);
-	if(find)
-		return true;
-	return false;
-}
-// check if user in blocklist
-@Post('checkblock')
-async checkblock(@Req() req, @Body() body: FriendrequestDto){
-    const blocked = await this.usersService.getblocked(req.user.id);
-    const find = blocked.blocked.find((item) => item.id === body.to);
-    if(find)
-        return true;
-    return false;
-}
+//get('local/users/blockme',with)
+//get('local/users/blocklist',with)
 }
