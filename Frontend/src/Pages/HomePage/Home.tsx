@@ -435,7 +435,7 @@ const BottomLeft = () => {
 			setAchivements(response.data.achievementType);
 		})
 		.catch((error) => {
-			console.log("Error -> ", error);
+			console.log("Error Achievements -> ", error);
 		})
     },[])
 
