@@ -110,7 +110,12 @@ const GameComponents = () => {
 
 const AlreadyInGame = () => {
 	return (
-		<div style={{height: '100vh' ,background: '#333C54' ,display:'flex', alignItems: 'center', justifyContent: 'center'}}>
+		<>
+		<div style={{background: '#333C54' ,display:'flex', alignItems: 'center', justifyContent: 'center'}}>
+			<div>
+
+			<BackgroudGame/>
+			</div>
 			<div>
 				<div>
 					<img style={{width: '600px', height: '600px', borderRadius: '50%'}} src={Dogo} alt='Already In Game'/>
@@ -120,6 +125,7 @@ const AlreadyInGame = () => {
 			</div>
 			</div>
 		</div>
+		</>
 	);
 }
 
