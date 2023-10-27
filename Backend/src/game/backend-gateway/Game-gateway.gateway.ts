@@ -90,6 +90,7 @@ handleConnection(Player: Socket) {
 
   async getUser(client: Socket){
     const session = client.handshake.headers.cookie;
+    console.log(session);
     if (session) {
       const jwt = session.split('=')[1];
       const t = decode(jwt);
