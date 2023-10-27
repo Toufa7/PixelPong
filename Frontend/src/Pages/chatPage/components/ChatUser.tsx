@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import MessageInput from './messageInput'
 import play from '../assets/images/playgame.svg'
-import block from '../assets/images/block.svg'
 import info from '../assets/info.svg'
 import tree from '../assets/giblyTree.gif'
 import kirby from '../assets/kirby-hit-the-screen.gif'
@@ -57,16 +56,6 @@ const ChatUser = (props:any) => {
             .catch(Error)
                 console.log("Error happened when requesting to join the game", Error);
 
-    }
-
-    const blockOnClickHandler = () => {
-        axios
-            .patch(`http://localhost:3000/users/blocked`, {to: remoteUser.id}, { withCredentials: true })
-            .then(() => {
-                console.log("im here");
-            })
-            .catch(Error)
-                console.log("Error hapened when blocking the user")
     }
 
     return (

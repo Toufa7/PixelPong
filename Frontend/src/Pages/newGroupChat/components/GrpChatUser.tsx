@@ -7,6 +7,7 @@ import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
 import toast from 'react-hot-toast'
 import dudley from '../assets/Dudley.gif'
+import manage from '../assets/manage.svg'
 
 interface localUserClass
 {
@@ -91,6 +92,13 @@ const ChatUser = (props : any) => {
         const dialog = document.getElementById('dialogMembers');
 		dialog?.showModal();
     }
+
+    const manageGroup = () => {
+        console.log("Clicked On Info")
+        const dialog = document.getElementById('dialogMembers');
+		dialog?.showModal();
+    }
+
     return (
         <div className='GrpusrProfileConversation'>
                 <div className="GrpchatUserDiv">
@@ -106,7 +114,7 @@ const ChatUser = (props : any) => {
                                     {
                                         //Conditional rendring to display the profile username or not based on the presence of groupRoom.username
                                         groupRoom.namegb ?   groupRoom.namegb
-                                                            :   'Start a conversation   '
+                                                            :   'Start a conversation'
                                     }
                                 </span>
                             </div>
@@ -115,8 +123,11 @@ const ChatUser = (props : any) => {
                     {
                         //Conditional rendring to display the control buttons or not based on the presence of groupRoom.profileImage
                         groupRoom.namegb ?  (<div className="GrpchatControlButtons">
+                                                        <button className='mobileManageGrp'>
+                                                            <img src={manage} onClick={openDialogUsers} width={50} height={50} title='Group Info'></img>
+                                                        </button>
                                                         <button className='GrpuserControlButtons'>
-                                                            <img src={info} onClick={openDialogUsers} width={50} height={50} title='Group Info'></img>
+                                                            <img src={info} onClick={manageGroup} width={50} height={50} title='Manage Groups'></img>
                                                         </button>
                                                         <button className='GrpuserControlButtons'>
                                                             <img src={exit} onClick={() => {

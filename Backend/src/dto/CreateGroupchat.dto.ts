@@ -1,8 +1,9 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString, NotContains } from "class-validator";
 
 
 export class CreateGroupchatDto {
     @IsNotEmpty()
+    @NotContains(' ', { message: 'Field must not contain only spaces' })
     @IsString()
     namegb : string;
 

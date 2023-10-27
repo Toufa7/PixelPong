@@ -110,11 +110,22 @@ const GameComponents = () => {
 
 const AlreadyInGame = () => {
 	return (
-		<div>
-			<img style={{display:'flex', alignItems: 'center', width: '600px', height: '600px', borderRadius: '50%' , padding:'50px'}} src={Dogo} alt='Already In Game'/>
-			{/* <img style={{width: '600px', height: '600px', borderRadius: '50%'}} src="" alt='Already In Game'/> */}
-			<h1 style={{alignContent: 'center', justifyContent: 'center', display: 'flex', fontSize: '50px', color: 'Black'}}>Already In Game</h1>
+		<>
+		<div style={{background: '#333C54' ,display:'flex', alignItems: 'center', justifyContent: 'center'}}>
+			<div>
+
+			<BackgroudGame/>
+			</div>
+			<div>
+				<div>
+					<img style={{width: '600px', height: '600px', borderRadius: '50%'}} src={Dogo} alt='Already In Game'/>
+				</div>
+			<div>
+				<h1 style={{fontSize: '50px', color: 'Black', marginTop: '50px'}}>Already In Game</h1>
+			</div>
+			</div>
 		</div>
+		</>
 	);
 }
 
@@ -184,9 +195,9 @@ const Routing = () => {
 };
 	
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
+	// <React.StrictMode>
 		<Suspense>
 			<Routing/>
 		</Suspense>
-	</React.StrictMode>
+	// </React.StrictMode>
 )
