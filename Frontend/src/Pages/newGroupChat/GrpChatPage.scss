@@ -248,6 +248,19 @@
                                     transform: scale(1.2);
                                 }
                             }
+
+                            .mobileManageGrp
+                            {
+                                padding: 15px;
+                                background-color: transparent;
+                                outline: none;
+                                border: none;
+                                visibility: hidden;
+
+                                :hover  {
+                                    transform: scale(1.2);
+                                }
+                            }
                         }
                     }
                 }
@@ -587,6 +600,82 @@
     }
     .chatPage .GrpchatMessage .GrpchatNavBarDiv .GrpchatSearchDiv span {
         visibility: hidden;
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    
+    .GrpchatPage .GrpchatMessage .GrpchatNavBarDiv .GrpchatSearchDiv
+    {
+        display: none;
+    }
+
+    .GrpchatPage .GrpchatMessage .GrpchatNavBarDiv .GrpchatLowerRibbon
+    {
+        display: none;
+    }
+
+    .GrpchatPage .GrpchatMessage .GrpuserProfileAndMessages .GrpusrProfileConversation .GrpchatBodyLowerRibbon
+    {
+        display: none;
+    }
+
+    .GrpchatPage .GrpmainNavBarDiv
+    {
+        flex: 0;        
+    }
+
+    .GrpchatPage .GrpchatMessage .GrpuserProfileAndMessages .GrpusrProfileConversation .GrpchatUserDiv
+    {
+        width: 79vw;
+    }
+
+    .GrpchatPage .GrpchatMessage .GrpuserProfileAndMessages .GrpusrProfileConversation .GrpMessagingBodyDiv
+    {
+        width: 75vw;
+    }
+
+    .GrpchatPage .GrpchatMessage .GrpuserProfileAndMessages .GrpusrProfileConversation .GrpchatUserDiv .GrpplayerPicProfile .GrpchatUser img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        align-self: flex-start;
+    }
+
+    .GrpchatDmDiv
+    {
+        padding: 0px;
+        margin: 0px;
+        p
+        {
+            font-size: 3vw;
+        }
+    }
+
+    .chatNavBarDivGroup
+    {
+        span
+        {
+            display: none;
+        }
+    }
+
+    .navbar-container
+    {
+        z-index: 1;
+    }
+
+    .chatNavBarDivGroup .chatsContainerGroup .choice
+    {
+        display: none;
+    }
+
+    .GrpchatPage .GrpchatMessage .GrpuserProfileAndMessages .GrpusrProfileConversation .GrpchatUserDiv .GrpplayerPicProfile .GrpchatUserControls .mobileManageGrp {
+        padding: 15px;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        visibility: visible;
     }
 }
 
