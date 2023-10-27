@@ -128,7 +128,7 @@ const ChatUser = (props : any) => {
                                                         </button>
                                                         <button className='GrpuserControlButtons'>
                                                             <img src={info} onClick={manageGroup} width={50} height={50} title='Manage Groups'></img>
-                                                        </button>
+                                                        </button> 
                                                         <button className='GrpuserControlButtons'>
                                                             <img src={exit} onClick={() => {
                                                                 axios.delete(`http://localhost:3000/groupchat/${props.pcurrentUserId}/exit`, { withCredentials: true })
