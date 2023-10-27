@@ -18,6 +18,7 @@ import { UserStatus } from '@prisma/client';
 import { decode } from 'jsonwebtoken';
 import { io } from 'socket.io-client';
 import { GateWayService } from './socket.service';
+import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway({
   cors: {
@@ -33,24 +34,24 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // private readonly authservice: AuthService,
     private readonly userservice: UsersService,
     private readonly gatewayservice: GateWayService,
+    private readonly Jwt:JwtService
   ) {}
   connectedUsers: Map<string, string[]> = new Map();
 
   //handle connection and deconnection
 
   async handleConnection(client: Socket) {
-    const jwt = await this.getUser(client);
+    const user = await this.getUser(client);
     //console.log('client connected -->' + client.id, '  ', jwt);
     this.server.emit('checkout', { msg: 'hello' });
-    if (jwt) {
-      const user = decode(jwt); 
+    if (user) {
       // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
       // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
-      if(this.connectedUsers.has(user['id'] ))
-        this.connectedUsers.get(user['id']).push(client.id);
+      if(this.connectedUsers.has(user.id ))
+        this.connectedUsers.get(user.id).push(client.id);
       else
-        this.connectedUsers.set(user['id'], [client.id]);
+        this.connectedUsers.set(user.id, [client.id]);
         
       const status = UserStatus.ONLINE;
       // //console.log(
@@ -61,17 +62,16 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async handleDisconnect(client: Socket) {
-    const jwt = await this.getUser(client);
+    const user = await this.getUser(client);
 
-    if(jwt)
+    if(user)
     {
-      const user = decode(jwt);
       console.log('A client disconnected');
-      const index = this.connectedUsers.get(user['id']).indexOf(client.id);
+      const index = this.connectedUsers.get(user.id).indexOf(client.id);
       if(index != -1)
-      this.connectedUsers.get(user['id']).splice(index, 1);
-    if (this.connectedUsers.get(user['id']).length === 0) {
-        this.connectedUsers.delete(user['id'])
+      this.connectedUsers.get(user.id).splice(index, 1);
+    if (this.connectedUsers.get(user.id).length === 0) {
+        this.connectedUsers.delete(user.id)
         console.log("i dont know ! ===============================> ",this.connectedUsers.get(user['id']))
         this.userservice.updatestatus(user,UserStatus.OFFLINE);
       }
@@ -105,13 +105,18 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       //console.log(error);
     }
   } 
-  getUser(client: Socket) {
+  async getUser(client: Socket)  {
     const session = client.handshake.headers.cookie;
     if (session) {
       const jwt = session.split('=')[1];
-      // //console.log('session ,', jwt);
+      const t = decode(jwt);
       if (session && jwt) {
-        return jwt;
+        try{
+          const user = await this.Jwt.verifyAsync(jwt,{secret:'THISISMYJWTSECRET'});
+          return user;
+        }catch(err){
+          return null; 
+        }
       }
     }
     return null;
