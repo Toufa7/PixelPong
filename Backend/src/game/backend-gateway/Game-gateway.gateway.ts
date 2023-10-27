@@ -18,7 +18,7 @@ config();
 @WebSocketGateway({
 namespace :"/game",
 cors : {
-origin : [`${process.env.FRONT_URL}` , 'http://10.14.8.4:5173'] , 
+origin : ['http://localhost:5173' , 'http://10.14.8.4:5173'] , 
 methods: ["GET", "POST"],
 credentials: true , transports : 'websocket'
 },
@@ -75,7 +75,7 @@ handleConnection(Player: Socket) {
           console.log("new Player connected " + Player.id);
           // let Player_width_scale = (2 / 100) * Data.s_w;
           // let Player_height_scale = (20 / 100) * Data.s_h;
-          await this.Players.AddPlayer(Player , Player.id,0,(Data.s_h / 2) - (Data.pd_height / 2),Data.pd_width,Data.pd_height,Data.s_w,Data.s_h,"",this.User.id,My_username,Token_for_matching);
+          this.Players.AddPlayer(Player , Player.id,0,(Data.s_h / 2) - (Data.pd_height / 2),Data.pd_width,Data.pd_height,Data.s_w,Data.s_h,"",this.User.id,My_username,Token_for_matching);
           console.log("Can i set Rooms --> " + this.Players.SetRoom);
           if (this.Players.SetRoom){
             this.historyService.addMatchHistory(this.Players.players[Player.id].user_id);
