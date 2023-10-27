@@ -362,16 +362,22 @@ export class GroupchatService {
                     const saltOrRounds = 10;
                     createGroupchatDto.password = await bcrypt.hash(createGroupchatDto.password, saltOrRounds);
                 }
-                return await this.prisma.groupchat.create({
-                    data: {
-                        namegb: createGroupchatDto.namegb,
-                        usersgb: { connect: [{ id: iduser }] },
-                        admins: { connect: [{ id: iduser }] },
-                        superadmin: { connect: { id: iduser } },
-                        grouptype: createGroupchatDto.grouptype,
-                        password: createGroupchatDto.password,
-                    },
-                });
+                if(createGroupchatDto.namegb.trim() === true){
+
+                    return await this.prisma.groupchat.create({
+                        data: {
+                            namegb: createGroupchatDto.namegb,
+                            usersgb: { connect: [{ id: iduser }] },
+                            admins: { connect: [{ id: iduser }] },
+                            superadmin: { connect: { id: iduser } },
+                            grouptype: createGroupchatDto.grouptype,
+                            password: createGroupchatDto.password,
+                        },
+                    });
+                }else{
+                    console .log("==========>>>> :: name is not valide");
+                    throw new HttpException('name is not valide', HttpStatus.BAD_REQUEST);
+                }
             }
             else {
                 throw new HttpException('name of Groupchat already exist', HttpStatus.BAD_REQUEST);
