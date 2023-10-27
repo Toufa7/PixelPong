@@ -13,3 +13,4 @@ import { achievementService } from 'src/users/gamedata/acheievement.service';
   providers: [BackendGateway, Players_Management , Rooms , PrismaService , JwtService,HistoryService, achievementService],
 })
 export class BackendGatewayModule {}
+ 

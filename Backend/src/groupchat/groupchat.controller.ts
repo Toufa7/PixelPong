@@ -17,6 +17,13 @@ import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 @Controller('groupchat')
 export class GroupchatController {
     constructor(private readonly GroupchatService : GroupchatService, private readonly  GroupchatGateway : GroupchatGateway) {}
+
+    //get test 
+    @Get('test')
+    test(){
+            throw new HttpException('error test ', HttpStatus.BAD_REQUEST);
+    }
+
     //get number user of a groupchat
     @Get(":id/numberuser")
     numberuser(@Param('id') id :string): Promise<number> {
@@ -55,6 +62,7 @@ export class GroupchatController {
     findallGpuser(@Param('iduser') iduser : string) : Promise<Groupchat[]>{
         return this.GroupchatService.findAllGpuser(iduser);
     }
+
     //get all groupchat of a user
     @Get()
     findAll(@Req() Request) :  Promise<Groupchat[]> {
@@ -155,7 +163,7 @@ export class GroupchatController {
         }),
       )
     uploadimage(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Req() req): any {
-        return this.GroupchatService.uploadimage(file.filename ,id, req.user.id);
+        const data =  this.GroupchatService.uploadimage(file.filename ,id, req.user.id);
     }
     
     //update a groupchat
