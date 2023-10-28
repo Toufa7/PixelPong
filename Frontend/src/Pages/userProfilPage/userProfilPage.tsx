@@ -82,6 +82,18 @@ const Profil = () => {
 
     console.log("User Data -> ", userData);
     const [isFriend, setIsFriend] = useState<boolean>(false);
+    useEffect(() => {
+        axios.post("http://localhost:3000/users/checkfriend", {to: userData.userId}, { withCredentials: true })
+        .then((response) => {
+            setIsFriend(response.data)
+        })
+        .catch(() => {})
+    }, [userData.userId])
+
+    const [pending, setPending] = useState<boolean>(true);
+
+
+    // Post('checkfriend')
     return (
         <div className="profilRectangle">
           <div className="avatar">
@@ -106,21 +118,48 @@ const Profil = () => {
             </div>
             <div>
               <div>
-                    {isFriend ? (
-                                <div>
-                                    <a className="nes-btn" href="#" onClick={() => setIsFriend(false)}>Unfriend</a>
-                                    <a className="nes-btn is-error" href="#" onClick={() => {
-                                        axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
+                    {
+                        isFriend ?
+                        (
+                            <div>
+                                <a className="nes-btn" href="#" onClick={() => {
+                                    setIsFriend(false);
+                                    axios.patch(`http://localhost:3000/users/remove/`, {to: userData.userId}, {withCredentials: true})
+                                    .then((response) => {
+                                        console.log("Removing Response", response);
+                                    })
+                                    .catch((error) => {
+                                        console.log("Error While Removing Friends -> ",error );
+                                    })
+                                }} >Unfriend</a>
+                                <a className="nes-btn is-error" href="#" onClick={() => {
+                                    axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
+                                    .then(() => {})
+                                    .catch(() => {})
+                                    
+                                }}>Block</a>
+                            </div>
+                        )
+                        :
+                        (
+                            pending ? 
+                            (
+
+                                <a className="nes-btn" href="#" onClick={() => 
+                                    {
+                                        setPending(false);
+                                        axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
                                         .then(() => {})
                                         .catch(() => {})
-                                    }}>Block</a>
-                                </div>
-                            ) : (
-                        <a className="nes-btn" href="#" onClick={() => {setIsFriend(true); 
-                            axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
-                            .then(() => {})
-                            .catch(() => {})
-                        }}>Add Friend</a>)
+                                    }
+                                }>
+                            Add Friend</a>
+                            )
+                                :
+                            (
+                                <a className="nes-btn" href="#">Pending</a>
+                            )
+                        )
                     }
               </div>
             </div>

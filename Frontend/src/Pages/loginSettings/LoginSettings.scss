@@ -110,3 +110,11 @@ body {
 		transform: translateX(-8px);
 	}
 }
+
+
+@media only screen and (max-width: 600px) {
+	body, code, html, kbd, pre, samp {
+		overflow-x: hidden;
+	}
+}
+
