@@ -348,8 +348,8 @@ const TopLeft = () => {
 						return (
 							<div style={{ background: '#FDD43B' }} className="match1" key={value}>
 		  						<span className="position">{index + 1}</span>
-								<AnimatedText duration={5} className="name" animationType="float" threshold={0.9} rootMargin="20%">{key.username}</AnimatedText><span className="wins">{key.wins}</span>
-								<span className="loses">{key.loses}</span>
+								{/* <AnimatedText duration={5} className="name" animationType="float" threshold={0.9} rootMargin="20%">{key.username}</AnimatedText><span className="wins">{key.wins}</span> */}
+								{/* <span className="loses">{key.loses}</span> */}
 							</div>
 							);
 						}

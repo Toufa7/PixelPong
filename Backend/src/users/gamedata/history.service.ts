@@ -119,9 +119,19 @@ async getStats(id:string){
             userId: id,
         },
     });
-    if (stats){
-        if (stats.wins * 20 == 100){
-            stats.level = ((stats.wins * 20) / 10) / 10;
+    if (stats)
+    {
+        if (stats.wins * 20 >= 100){
+            console.log("Stats calculation -->" , (((stats.wins * 20) / 10) / 10) as number);
+            console.log("id ---> " + id);
+            await this.prisma.stats.updateMany({
+                where : {
+                    id : stats.id,
+                },
+                data : {
+                    level : (((stats.wins * 20) / 10) / 10) as number
+                }
+            });
         }
     }
     return stats;

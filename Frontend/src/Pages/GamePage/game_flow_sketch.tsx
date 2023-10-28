@@ -293,7 +293,9 @@ p5_ob.setup = () => {
           // console.log("Player Database Id -->" + JSON.stringify(Infos.id) +"\n" 
           // + "Player Database username -->" + JSON.stringify(Infos.username));
         
-        canvas = p5_ob.createCanvas(scaled_width,scaled_height,{willReadFrequently: true});
+        canvas = p5_ob.createCanvas(scaled_width,scaled_height);
+        let ctx = p5_ob.drawingContext;
+        ctx.willReadFrequently = true;
 
         // canvas = p5_ob.createCanvas(screen_width,screen_height);
         const canvas_x = (window.innerWidth - p5_ob.width) / 2;
