@@ -117,12 +117,12 @@ async blockFriend(
 @Get('profil/:username')
 async findOneByUsername(@Param('username') username: string, @Req() req){
   try {
-	console.log("i am here ? !")
+	//console.log("i am here ? !")
 	const user = await this.usersService.findByName(username);
 	if (!user) {
 	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 	}
-	console.log("im herererererer 3678", user)
+	//console.log("im herererererer 3678", user)
 
 	return user;
   } catch (error) {

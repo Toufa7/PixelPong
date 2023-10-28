@@ -622,6 +622,8 @@ export default function Home() {
 		})
     },[])
 
+	console.log("states ============================> -> ", states);
+
 	return (
 		<div style={{ height: '100vh'}}>
 			<title>Home</title>
@@ -636,9 +638,7 @@ export default function Home() {
 						)
 						:
 						(
-							Object.keys(states).map((idx) => (
-								<TopRight key={idx} winRate={((states[idx].wins / states[idx].numberOfMatches) * 100).toFixed(2)} wins={states[idx].wins} loses={states[idx].loses}/>
-							))
+							<TopRight winRate={((states.wins / states.numberOfMatches) * 100).toFixed(2)} wins={states.wins} loses={states.loses}/>
 						)
 					}
 				</div>

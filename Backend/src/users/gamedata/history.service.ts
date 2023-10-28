@@ -122,8 +122,8 @@ async getStats(id:string){
     if (stats)
     {
         if (stats.wins * 20 >= 100){
-            console.log("Stats calculation -->" , (((stats.wins * 20) / 10) / 10) as number);
-            console.log("id ---> " + id);
+            // console.log("Stats calculation -->" , (((stats.wins * 20) / 10) / 10) as number);1
+            // console.log("id ---> " + id);
             await this.prisma.stats.updateMany({
                 where : {
                     id : stats.id,
