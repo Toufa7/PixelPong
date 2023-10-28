@@ -18,12 +18,6 @@ import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 export class GroupchatController {
     constructor(private readonly GroupchatService : GroupchatService, private readonly  GroupchatGateway : GroupchatGateway) {}
 
-    //get test 
-    @Get('test')
-    test(){
-            throw new HttpException('error test ', HttpStatus.BAD_REQUEST);
-    }
-
     //get number user of a groupchat
     @Get(":id/numberuser")
     numberuser(@Param('id') id :string): Promise<number> {
