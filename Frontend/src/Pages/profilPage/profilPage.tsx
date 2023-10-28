@@ -205,15 +205,11 @@ function ProfilPage() {
             {
                 states.length == 0 ? 
                 (
-                    Object.keys(states).map((idx) => (
-                        <States winRate={0} wins={0} loses={0} matchplayed={0} key={idx}/>
-                    ))
-                    )
-                    :
-                    (
-                        Object.keys(states).map((idx) => (
-                            <States winRate={((states[idx].wins / states[idx].numberOfMatches) * 100).toFixed(2)} wins={states[idx].wins} loses={states[idx].loses} matchplayed={states[idx].numberOfMatches} key={idx}/>
-                    ))
+                    <States winRate={0} wins={0} loses={0} matchplayed={0}/>
+                )
+                :
+                (
+                    <States winRate={((states.wins / states.numberOfMatches) * 100).toFixed(2)} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>
                 )
             }
 
