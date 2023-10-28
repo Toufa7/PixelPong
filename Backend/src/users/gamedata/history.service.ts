@@ -114,11 +114,16 @@ async getMatchHistory(userId:string){
     return matchHistory;
 }
 async getStats(id:string){
-    const status = await this.prisma.stats.findMany({
+    const stats = await this.prisma.stats.findUnique({
         where: {
             userId: id,
         },
     });
-    return status;
+    if (stats){
+        if (stats.wins * 20 == 100){
+            stats.level = ((stats.wins * 20) / 10) / 10;
+        }
+    }
+    return stats;
 } 
 } 

@@ -283,6 +283,7 @@ p5_ob.setup = () => {
         scaled_width = ((80 / 100) * window.innerWidth);
         scaled_height = ((50 / 100) * scaled_width);
         p5_ob.frameRate(120);
+        p5_ob.setAttributes("willReadFrequently",true);
         // canvasDiv = document.getElementById('child');
         // width = document.getElementById('child')?.offsetWidth;
         // height = document.getElementById('child')?.offsetHeight;
@@ -292,7 +293,7 @@ p5_ob.setup = () => {
           // console.log("Player Database Id -->" + JSON.stringify(Infos.id) +"\n" 
           // + "Player Database username -->" + JSON.stringify(Infos.username));
         
-        canvas = p5_ob.createCanvas(scaled_width,scaled_height);
+        canvas = p5_ob.createCanvas(scaled_width,scaled_height,{willReadFrequently: true});
 
         // canvas = p5_ob.createCanvas(screen_width,screen_height);
         const canvas_x = (window.innerWidth - p5_ob.width) / 2;
