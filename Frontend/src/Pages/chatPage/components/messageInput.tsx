@@ -73,6 +73,21 @@ const messageInput = (props: any) => {
 
     //Refering to the dummy div
     const firstRef = useRef<HTMLInputElement>(null);
+
+    //Check blocked state
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [localUserBlocksRemote, setLocalUserBlocksRemote] = useState(false);
+
+    useEffect(() => {
+        axios
+            .post(`http://localhost:3000/users/checkblockme`, props.Receiver.id , { withCredentials: true })
+            .then((res:any) => {
+                console.log(res.data);
+            })
+            .catch(Error)
+                console.log('Error happened when checking for the error');
+    },[]);
+
     
     //Our chat socket
     const conversationsSocket = useContext(chatSocketContext);
