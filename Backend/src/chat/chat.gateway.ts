@@ -80,13 +80,10 @@ let map = new Map <any , any>();
     }
     ///////////////////////////////// connection ////////////////////////////////
     async handleConnection(client: Socket, ...args: any[]) {
-      // console.log("Im hererererererere");
       this.logger.log(`connected : ${client.id}`  );
       const user = await this.getUser(client);
-      // console.log(user);
       if(user){
         map.set(user.id, client.id);
-        // console.log(map);
       }
     }
 
@@ -94,10 +91,8 @@ let map = new Map <any , any>();
     async handleDisconnect(client: Socket, ...args: any[]) {
         this.logger.log(`Disconnect : ${client.id}`  );
         const user = await this.getUser(client);
-        console.log(user);
         if(user){
           map.delete(user.id);
-          console.log(map);
         } 
     }
 
@@ -105,9 +100,7 @@ let map = new Map <any , any>();
     ///////////////   -----get old convetation----- ///////////////////////
     @SubscribeMessage('getOldCnv')
     async getConv(client : Socket) {
-      console.log("getoldcnv");
       const user = await this.getUser(client);
-      
       this.server.to(map.get(user.id)).emit('postOldCnv'  , await this.oldcnv(user.id));
     }
 
@@ -118,46 +111,44 @@ let map = new Map <any , any>();
       console.log("msgToServer");
         const user = await this.getUser(client);
         const idUs = map.get(body.id);
-            const dMSChat1 =  await this.prisma.dmschat.create({
-              data: {
+        const blocked =  await this.prisma.user.findUnique({
+          where: { id: user.id },
+          select: {
+            blocked: true,
+            blockedby: true,
+          },
+        });
+        //check if user is blocked
+        if(blocked.blocked.some((user1) => user1.id == body.id) || blocked.blockedby.some((user1) => user1.id == body.id)){
+          console.log("user is blocked");
+          return ;
+        }
+        
+        const dMSChat1 =  await this.prisma.dmschat.create({
+          data: {
 
-                sender: {connect: {id: user.id}},
-                receiver: {connect: {id: body.id}},
-                messageDMs : body.message
-              },
-          });
-           const blocked =  await this.prisma.user.findUnique({
-            where: { id: user.id },
-            select: {
-              blocked: true,
-              blockedby: true,
-            },
-          });
-          //check if user is blocked
-          if(blocked.blocked.some((user1) => user1.id == user.id) || blocked.blockedby.some((user1) => user1.id == user.id)){
-            console.log("user is blocked");
-            return ;
-          }
-
-            this.server.to(idUs).emit('msgToClient', {
-              id :body.id,
-              username: user.username,
-              pic: user.image,
-              side: body.side,
-              message: body.message,
-              idsender : user.id,
-              timestamp: new Date()
-            });
-            this.getConv(client);
-            this.server.to(idUs).emit('postOldCnv'  , await this.oldcnv(body.id));
-        // }
+            sender: {connect: {id: user.id}},
+            receiver: {connect: {id: body.id}},
+            messageDMs : body.message
+          },
+      });
+      this.server.to(idUs).emit('msgToClient', {
+        id :body.id,
+        username: user.username,
+        pic: user.image,
+        side: body.side,
+        message: body.message,
+        idsender : user.id,
+        timestamp: new Date()
+      });
+      this.getConv(client);
+      this.server.to(idUs).emit('postOldCnv'  , await this.oldcnv(body.id));
     }
 
 
 
     //////////////////////request to join game //////////////////////////
     async requestjoingame(namesender: string, idsender: string, idrecever: string) {
-      console.log("requestjoingame");
       const idUs = await map.get(idrecever);
       const token = this.generate_Random_id(10);
 

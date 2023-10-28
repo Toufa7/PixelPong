@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Cron } from '@nestjs/schedule';
 import { Groupchat, Messagegb, Requestjoingroup, User, usermute } from '@prisma/client';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
 @Injectable()
 export class GroupchatService {
@@ -13,7 +14,26 @@ export class GroupchatService {
         private jwtService: JwtService,
     ) { }
 
-
+    //test
+    test(id : string): any {
+        try
+        {
+            const data = this.prisma.user.findUnique({
+                where: {
+                    id: id,
+                },
+            });
+            if (data)
+                return data;
+            else
+                throw new ExceptionsHandler();
+        }catch(error)
+        {
+            console.log("catch error in test groupchat service");
+            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            // console.log(error.message);
+        }
+    }
 
     //get number user of a groupchat
     async numberuser(id: string): Promise<number> {
