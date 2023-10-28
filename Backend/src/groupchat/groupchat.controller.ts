@@ -36,7 +36,12 @@ export class GroupchatController {
     checksuperuser(@Param('id') id: string, @Req() req): Promise<boolean>{
         return this.GroupchatService.checksuperuser(id, req.user.id);
     }
-
+    
+     //check if a user is a adminuser of a groupchat
+     @Get(":id/checkadminuser")
+     checkadminuser(@Param('id') id: string, @Req() req): Promise<boolean>{
+         return this.GroupchatService.checkadminuser(id, req.user.id);
+     }
     //get a groupchat
     @Get(":id/groupinfo")
     getinfo(@Param('id') id: string) : Promise<Groupchat> {

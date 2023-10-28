@@ -55,6 +55,33 @@ export class GroupchatService {
             console.log(error);
         }
     }
+
+
+        //check if a user is a adminuser of a groupchat
+        async checkadminuser(id: string, iduserconnected: string): Promise<boolean> {
+            try {
+                const data = await this.prisma.groupchat.findUnique({
+                    where: {
+                        id: id,
+                    },
+                    select: {
+                        admins : true
+                    },
+                });
+                let check = false
+                data.admins.forEach((admin)=> {
+                    if ( admin.id == iduserconnected)
+                    {
+                        check = true;
+                    }
+                });
+                return check;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+
     
         // get one groupchat
         async findOne(id: string) : Promise<Groupchat> {
@@ -188,16 +215,17 @@ export class GroupchatService {
             if (data) {
                 var users = [];
                 data.usersgb.forEach(user => {
-                    let check = false;
+                    let check = true;
                     data.admins.forEach(admin => {
-                        if (user.id != admin.id) {
-                            check = true;
+                        if (user.id == admin.id) {
+                            check = false;
                         }
                     });
                     if (check) {
                         users.push(user);
                     }
                 });
+                console.log("users === >> ", users)
                 return users;
             }
             else

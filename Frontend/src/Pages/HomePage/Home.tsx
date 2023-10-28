@@ -295,38 +295,48 @@ const TopLeft = () => {
 		wins: number;
 		loses: number;
 		matchesPlayed: number;
+		username: string;
 	}
 	
-	const [leaderboards, setLeaderboards] = useState<Map<string, States>>(new Map());
+	const [leaderboards, setLeaderboards] = useState<Map<number, States>>(new Map());
 	useEffect(() => {
 		axios.get('http://localhost:3000/users/all', { withCredentials: true })
 		.then((response) => {
-			const leaderboardMap = new Map<string, States>();
 			const fetchStatsPromises = response.data.map((user : any) =>
 				axios.get(`http://localhost:3000/users/stats/${user.id}`, { withCredentials: true })
 			);
 			Promise.all(fetchStatsPromises)
 			.then((responses) => {
-				responses.forEach((respo, index) => {
-					const userData = respo.data[0];
-					if (userData) {
-						leaderboardMap.set(response.data[index].username, {
-							wins: userData.wins,
-							loses: userData.loses,
-							matchesPlayed: userData.numberOfMatches,
-						});
-					}
+			  const leaderboardArray = responses
+				.map((respo, index) => {
+				  const userData = respo.data[0];
+				  if (userData) {
+					return {
+					  wins: userData.wins,
+					  loses: userData.loses,
+					  matchesPlayed: userData.numberOfMatches,
+					  username: response.data[index].username,
+					};
+				  }
+				  return null;
+				})
+				leaderboardArray.sort((a, b) => b.wins - a.wins);
+				const leaderboardMap = new Map<number, States>();
+				leaderboardArray.forEach((data, index) => {
+				leaderboardMap.set(index + 1, data);
 				});
 				setLeaderboards(leaderboardMap);
 			})
 			.catch((error) => {
-				console.error('Error -> ', error);
+			  console.error('Error -> ', error);
 			});
 		})
 		.catch((error) => {
-			console.error('Error -> ', error);
+		  console.error('Error -> ', error);
 		});
 	}, []);
+
+	console.log("LeaderBaords -> ", leaderboards);
 
 	return (
 	<div className="loginBox on-going-matches">
@@ -338,7 +348,7 @@ const TopLeft = () => {
 						return (
 							<div style={{ background: '#FDD43B' }} className="match1" key={value}>
 		  						<span className="position">{index + 1}</span>
-								<AnimatedText duration={5} className="name" animationType="float" threshold={0.9} rootMargin="20%">{value}</AnimatedText><span className="wins">{key.wins}</span>
+								<AnimatedText duration={5} className="name" animationType="float" threshold={0.9} rootMargin="20%">{key.username}</AnimatedText><span className="wins">{key.wins}</span>
 								<span className="loses">{key.loses}</span>
 							</div>
 							);
@@ -347,7 +357,7 @@ const TopLeft = () => {
 						return (
 							<div style={{ background: '#BFBFBF' }} className="match1" key={value}>
 								<span className="position">{index + 1}</span>
-								<AnimatedText duration={2.5} className="name" animationType="float">{value}</AnimatedText>
+								<AnimatedText duration={2.5} className="name" animationType="float">{key.username}</AnimatedText>
 								<span className="wins">{key.wins}</span>
 								<span className="loses">{key.loses}</span>
 							</div>
@@ -357,7 +367,7 @@ const TopLeft = () => {
 						return (
 							<div style={{ background: '#CA7E40' }} className="match1" key={value}>
 								<span className="position">{index + 1}</span>
-								<AnimatedText duration={1} className="name" animationType="float">{value}</AnimatedText>
+								<AnimatedText duration={1} className="name" animationType="float">{key.username}</AnimatedText>
 								<span className="wins">{key.wins}</span>
 								<span className="loses">{key.loses}</span>
 							</div>
@@ -367,7 +377,7 @@ const TopLeft = () => {
 						return (
 							<div className="match1" key={value}>
 								<span className="position">{index + 1}</span>
-								<AnimatedText duration={1} className="name" animationType="float">{value}</AnimatedText>
+								<AnimatedText duration={1} className="name" animationType="float">{key.username}</AnimatedText>
 								<span className="wins">{key.wins}</span>
 								<span className="loses">{key.loses}</span>
 							</div>
