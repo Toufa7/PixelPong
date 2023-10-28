@@ -2,9 +2,7 @@ import "./Notifications.scss"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {socket, socketgp} from '../../Pages/socket-client'
-import NavBar from "../addons/NavBar";
-import toast from "react-hot-toast";
-
+import toast, { Toaster } from "react-hot-toast";
 
 const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	const acceptFriend = async () => {
@@ -22,27 +20,28 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
   
 	const refuseFriend = async () => {
 		try {
-		await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
-		.then((rese) => {
-			console.log("Notification Refuse ", rese);
-		});
-		}
-		catch (error) {
-			console.log("Error Caught ", error);
-		}
-		toast.remove();
-	};
-  
+			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
+			.then((rese) => {
+				console.log("Notification Refuse ", rese);
+			});
+			}
+			catch (error) {
+				console.log("Error Caught ", error);
+			}
+			toast.remove();
+		};
+	// <img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px'}} alt="avatar" />
+
 	return (
 		<div style={{ padding: '5px' }}>
 			<div className="nes-container with-title">
-				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request : {myData.namegp}</p>
+				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to {myData.namegp}</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-				<div>
-					<img src={`http://localhost:3000/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-					<span style={{ marginLeft: '20px' }}>{myData.from}</span>
-					<img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px'}} alt="avatar" />
-				</div>
+					<div>
+						<img src={`http://localhost:3000/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+						{/* <img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px', position: "absolute", left: '85px', bottom: '25px'}} alt="avatar" /> */}
+						<span style={{ marginLeft: '20px' }}>{myData.from}</span>
+					</div>
 				<div>
 					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={acceptFriend}>Accept</button>
 					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={refuseFriend}>Deny</button>
@@ -54,13 +53,6 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 };
 
 
-
-
-interface myDataTypes {
-	userId: string,
-	from: string,
-	to: string
-}
 
 const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 	const [friendStatus, setFriendStatus] = useState(false);
@@ -91,12 +83,13 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
   
 	const refuseFriend = async () => {
 		try {
-		await axios.patch("http://localhost:3000/users/refuseFriendRequest", object, { withCredentials: true })
-		.then((rese) => {
-			console.log("Accepted Sent Object -> ", object);
-			console.log("Notification Refuse ", rese);
-			setFriendStatus(friendStatus);
-		});
+			await axios.patch("http://localhost:3000/users/refuseFriendRequest", object, { withCredentials: true })
+			.then((rese) => {
+				console.log("Accepted Sent Object -> ", object);
+				console.log("Notification Refuse ", rese);
+				setFriendStatus(friendStatus);
+			});
+			toast.dismiss();toast.remove()
 		}
 		catch (error) {
 			console.log("Error Caught ", error);
@@ -106,6 +99,7 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
   
 	return (
 		<div style={{ padding: '5px' }}>
+			<Toaster/>
 			<div className="nes-container with-title">
 				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Invitation Request</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -115,7 +109,7 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 				</div>
 				<div>
 					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={acceptFriend}>Accept</button>
-					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={refuseFriend}>Deny</button>
+					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={() => {refuseFriend; toast.dismiss();toast.remove(); console.log("I Clicked On Refuse")}}>Deny</button>
 				</div>
 			  	</div>
 			</div>
@@ -124,7 +118,7 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 };
 
 function Notifications() {
-	const [flag, setFlag] = useState(false);
+	const [flag, setFlag] = useState<string>("");
 	const [friendRequests, setFriendRequests] = useState([]);
 	const [groupRequests, setGroupRequests] = useState([]);
   
@@ -160,11 +154,11 @@ function Notifications() {
 	useEffect(() => {
 		socketgp.on('notificationgp', (datagrp) => {
 			setGroupRequests(datagrp);
-			setFlag(true);
+			setFlag("group");
 		})
 		socket.on('notification', (data) => {
 			setFriendRequests(data);
-			setFlag(true);
+			setFlag("friend");
 		});
 		return () => {
 			socket.off();
@@ -173,43 +167,51 @@ function Notifications() {
 	}, []);
   
 	
-
 	console.log("groupRequests.length -> ", groupRequests.length);
   
 	return (
-	  <div className="notification">
-		<div className="notificationBox">
-		  <div className="loginBoxHeader">Notifications</div>
-		  <div className="loginBoxOutside">
-		  {
-		  friendRequests.length == 0 && groupRequests.length == 0 ? (
-			  	<p style={{ textAlign: 'center', marginTop: '20px' }}>
-					When you get notifications, they'll show up here
-			  	</p>
-			) : flag ? (
+		<div className="notification">
+			<Toaster/>
+		  <div className="notificationBox">
+			<div className="loginBoxHeader">Notifications</div>
+			<div className="loginBoxOutside">
+			{
+				friendRequests.length == 0 && groupRequests.length == 0 ?
+				(
+					<p style={{ textAlign: 'center', marginTop: '20px' }}>
+						When you get notifications, they'll show up here
+					</p>
+				)
+				:
 				<>
-			 		<FriendRequest myData={friendRequests} />
-					<GroupRequest myData={groupRequests}/>
+				{
+					flag == "group" ?
+						(<GroupRequest myData={groupRequests}/>)
+					:
+					flag == "friend"?
+ 						(<FriendRequest myData={friendRequests} />)
+					:
+					(
+						<>
+							{
+								Object.keys(friendRequests).map((idx : any) => (
+									<FriendRequest key={idx} myData={friendRequests[idx]}/>
+								))
+							}
+							{
+								Object.keys(groupRequests).map((idx : any) => (
+									<GroupRequest key={idx} myData={groupRequests[idx]}/>
+								))
+							}
+						</>
+		  			)
+				}
 				</>
-
-			) : (
-			  <>
-				{
-					friendRequests.map((request, idx) => (
-					  <FriendRequest key={idx} myData={request}/>
-					))
-				}
-				{
-					Object.keys(groupRequests).map((idx) => (
-						<GroupRequest key={idx} myData={groupRequests[idx]}/>
-					))
-				}
-			  </>
-		)}
+		  	}
+			</div>
 		  </div>
 		</div>
-	  </div>
-	);
+	  );
 }
 
 export default Notifications;
