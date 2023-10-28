@@ -67,11 +67,12 @@ export class UsersController {
 
  @Patch('remove')
 async removeFriend(
-  @Body('friendId') body: FriendrequestDto,
+  @Body() body: FriendrequestDto,
   @Req() req
 ): Promise<void> {
+console.log("boooodyyyyy : ", body);
   try {
-	await this.usersService.removefriend(req.user.id, body.from);
+	await this.usersService.removefriend(req.user.id, body.to);
   } catch (error) {
 	console.error(error.message); // Log the error for debuggingƒ
   }
