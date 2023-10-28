@@ -97,7 +97,7 @@ const GroupsAndFriends = () => {
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
             .then((response) => {
-                console.log("Resp _> ", response);
+                console.log("Resp groupchat -> ", response.data);
                 setGroups(response.data);
             });
     }, []);
@@ -105,7 +105,7 @@ const GroupsAndFriends = () => {
     const removeFriend = (removeId: string) => {
         const remote = removeId;
         const endpoint = `http://localhost:3000/users/remove/`;
-        axios.patch(endpoint, {friendId: remote}, {withCredentials: true})
+        axios.patch(endpoint, {to: remote}, {withCredentials: true})
             .then((response) => {
                 console.log("Removing Response", response);
                 setFriends(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
@@ -188,7 +188,7 @@ function ProfilPage() {
 			setStates(response.data);
 		})
 		.catch((error) => {
-			console.log("Error -> ", error);
+			console.log("Error States -> ", error);
 		})
     },[])
 
@@ -203,9 +203,14 @@ function ProfilPage() {
         <div className="downContainer">
             <GroupsAndFriends/>
             {
-                Object.keys(states).map((idx) => (
-                    <States winRate={((states[idx].wins / states[idx].numberOfMatches) * 100).toFixed(2)} wins={states[idx].wins} loses={states[idx].loses} matchplayed={states[idx].numberOfMatches}/>
-                ))
+                states.length == 0 ? 
+                (
+                    <States winRate={0} wins={0} loses={0} matchplayed={0}/>
+                )
+                :
+                (
+                    <States winRate={((states.wins / states.numberOfMatches) * 100).toFixed(2)} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>
+                )
             }
 
         </div>
