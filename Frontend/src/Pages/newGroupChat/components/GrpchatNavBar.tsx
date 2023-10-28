@@ -54,6 +54,10 @@ const GrpchatNavBar = () => {
                             .choice {
                                 display: none !important;
                             }
+                            .groupSettings
+                            {
+                                display: none !important;
+                            }
                         }
                         `}
                     </style>

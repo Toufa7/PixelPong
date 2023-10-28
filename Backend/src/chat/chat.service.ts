@@ -15,23 +15,6 @@ export class ChatService {
   async getOldMessages(idsender: string, idrecever: string) {
 
     //get userblock
-    const userblock = await this.prisma.user.findUnique({
-      where: {
-        id: idrecever
-      },
-      select: {
-        block: {
-          select: {
-            id: true
-          }
-        }
-      }
-    });
-    if(userblock.block.find((element) => element.id === idsender))
-    {
-      console.log("userblock");
-      return [];
-    }
     return await this.prisma.dmschat.findMany({
       where: {
         OR: [

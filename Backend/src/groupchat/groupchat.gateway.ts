@@ -136,9 +136,15 @@ export class GroupchatGateway implements OnGatewayInit , OnGatewayConnection, On
           blockedby: true,
         },
       });
+      const userblockingp = await this.prisma.groupchat.findUnique({
+        where: { id: body.roomid },
+        select: {
+          usersblock: true,
+        },
+      });
       //check if user is blocked
-      if(blocked.blocked.some((user1) => user1.id == user.id)){
-        console.log("user is blocked");
+      if(userblockingp.usersblock.some((user1) => user1.id == user.id)){
+        console.log("user is blocked in groupchat");
         return ;
       }
       const allsocket = await this.server.in(body.roomid).fetchSockets();

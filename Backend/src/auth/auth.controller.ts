@@ -60,7 +60,10 @@ export class AuthController {
       }
       else{
         if(user.twofa)
+        {
+          console.log("im here");
           return res.redirect(`${process.env.FRONT_URL}/two-factor-authentication`);
+        }
         return res.redirect(`${process.env.FRONT_URL}/home`);
       }
     } catch (err) {    
@@ -114,6 +117,7 @@ export class AuthController {
 
   }
   @Put('2fa/enable')
+  @UseGuards(JwtGuard)
 async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
   try {
     await this.authService.change2FAStatus(req.user.id);
@@ -126,7 +130,7 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
   @UseGuards(JwtGuard)
   async disable2FAStatus(@Req() req: any): Promise<{ status: boolean }> {
     try {
-      await this.authService.disable2FAStatus(req.user.username);
+      await this.authService.disable2FAStatus(req.user.id);
       return { status: false };
     } catch (error) {
       console.error(error); 

@@ -206,6 +206,7 @@ const Routing = () => {
 			{userData != undefined && userData.twofa && (
 				<>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
+					<Route path="/*" 				element={<Navigate to="/two-factor-authentication" replace/>}/>
 				</>
 			)}
 			{/* User is not logged in */}

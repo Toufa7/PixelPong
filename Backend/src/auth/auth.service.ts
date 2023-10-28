@@ -92,6 +92,7 @@ export class AuthService {
   }
   
   async change2FAStatus(id: string): Promise<void> {
+    console.log("im here");
     try {
       await this.prisma.user.update({
         where: {
@@ -110,7 +111,7 @@ export class AuthService {
     try {
       await this.prisma.user.update({
         where: {
-          username,
+          id:username,
         },
         data: {
           twofa: false,
