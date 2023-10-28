@@ -149,10 +149,10 @@ async findOneByid(@Param('id') id: string){
 @Patch('unblocked')
 async unblockFriend(
   @Req() req,
-  @Body('friendId') body: FriendrequestDto
+  @Body() body: FriendrequestDto
 ): Promise<void> {
   try {
-	await this.usersService.unblockfriend(req.user.id, body.from);
+	await this.usersService.unblockfriend(req.user.id, body.to);
   } catch (error) {
 	console.error(error); // Log the error for debugging
   }

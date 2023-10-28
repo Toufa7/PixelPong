@@ -23,7 +23,7 @@ const RetrieveCheckSendData =  () => {
             }),
             {
                 loading: "Sending data...",
-                success: "Success Settings!", 
+                success: "Avatar Uploaded!", 
                 error: "An error occurred",
             }
         ,{ duration: 5000, position: 'top-right' });           
@@ -36,7 +36,7 @@ const RetrieveCheckSendData =  () => {
              }),
              {
                 loading: "Sending data...",
-                success: "Success Settings!",
+                success: "Username Changed!",
                 error: "An error occurred",
              }
              ,{ duration: 5000, position: 'top-right' });           
