@@ -186,6 +186,7 @@ export const Game_instance = () =>{
   },[]);
   
 const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
+
     const Frontroom : any = {};
     let MatchmakingPage : p5Types.Image;
     let font : p5Types.Font;
@@ -218,18 +219,18 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
         //r--------------------------------------------
   
         //r- Loading Images
-p5_ob.preload = () =>{
+p5_ob.preload =  () =>{
           let Rnd_background = Math.floor(Math.random() * 2);
           let Rnd_paddle_asset = Math.floor(Math.random() * 4);
           let Rnd_ball_asset = Math.floor(Math.random() * 4);
           // let Random_loading_page = Math.floor(Math.random() * 2);
 
           MatchmakingPage = p5_ob.loadImage(gifMatch);
-          font  = p5_ob.loadFont(f);
-          ovp = p5_ob.loadImage(over_g);
-          win = p5_ob.loadImage(Win);
-          lose = p5_ob.loadImage(Lose);
-          Dim = p5_ob.loadImage(Dimension);
+          font  =  p5_ob.loadFont(f);
+          ovp =  p5_ob.loadImage(over_g);
+          win =  p5_ob.loadImage(Win);
+          lose =  p5_ob.loadImage(Lose);
+          Dim =  p5_ob.loadImage(Dimension);
           if (Rnd_background)
             GameBackgrund = p5_ob.loadImage(BackgroundGame);
           else
@@ -320,7 +321,7 @@ p5_ob.draw = () =>{
   
           socket_gm?.on("UpdatePlayerPos",(Backroom : any)=>{
 
-            if (Backroom.who == "P1"){
+            if (Backroom.who == "P1" && Frontroom.Player1 && Frontroom.Player2){
                   Frontroom.Player1.Paddle.pos.x = Backroom.P1_x;
                   Frontroom.Player1.Paddle.pos.y = Backroom.P1_y;
                   Frontroom.Player1.Paddle.paddle_width = (2 / 100) * scaled_width;
@@ -341,7 +342,7 @@ p5_ob.draw = () =>{
                 // Frontroom.Player2.username = Backroom.Player2.username;
             }
 
-            else if (Backroom.who == "P2"){
+            else if (Backroom.who == "P2" && Frontroom.Player1 && Frontroom.Player2){
               Frontroom.Player2.Paddle.pos.x = Backroom.P2_x;
               Frontroom.Player2.Paddle.pos.y = Backroom.P2_y;
               Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
@@ -383,12 +384,12 @@ p5_ob.draw = () =>{
             // }
           // }
 
-          if (Backroom.who == "P1"){
+          if (Backroom.who == "P1" && Frontroom.Player1){
               Frontroom.Player1.Ball.pos.x = Backroom.Ball1_x;
               Frontroom.Player1.Ball.pos.y = Backroom.Ball1_y;
               Frontroom.Player1.Ball.diameter = (2.4 / 100) * scaled_width;
           }
-          else if (Backroom.who == "P2"){
+          else if (Backroom.who == "P2" && Frontroom.Player2){
             let reverse_ball_x = scaled_width - Backroom.Ball2_x;
             Frontroom.Player2.Ball.pos.x = reverse_ball_x;
             Frontroom.Player2.Ball.pos.y = Backroom.Ball2_y;
@@ -421,8 +422,8 @@ p5_ob.draw = () =>{
 
           // for(const id in Frontroom){
             
-            p5_ob.background(GameBackgrund);
             if (Frontroom.Player1 && Frontroom.Player2){
+              p5_ob.background(GameBackgrund);
             Update_screen = true;
             const id_of_player1 = Frontroom.Player1?.id;
             const id_of_player2 = Frontroom.Player2?.id;

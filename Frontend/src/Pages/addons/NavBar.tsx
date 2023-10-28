@@ -54,12 +54,23 @@ const NavBarHeader = () => {
 }
 
 const NavBarFooter = () => {
+	const [userId, setUserId] = useState();
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
+            .then((res:any) =>  {
+                setUserId(res.data.id);
+            })
+            .catch(Error)
+                console.log("Error happened when feching local user data");
+    }, [])
+
+
 	const navigate = useNavigate();
 	return (
 		<div className="nav-footer">
 		<div className="nav-item">
 			<Link to="/profil" title="Profil">
-				<img src={`http://localhost:3000/auth/avatar/id`} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+				<img src={`http://localhost:3000/auth/avatar/${userId}`} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</Link>
 		</div>
 		<div className="nav-item">

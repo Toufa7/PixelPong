@@ -18,7 +18,7 @@ config();
 @WebSocketGateway({
 namespace :"/game",
 cors : {
-origin : [`${process.env.FRONT_URL}` , 'http://10.14.8.4:5173'] , 
+origin : ['http://localhost:5173' , 'http://10.14.8.4:5173'] , 
 methods: ["GET", "POST"],
 credentials: true , transports : 'websocket'
 },
@@ -90,6 +90,7 @@ handleConnection(Player: Socket) {
 
   async getUser(client: Socket){
     const session = client.handshake.headers.cookie;
+    console.log(session);
     if (session) {
       const jwt = session.split('=')[1];
       const t = decode(jwt);

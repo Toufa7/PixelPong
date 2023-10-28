@@ -1,37 +1,24 @@
 import "./Home.scss";
 /******************* Packages  *******************/
 import {useEffect, useRef, useState } from "react";
-import { Cookies } from "react-cookie";
 import axios from "axios";
 import HorizontalScroll from 'react-scroll-horizontal'
 import AnimatedText from 'react-animated-text-content';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from "../socket-client";
 import Anime, { anime } from 'react-anime';
-import { Search } from "./search";
 /******************* Includes  *******************/
 import notification from './assets/notification.mp3';
 import medal from './assets/medaille.svg';
 import savage from './assets/savage.svg';
-import knife from './assets/siif.svg';
 import flag from './assets/endpoint.svg';
-import key from './assets/key.svg';
-import dpad from './assets/d-pad.svg';
-import fire from './assets/firelogo.svg';
 import bomb from './assets/bomblogo.svg';
 import joystick from './assets/joystic.svg';
 import handshake from './assets/handshake.png';
-import box from './assets/box.svg';
-import shield from './assets/shield.svg';
-import mail from './assets/mail.svg';
-import caution from './assets/caution.svg';
-import folder from './assets/folder.svg';
 import { Link } from "react-router-dom";
-
 import publicGroup from './assets/public.svg'
 import protectedGroup from './assets/protected.svg'
 import privateGroup from './assets/private.svg'
-import NavBar from "../addons/NavBar";
 
 /*************************************************/
 
@@ -304,38 +291,101 @@ const TopContainer = () => {
 };
 
 const TopLeft = () => {
+	interface States {
+		wins: number;
+		loses: number;
+		matchesPlayed: number;
+		username: string;
+	}
+	
+	const [leaderboards, setLeaderboards] = useState<Map<number, States>>(new Map());
+	useEffect(() => {
+		axios.get('http://localhost:3000/users/all', { withCredentials: true })
+		.then((response) => {
+			const fetchStatsPromises = response.data.map((user : any) =>
+				axios.get(`http://localhost:3000/users/stats/${user.id}`, { withCredentials: true })
+			);
+			Promise.all(fetchStatsPromises)
+			.then((responses) => {
+			  const leaderboardArray = responses
+				.map((respo, index) => {
+				  const userData = respo.data[0];
+				  if (userData) {
+					return {
+					  wins: userData.wins,
+					  loses: userData.loses,
+					  matchesPlayed: userData.numberOfMatches,
+					  username: response.data[index].username,
+					};
+				  }
+				  return null;
+				})
+				leaderboardArray.sort((a, b) => b.wins - a.wins);
+				const leaderboardMap = new Map<number, States>();
+				leaderboardArray.forEach((data, index) => {
+				leaderboardMap.set(index + 1, data);
+				});
+				setLeaderboards(leaderboardMap);
+			})
+			.catch((error) => {
+			  console.error('Error -> ', error);
+			});
+		})
+		.catch((error) => {
+		  console.error('Error -> ', error);
+		});
+	}, []);
+
+	console.log("LeaderBaords -> ", leaderboards);
+
 	return (
 	<div className="loginBox on-going-matches">
 		<div className="loginBoxHeader on-going-matches1">TABLA DE LIDERES</div>
 		<div className="loginBoxOutside on-going-matches2">
-			<div style={{background: "#FDD43B"}} className="match1">
-				<span className="position">1</span>
-				<AnimatedText duration={5} className="name" animationType="float" threshold={0.9} rootMargin="20%" >XX</AnimatedText>
-				<span className="wins">0</span>
-				<span className="loses">0</span>
-				<span className="draw">0</span>
-			</div>
-			<div style={{background: "#BFBFBF"}} className="match1">
-				<span className="position">2</span>
-				<AnimatedText duration={2.5} className="name" animationType="float">XX</AnimatedText>
-				<span className="wins">0</span>
-				<span className="loses">0</span>
-				<span className="draw">0</span>
-			</div>
-			<div  style={{background: "#CA7E40"}} className="match1">
-				<span className="position">3</span>
-				<AnimatedText duration={1} className="name" animationType="float">XX</AnimatedText>
-				<span className="wins">0</span>
-				<span className="loses">0</span>
-				<span className="draw">0</span>
-			</div>
-			<div className="match1">
-				<span className="position">X</span>
-				<span className="name">You</span>
-				<span className="wins">0</span>
-				<span className="loses">0</span>
-				<span className="draw">0</span>
-			</div>
+			{
+				Array.from(leaderboards).map(([value, key], index) => {
+					if (index == 0) {
+						return (
+							<div style={{ background: '#FDD43B' }} className="match1" key={value}>
+		  						<span className="position">{index + 1}</span>
+								<AnimatedText duration={5} className="name" animationType="float" threshold={0.9} rootMargin="20%">{key.username}</AnimatedText><span className="wins">{key.wins}</span>
+								<span className="loses">{key.loses}</span>
+							</div>
+							);
+						}
+					if (index == 1) {
+						return (
+							<div style={{ background: '#BFBFBF' }} className="match1" key={value}>
+								<span className="position">{index + 1}</span>
+								<AnimatedText duration={2.5} className="name" animationType="float">{key.username}</AnimatedText>
+								<span className="wins">{key.wins}</span>
+								<span className="loses">{key.loses}</span>
+							</div>
+							);
+						}
+					if (index == 2) {
+						return (
+							<div style={{ background: '#CA7E40' }} className="match1" key={value}>
+								<span className="position">{index + 1}</span>
+								<AnimatedText duration={1} className="name" animationType="float">{key.username}</AnimatedText>
+								<span className="wins">{key.wins}</span>
+								<span className="loses">{key.loses}</span>
+							</div>
+							);
+						}
+					else {
+						return (
+							<div className="match1" key={value}>
+								<span className="position">{index + 1}</span>
+								<AnimatedText duration={1} className="name" animationType="float">{key.username}</AnimatedText>
+								<span className="wins">{key.wins}</span>
+								<span className="loses">{key.loses}</span>
+							</div>
+							);
+					}
+					})
+					
+				}
 		</div>
 	</div>
 	);
@@ -395,7 +445,7 @@ const BottomLeft = () => {
 			setAchivements(response.data.achievementType);
 		})
 		.catch((error) => {
-			console.log("Error -> ", error);
+			console.log("Error Achievements -> ", error);
 		})
     },[])
 
@@ -471,17 +521,19 @@ const BottomRight= () => {
 			<div className="loginBoxOutside latest-matches2">	
 			<div className="matcheHistory">
 				{
-					// Check for color in history msg , give 
-					Object.keys(matchHistory).map((idx) => (
-						matchHistory[idx].message == "WIN" ?
-						(
-							<MatchResult player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={win}/>
-						)
-						:
-						(
-							<MatchResult player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={lose}/>
-						)
-					))
+					matchHistory.length == 0 ? (
+						<p style={{ textAlign: 'center', margin: '20px' }}>
+						No matches played yet, they'll show up here
+					  </p>
+
+					) : (
+						Object.keys(matchHistory).map((idx) => (
+							matchHistory[idx].message == "WIN" ?
+							(<MatchResult player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={win}/>)
+								:
+							(<MatchResult player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={lose}/>)
+						))
+					)
 				}
 			</div>
 			</div>
@@ -560,15 +612,13 @@ export default function Home() {
     useEffect(() => {
         axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
 		.then((response) => {
-			console.log("USER -> ", response.data);
+			console.log("USER STATES -> ", response.data);
 			setStates(response.data);
 		})
 		.catch((error) => {
 			console.log("Error -> ", error);
 		})
     },[])
-
-
 
 	return (
 		<div style={{ height: '100vh'}}>
@@ -578,9 +628,16 @@ export default function Home() {
 				<div className="top-containers">
 					<TopLeft/>
 					{
-						Object.keys(states).map((idx) => (
-							<TopRight winRate={((states[idx].wins / states[idx].numberOfMatches) * 100).toFixed(2)} wins={states[idx].wins} loses={states[idx].loses}/>
-						))
+						states.length == 0 ?
+						(
+							<TopRight winRate={0.0} wins={0} loses={0}/>
+						)
+						:
+						(
+							Object.keys(states).map((idx) => (
+								<TopRight winRate={((states[idx].wins / states[idx].numberOfMatches) * 100).toFixed(2)} wins={states[idx].wins} loses={states[idx].loses}/>
+							))
+						)
 					}
 				</div>
 				<div className="bottom-containers">
