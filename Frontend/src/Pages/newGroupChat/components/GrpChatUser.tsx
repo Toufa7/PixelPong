@@ -43,6 +43,7 @@ const ChatUser = (props : any) => {
 
     // const [showing, setShowing] = useState(false);
     
+    //Identifying local user
     useEffect(() => {
         axios
             .get(`http://localhost:3000/users/profil`, { withCredentials: true })
@@ -105,8 +106,6 @@ const ChatUser = (props : any) => {
         const dialog = document.getElementById('dialogMembers');
 		dialog?.showModal();
     }
-
-    
 
     return (
         <div className='GrpusrProfileConversation'>
