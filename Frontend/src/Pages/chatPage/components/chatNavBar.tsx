@@ -26,11 +26,11 @@ const chatNavBar = () => {
             <div className="chatNavBarDiv">
                 <ChatSearch userFound={getCurentUserDms} />
                 <div className="chatsContainer"><Dms cu={getCurentUserDms}/></div>
-                <div className="chatLowerRibbon"></div></div>
-                <div className="userProfileAndMessages">
-                    <ChatUser pcurrentUserId={currentUserId}/>
-                </div>
-                {/* {isMobile ? (<></>) : (<div className='red-square'><ChatSearch userFound={getCurentUserDms} /></div>)} */}
+                <div className="chatLowerRibbon"></div>
+            </div>
+            <div className="userProfileAndMessages">
+                <ChatUser pcurrentUserId={currentUserId}/>
+            </div>
         </div>
   )
 }
@@ -89,7 +89,7 @@ const Dms = (props:any) => {
         {
             axios.get(`http://localhost:3000/users/profile/${conversations[i]}`, { withCredentials: true })
                 .then((res) => {
-                    tmpObj = {userName: res.data.username, pic: `http://localhost:3000/auth/avatar/${conversations[i]}`, id: conversations[i]}
+                    tmpObj = { userName: res.data.username, pic: `http://localhost:3000/auth/avatar/${conversations[i]}`, id: conversations[i] }
                     map.set(conversations[i], tmpObj);
                 })
                 .catch(Error)

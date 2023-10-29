@@ -58,6 +58,10 @@ const GrpchatNavBar = () => {
                             {
                                 display: none !important;
                             }
+                            .chatDmDiv
+                            {
+                                display: none !important;
+                            }
                         }
                         `}
                     </style>

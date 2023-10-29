@@ -96,9 +96,9 @@ const ChatUser = (props:any) => {
                             {
                                 //Conditional rendring to display the profile image or not based on the presence of remoteUser.profileImage
                                 remoteUser.profileImage ?   (<Link to={`/profil/${remoteUser.username}`}>
-                                                                <a style={{color: 'black', textDecoration: 'none'}}>
+                                                                <div style={{color: 'black', textDecoration: 'none'}}>
                                                                     <img style={{border: '3px solid'}} src={`http://localhost:3000/auth/avatar/${remoteUser.id}`} alt="user-photo"/>
-                                                                </a>
+                                                                </div>
                                                             </Link>)
                                                         :   (<img src={info} alt="user-photo" />)
                             }
@@ -106,7 +106,7 @@ const ChatUser = (props:any) => {
                                 <span>
                                     {
                                         //Conditional rendring to display the profile username or not based on the presence of remoteUser.username
-                                        remoteUser.username ?   (<Link to={`/profil/${remoteUser.username}`}><a style={{color: 'black', textDecoration: 'none'}}>{remoteUser.username}</a></Link>)
+                                        remoteUser.username ?   (<Link to={`/profil/${remoteUser.username}`}><span style={{color: 'black', textDecoration: 'none'}}>{remoteUser.username}</span></Link>)
                                                             :   ('Start a conversation')
                                     }
                                 </span>
@@ -121,11 +121,6 @@ const ChatUser = (props:any) => {
                                                             <button className='userControlButtons' onClick={onClickHandler}><img src={play} width={50} height={50}></img></button>
                                                         </div>)
                                                     )   :   (<></>)
-                        
-                        // remoteUser.profileImage ?  (<div className="chatControlButtons">
-                        //                                 <button className='userControlButtons' onClick={onClickHandler}><img src={play} width={50} height={50}></img></button>
-                        //                             </div>)
-                        //                         :   (<></>)
                     }
                     </div>
                 </div>
