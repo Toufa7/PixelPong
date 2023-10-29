@@ -75,7 +75,7 @@ const ChatUser = (props : any) => {
                 console.log("Error fetching users:", error);
             });
         }
-    }, []);
+    }, [props.pcurrentUserId]);
     
     useEffect(() => {
         if (props.pcurrentUserId != '') 
@@ -89,7 +89,7 @@ const ChatUser = (props : any) => {
                 console.log("Error fetching admins:", error);
             });
         }
-    }, []);
+    }, [props.pcurrentUserId]);
 
 
     console.log("props.pcurrentUserId +> ", props.pcurrentUserId); 

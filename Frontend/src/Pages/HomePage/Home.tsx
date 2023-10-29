@@ -12,6 +12,7 @@ import notification from './assets/notification.mp3';
 import medal from './assets/medaille.svg';
 import savage from './assets/savage.svg';
 import flag from './assets/endpoint.svg';
+import key from './assets/key.svg'
 import bomb from './assets/bomblogo.svg';
 import key from './assets/key.svg';
 import joystick from './assets/joystic.svg';
@@ -250,12 +251,10 @@ const TopContainer = () => {
 						{textInfos[1]}
 					</AnimatedText>
 					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="/game">Vamos</a>
-                    {/* <a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" onClick={() => {
-                        document.getElementById('howtoplay').showModal();
-                    }} >How To Play</a> */}
 				</div>
-				{/* <section>
-                    <dialog class = 'example' style={{height: '700px', width: '700px', background: 'white' , borderRadius:"20px"}} id="howtoplay">
+                    {/* <a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" onClick={() => {document.getElementById('howtoplay').showModal();}} >How To Play</a> */}
+				{/* <section> */}
+                    {/* <dialog class = 'example' style={{height: '700px', width: '700px', background: 'white' , borderRadius:"20px"}} id="howtoplay">
 
                     <button style={{display: 'flex', alignItems:'left'}} class="nes-btn is-error"  onClick={() => {
                         document.getElementById('howtoplay')?.close();
@@ -272,18 +271,12 @@ const TopContainer = () => {
 						<h2 style={{marginTop : '50px'}}>How To Play</h2>
 						<i class="snes-logo"></i>
 						<div class="nes-container with-title is-centered">
-							{/* <img src= {handshake}></img> */}
-							{/* To move Your Paddle you can use eaither the up and down arrows , Or use your mouse. */}
-						{/* </div> 
+							<img src= {handshake}></img>
+							To move Your Paddle you can use eaither the up and down arrows , Or use your mouse.
+						</div> 
                     </dialog>
-                </section> */}
-				{/* <div style={{justifyContent: 'center',alignItems:'center', display: 'flex', margin: '10px', flexDirection: 'column'}} className="playWith Practice">
-					<AnimatedText duration={2} animationType="bounce">
-						{textInfos[1]}
-					</AnimatedText>
-					<a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" href="#">Arriba</a>
-				</div> */}
-			</div>
+                	</section> */}
+				</div>
 		</div>
 		</div>
 		</div>
@@ -310,8 +303,8 @@ const TopLeft = () => {
 			Promise.all(fetchStatsPromises)
 			.then((responses) => {
 				responses.forEach((respo, index) => {
-					const userData = respo.data[0];
-					if (userData) {
+					const userData = respo.data;
+					if (userData) { 
 						leaderboardMap.set(userData.wins, {
 							wins: userData.wins,
 							loses: userData.loses,
@@ -332,6 +325,7 @@ const TopLeft = () => {
 		});
 	}, []);
 
+	console.log("leaderboardMap -> ", leaderboards);
 
 	return (
 	<div className="loginBox on-going-matches">
@@ -458,21 +452,21 @@ const BottomLeft = () => {
 			<div className="loginBoxOutside achievements2">
 				{/* <HorizontalScroll> */}
 					{
-					achivements &&
-						achivements.map((item, idx) => {
-							if (item == "WELCOME")
-							return (<img style={{width: '150px', height: '150px'}} src={handshake} key={idx}/>)
-							if (item == "FIRSTWIN")
-							return (<img style={{width: '150px', height: '150px'}} src={medal} key={idx}/>)
-							if (item == "FIRSTLOSE")
-							return (<img style={{width: '150px', height: '150px'}} src={bomb} key={idx}/>)
-							if (item == "WINSTRIKE")
-							return (<img style={{width: '150px', height: '150px'}} src={savage} key={idx}/>)
-							if (item == "WIN5")
-							return (<img style={{width: '150px', height: '150px'}} src={key} key={idx}/>)	
-							if (item == "WIN10")
-							return (<img style={{width: '150px', height: '150px'}} src={joystick} key={idx}/>)
-						})
+						achivements &&
+							achivements.map((item, idx) => {
+								if (item == "WELCOME")
+									return (<img style={{width: '150px', height: '150px'}} src={handshake} key={idx}/>)
+								if (item == "FIRSTWIN")
+									return (<img style={{width: '150px', height: '150px'}} src={medal} key={idx}/>)
+								if (item == "FIRSTLOSE")
+									return (<img style={{width: '150px', height: '150px'}} src={bomb} key={idx}/>)
+								if (item == "WINSTRIKE")
+									return (<img style={{width: '150px', height: '150px'}} src={savage} key={idx}/>)
+								if (item == "WIN5")
+									return (<img style={{width: '150px', height: '150px'}} src={key} key={idx}/>)	
+								if (item == "WIN10")
+									return (<img style={{width: '150px', height: '150px'}} src={joystick} key={idx}/>)
+							})
 					}
 				{/* </HorizontalScroll> */}
 			</div>
@@ -532,9 +526,9 @@ const BottomRight= () => {
 					) : (
 						Object.keys(matchHistory).map((idx) => (
 							matchHistory[idx].message == "WIN" ?
-							(<MatchResult player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={win}/>)
+							(<MatchResult key={idx} player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={win}/>)
 								:
-							(<MatchResult player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={lose}/>)
+							(<MatchResult key={idx} player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={lose}/>)
 						))
 					)
 				}

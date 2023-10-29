@@ -80,7 +80,6 @@ const Profil = () => {
         fetchData();
     }, []);
 
-    console.log("User Data -> ", userData);
     const [isFriend, setIsFriend] = useState<boolean>(false);
     useEffect(() => {
         axios.post("http://localhost:3000/users/checkfriend", {to: userData.userId}, { withCredentials: true })
@@ -88,32 +87,87 @@ const Profil = () => {
             setIsFriend(response.data)
         })
         .catch(() => {})
-    }, [userData.userId])
+    }, [userData])
 
+
+    const [isBlocked, setisBlocked] = useState<boolean>(false);
+    useEffect(() => {
+        axios.post("http://localhost:3000/users/checkblock", {to: userData.userId}, { withCredentials: true })
+        .then((response) => {
+            setisBlocked(response.data)
+        })
+        .catch(() => {})
+    }, [userData])
+
+
+    
+    
+    
+    
     const [pending, setPending] = useState<boolean>(true);
+    const [states, setStates] = useState([]);
+    
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/stats/${userData.userId}` , {withCredentials: true})
+		.then((response) => {
+            setStates(response.data);
+		})
+		.catch((error) => {
+            console.log("Error stats -> ", error);
+		})
+    },[userData])
+    
+    const BlockUser = () => {
+        axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
+        .then(() => {})
+        .catch(() => {})
+    }
+    const UnBlockUser = () => {
+        // useEffect(() => {
+            axios.patch(`http://localhost:3000/users/unblocked/`, {to: userData.userId}, {withCredentials: true})
+            .then(() => {
+            })
+            .catch((error) => {
+                console.log("Error While Removing Friends -> ",error );
+            })
+        // }, [userData])
+    }
+    const AddFriend = () => {
+        setPending(false);
+        axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
+        .then(() => {})
+        .catch(() => {})
+    }
+    const UnfriendUser = () => {
+        setIsFriend(false);
+        axios.patch(`http://localhost:3000/users/remove/`, {to: userData.userId}, {withCredentials: true})
+        .then(() => {
+        })
+        .catch((error) => {
+            console.log("Error While Removing Friends -> ",error );
+        })
+    }
 
-
-    // Post('checkfriend')
     return (
         <div className="profilRectangle">
           <div className="avatar">
             <div className="left">
                 <img src={`http://localhost:3000/auth/avatar/${userData.userId}`} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                 {
-                    userData.status == "ONLINE" ? (<>
-                        <div style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px', background: '#63C163'}}></div>
-                    </>)
-                    :
-                    userData.status != "ONLINE" ? (<>
-                        <div style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px' ,background: '#F2202B'}}></div>
-                    </>) : (<></>)
+                    userData.status == "ONLINE" ?
+                    (<><div style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px', background: '#63C163'}}></div></>)
+                        :
+                    userData.status != "ONLINE" ?
+                    (<><div style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px' ,background: '#F2202B'}}></div></>)
+                        :
+                    (<></>)
                 }            
             <div>
               <span className="playerName" style={{marginBottom: '10px'}}>{userData.username}</span>
               <div>
                 <progress style={{width: '300px', height: '20px'}} className="nes-progress" value="30" max="100"/>
               </div>
-              <span style={{textAlign: 'right'}}>32/100</span>
+              <span style={{textAlign: 'right'}}>{states.level}/100</span>
             </div>
             </div>
             <div>
@@ -122,44 +176,24 @@ const Profil = () => {
                         isFriend ?
                         (
                             <div>
-                                <a className="nes-btn" href="#" onClick={() => {
-                                    setIsFriend(false);
-                                    axios.patch(`http://localhost:3000/users/remove/`, {to: userData.userId}, {withCredentials: true})
-                                    .then((response) => {
-                                        console.log("Removing Response", response);
-                                    })
-                                    .catch((error) => {
-                                        console.log("Error While Removing Friends -> ",error );
-                                    })
-                                }} >Unfriend</a>
-                                <a className="nes-btn is-error" href="#" onClick={() => {
-                                    axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
-                                    .then(() => {})
-                                    .catch(() => {})
-                                    
-                                }}>Block</a>
+                                <a className="nes-btn" href="#" onClick={() => UnfriendUser()}>Unfriend</a>
+                                <a className="nes-btn is-error" href="#" onClick={() => BlockUser()}>Block</a>
                             </div>
                         )
                         :
                         (
-                            pending ? 
-                            (
-
-                                <a className="nes-btn" href="#" onClick={() => 
-                                    {
-                                        setPending(false);
-                                        axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
-                                        .then(() => {})
-                                        .catch(() => {})
-                                    }
-                                }>
-                            Add Friend</a>
-                            )
+                            isBlocked ?
+                                (<a className="nes-btn is-error" href="#" onClick={() => UnBlockUser()}>Unblock</a>)
                                 :
-                            (
-                                <a className="nes-btn" href="#">Pending</a>
-                            )
+                                (
+                                    // pending ? 
+                                        <>
+                                            <a className="nes-btn" href="#" onClick={() => AddFriend()}>Add Friend</a>
+                                            <a className="nes-btn is-error" href="#" onClick={() => BlockUser()}>Block</a>
+                                        </>
+                                )
                         )
+
                     }
               </div>
             </div>
@@ -197,10 +231,6 @@ const GroupsAndFriends = () => {
 
 
 
-
-
-
-
       return (
           <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
@@ -230,8 +260,7 @@ const GroupsAndFriends = () => {
                         )
                     )
                 )}
-
-                    </div>
+                </div>
             </div>
             </div>
 
@@ -307,36 +336,29 @@ function OtherProfilPage() {
     const info = useLocation();
     axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
     .then((res) => {
-        console.log("res.data.id = ", res.data.id);
         setId(res.data.id);
     })
 
     useEffect(() => {
         axios.get(`http://localhost:3000/users/stats/${thisId}` , {withCredentials: true})
 		.then((response) => {
-			console.log("Response States  Other -> ", response.data);
 			setStates(response.data);
 		})
 		.catch((error) => {
 			console.log("Error -> ", error);
 		})
-    },[])
-
-
-
+    },[thisId])
 
 
     const [user, setUser] = useState<string>("");
     axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
     .then((res) => {
         setUser(res.data.username);
-        console.log("Res -> ", res.data.username)
     })
     .catch((erro) => {
         console.error("Erro -> ", erro);
     })
 
-    console.log("Is User Exist -> ", currUser.userId , user);
     if (userExist == "NotFound") {
         return (<ErrorPage title={"User Not Found"} errorType={'Oops! The user you\'re looking \nfor couldn\'t be found'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />)
     }
@@ -354,9 +376,7 @@ function OtherProfilPage() {
                 <div className="downContainer">
                     <GroupsAndFriends/>
                     {
-                        Object.keys(states).map((idx) => (
-                            <States winRate={(states[idx].wins / states[idx].numberOfMatches) * 100} wins={states[idx].wins} loses={states[idx].loses} matchplayed={states[idx].numberOfMatches}/>
-                        ))
+                        <States winRate={(states.wins / states.numberOfMatches) * 100} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>
                     }
                 </div>
                 <div className="downContainer">

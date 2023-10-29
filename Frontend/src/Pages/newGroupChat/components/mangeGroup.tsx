@@ -215,7 +215,7 @@ const ListingUsersAdmins = ({group}) => {
 				<menu className="dialog-menu">
 				<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 					<label style={{fontSize: 'large'}}>
-						Admins 
+						Admins
 						<img style={{ height: '30px',   position: "relative", marginLeft: "5px" , top: '-3px',width: '30px'}}src={crown}></img>
 					</label>
 				</div>
@@ -377,7 +377,7 @@ const ManageGroup = () => {
 										<span>Change Avatar</span>
 										<input formMethod="post" type="file" name="avatarUpload" accept="image/*"/>
 									</label>
-											<ListingUsersAdmins group={selecting} />
+									<ListingUsersAdmins group={selecting} />
 									<a style={{color: '#333C54', margin: '10px'} }>
 										<img src={erase} style={{width: '40px', height: '40px', marginRight: '10px'}}  onClick={() => {
 											axios.delete(`http://localhost:3000/groupchat/${selecting.id}`, {withCredentials: true})

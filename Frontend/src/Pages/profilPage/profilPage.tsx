@@ -37,7 +37,8 @@ const States = (props : {winRate: number, wins: number, loses: number, matchplay
 }
 
 const Profil = () => {
-    const [userInfo, setUserInfo] = useState("");
+    const [userInfo, setUserInfo] = useState<string>("");
+    const [userStates, setUserStates] = useState<string>("");
     useEffect(() => {
         const fetchData = () => {
             axios.get("http://localhost:3000/users/profil", { withCredentials: true })
@@ -51,16 +52,19 @@ const Profil = () => {
     fetchData();
     }, []);
 
-    const [level, setLevel] = useState([]);
+    const [level, setLevel] = useState<string>("");
     useEffect(() => {
         axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
-		.then((response) => {
-			setLevel(response.data[0].level);
+		.then((response) => { 
+            console.log("Level )()()()()))( -> ", response.data)
+			setLevel(response.data.level);
+            setUserStates(response.data);
 		})
 		.catch((error) => {
 			console.log("Error -> ", error);
 		})
     },[])
+
 
     return (
         <div className="profilRectangle">
@@ -70,9 +74,9 @@ const Profil = () => {
             <div>
               <span className="playerName" style={{marginBottom: '10px'}}>{userInfo.username}</span>
               <div>
-                <progress style={{width: '300px', height: '20px'}} className="nes-progress" value={level} max="100"/>
+                <progress style={{width: '300px', height: '20px'}} className="nes-progress" value={((userStates.wins * 20) % 100).toString()} max="100"/>
               </div>
-              <span style={{textAlign: 'right'}}>{level}/100</span>
+              <span style={{textAlign: 'right'}}>Level {level}</span>
             </div>
             </div>
             <div>
@@ -148,15 +152,40 @@ const GroupsAndFriends = () => {
     );
 }
 
-const Achivements = () => {
-    const achivements: Map<string, string> = new Map();
-    achivements.set(handshake, "Awarded to users upon joining the platform for the first time");
-    achivements.set(medal, "Awarded to users upon achieving their first victory or milestone");
-    achivements.set(bomb, "Awarded to users upon experiencing their first defeat");
-    achivements.set(savage, "Awarded to users who achieve a consecutive series of wins");
-    achivements.set(key, "Awarded to users upon reaching 5 victories");
-    achivements.set(joystick, "Awarded to users upon reaching 10 victories");
+// const achivements: Map<string, string> = new Map();
+// achivements.set(handshake, "Awarded to users upon joining the platform for the first time");
+// achivements.set(medal, "Awarded to users upon achieving their first victory or milestone");
+// achivements.set(bomb, "Awarded to users upon experiencing their first defeat");
+// achivements.set(savage, "Awarded to users who achieve a consecutive series of wins");
+// achivements.set(key, "Awarded to users upon reaching 5 victories");
+// achivements.set(joystick, "Awarded to users upon reaching 10 victories");
 
+
+// "WELCOME"
+// <img style={{opacity: 1}} src={handshake}   />
+// <span style={{opacity: 1}}>{"Awarded to users upon joining the platform for the first time"}</span>
+
+
+// "FIRSTWIN"
+// "FIRSTLOSE"
+// "WINSTRIKE"
+// "WIN5"
+// "WIN10"
+
+const Achivements = () => {
+	const [achivements, setAchivements] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/achievements` , {withCredentials: true})
+		.then((response) => {
+            console.log("Achievemtn +++> ", response.data.achievementType)
+			setAchivements(response.data.achievementType);
+		})
+		.catch((error) => {
+			console.log("Error Achievements -> ", error);
+		})
+    },[])
+
+    console.log("Include WIN10  ==>",achivements.includes("WIN10"))
     return (    
             <div className="fullAchivementsBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
@@ -164,14 +193,75 @@ const Achivements = () => {
                     <div className="icons">
                         <div>
                         {
-                            Array.from(achivements).map(([icon, achivText], idx) => (
-                            <div key={idx}>
-                                <img style={{opacity: 1}} src={icon}   />
-                                <span>{achivText}</span>
-                            </div>
-                            ))
+                            achivements.includes("WELCOME") ? (
+                                <div>
+                                    <img style={{opacity: 1}} src={handshake}   />
+                                    <span style={{opacity: 1}}>{"Awarded to users upon joining the platform for the first time"}</span>
+                                </div>
+                            ) : (
+                                <div >
+                                    <img style={{opacity: 0.2}} src={handshake}   />
+                                    <span style={{opacity: 0.2}}>{"Awarded to users upon joining the platform for the first time"}</span>
+                                </div>
+                            )
                         }
-                        </div>
+                        {
+                            achivements.includes("FIRSTWIN") ? (
+                                <div>
+                                    <img style={{opacity: 1}} src={medal}   />
+                                    <span style={{opacity: 1}}>{"Awarded to users upon achieving their first victory or milestone"}</span>
+                                </div>
+                            ) : (
+                                <div >
+                                    <img style={{opacity: 0.2}} src={medal}   />
+                                    <span style={{opacity: 0.2}}>{"Awarded to users upon achieving their first victory or milestone"}</span>
+                                </div>
+                            )
+                        }
+                        {
+                            achivements.includes("FIRSTLOSE") ? (
+                                <div>
+                                    <img style={{opacity: 1}} src={bomb}   />
+                                    <span style={{opacity: 1}}>{"Awarded to users upon experiencing their first defeat"}</span>
+                                </div>
+                            ) : (
+                                <div >
+                                    <img style={{opacity: 0.2}} src={bomb}   />
+                                    <span style={{opacity: 0.2}}>{"Awarded to users upon experiencing their first defeat"}</span>
+                                </div>
+                            )
+                        }
+                        {
+                            achivements.includes("WIN5") ? (
+                                <div>
+                                    <img style={{opacity: 1}} src={key}   />
+                                    <span style={{opacity: 1}}>{"Awarded to users upon reaching 5 victories"}</span>
+                                </div>
+                            ) : (
+                                <div >
+                                    <img style={{opacity: 0.2}} src={key}   />
+                                    <span style={{opacity: 0.2}}>{"Awarded to users upon reaching 5 victories"}</span>
+                                </div>
+                            )
+                        }
+                        {
+                            achivements.includes("WIN10") ? (
+                                <div>
+                                    <img style={{opacity: 1}} src={joystick}   />
+                                    <span style={{opacity: 1}}>{"Awarded to users upon reaching 10 victories"}</span>
+                                </div>
+                            ) : (
+                                <div >
+                                    <img style={{opacity: 0.2}} src={joystick}   />
+                                    <span style={{opacity: 0.2}}>{"Awarded to users upon reaching 10 victories"}</span>
+                                </div>
+                            )
+                        }
+
+
+
+
+                    </div>
                 </div>
                 </div>
             </div>
