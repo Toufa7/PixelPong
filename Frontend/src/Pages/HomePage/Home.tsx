@@ -260,7 +260,7 @@ const TopContainer = () => {
                     }} >X</button>
 						<h1>Pixel Pong</h1>
 						<div style = {{backgroundColor : "#e0a43d"}} class="nes-container is-dark with-title">
-						Pixel Pong was originally founded in September 2023, it was the idea of Omar Toufah and was encouraged later by other members of our team who were Ayoub Bensguia, Mohamed Amella,
+						Pixel Pong was originally founded in September 2023, it was the idea of Omar Toufah and was encouraged later by other members of our team who were Ayoub Bensguia, Mohamed Amellal,
 						Ibrahim Nada, and Mohamed Khalil Naqqad.
 						Our design was heavily inspired by Pixel art which is a form of digital art, our website is structured on the idea of foolishness that paid tribute to this
 						kind of art as it is based on pixels and playing with colors to create a childish yet very artsy design,
