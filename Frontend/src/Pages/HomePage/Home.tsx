@@ -13,6 +13,7 @@ import medal from './assets/medaille.svg';
 import savage from './assets/savage.svg';
 import flag from './assets/endpoint.svg';
 import bomb from './assets/bomblogo.svg';
+import key from './assets/key.svg';
 import joystick from './assets/joystic.svg';
 import handshake from './assets/handshake.png';
 import { Link } from "react-router-dom";

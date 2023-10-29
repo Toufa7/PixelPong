@@ -35,7 +35,7 @@ const ChatUser = (props:any) => {
             })
             .catch(Error)
                 console.log("Error happened when feching local user data");
-    }, [props.pcurrentUserId])
+    }, [])
     
     //Fetching remote user info
     useEffect(() => {
@@ -86,7 +86,6 @@ const ChatUser = (props:any) => {
             .get(`http://localhost:3000/chat/${remoteUser.id}/requestjoingame`, { withCredentials: true })
             .catch(Error)
                 console.log("Error happened when requesting to join the game", Error);
-
     }
 
     return (

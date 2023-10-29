@@ -106,8 +106,6 @@ const ChatUser = (props : any) => {
 		dialog?.showModal();
     }
 
-    
-
     return (
         <div className='GrpusrProfileConversation'>
                 <div className="GrpchatUserDiv">
