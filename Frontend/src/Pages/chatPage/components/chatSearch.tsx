@@ -17,7 +17,6 @@ const chatSearch = (props: any) => {
 
     const [Found, FoundState] = useState(false);
     const [notFound, notFoundState] = useState(false);
-    // const [visible, setVisible] = useState(true);
     const [friendsIds, setFriendsIds] = useState<any[]>();
     const [friendFound, setFriendFound] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
 
@@ -34,7 +33,6 @@ const chatSearch = (props: any) => {
     }, [])
 
     const removeElement = () => {
-        // setVisible((prev) => !prev);
         FoundState(false);
         notFoundState(false);
     };

@@ -7,11 +7,6 @@ import DmChatUser from './GrpdmChatUser'
 import ChatSearch from './GrpchatSearch'
 import CreateGroup from './createGroup'
 import ManageGroup from './mangeGroup'
-interface chatUser {
-    userName: string;
-    pic: string;
-    id: string;
-}
 
 const GrpchatNavBar = () => {
     const [currentUserId, setCurrentUserId] = useState('');
@@ -54,13 +49,17 @@ const GrpchatNavBar = () => {
                             .choice {
                                 display: none !important;
                             }
-                            .groupSettings
+                            .choice .groupSettings
                             {
                                 display: none !important;
                             }
-                            .chatDmDiv
+                            .choice .chatDmDiv
                             {
                                 display: none !important;
+                            }
+                            .nes-dialog
+                            {
+                                overflow-x: hidden;
                             }
                         }
                         `}

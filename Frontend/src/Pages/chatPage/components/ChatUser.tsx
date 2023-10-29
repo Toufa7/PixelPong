@@ -3,7 +3,6 @@ import axios from 'axios'
 import MessageInput from './messageInput'
 import play from '../assets/images/playgame.svg'
 import info from '../assets/info.svg'
-import tree from '../assets/giblyTree.gif'
 import kirby from '../assets/kirby-hit-the-screen.gif'
 import { Link } from 'react-router-dom'
 

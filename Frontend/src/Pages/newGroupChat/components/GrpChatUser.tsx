@@ -6,7 +6,6 @@ import info from '../assets/info.svg'
 import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
 import toast from 'react-hot-toast'
-import dudley from '../assets/Dudley.gif'
 import manage from '../assets/manage.svg'
 import ManageGroup from './mangeGroup'
 import CreateGroup from './createGroup'
@@ -19,10 +18,20 @@ interface localUserClass
     username: string,
 }
 
+interface grpInfoClass
+{
+    id: string,
+    namegb: string,
+    idsuperadmin: string,
+    grouptype: string,
+    password: string,
+    image: string,
+}
+
 const ChatUser = (props : any) => {
     
     //Fetching current user (Receiver) data each time the prop gets new value
-    const [groupRoom, setgroupRoom] = useState({});
+    const [groupRoom, setgroupRoom] = useState<grpInfoClass>({id: '', namegb: '', idsuperadmin: '', grouptype: '', image: '', password: ''});
     const [localUser, setLocalUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
 
 
@@ -32,12 +41,10 @@ const ChatUser = (props : any) => {
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
             .then((response) => {
+                console.log("Just dance --->", response.data)
                 setgroupRoom(response.data);
-                console.log("rese -> ", response.data);
             })
-            .catch((erro) => {
-                console.log("erro -> ", erro);
-            })
+            .catch((Error))
         }
     }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
 
@@ -51,7 +58,6 @@ const ChatUser = (props : any) => {
                 setLocalUser(res.data);
             })
             .catch(Error)
-                console.log("Error happened when feching local user data");
     }, [])
 
     const [users, setUsers] = useState([]);
@@ -253,7 +259,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
             props.groupInfo.id   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dudley} width={500} height={500} alt="user-photo" />
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="user-photo" />
         }
     </div>
     )
