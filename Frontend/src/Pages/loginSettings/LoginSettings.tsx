@@ -18,9 +18,9 @@ const RetrieveCheckSendData =  () => {
         data.append('file', avatar);
         toast.promise(
             axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
-            .then((responseNickname) => {
-                console.log(responseNickname);
-            }),
+            .then(() => {
+            })
+            .catch(() => {}),
             {
                 loading: "Sending data...",
                 success: "Avatar Uploaded!", 
@@ -31,15 +31,15 @@ const RetrieveCheckSendData =  () => {
     if (usernameCheck.test(nicknameInput)) {
         toast.promise(
             axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true })
-            .then((responseNickname) => {
-                console.log(responseNickname);
-             }),
-             {
+            .then(() => {
+            })
+            .catch(() => {}),
+            {
                 loading: "Sending data...",
                 success: "Username Changed!",
                 error: "An error occurred",
-             }
-             ,{ duration: 5000, position: 'top-right' });           
+            }
+            ,{ duration: 5000, position: 'top-right' });           
     }
     else if (!nicknameInput){
         toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
@@ -91,7 +91,6 @@ export default function LoginSettings() {
     fetchData();
     }, []);
 
-    console.log("userInfo -> ", userInfo);
     return (
         <div style={{height: '100vh'}}>
             
