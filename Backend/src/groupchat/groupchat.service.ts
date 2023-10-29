@@ -15,9 +15,8 @@ export class GroupchatService {
     ) { }
 
     //test
-    test(id : string): any {
-        try
-        {
+    test(id: string): any {
+        try {
             const data = this.prisma.user.findUnique({
                 where: {
                     id: id,
@@ -27,10 +26,9 @@ export class GroupchatService {
                 return data;
             else
                 throw new ExceptionsHandler();
-        }catch(error)
-        {
+        } catch (error) {
             console.log("catch error in test groupchat service");
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             // console.log(error.message);
         }
     }
@@ -49,7 +47,7 @@ export class GroupchatService {
             return data.usersgb.length;
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -72,134 +70,111 @@ export class GroupchatService {
             }
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
 
-        //check if a user is a adminuser of a groupchat
-        async checkadminuser(id: string, iduserconnected: string): Promise<boolean> {
-            try {
-                const data = await this.prisma.groupchat.findUnique({
-                    where: {
-                        id: id,
-                    },
-                    select: {
-                        admins : true
-                    },
-                });
-                let check = false
-                data.admins.forEach((admin)=> {
-                    if ( admin.id == iduserconnected)
-                    {
-                        check = true;
-                    }
-                });
-                return check;
-            }
-            catch (error) {
-                console.log(error);
-            }
+    //check if a user is a adminuser of a groupchat
+    async checkadminuser(id: string, iduserconnected: string): Promise<boolean> {
+        try {
+            const data = await this.prisma.groupchat.findUnique({
+                where: {
+                    id: id,
+                },
+                select: {
+                    admins: true
+                },
+            });
+            let check = false
+            data.admins.forEach((admin) => {
+                if (admin.id == iduserconnected) {
+                    check = true;
+                }
+            });
+            return check;
         }
+        catch (error) {
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
+        }
+    }
 
-    
-        // get one groupchat
-        async findOne(id: string) : Promise<Groupchat> {
-            try {
-    
-                const data = await this.prisma.groupchat.findUnique({
-                    where: {
-                        id: id,
-                    },
-                });
-                if (data)
-                    return data;
-                else
-                    throw new HttpException('Groupchat not found', HttpStatus.NOT_FOUND);
-            }
-            catch (error) {
-                throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
-            }
+
+    // get one groupchat
+    async findOne(id: string): Promise<Groupchat> {
+        try {
+            return await this.prisma.groupchat.findUnique({
+                where: {
+                    id: id,
+                },
+            });
         }
+        catch (error) {
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
+        }
+    }
 
     //get a all groupchat
     async findAllGp(): Promise<Groupchat[]> {
         try {
-            const data = await this.prisma.groupchat.findMany();
-            if (data)
-                return data;
-            else
-                throw new HttpException('Groupschat not found', HttpStatus.NOT_FOUND);
-
+            return await this.prisma.groupchat.findMany();
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //get a all groupchat is not member
     async findAllGpnotmember(iduser: string): Promise<Groupchat[]> {
         try {
-            const data = await this.prisma.groupchat.findMany(
+            return await this.prisma.groupchat.findMany(
                 {
                     where: {
                         usersgb: { none: { id: iduser } },
                     },
                 }
             );
-            if (data)
-                return data;
-            else
-            throw new HttpException('Groupschat not found', HttpStatus.NOT_FOUND);
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
     //get groupchats of a user pasing  iduser
     async findAllGpuser(iduser: string): Promise<Groupchat[]> {
         try {
-            const data = await this.prisma.groupchat.findMany(
+            return await this.prisma.groupchat.findMany(
                 {
                     where: {
                         usersgb: { some: { id: iduser } },
                     },
                 }
             );
-            if (data)
-                return data;
-            else
-                throw new HttpException('Groupschat not found', HttpStatus.NOT_FOUND);
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //get all groupchat of a user
-    async findAll(iduser: string) : Promise<Groupchat[]>{
+    async findAll(iduser: string): Promise<Groupchat[]> {
         try {
 
-            const data = await this.prisma.groupchat.findMany(
+            return await this.prisma.groupchat.findMany(
                 {
                     where: {
                         usersgb: { some: { id: iduser } },
                     },
                 }
             );
-            if (data)
-                return data;
-            else
-                console.log("no groupchat found");
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
 
     //get all groupchat of a useradmin
-    async findgpadmin(iduser: string) : Promise<Groupchat[]>{
+    async findgpadmin(iduser: string): Promise<Groupchat[]> {
         try {
             //get all groupchat where user is admin
             const data = await this.prisma.groupchat.findMany(
@@ -209,19 +184,18 @@ export class GroupchatService {
                     },
                 }
             );
-            if (data) {
+            if (data)
                 return data;
-            }
             else
-                console.log("no groupchat found");
+                return null;
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //get all users of a groupchat if not admin
-    async findAllUsers(id: string) : Promise<User[]> {
+    async findAllUsers(id: string): Promise<User[]> {
         try {
             const data = await this.prisma.groupchat.findUnique({
                 where: {
@@ -245,14 +219,13 @@ export class GroupchatService {
                         users.push(user);
                     }
                 });
-                console.log("users === >> ", users)
                 return users;
             }
             else
                 return [];
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -267,11 +240,10 @@ export class GroupchatService {
                     admins: true,
                 },
             });
-
             return data.admins;
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -288,7 +260,6 @@ export class GroupchatService {
                     blockedby: true,
                 },
             });
-            console.log(userblock);
             const messages = await this.prisma.groupchat.findUnique({
                 where: {
                     id: id,
@@ -301,7 +272,7 @@ export class GroupchatService {
             messages.messagesgb.forEach(element => {
                 let check = true;
                 userblock.blocked.forEach(user => {
-                    if (element.senderid == user.id) 
+                    if (element.senderid == user.id)
                         check = false;
                 });
                 userblock.blockedby.forEach(user => {
@@ -316,13 +287,13 @@ export class GroupchatService {
 
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
     //get superuser of a groupchat
     async findSuperUser(id: string): Promise<User> {
         try {
-            const data =  await this.prisma.groupchat.findUnique({
+            const data = await this.prisma.groupchat.findUnique({
                 where: {
                     id: id,
                 },
@@ -333,14 +304,14 @@ export class GroupchatService {
             return data.superadmin;
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //get userban of a groupchat
     async findUserBan(id: string): Promise<User[]> {
         try {
-            const data =  await this.prisma.groupchat.findUnique({
+            const data = await this.prisma.groupchat.findUnique({
                 where: {
                     id: id,
                 },
@@ -351,12 +322,12 @@ export class GroupchatService {
             return data.usersblock;
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //get usermute of a groupchat
-    async findUserMute(id: string) : Promise<usermute[]> {
+    async findUserMute(id: string): Promise<usermute[]> {
 
         try {
             const data = await this.prisma.groupchat.findUnique({
@@ -370,13 +341,13 @@ export class GroupchatService {
             return data.usersmute;
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
 
     //get Requestjoingroup of a groupchat
-    async findRequestjoingroup(id: string) : Promise<Requestjoingroup[]> {
+    async findRequestjoingroup(id: string): Promise<Requestjoingroup[]> {
 
         try {
             return await this.prisma.requestjoingroup.findMany({
@@ -386,14 +357,14 @@ export class GroupchatService {
             });
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
 
 
     //create a groupchat
-    async create(createGroupchatDto: any, iduser: string) {
+    async create(createGroupchatDto: any, iduser: string) : Promise<Groupchat> {
         try {
             const namegp = await this.prisma.groupchat.findUnique({
                 where: {
@@ -406,7 +377,7 @@ export class GroupchatService {
                     const saltOrRounds = 10;
                     createGroupchatDto.password = await bcrypt.hash(createGroupchatDto.password, saltOrRounds);
                 }
-                const data =  await this.prisma.groupchat.create({
+                const data = await this.prisma.groupchat.create({
                     data: {
                         namegb: createGroupchatDto.namegb,
                         usersgb: { connect: [{ id: iduser }] },
@@ -416,16 +387,16 @@ export class GroupchatService {
                         password: createGroupchatDto.password,
                     },
                 });
-                if(data)
-                    throw new HttpException('Groupchat created', HttpStatus.CREATED);
+                if (data)
+                    return data;
                 else
-                    throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+                    throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
             else {
                 throw new HttpException('name of Groupchat already exist', HttpStatus.BAD_REQUEST);
             }
         } catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -450,13 +421,12 @@ export class GroupchatService {
             }
         }
         catch (error) {
-            console.log("image not uploaded");
             throw new HttpException('image not upload', HttpStatus.BAD_REQUEST);
         }
     }
 
     //update a groupchat
-    async update(id: string, updateGroupchatDto: any, iduserconnected: string) {
+    async update(id: string, updateGroupchatDto: any, iduserconnected: string): Promise<void> {
         try {
             if (updateGroupchatDto.password) {
                 const saltOrRounds = 10;
@@ -472,7 +442,7 @@ export class GroupchatService {
                 }
             });
             if (admin) {
-                return await this.prisma.groupchat.update({
+                const data = await this.prisma.groupchat.update({
                     where: {
                         id: id,
                     },
@@ -482,18 +452,22 @@ export class GroupchatService {
                         password: updateGroupchatDto.password,
                     },
                 });
+                if (data)
+                    throw new HttpException('Groupchat updated', HttpStatus.CREATED);
+                else
+                    throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
             else {
                 throw new HttpException('You are not the admin of this groupchat', HttpStatus.BAD_REQUEST);
             }
         }
         catch (error) {
-            throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);                                                                                            
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //ban a user from a groupchat
-    async banuser(id: string, iduser: string, iduserconnected: string) {
+    async banuser(id: string, iduser: string, iduserconnected: string): Promise<void> {
         try {
             const admins = await this.findAllAdmins(id);
             //check if the user is an admin of the groupchat
@@ -504,7 +478,7 @@ export class GroupchatService {
                 }
             });
             if (admin) {
-                return await this.prisma.groupchat.update({
+                const data = await this.prisma.groupchat.update({
                     where: {
                         id: id,
                     },
@@ -513,43 +487,58 @@ export class GroupchatService {
                         usersgb: { disconnect: [{ id: iduser }] },
                     },
                 });
+                if (data)
+                {
+                    throw new HttpException('User banned', HttpStatus.CREATED);
+                }
+                else
+                    throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
             else {
-                return "You are not the admin of this groupchat";
+                throw new HttpException('You are not the admin of this groupchat', HttpStatus.BAD_REQUEST);
             }
         }
         catch (error) {
-            return null;
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //mute a user from a groupchat
-    async muteuser(id: string, iduser: string, iduserconnected: string, time: number) {
-        const admins = await this.findAllAdmins(id);
-        //check if the user is an admin of the groupchat
-        var admin = false;
-        admins.forEach(element => {
-            if (element.id == iduserconnected) {
-                admin = true;
-            }
-        });
-        if (admin) {
-            return await this.prisma.usermute.create({
-                data: {
-                    user: { connect: { id: iduser } },
-                    groupchat: { connect: { id: id } },
-                    expiresAt: new Date(Date.now() + time),
-                },
+    async muteuser(id: string, iduser: string, iduserconnected: string, time: number): Promise<void> {
+        try {
+            const admins = await this.findAllAdmins(id);
+            //check if the user is an admin of the groupchat
+            var admin = false;
+            admins.forEach(element => {
+                if (element.id == iduserconnected) {
+                    admin = true;
+                }
             });
+            if (admin) {
+                const data = await this.prisma.usermute.create({
+                    data: {
+                        user: { connect: { id: iduser } },
+                        groupchat: { connect: { id: id } },
+                        expiresAt: new Date(Date.now() + time),
+                    },
+                });
+                if (data)
+                    throw new HttpException('User muted', HttpStatus.CREATED);
+                else
+                    throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
+            }
+            else {
+                throw new HttpException('You are not the admin of this groupchat', HttpStatus.BAD_REQUEST);
+            }
         }
-        else {
-            return "You are not the admin of this groupchat";
+        catch (error) {
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //add a user to a groupchat public
 
-    async adduser(id: string, iduserconnected: string) {
+    async adduser(id: string, iduserconnected: string): Promise<void> {
         //get user ban of the groupchat
         const userban = await this.findUserBan(id);
         //check if the user is not banned
@@ -560,7 +549,7 @@ export class GroupchatService {
             }
         });
         if (notban) {
-            return await this.prisma.groupchat.update({
+            const data = await this.prisma.groupchat.update({
                 where: {
                     id: id,
                 },
@@ -568,14 +557,18 @@ export class GroupchatService {
                     usersgb: { connect: { id: iduserconnected } },
                 },
             });
+            if (data)
+                throw new HttpException('User added', HttpStatus.CREATED);
+            else
+                throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
         else {
-            return "You are banned from this groupchat";
+            throw new HttpException('You are banned from this groupchat', HttpStatus.BAD_REQUEST);
         }
     }
 
     //add a user to a groupchat protected
-    async adduserprotected(id: string, pass: string, iduserconnected: string) {
+    async adduserprotected(id: string, pass: string, iduserconnected: string): Promise<void> {
 
         //get user ban of the groupchat
         const userban = await this.findUserBan(id);
@@ -597,7 +590,7 @@ export class GroupchatService {
             });
             const validPassword = await bcrypt.compare(pass, groupchat.password);
             if (validPassword) {
-                return await this.prisma.groupchat.update({
+                const data = await this.prisma.groupchat.update({
                     where: {
                         id: id,
                     },
@@ -605,19 +598,23 @@ export class GroupchatService {
                         usersgb: { connect: { id: iduserconnected } },
                     },
                 });
+                if (data)
+                    throw new HttpException('User added', HttpStatus.CREATED);
+                else
+                    throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
             else {
-                return "Wrong password";
+                throw new HttpException('Password is incorrect', HttpStatus.BAD_REQUEST);
             }
         }
         else {
-            return "You are banned from this groupchat";
+            throw new HttpException('You are banned from this groupchat', HttpStatus.BAD_REQUEST);
         }
 
     }
 
     //accept a request to join a groupchat
-    async acceptrequest(id: string, iduser: string, iduserconnected: string) {
+    async acceptrequest(id: string, iduser: string, iduserconnected: string): Promise<void> {
         const superadmin = await this.findSuperUser(id);
         //select the request
         const request = await this.prisma.requestjoingroup.findFirst({
@@ -636,7 +633,7 @@ export class GroupchatService {
         });
         if (superadmin.id == iduserconnected) {
             await this.prisma.requestjoingroup
-            return await this.prisma.groupchat.update({
+            const data = await this.prisma.groupchat.update({
                 where: {
                     id: id,
                 },
@@ -644,14 +641,18 @@ export class GroupchatService {
                     usersgb: { connect: [{ id: iduser }] },
                 },
             });
+            if (data)
+                throw new HttpException('User added', HttpStatus.CREATED);
+            else
+                throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
         else {
-            return "You are not the admin of this groupchat";
+            throw new HttpException('You are not the admin of this groupchat', HttpStatus.BAD_REQUEST);
         }
     }
 
     //refuse a request to join a groupchat
-    async refuserequest(id: string, iduser: string, iduserconnected: string) {
+    async refuserequest(id: string, iduser: string, iduserconnected: string) : Promise<void> {
         const superadmin = await this.findSuperUser(id);
 
         //select the request
@@ -670,20 +671,20 @@ export class GroupchatService {
             },
         });
         if (superadmin.id == iduserconnected) {
-            return "Request refused";
+            throw new HttpException('User refused', HttpStatus.CREATED);
         }
         else {
-            return "You are not the admin of this groupchat";
+            throw new HttpException('You are not the admin of this groupchat', HttpStatus.BAD_REQUEST);
         }
     }
 
     ////////////////////////////////////////////////
     //add an admin to a groupchat
-    async addadmin(id: string, iduser: string, iduserconnected: string) {
+    async addadmin(id: string, iduser: string, iduserconnected: string) : Promise<void> {
         //get sueperadmin of the groupchat
         const superadmin = await this.findSuperUser(id);
         if (superadmin.id == iduserconnected) {
-            return await this.prisma.groupchat.update({
+            const data = await this.prisma.groupchat.update({
                 where: {
                     id: id,
                 },
@@ -691,15 +692,19 @@ export class GroupchatService {
                     admins: { connect: [{ id: iduser }] },
                 },
             });
+            if (data)
+                throw new HttpException('User added in admins', HttpStatus.CREATED);
+            else
+                throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
         else {
-            return "You are not the superadmin of this groupchat";
+            throw new HttpException('You are not the superadmin of this groupchat', HttpStatus.BAD_REQUEST);
         }
     }
 
     //delete a groupchat
     async remove(id: string, iduserconnected: string) {
-        const superadmin = await this.findSuperUser(id);  
+        const superadmin = await this.findSuperUser(id);
         //delete all messages of the groupchat
         await this.prisma.messagegb.deleteMany({
             where: {
@@ -713,52 +718,64 @@ export class GroupchatService {
             },
         });
         if (superadmin.id == iduserconnected) {
-            return await this.prisma.groupchat.delete({
+            const data = await this.prisma.groupchat.delete({
                 where: {
                     id: id,
                 },
             });
+            if (data)
+                throw new HttpException('Groupchat deleted', HttpStatus.ACCEPTED);
+            else
+                throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
         else {
-            return "You are not the superadmin of this groupchat";
+            throw new HttpException('You are not the superadmin of this groupchat', HttpStatus.BAD_REQUEST);
         }
     }
 
     //delete a user from a groupchat
-    async removeuser(id: string, iduser: string, iduserconnected: string) {
-        //get all admins of the groupchat
-        const admins = await this.findAllAdmins(id);
+    async removeuser(id: string, iduser: string, iduserconnected: string) : Promise<void> {
+        try {  //get all admins of the groupchat
+            const admins = await this.findAllAdmins(id);
 
-        //check if the userconnected  is an admin of the groupchat
-        var admin = false;
-        admins.forEach(element => {
-            if (element.id == iduserconnected) {
-                admin = true;
-            }
-        });
-
-        //check if the user not an admin of the groupchat
-        var notadmin = true;
-        admins.forEach(element => {
-            if (element.id == iduser) {
-                notadmin = false;
-            }
-        });
-
-        if (admin || iduserconnected == iduser || notadmin) {
-            return await this.prisma.groupchat.update({
-                where: {
-                    id: id,
-                },
-                data: {
-                    usersgb: { disconnect: [{ id: iduser }] },
-                },
+            //check if the userconnected  is an admin of the groupchat
+            var admin = false;
+            admins.forEach(element => {
+                if (element.id == iduserconnected) {
+                    admin = true;
+                }
             });
+
+            //check if the user not an admin of the groupchat
+            var notadmin = true;
+            admins.forEach(element => {
+                if (element.id == iduser) {
+                    notadmin = false;
+                }
+            });
+
+            if (admin || iduserconnected == iduser || notadmin) {
+                const data =  await this.prisma.groupchat.update({
+                    where: {
+                        id: id,
+                    },
+                    data: {
+                        usersgb: { disconnect: [{ id: iduser }] },
+                    },
+                });
+                if (data)
+                    throw new HttpException('User deleted', HttpStatus.ACCEPTED);
+                else
+                    throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
+            }
+        }
+        catch (error) {
+            return null;
         }
     }
 
     //exit a groupchat
-    async exit(id: string, iduserconnected: string) {
+    async exit(id: string, iduserconnected: string) : Promise<void>{
         try {
 
             //check if the userconnected  is a superadmin of the groupchat
@@ -770,7 +787,7 @@ export class GroupchatService {
                         idgp: id,
                     },
                 });
-                return await this.prisma.groupchat.delete({
+                await this.prisma.groupchat.delete({
                     where: {
                         id: id,
                     },
@@ -781,18 +798,19 @@ export class GroupchatService {
             const admins = await this.findAllAdmins(id);
             //check if the userconnected  is an admin of the groupchat
             if (admins.some(admin => admin.id == iduserconnected)) {
-                return await this.prisma.groupchat.update({
+                await this.prisma.groupchat.update({
                     where: {
                         id: id,
                     },
                     data: {
                         admins: { disconnect: [{ id: iduserconnected }] },
+                        usersgb: { disconnect: [{ id: iduserconnected }]},
                     },
                 });
             }
 
 
-            return await this.prisma.groupchat.update({
+            const data =  await this.prisma.groupchat.update({
                 where: {
                     id: id,
                 },
@@ -800,18 +818,22 @@ export class GroupchatService {
                     usersgb: { disconnect: [{ id: iduserconnected }] },
                 },
             });
+            if (data)
+                throw new HttpException('User exit', HttpStatus.ACCEPTED);
+            else
+                throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         } catch (error) {
-            return null;
+            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
         }
     }
 
     //delete an admin from a groupchat
-    async removeadmin(id: string, iduser: string, iduserconnected: string) {
+    async removeadmin(id: string, iduser: string, iduserconnected: string) : Promise<void> {
 
         try { //get sueperadmin of the groupchat
             const superadmin = await this.findSuperUser(id);
             if ((superadmin.id == iduserconnected || iduserconnected == iduser) && iduserconnected != superadmin.id) {
-                return await this.prisma.groupchat.update({
+                const data =  await this.prisma.groupchat.update({
                     where: {
                         id: id,
                     },
@@ -819,9 +841,13 @@ export class GroupchatService {
                         admins: { disconnect: [{ id: iduser }] },
                     },
                 });
+                if (data)
+                    throw new HttpException('User deleted from admins', HttpStatus.ACCEPTED);
+                else
+                    throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
             else {
-                return "You are not the superadmin of this groupchat";
+                throw new HttpException('You are not the superadmin of this groupchat', HttpStatus.BAD_REQUEST);
             }
         } catch (error) {
             return null;
