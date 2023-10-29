@@ -73,7 +73,33 @@ const messageInput = (props: any) => {
 
     //Refering to the dummy div
     const firstRef = useRef<HTMLInputElement>(null);
-    
+
+    //Check blocked state
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [localUserBlocksRemote, setLocalUserBlocksRemote] = useState(false);
+
+    //Check if remote user blocked me
+    useEffect(() => {
+        axios
+            .post(`http://localhost:3000/users/checkblockme`, { to: props.Receiver.id } , { withCredentials: true })
+            .then((res:any) => {
+                setIsBlocked(res.data);
+            })
+            .catch(Error)
+                console.log('Error happened when checking for the error');
+    },[props.Receiver]);
+
+    //Check if local user blocked me
+    useEffect(() => {
+        axios
+            .post(`http://localhost:3000/users/checkblock`, { to: props.Receiver.id } , { withCredentials: true })
+            .then((res:any) => {
+                setLocalUserBlocksRemote(res.data);
+            })
+            .catch(Error)
+                console.log('Error happened when checking for the error');
+    },[props.Receiver]);
+
     //Our chat socket
     const conversationsSocket = useContext(chatSocketContext);
     
@@ -268,10 +294,14 @@ const messageInput = (props: any) => {
                     <Conversation MessagesArr={Array.from(map.values())}/>
                     <Toaster/>
                     <div className="messageInput">
-                        <form className='messageform' onSubmit={onSubmitHandler}>
-                            <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
-                            <button className='sendButton'><img src={Send}></img></button>
-                        </form>
+                        {
+                            isBlocked ? (<div>You're blocked</div>) :
+                            localUserBlocksRemote ? (<div style={{fontSize: '1vw'}}>You blocked this user, click on the profile to unblock</div>) :
+                            (<form className='messageform' onSubmit={onSubmitHandler}>
+                                <input className='messageInputBox' ref={firstRef} placeholder='Type your message here ...'></input>
+                                <button className='sendButton'><img src={Send}></img></button>
+                            </form>)
+                        }
                     </div>
                 </>
             )

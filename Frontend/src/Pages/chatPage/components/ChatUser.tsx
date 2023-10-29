@@ -19,8 +19,12 @@ interface localUserClass
 const ChatUser = (props:any) => {
 
     //Fetching current user (Receiver) data each time the prop gets new value
-    const [remoteUser, setRemoteUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
     const [localUser, setLocalUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
+    const [remoteUser, setRemoteUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
+
+    //Block checks
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [localUserBlocksRemote, setLocalUserBlocksRemote] = useState(false);
     
     //Fetching local user info
     useEffect(() => {
@@ -31,7 +35,7 @@ const ChatUser = (props:any) => {
             })
             .catch(Error)
                 console.log("Error happened when feching local user data");
-    }, [])
+    }, [props.pcurrentUserId])
     
     //Fetching remote user info
     useEffect(() => {
@@ -43,16 +47,43 @@ const ChatUser = (props:any) => {
                     setRemoteUser(res.data)
                 })
                 .catch(Error)
-                    console.log("Error happened when feching local user data");
+                    console.log("Error happened on block check");
         }
     }, [props.pcurrentUserId]);
+
+    //Check if remote user blocked me
+    useEffect(() => {
+        if (remoteUser.id != '')
+        {
+            axios
+                .post(`http://localhost:3000/users/checkblockme`, { to: remoteUser.id } , { withCredentials: true })
+                .then((res:any) => {
+                    console.log('Check if remote user blocked me ->', res.data)
+                    setIsBlocked(res.data);
+                })
+                .catch(Error)
+                    console.log('Error happened on block check 2');
+        }
+    },[remoteUser.id]);
+
+    //Check if local user blocked me
+    useEffect(() => {
+        if (remoteUser.id != '')
+        {
+            axios
+                .post(`http://localhost:3000/users/checkblock`, { to: remoteUser.id } , { withCredentials: true })
+                .then((res:any) => {
+                    console.log('Check if local user blocked me ->', res.data)
+                    setLocalUserBlocksRemote(res.data);
+                })
+                .catch(Error)
+                    console.log('Error happened when checking for the error');
+        }
+    },[remoteUser.id]);
 
     const onClickHandler = () => {
         axios
             .get(`http://localhost:3000/chat/${remoteUser.id}/requestjoingame`, { withCredentials: true })
-            .then((res:any) => {
-                console.log(" joingame on click handler",res.data);
-            })
             .catch(Error)
                 console.log("Error happened when requesting to join the game", Error);
 
@@ -85,12 +116,17 @@ const ChatUser = (props:any) => {
                     <div className='chatUserControls'>
                     {
                         //Conditional rendring to display the control buttons or not based on the presence of remoteUser.profileImage
-                        remoteUser.profileImage ?  (<div className="chatControlButtons">
-                                                    {/* <Link to={'/game'}> */}
-                                                        <button className='userControlButtons' onClick={onClickHandler}><img src={play} width={50} height={50}></img></button>
-                                                    {/* </Link> */}
-                                                    </div>)
-                                                :   (<></>)
+                        remoteUser.profileImage ?  (    isBlocked ? (<></>) :
+                                                        localUserBlocksRemote ? (<></>) :
+                                                        (<div className="chatControlButtons">
+                                                            <button className='userControlButtons' onClick={onClickHandler}><img src={play} width={50} height={50}></img></button>
+                                                        </div>)
+                                                    )   :   (<></>)
+                        
+                        // remoteUser.profileImage ?  (<div className="chatControlButtons">
+                        //                                 <button className='userControlButtons' onClick={onClickHandler}><img src={play} width={50} height={50}></img></button>
+                        //                             </div>)
+                        //                         :   (<></>)
                     }
                     </div>
                 </div>

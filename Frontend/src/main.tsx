@@ -1,8 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate, Link} from "react-router-dom";
-import Cookies from 'universal-cookie';
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import axios from 'axios';
@@ -23,6 +22,7 @@ const Notification = lazy(() => import('./Pages/Notifications/Notifications'));
 import GroupPage from './Pages/newGroupChat/GrpChatPage';
 import Dogo from "./Pages/dogo.gif";
 import randomLogo from './Pages/addons/assets/logo.svg'
+import handshake from '../src/Pages/HomePage/assets/handshake.png';
 
 const BackgroudGame = () => {
 	const animationStyle = `
@@ -35,6 +35,32 @@ const BackgroudGame = () => {
   		<style>{animationStyle}</style>
         	<img src={randomLogo} title={"Back To Home"} style={{ margin: '20px',width: '50px',height: '50px',animation: 'rotate 10s infinite'}}/>
       	</a>
+		{/* <a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" onClick={() => {document.getElementById('howtoplay').showModal();}} >How To Play</a>
+		<section>
+			<dialog className = 'example' style={{height: '700px', width: '700px', background: 'white' , borderRadius:"20px"}} id="howtoplay">
+
+			<button style={{display: 'flex', alignItems:'left'}} className="nes-btn is-error"  onClick={() => {
+				document.getElementById('howtoplay')?.close();
+			}} >X</button>
+				<h1>Pixel Pong</h1>
+				<div style = {{backgroundColor : "#e0a43d"}} className="nes-container is-dark with-title">
+				Pixel Pong was originally founded in September 2023, it was the idea of Omar Toufah and was encouraged later by other members of our team who were Ayoub Bensguia, Mohamed Amella,
+				Ibrahim Nada, and Mohamed Khalil Naqqad.
+				Our design was heavily inspired by Pixel art which is a form of digital art, our website is structured on the idea of foolishness that paid tribute to this
+				kind of art as it is based on pixels and playing with colors to create a childish yet very artsy design,
+				everything in this web site that you will experience and hope you'll enjoy was made from scratch using frameworks that facilitates the use of pixel art style in CSS and Html.
+				Hadouken!!!
+				</div>
+				<h2 style={{marginTop : '50px'}}>How To Play</h2>
+				<i className="snes-logo"></i>
+				<div className="nes-container with-title is-centered">
+					<img src= {handshake}></img>
+					To move Your Paddle you can use eaither the up and down arrows , Or use your mouse.
+				</div> 
+			</dialog>
+		</section> */}
+
+
     </div>
   );
 };
@@ -113,8 +139,7 @@ const AlreadyInGame = () => {
 		<>
 		<div style={{background: '#333C54' ,display:'flex', alignItems: 'center', justifyContent: 'center'}}>
 			<div>
-
-			<BackgroudGame/>
+				<BackgroudGame/>
 			</div>
 			<div>
 				<div>
@@ -141,16 +166,20 @@ const Routing = () => {
             })
             .catch(() => {
 				setUnlogged(true);
-        })
+        	})
     	}
 		fetchData();
 	}, [])
 
 	return (
 		<BrowserRouter>
-		<Suspense fallback={<div>
-								<img src={'https://64.media.tumblr.com/02f1e684630962dfde601535ca66c7ec/4f559fadb3dc32b2-db/s1280x1920/b30ed1f7179224fc6c882fc432975dea793cf25a.gifv'}/>
-							</div>}>
+		<Suspense fallback={
+			<>
+				<div style={{height: '100vh', background: '#333C54',display: 'flex', justifyContent: 'flex-start',alignItems: 'flex-start'}}>
+					<img style={{transform: 'translate(30vw, 30vh)'}}  src={'https://64.media.tumblr.com/02f1e684630962dfde601535ca66c7ec/4f559fadb3dc32b2-db/s1280x1920/b30ed1f7179224fc6c882fc432975dea793cf25a.gifv'}/>
+				</div>
+			</>
+		}>
 		<Routes>
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
 			{userData != undefined && !userData.twofa && (
@@ -167,7 +196,7 @@ const Routing = () => {
 					<Route path="/notifications" 	element={<NotificationComponents/>}/>
 					<Route path="/groups" 			element={<GroupPage/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
-					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
+					<Route path="*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
@@ -177,6 +206,7 @@ const Routing = () => {
 			{userData != undefined && userData.twofa && (
 				<>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
+					<Route path="/*" 				element={<Navigate to="/two-factor-authentication" replace/>}/>
 				</>
 			)}
 			{/* User is not logged in */}
