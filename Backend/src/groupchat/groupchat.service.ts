@@ -98,7 +98,7 @@ export class GroupchatService {
                 return check;
             }
             catch (error) {
-                console.log(error);
+                throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -115,7 +115,7 @@ export class GroupchatService {
                 if (data)
                     return data;
                 else
-                    throw new HttpException('Groupchat not found', HttpStatus.NOT_FOUND);
+                    null;
             }
             catch (error) {
                 throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
@@ -129,7 +129,7 @@ export class GroupchatService {
             if (data)
                 return data;
             else
-                throw new HttpException('Groupschat not found', HttpStatus.NOT_FOUND);
+                return  null;
 
         }
         catch (error) {
@@ -150,7 +150,7 @@ export class GroupchatService {
             if (data)
                 return data;
             else
-            throw new HttpException('Groupschat not found', HttpStatus.NOT_FOUND);
+                return null;
         }
         catch (error) {
             throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
@@ -169,7 +169,7 @@ export class GroupchatService {
             if (data)
                 return data;
             else
-                throw new HttpException('Groupschat not found', HttpStatus.NOT_FOUND);
+                return null;
         }
         catch (error) {
             throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
@@ -190,7 +190,7 @@ export class GroupchatService {
             if (data)
                 return data;
             else
-                console.log("no groupchat found");
+                return null;
         }
         catch (error) {
             throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
@@ -209,11 +209,10 @@ export class GroupchatService {
                     },
                 }
             );
-            if (data) {
+            if (data) 
                 return data;
-            }
             else
-                console.log("no groupchat found");
+                return null;
         }
         catch (error) {
             throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
@@ -245,11 +244,10 @@ export class GroupchatService {
                         users.push(user);
                     }
                 });
-                console.log("users === >> ", users)
                 return users;
             }
             else
-                return [];
+                return null;
         }
         catch (error) {
             throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
@@ -267,8 +265,10 @@ export class GroupchatService {
                     admins: true,
                 },
             });
-
-            return data.admins;
+            if(data)
+                return data.admins;
+            else
+                throw new HttpException('admins not found', HttpStatus.NOT_FOUND);
         }
         catch (error) {
             throw new HttpException('Error in Request', HttpStatus.BAD_REQUEST);
@@ -288,7 +288,6 @@ export class GroupchatService {
                     blockedby: true,
                 },
             });
-            console.log(userblock);
             const messages = await this.prisma.groupchat.findUnique({
                 where: {
                     id: id,
