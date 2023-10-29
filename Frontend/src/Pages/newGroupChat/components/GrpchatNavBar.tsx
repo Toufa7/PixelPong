@@ -7,6 +7,9 @@ import DmChatUser from './GrpdmChatUser'
 import ChatSearch from './GrpchatSearch'
 import CreateGroup from './createGroup'
 import ManageGroup from './mangeGroup'
+import { useNavigate } from 'react-router-dom';
+// const Error = lazy(() => import('./Pages/errorPage/errorPage'));
+
 interface chatUser {
     userName: string;
     pic: string;
@@ -37,7 +40,7 @@ const GrpchatNavBar = () => {
 			                </div> {data.label ?
                                 (
                                     data.createOrmanage ?
-                                    (<ManageGroup/>)
+                                    (<ManageGroup setIsCreated={setIsCreated}/>)
                                     :
                                     (<CreateGroup setIsCreated={setIsCreated} />)
                                 )
@@ -45,7 +48,7 @@ const GrpchatNavBar = () => {
 				                ""
 			                    }
 		                    </div>
-                            <Dms cu={getCurentUserDms} isCreated={isCreated}/>
+                            <Dms cu={getCurentUserDms} isCreated={isCreated} setIsCreated={setIsCreated}/>
 	                    </div>
                     <div className="GrpchatLowerRibbon"></div>
                     <style>
@@ -71,14 +74,22 @@ const Dms = (props:any) => {
     
     //Groups map
     let GroupsMap = useMap();
-
+    const navigate = useNavigate();
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
-            .then((response:any) => {
-                for (let index = 0; index < response.data.length; index++) {
-                    GroupsMap.set(response.data[index].id, response.data[index])
-                }
-            });
+        .then((response:any) => {
+            console.log(response.data)
+            GroupsMap.clear()
+            for (let index = 0; index < response.data.length; index++) {
+                GroupsMap.set(response.data[index].id, response.data[index])
+            }
+        })
+        .catch((error) => {
+            navigate("/error", {state: {
+                title: error.response.status, type: error.response.statusText, msg: error.response.statusText
+            }})
+        })
+
     }, [props.isCreated]);
 
     const updateSharedString = (newString: string) =>
@@ -86,20 +97,27 @@ const Dms = (props:any) => {
         props.cu(newString);
     };
 
+    console.log("Array Size -> ", GroupsMap);
+
     return (
         <div className="GrpchatDmDiv">
         <p>GROUPS</p>
         <div className="GrpuserDms">
             {
-                Array.from(GroupsMap.values()).map((group, index) => (
-                    <DmChatUser
-                        key={index}
-                        userName={group.namegb}
-                        pic={`http://localhost:3000/groupchat/getimage/${group.id}`}
-                        userId={updateSharedString}
-                        id={group.id}
-                        privacy={group.grouptype}
-                    />
+                GroupsMap.size == 0 ?
+                (<></>)
+                :
+                (
+                    Array.from(GroupsMap.values()).map((group, index) => (
+                        <DmChatUser
+                            key={index}
+                            userName={group.namegb}
+                            pic={`http://localhost:3000/groupchat/getimage/${group.id}`}
+                            userId={updateSharedString}
+                            id={group.id}
+                            privacy={group.grouptype}
+                        />
+                )
                 ))
             }
         </div>

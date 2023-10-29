@@ -14,7 +14,7 @@ import erase from '../assets/delete.svg';
     image : string;
 */
 
-const UpdateGroup = (id : string) => {
+const UpdateGroup = (id : string, setIsCreated: React.Dispatch<React.SetStateAction<boolean>>) => {
 	const choice	: number	= document.getElementById("default_select")?.value;
 	const groupName : string	= document.getElementById('name_field')?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload"]')?.files[0];
@@ -54,6 +54,7 @@ const UpdateGroup = (id : string) => {
 						axios.post(`http://localhost:3000/groupchat/${id}/uploadimage`, data, { withCredentials: true })
 						.then(() => {})
 					}
+					setIsCreated(prev => !prev)
 				}),
 				{
 					loading: "Sending data...",
@@ -285,7 +286,7 @@ const ListingUsersAdmins = ({group}) => {
 	);
 };
   
-const ManageGroup = () => {
+const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetStateAction<boolean>>}) => {
 	const privacy = ["Group Chat Visibility: Limited to Members","Exclusive Access: Only Members Allowed","Enhanced Security: Password-Protected Group"]
 	const [isProtected , setProtected] = useState<boolean>(false);
 	const [update , setUpdate] = useState<string>("");
@@ -316,10 +317,6 @@ const ManageGroup = () => {
 
 	const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false);
 	useEffect(() => {
-		// if (!initialRef.current) {
-		// 	initialRef.current = true
-		// 	return;
-		// }
 		if (!flag) return; 
 		axios.get(`http://localhost:3000/groupchat/${selecting.id}/checksuperuser`,{ withCredentials: true })
 		.then((respo) => {
@@ -383,13 +380,14 @@ const ManageGroup = () => {
 											.then(() => {
 												setUpdatingGroups(prev => !prev);
 												setFlag(false);
+												setIsCreated(prev => !prev)
 												toast.success("Delete Success", {style: {textAlign: "center", width: '300px'}, position: "top-right"});
 											})
 											.catch(() => {
 												toast.error("Delete Failed", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 											})}}>
 										</img>Delete Group</a>
-        							<button style={{marginBottom: '10px', width: 'auto'}} disabled={update ? false : true} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`} onClick={() => UpdateGroup(selecting.id)}>Update</button>
+        							<button style={{marginBottom: '10px', width: 'auto'}} disabled={update ? false : true} className={`nes-btn  ${update ? "is-success" : "is-disabled"}`} onClick={() => UpdateGroup(selecting.id, setIsCreated)}>Update</button>
 									<Toaster/>
 									</>
 							)

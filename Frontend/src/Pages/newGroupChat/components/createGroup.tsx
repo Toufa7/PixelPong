@@ -40,7 +40,7 @@ const CreatingGroup = (setIsCreated) => {
 			.then((response) => {
 				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
 				.then((response) => {
-					setIsCreated(true);
+					setIsCreated(prev => !prev);
 					console.log("Creating Group Response -> ", response);
 				})
 				console.log("Creating Group Response -> ", response);
@@ -74,7 +74,7 @@ const CreatingGroup = (setIsCreated) => {
 	}
 }
 
-const CreateGroup = ({setIsCreated} : {setIsCreated: boolean}) => {
+const CreateGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetStateAction<boolean>>}) => {
 	const privacy = ["Limited to Members","Only Members Allowed","Password-Protected Group"]
 	const [groupName , setGroupName] = useState("");
 	const [isProtected , setProtected] = useState<boolean>(false);

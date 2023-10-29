@@ -426,7 +426,7 @@ export class GroupchatService {
     }
 
     //update a groupchat
-    async update(id: string, updateGroupchatDto: any, iduserconnected: string): Promise<void> {
+    async update(id: string, updateGroupchatDto: any, iduserconnected: string): Promise<string> {
         try {
             if (updateGroupchatDto.password) {
                 const saltOrRounds = 10;
@@ -453,7 +453,7 @@ export class GroupchatService {
                     },
                 });
                 if (data)
-                    throw new HttpException('Groupchat updated', HttpStatus.CREATED);
+                    return "upadated";
                 else
                     throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }

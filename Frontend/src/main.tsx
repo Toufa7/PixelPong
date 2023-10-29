@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, useLocation} from "react-router-dom";
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import axios from 'axios';
@@ -154,6 +154,14 @@ const AlreadyInGame = () => {
 	);
 }
 
+const ErrorPageConfig = () => {
+	const {state} = useLocation()
+	const {title, type ,msg} = state;
+	return (
+		<Error title={title} errorType={type} msg={msg} />
+	)
+}
+
 
 const Routing = () => {
 	const [userData, setUserInfo] = useState();
@@ -196,6 +204,7 @@ const Routing = () => {
 					<Route path="/notifications" 	element={<NotificationComponents/>}/>
 					<Route path="/groups" 			element={<GroupPage/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
+					<Route path="/error" 			element={<ErrorPageConfig/>}/>
 					<Route path="*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
