@@ -53,7 +53,7 @@ const CreatingGroup = (setIsCreated) => {
 			,{ duration: 5000, position: 'top-right' });
 
 	}
-	else if (choice == 2 && password.length < 8) {
+	else if (choice == 2 && (password && password.length < 8)) {
 		toast.error("Password Too Short	", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 	}
 
@@ -90,8 +90,7 @@ const CreateGroup = ({setIsCreated} : {setIsCreated: boolean}) => {
 				</div>
 				<label>Select Privacy</label>
 				<div className="nes-select" style={{ width:' 300px'}}>
-					<select required id="default_privacy" onChange={(e) => setProtected(e.target.value == "2")} >
-						<option value="" disabled selected hidden>Choose Privacy</option>
+					<select required id="default_privacy" defaultValue={"0"} onChange={(e) => setProtected(e.target.value == "2")} >
 						<option value="0" title={privacy[0]}>Public</option>
 						<option value="1" title={privacy[1]}>Private</option>
 						<option value="2" title={privacy[2]}>Protected</option>

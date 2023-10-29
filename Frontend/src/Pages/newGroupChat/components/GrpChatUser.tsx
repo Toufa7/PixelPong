@@ -61,7 +61,7 @@ const ChatUser = (props : any) => {
 	})
 
     const [isCreated, setIsCreated] = useState<boolean>(false)
-
+    
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {
@@ -115,8 +115,8 @@ const ChatUser = (props : any) => {
                         <div className="GrpchatUser">
                             {
                                 //Conditional rendring to display the profile image or not based on the presence of groupRoom.profileImage
-                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="user-photo"/>
-                                                        :   <img src={info} alt="user-photo" />
+                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="Group-photo"/>
+                                                        :   <img src={info} alt="Group-photo" />
                             }
                             <div className="GrpchatUserName">
                                 <span>
@@ -175,14 +175,12 @@ const ChatUser = (props : any) => {
                             (
                                 data.createOrmanage ?
                                 (<ManageGroup/>)
-                                :
+                                    :
                                 (<CreateGroup setIsCreated={setIsCreated} />)
-                                )
+                            )
                                 :
-                                (
-                                    <></>
-                                )
-                            }
+                            (<></>)
+                        }
                     </div>
                 </menu>
                 </form>
@@ -254,7 +252,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
             props.groupInfo.id   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dudley} width={500} height={500} alt="user-photo" />
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dudley} width={500} height={500} alt="Group-photo" />
         }
     </div>
     )

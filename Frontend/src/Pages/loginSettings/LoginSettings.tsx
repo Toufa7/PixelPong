@@ -94,6 +94,7 @@ export default function LoginSettings() {
     console.log("userInfo -> ", userInfo);
     return (
         <div style={{height: '100vh'}}>
+            
             <Toaster/>
           <div className="container">
             <div className="settingsBox">
@@ -133,7 +134,6 @@ export default function LoginSettings() {
                             </button>
                         </div>
                     </div>
-                    {/* A dialog show up for the 1st time and ask the user if he want to go with the default username & avatar */}
                     <section>
                         <dialog style={{background: '#DDFFFF', width: '600px'}} className="nes-dialog is-rounded" id="warning">
                             <form method="dialog">
@@ -148,7 +148,7 @@ export default function LoginSettings() {
                                 <div>
                                     <button style={{margin: '10px'}} className="nes-btn">Cancel</button>
                                     <Link to="/home">
-                                    <a style={{margin: '10px', color: 'black'}} className="nes-btn is-primary">Confirm</a>
+                                    <span style={{margin: '10px', color: 'black'}} className="nes-btn is-primary">Confirm</span>
                                     </Link>
                                 </div>
                             </form>
@@ -160,4 +160,5 @@ export default function LoginSettings() {
         </div>
         </div>
     );
-    }
+}
+{/* A dialog show up for the 1st time and ask the user if he want to go with the default username & avatar */}

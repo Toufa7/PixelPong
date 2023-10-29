@@ -257,10 +257,6 @@ const Achivements = () => {
                                 </div>
                             )
                         }
-
-
-
-
                     </div>
                 </div>
                 </div>
@@ -302,7 +298,6 @@ function ProfilPage() {
                     <States winRate={((states.wins / states.numberOfMatches) * 100).toFixed(2)} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>
                 )
             }
-
         </div>
         <div className="downContainer">
             <Achivements/>

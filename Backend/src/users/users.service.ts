@@ -41,18 +41,18 @@ export class UsersService {
         },
       },
     }),
-      this.prisma.user.update({
-        where: {
-          id: friendId,
-        },
-        data: {
-          friends: {
-            disconnect: {
-              id: userId,
-            },
+    await this.prisma.user.update({
+      where: {
+        id: friendId,
+      },
+      data: {
+        friends: {
+          disconnect: {
+            id: userId,
           },
         },
-      });
+      },
+    });
   }
   async blockfriend(userId: string, blockedId: string): Promise<void> {
     console.log("blockfriend", blockedId, "  ", userId);

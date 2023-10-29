@@ -215,7 +215,7 @@ const Routing = () => {
 					<Route path="/"			element={<WelcomePage/>}/>
 					<Route path="/welcome"	element={<WelcomePage/>}/>
 					<Route path="/login"	element={<LoginPage/>}/>
-					<Route path="*"		element={<Navigate to="/login" replace/>}/>
+					<Route path="*"			element={<Navigate to="/login" replace/>}/>
 				</>
 			)}
 			</Routes>

@@ -1,9 +1,8 @@
-import {useEffect, useState } from "react";
+import {useEffect, useRef, useState } from "react";
 import crown from '../assets/crown.svg'
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import erase from '../assets/delete.svg';
-import HorizontalScroll from 'react-scroll-horizontal'
 
 /*
 	TODO: Receiving the ID of the Selected Group to be updated
@@ -23,8 +22,6 @@ const UpdateGroup = (id : string) => {
 	const usernameCheck			= /^[A-Za-z0-9_]{5,15}$/;
 	
 	if (usernameCheck.test(groupName) || groupAvatar || choice || password) {
-		console.log("THE ID IS -> ", id);
-		// console.log("update Avatar -> ", groupAvatar);
 		// console.log("update data  Avatar -> ", data);
 
 		interface groupTypes {
@@ -52,7 +49,6 @@ const UpdateGroup = (id : string) => {
 				axios.patch(`http://localhost:3000/groupchat/${id}`, groupData, { withCredentials: true })
 				.then(() => {
 					if (groupAvatar) {
-
 						const data = new FormData();
 						data.append('file', groupAvatar);
 						axios.post(`http://localhost:3000/groupchat/${id}/uploadimage`, data, { withCredentials: true })
@@ -103,8 +99,8 @@ const ListingUsersAdmins = ({group}) => {
 				console.log("Users Response -> ", response.data);
 				setUsers(response.data);
 			})
-			.catch((error) => {
-				console.log("Error fetching users:", error);
+			.catch(() => {
+				console.log("Error fetching users:");
 			});
 		}, [group]); 
 		
@@ -114,8 +110,8 @@ const ListingUsersAdmins = ({group}) => {
 				console.log("Admins Response -> ", response.data);
 				setAdmins(response.data);
 			})
-			.catch((error) => {
-				console.log("Error fetching admins:", error);
+			.catch(() => {
+				console.log("Error fetching admins:");
 			});
 		}, [group]);
 	}
@@ -200,8 +196,6 @@ const ListingUsersAdmins = ({group}) => {
 
 
 
-
-
 	const openMembersDialog = () => {
 		const dialog = document.getElementById('dialog_members');
 		dialog?.showModal();
@@ -253,8 +247,8 @@ const ListingUsersAdmins = ({group}) => {
 									(
 										<>
 											<div className="nes-select" style={{ width: '140px', height: 'auto' }}>
-												<select style={{}} required id="muteSelect" onChange={(event) => handleMuteSelect(event, selectedMember, group.id)}>
-													<option disabled selected hidden>Mute</option>
+												<select style={{}} required id="muteSelect" defaultValue={"5"}  onChange={(event) => handleMuteSelect(event, selectedMember, group.id)}>
+													<option value="5" disabled hidden>Mute</option>
 													<option value="0">5min</option>
 													<option value="1">15min</option>
 												</select>
@@ -262,8 +256,8 @@ const ListingUsersAdmins = ({group}) => {
 											{
 												isSuperAdmin ? (
 													<div className="nes-select" style={{ width: '140px', height: 'auto' }}>
-														<select style={{}} required id="setAdmin" onChange={(event) => handleSetAdmin(event, selectedMember, group.id)}>
-															<option disabled selected hidden>Role</option>
+														<select required id="setAdmin"  defaultValue={"5"} onChange={(event) => handleSetAdmin(event, selectedMember, group.id)}>
+															<option value="5" disabled hidden>Role</option>
 															<option value="0">Member</option>
 															<option value="1">Admin</option>
 														</select>
@@ -275,10 +269,10 @@ const ListingUsersAdmins = ({group}) => {
 												<button  className="nes-btn is-warning" style={{width: '100px'}} onClick={() => kickingMember(selectedMember,group.id)}>Kick</button>
 												<button className="nes-btn is-error" style={{width: '80px' }}onClick={() => baningMember(selectedMember, group.id)}>Ban</button>
 											</>
-										)
-										:
+									)
+									:
 										(<></>)
-									}
+								}
 								</div>
 								);
 							})
@@ -295,40 +289,44 @@ const ManageGroup = () => {
 	const privacy = ["Group Chat Visibility: Limited to Members","Exclusive Access: Only Members Allowed","Enhanced Security: Password-Protected Group"]
 	const [isProtected , setProtected] = useState<boolean>(false);
 	const [update , setUpdate] = useState<string>("");
+	const [udpatingGroup, setUpdatingGroups] = useState<boolean>(false);
     const [groupsList, setGroupsList] = useState<string[]>([]);
 	const [amIAdmin, setamIAdmin] = useState<boolean>(false);
-    useEffect(() => {   
-		axios.get(`http://localhost:3000/groupchat/lifihomanaadmin`, {withCredentials: true})
-		.then((response) => {
-			console.log("Groups List " ,response.data);
-			setGroupsList(response.data);
-			if (response.data.length != 0)
-				setamIAdmin(true);
-		})
-		.catch((erro) => {
-			console.log("Error Image -> ", erro);
-		});
-    }, []);
+    useEffect(() => {
+		const CheckAdmin = async () => {
+			try {
+				const response = await axios.get(`http://localhost:3000/groupchat/lifihomanaadmin`, {withCredentials: true});
+				setGroupsList(response.data);
+				if (response.data.length != 0)
+					setamIAdmin(true);
+			}
+			catch (error) {
+				console.error("Checkin Admin Failed");
+			}
+		};
+		CheckAdmin(); 
+    }, [udpatingGroup]);
 	
 	const [selecting , setSelecting] = useState({
 		namegb: "Group Name",
+		grouptype: "",
 	});
 	const [flag, setFlag] = useState<boolean>(false);
-	console.log("Group List Map -> ", groupsList);
 
-	console.log("selecting.id => ", selecting.id);
 
 	const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false);
-	axios.get(`http://localhost:3000/groupchat/${selecting.id}/checksuperuser`,{ withCredentials: true })
-	.then((respo) => {
-		console.log("Success SuperUser -> ", respo.data);
-		setSuperAdmin(respo.data);
-	})
-	.catch((erro) => {
-		console.log("Error in SueprAdmin ", erro);
-	})
-
-
+	useEffect(() => {
+		// if (!initialRef.current) {
+		// 	initialRef.current = true
+		// 	return;
+		// }
+		if (!flag) return; 
+		axios.get(`http://localhost:3000/groupchat/${selecting.id}/checksuperuser`,{ withCredentials: true })
+		.then((respo) => {
+			console.log("first")
+			setSuperAdmin(respo.data);
+		})
+	}, [flag])
 
 	return (
 	<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff",borderRadius: "10px"}}>
@@ -357,8 +355,8 @@ const ManageGroup = () => {
 										<input  style={{background: '#E9E9ED',width: '300px'}} type="text" id="name_field" placeholder={selecting.namegb} onChange={(e) => setUpdate(e.target.value)} className="nes-input"/>
 									</div>
 									<div style={{ margin: '10px', width:'auto'}} className="nes-select">
-										<select required id="default_select"  onChange={(e) => {setProtected(e.target.value == "2"); setUpdate(e.target.value)}}>
-											<option value=""  disabled selected hidden>Change Privacy</option>
+										<select id="default_select"  onChange={(e) => {setProtected(e.target.value == "2"); setUpdate(e.target.value)}}>
+											<option value="" disabled defaultValue={""} hidden>Choose Privacy</option>
 											<option value="0" title={privacy[0]}>Public</option>
 											<option value="1" title={privacy[1]}>Private</option>
 											<option value="2" title={privacy[2]}>Protected</option>
@@ -380,8 +378,11 @@ const ManageGroup = () => {
 									<ListingUsersAdmins group={selecting} />
 									<a style={{color: '#333C54', margin: '10px'} }>
 										<img src={erase} style={{width: '40px', height: '40px', marginRight: '10px'}}  onClick={() => {
+											console.log("selecting.id ====> ", selecting.id);
 											axios.delete(`http://localhost:3000/groupchat/${selecting.id}`, {withCredentials: true})
 											.then(() => {
+												setUpdatingGroups(prev => !prev);
+												setFlag(false);
 												toast.success("Delete Success", {style: {textAlign: "center", width: '300px'}, position: "top-right"});
 											})
 											.catch(() => {
@@ -392,7 +393,7 @@ const ManageGroup = () => {
 									<Toaster/>
 									</>
 							)
-								:
+							:
 							(
 								<ListingUsersAdmins group={selecting} />
 							)
@@ -402,7 +403,7 @@ const ManageGroup = () => {
 						(<></>)
 					}
 					</div>
-				)
+			)
 			:
 			(<></>)
 		}
