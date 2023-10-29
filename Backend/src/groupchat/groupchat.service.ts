@@ -364,7 +364,7 @@ export class GroupchatService {
 
 
     //create a groupchat
-    async create(createGroupchatDto: any, iduser: string) : Promise<void> {
+    async create(createGroupchatDto: any, iduser: string) : Promise<Groupchat> {
         try {
             const namegp = await this.prisma.groupchat.findUnique({
                 where: {
@@ -388,7 +388,7 @@ export class GroupchatService {
                     },
                 });
                 if (data)
-                    throw new HttpException('Groupchat created', HttpStatus.CREATED);
+                    return data;
                 else
                     throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
