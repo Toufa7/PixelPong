@@ -437,7 +437,7 @@ Catch_Win_Lost_Reset_Game(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_rig
       }
 
 
-    @Interval(15)
+    @Interval(10)
     handleevent(){
       for(const id in this.Rooms.rooms){
         const Room = this.Rooms.rooms[id];
@@ -482,7 +482,7 @@ Catch_Win_Lost_Reset_Game(Ball_x , Ball_y , Game_Data,Ball_left_point , Ball_rig
       }
     }
 
-    @Interval(3000)
+    @Interval(5000)
     SetCountDown(){
       // if (this.CountDown > 0)
       // console.log("Count Down ---> " +  this.CountDown--);
