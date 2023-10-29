@@ -34,7 +34,9 @@ const ChatUser = (props : any) => {
             .then((response) => {
                 setgroupRoom(response.data);
             })
-            .catch(() => {})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
         }
     }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
 
@@ -67,9 +69,9 @@ const ChatUser = (props : any) => {
             .then((response) => {
                 setUsers(response.data);
             })
-            .catch((error) => {
-                console.log("Error fetching users:", error);
-            });
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
         }
     }, [props.pcurrentUserId]);
     
@@ -81,9 +83,9 @@ const ChatUser = (props : any) => {
                 console.log("Admins -> ", response.data)
                 setAdmins(response.data);
             })
-            .catch((error) => {
-                console.log("Error fetching admins:", error);
-            });
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
         }
     }, [props.pcurrentUserId]);
 
@@ -136,7 +138,9 @@ const ChatUser = (props : any) => {
                                                                 .then(() => {
                                                                     toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
                                                                 })
-                                                                .catch(() => {})
+                                                                .catch((error) => {
+                                                                    console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                                                                });
                                                             }
                                                             }   width={50} height={50} title='Leave Group' ></img>
                                                         </button>

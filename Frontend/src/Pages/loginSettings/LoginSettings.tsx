@@ -33,7 +33,9 @@ const RetrieveCheckSendData =  () => {
             axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true })
             .then(() => {
             })
-            .catch(() => {}),
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			}),
             {
                 loading: "Sending data...",
                 success: "Username Changed!",
@@ -61,7 +63,9 @@ export default function LoginSettings() {
         const status = isChecked ? 1 : 0;
         axios.put(endpoint, status, { withCredentials: true }) 
         .then (() => {})
-        .catch(() => {});
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
 	const [update , setUpdate] = useState("");
     const [imagePreview, setImagePreview] = useState('');
@@ -84,9 +88,9 @@ export default function LoginSettings() {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch((error) => {
-            console.log("Error -> ", error);
-        })
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }
     fetchData();
     }, []);

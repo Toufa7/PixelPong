@@ -23,6 +23,9 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
 			.then((rese) => {
 				console.log("Notification Refuse ", rese);
+			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 			}
 			catch (error) {
@@ -69,11 +72,14 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 	const acceptFriend = async () => {
 		console.log("Accepted Sent Object -> ", object);
 		try {
-		await axios.patch("http://localhost:3000/users/acceptFriendRequest", object, { withCredentials: true })
-		.then((rese) => {
-			console.log("Notification Acceptted ", rese);
-			setFriendStatus(friendStatus);
-		});
+			await axios.patch("http://localhost:3000/users/acceptFriendRequest", object, { withCredentials: true })
+			.then((rese) => {
+				console.log("Notification Acceptted ", rese);
+				setFriendStatus(friendStatus);
+			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
 	  	} 
 		catch (error) {
 			console.log("Error Caught ", error);
@@ -88,6 +94,9 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 				console.log("Accepted Sent Object -> ", object);
 				console.log("Notification Refuse ", rese);
 				setFriendStatus(friendStatus);
+			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 			toast.dismiss();toast.remove()
 		}

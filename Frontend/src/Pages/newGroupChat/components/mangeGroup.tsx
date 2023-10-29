@@ -55,6 +55,9 @@ const UpdateGroup = (id : string, setIsCreated: React.Dispatch<React.SetStateAct
 						.then(() => {})
 					}
 					setIsCreated(prev => !prev)
+				})
+				.catch((error) => {
+					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				}),
 				{
 					loading: "Sending data...",
@@ -98,8 +101,8 @@ const ListingUsersAdmins = ({group}) => {
 			.then((response) => {
 				setUsers(response.data);
 			})
-			.catch(() => {
-				console.log("Error fetching users:");
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}, [group]); 
 		
@@ -108,8 +111,8 @@ const ListingUsersAdmins = ({group}) => {
 			.then((response) => {
 				setAdmins(response.data);
 			})
-			.catch(() => {
-				console.log("Error fetching admins:");
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}, [group]);
 	}
@@ -119,16 +122,18 @@ const ListingUsersAdmins = ({group}) => {
 		axios.delete(`http://localhost:3000/groupchat/${groupId}/${memberId}/user`, { withCredentials: true })
 		.then(() => {
 		})
-		.catch(() => {
-		})
+		.catch((error) => {
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
 	}
 
 	const baningMember = (memberId : string, groupId : string) => {
 		axios.patch(`http://localhost:3000/groupchat/${groupId}/${memberId}/ban`, {}, { withCredentials: true })
 		.then(() => {
 		})
-		.catch(() => {
-		})
+		.catch((error) => {
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
 	}
 
 	function handleMuteSelect(event , memberId : string, groupId : string ) {
@@ -138,11 +143,10 @@ const ListingUsersAdmins = ({group}) => {
 			duration == 0 ? timeer = (5 * 60000) : timeer = (15 * 60000);
 			console.log('Duration -> Time ', duration, timeer);
 			axios.post(`http://localhost:3000/groupchat/${groupId}/${memberId}/mute`,{ time: timeer },{ withCredentials: true })
-			.then((response) => {
-				console.log('MUTING USER -> ', response.data);
+			.then(() => {
 			})
 			.catch((error) => {
-				console.error('MUTING Error -> ', error);
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}
 	}
@@ -155,21 +159,19 @@ const ListingUsersAdmins = ({group}) => {
 			console.log("Role is -> ", role);
 			if (role == "member") {
 				axios.delete(`http://localhost:3000/groupchat/${groupId}/${memberId}/admin`,{ withCredentials: true })
-				.then((response) => {
-					console.log('Setting Admin USER -> ', response.data);
+				.then(() => {
 				})
 				.catch((error) => {
-					console.error('Settting Admin Error -> ', error);
+					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				});
 			}
 			else
 			{
 				axios.patch(`http://localhost:3000/groupchat/${groupId}/${memberId}/admin`,{}, { withCredentials: true })
-				.then((response) => {
-					console.log('Setting Admin USER -> ', response.data);
+				.then(() => {
 				})
 				.catch((error) => {
-					console.error('Settting Admin Error -> ', error);
+					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				});
 			}
 		}
@@ -181,9 +183,9 @@ const ListingUsersAdmins = ({group}) => {
 	.then((respo) => {
 		setSuperAdmin(respo.data);
 	})
-	.catch((erro) => {
-		console.log("Error in SueprAdmin ", erro);
-	})
+	.catch((error) => {
+		console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+	});
 
 	const openMembersDialog = () => {
 		const dialog = document.getElementById('dialog_members');
@@ -310,6 +312,9 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 		.then((respo) => {
 			setSuperAdmin(respo.data);
 		})
+		.catch((error) => {
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
 	}, [flag])
 
 	return (
@@ -369,7 +374,8 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 												setIsCreated(prev => !prev)
 												toast.success("Delete Success", {style: {textAlign: "center", width: '300px'}, position: "top-right"});
 											})
-											.catch(() => {
+											.catch((error) => {
+												console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 												toast.error("Delete Failed", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 											})}}>
 										</img>Delete Group</a>

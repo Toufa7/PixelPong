@@ -60,8 +60,9 @@ const NavBarFooter = () => {
             .then((res:any) =>  {
                 setUserId(res.data.id);
             })
-            .catch(Error)
-                console.log("Error happened when feching local user data");
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }, [])
 
 
@@ -82,8 +83,8 @@ const NavBarFooter = () => {
 							window.location.href = '/welcome';
 							navigate("/welcome");
 						})
-						.catch((err) => {
-							console.error("Cannot Logout -> ", err);
+						.catch((error) => {
+							console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 						});
 				}} src={logoutLogo} alt="Logout" />
 			</Link>

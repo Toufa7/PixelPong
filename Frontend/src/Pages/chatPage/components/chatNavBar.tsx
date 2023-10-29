@@ -92,9 +92,9 @@ const Dms = (props:any) => {
                     tmpObj = { userName: res.data.username, pic: `http://localhost:3000/auth/avatar/${conversations[i]}`, id: conversations[i] }
                     map.set(conversations[i], tmpObj);
                 })
-                .catch(Error)
-                    console.log('%cAn error happened in : ', 'color: red')
-                    console.log('%cDms: Dms:handleNewConversations', 'color: blue');
+                .catch((error) => {
+                    console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                });
         }   
     };
         

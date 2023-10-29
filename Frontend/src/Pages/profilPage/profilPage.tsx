@@ -46,9 +46,9 @@ const Profil = () => {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch((error) => {
-            console.log("Error -> ", error);
-        })
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }
     fetchData();
     }, []);
@@ -60,9 +60,9 @@ const Profil = () => {
 			setLevel(response.data.level);
             setUserStates(response.data);
 		})
-		.catch((error) => {
-			console.log("Error -> ", error);
-		})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[])
 
 
@@ -94,7 +94,10 @@ const GroupsAndFriends = () => {
         axios.get(`http://localhost:3000/users/Friends`, {withCredentials: true})
             .then((response) => {
                 setFriends(response.data);
-            });
+            })
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }, []);
 
     const [groups, setGroups] = useState<string[]>([]);
@@ -102,7 +105,10 @@ const GroupsAndFriends = () => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
             .then((response) => {
                 setGroups(response.data);
-            });
+            })
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }, []);
 
     const removeFriend = (removeId: string) => {
@@ -112,7 +118,10 @@ const GroupsAndFriends = () => {
             .then((response) => {
                 console.log("Removing Response", response);
                 setFriends(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
-            });
+            })
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }
 
     const [label, setlabel] = useState(true);
@@ -272,9 +281,9 @@ function ProfilPage() {
 		.then((response) => {
 			setStates(response.data);
 		})
-		.catch((error) => {
-			console.log("Error States -> ", error);
-		})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[])
 
 

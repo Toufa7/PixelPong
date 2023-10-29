@@ -31,9 +31,9 @@ const GetUserData = () => {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch((error) => {
-            console.log("Error -> ", error);
-        })
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }
     fetchData();
     }, []);
@@ -92,7 +92,8 @@ const TopContainer = () => {
 				setIsFound(false);
 				setVisibility(false);
 		  }
-		} catch (error) {
+		}
+		catch (error) {
 		  console.log("Error searching in groups:", error);
 		}
 	};
@@ -140,18 +141,22 @@ const TopContainer = () => {
 			axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
 			.then(() => {
 				toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
-				document.getElementById('joinGroup').close();
+				document.getElementById('joinGroup')?.close();
 			})
-			.catch(() => {});
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
 		}
 		else if (privacy == "private")
 		{
 			axios.post(`http://localhost:3000/groupchat/${theOne.id}/request`, {}, { withCredentials: true })
 			.then((res) => {
 				toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
-				document.getElementById('joinGroup').close();
+				document.getElementById('joinGroup')?.close();
 			})
-			.catch(() => {})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
 		}
 		else if (privacy == "protected") {
 			const password = document.getElementById("password_join")?.value;
@@ -161,13 +166,13 @@ const TopContainer = () => {
 				if (res.data == "no")
 					toast.error("Invalid Password", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
 				else {
-					document.getElementById('joinGroup').close();
+					document.getElementById('joinGroup')?.close();
 					toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
 				}
 			})
-			.catch((err) => {
-				console.error("Error -> ", err);
-			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
 		}
 		
 	}
@@ -318,11 +323,11 @@ const TopLeft = () => {
 				setLeaderboards(new Map(sortedEntries));
 			})
 			.catch((error) => {
-				console.error('Error -> ', error);
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		})
 		.catch((error) => {
-			console.error('Error -> ', error);
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 		});
 	}, []);
 
@@ -441,8 +446,8 @@ const BottomLeft = () => {
 			setAchivements(response.data.achievementType);
 		})
 		.catch((error) => {
-			console.log("Error Achievements -> ", error);
-		})
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
     },[])
 
 	return (
@@ -502,8 +507,8 @@ const BottomRight= () => {
 			setMatchHistory(response.data);
 		})
 		.catch((error) => {
-			console.log("Error -> ", error);
-		})
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
     },[])
 
 
@@ -550,6 +555,9 @@ function Notification () {
 				console.log("Notifcation Accept ", rese);
 				setFriendStatus(friendStatus)
 			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
 		}
 		catch (error) {
 			console.log("Error Catched ", error);
@@ -563,6 +571,9 @@ function Notification () {
 				console.log("Notifcation Refuse ", rese);
 				setFriendStatus(friendStatus)
 			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
 		} catch (error) {
 			console.log("Error Catched ", error);
 		}
@@ -610,8 +621,8 @@ export default function Home() {
 			setStates(response.data);
 		})
 		.catch((error) => {
-			console.log("Error -> ", error);
-		})
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
     },[])
 
 
