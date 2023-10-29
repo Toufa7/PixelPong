@@ -35,7 +35,7 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	return (
 		<div style={{ padding: '5px' }}>
 			<div className="nes-container with-title">
-				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to {myData.namegp}</p>
+				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to 	</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 					<div>
 						<img src={`http://localhost:3000/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
@@ -165,9 +165,6 @@ function Notifications() {
 			socketgp.off();
 		};
 	}, []);
-  
-	
-	console.log("groupRequests.length -> ", groupRequests.length);
   
 	return (
 		<div className="notification">

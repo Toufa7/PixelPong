@@ -90,14 +90,12 @@ const ListingUsersAdmins = ({group}) => {
 	const [users, setUsers] = useState([]);
 	const [admins, setAdmins] = useState([]);
 	const [options, setOptions] = useState<boolean>(false);
-	console.log("Group IIDDDD -> ", group.id);
 
 	const [selectedMember , setSelectedMember] = useState("ID-XXXX");
 	if (group) {
 		useEffect(() => {
 			axios.get(`http://localhost:3000/groupchat/${group.id}/users`, { withCredentials: true })
 			.then((response) => {
-				console.log("Users Response -> ", response.data);
 				setUsers(response.data);
 			})
 			.catch(() => {
@@ -108,7 +106,6 @@ const ListingUsersAdmins = ({group}) => {
 		useEffect(() => {
 			axios.get(`http://localhost:3000/groupchat/${group.id}/admins`, { withCredentials: true })
 			.then((response) => {
-				console.log("Admins Response -> ", response.data);
 				setAdmins(response.data);
 			})
 			.catch(() => {
@@ -120,21 +117,17 @@ const ListingUsersAdmins = ({group}) => {
 	
 	const kickingMember = (memberId : string, groupId : string) => {
 		axios.delete(`http://localhost:3000/groupchat/${groupId}/${memberId}/user`, { withCredentials: true })
-		.then((reseponse) => {
-			console.log("KICKING USER -> ", reseponse.data);
+		.then(() => {
 		})
-		.catch((err) => {
-			console.error("KICKING Error -> ", err);
+		.catch(() => {
 		})
 	}
 
 	const baningMember = (memberId : string, groupId : string) => {
 		axios.patch(`http://localhost:3000/groupchat/${groupId}/${memberId}/ban`, {}, { withCredentials: true })
-		.then((reseponse) => {
-			console.log("BANING USER -> ", reseponse);
+		.then(() => {
 		})
-		.catch((err) => {
-			console.error("BANING Error -> ", err);
+		.catch(() => {
 		})
 	}
 
@@ -186,16 +179,11 @@ const ListingUsersAdmins = ({group}) => {
 	const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false);
 	axios.get(`http://localhost:3000/groupchat/${group.id}/checksuperuser`,{ withCredentials: true })
 	.then((respo) => {
-		console.log("Success SuperUser -> ", respo.data);
 		setSuperAdmin(respo.data);
 	})
 	.catch((erro) => {
 		console.log("Error in SueprAdmin ", erro);
 	})
-
-	console.log(" ==> ", isSuperAdmin);
-
-
 
 	const openMembersDialog = () => {
 		const dialog = document.getElementById('dialog_members');
@@ -320,7 +308,6 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 		if (!flag) return; 
 		axios.get(`http://localhost:3000/groupchat/${selecting.id}/checksuperuser`,{ withCredentials: true })
 		.then((respo) => {
-			console.log("first")
 			setSuperAdmin(respo.data);
 		})
 	}, [flag])
@@ -375,7 +362,6 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 									<ListingUsersAdmins group={selecting} />
 									<a style={{color: '#333C54', margin: '10px'} }>
 										<img src={erase} style={{width: '40px', height: '40px', marginRight: '10px'}}  onClick={() => {
-											console.log("selecting.id ====> ", selecting.id);
 											axios.delete(`http://localhost:3000/groupchat/${selecting.id}`, {withCredentials: true})
 											.then(() => {
 												setUpdatingGroups(prev => !prev);

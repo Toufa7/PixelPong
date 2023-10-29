@@ -65,7 +65,6 @@ const Profil = () => {
                 const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
                 try {
                     await axios.get(avatarURL, { withCredentials: true });
-                    console.log("Respoen ===> ", response.data);
                     setUserData(() => ({
                         avatar: avatarURL,
                         username: response.data.username,
@@ -87,7 +86,7 @@ const Profil = () => {
                 }
         }
         fetchData();
-    }, []);
+    }, [location]);
 
     const [isFriend, setIsFriend] = useState<boolean>(false);
     useEffect(() => {
@@ -151,9 +150,6 @@ const Profil = () => {
             console.log("Error While Removing Friends -> ",error );
         })
     }
-
-    console.log("userData ==> ", userData);
-
     return (
         <div className="profilRectangle">
           <div className="avatar">
@@ -210,7 +206,7 @@ const Profil = () => {
                                     ) 
                                     :
                                     (
-                                        <a className="nes-btn is-error" href="#">Pending</a>
+                                        <a className="nes-btn" href="#">Pending</a>
                                     )
 
                                 )

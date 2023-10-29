@@ -2,17 +2,6 @@ import axios from "axios";
 import { useState } from "react"
 import toast, { Toaster } from "react-hot-toast";
 
-/*
-	TODO: Receiving the ID of the Selected Group to be updated
-    namegb : string;
-    usersgb : string;
-    admins : string;
-    grouptype: string;
-    password? : string;
-    image : string;
-*/
-
-
 const CreatingGroup = (setIsCreated) => {
 	const groupName : string	= document.getElementById('name_field')?.value;
 	const choice : number		= document.getElementById("default_privacy")?.value;
@@ -23,9 +12,7 @@ const CreatingGroup = (setIsCreated) => {
 	if (regEx.test(groupName) && groupAvatar && choice) {
 		const data = new FormData();
 		data.append('file', groupAvatar);
-		console.log("Created Avatar -> ", groupAvatar);
 
-		console.log("Avatar -> ", data);
 		let groupType = "PUBLIC";
 		if (choice == 1) {groupType = "PRIVATE";}
 		else if (choice == 2) {groupType = "PROTECTED";}
@@ -34,7 +21,6 @@ const CreatingGroup = (setIsCreated) => {
 			grouptype: groupType,
 			password: (choice == 2) ? password : undefined
 		};
-		console.log(" --== Create =====--> ", groupData);
 		toast.promise(
 			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
 			.then((response) => {
@@ -79,8 +65,6 @@ const CreateGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 	const [groupName , setGroupName] = useState("");
 	const [isProtected , setProtected] = useState<boolean>(false);
 	const [update , setUpdate] = useState("");
-	console.log("Typing -> ", update);
-	console.log(" update ", update);
 	return (
 		<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff" ,borderRadius: "10px"}}>
 			<Toaster/>

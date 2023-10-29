@@ -33,11 +33,8 @@ const ChatUser = (props : any) => {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
             .then((response) => {
                 setgroupRoom(response.data);
-                console.log("rese -> ", response.data);
             })
-            .catch((erro) => {
-                console.log("erro -> ", erro);
-            })
+            .catch(() => {})
         }
     }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
 
@@ -68,8 +65,6 @@ const ChatUser = (props : any) => {
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
             .then((response) => {
-                console.log("Admins -> ", response.data)
-
                 setUsers(response.data);
             })
             .catch((error) => {
@@ -92,8 +87,6 @@ const ChatUser = (props : any) => {
         }
     }, [props.pcurrentUserId]);
 
-
-    console.log("props.pcurrentUserId +> ", props.pcurrentUserId); 
 
     const openDialogUsers = () => {
         console.log("Clicked On Info")
@@ -140,14 +133,10 @@ const ChatUser = (props : any) => {
                                                         <button className='GrpuserControlButtons'>
                                                             <img src={exit} onClick={() => {
                                                                 axios.delete(`http://localhost:3000/groupchat/${props.pcurrentUserId}/exit`, { withCredentials: true })
-                                                                .then((reseponse) => {
-                                                                    console.log("Response Exiting Group -> ", reseponse);
+                                                                .then(() => {
                                                                     toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
-
                                                                 })
-                                                                .catch((error) => {
-                                                                    console.log("Reseponse Exiting Group -> ", error)
-                                                                })
+                                                                .catch(() => {})
                                                             }
                                                             }   width={50} height={50} title='Leave Group' ></img>
                                                         </button>

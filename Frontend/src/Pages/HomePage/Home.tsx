@@ -214,6 +214,8 @@ const TopContainer = () => {
 		<section>
 			<form method="dialog">
 				<dialog style={{height: 'fitContent', width: '600px',background: "#e4f0ff"}} className="nes-container" id="joinGroup">
+				<button style={{position: "absolute",left: "0%",marginLeft: "20px"}} onClick={() => {document.getElementById('joinGroup').close();}}>X</button>
+
 				<h1 className="groupName">{theOne.namegb}</h1>
 					<h5 className="grouptype">{theOne.grouptype}</h5>
 					<img style={{borderRadius: '50%',width: '20%',height: '100px', marginBottom: '20px'}} className="groupAvatar" src={avatar} />
@@ -227,7 +229,7 @@ const TopContainer = () => {
 						) :
 						(
 							<>
-								<input style={{ background: '#E9E9ED', marginBottom: '10px' }} type="password" placeholder="P@55w0rd" maxLength={18} id="password_join" className="nes-input" />
+								<input type="password" style={{ background: '#E9E9ED', marginBottom: '10px' }} placeholder="P@55w0rd" maxLength={18} id="password_join" className="nes-input"/>
 								<button onClick={() => handleJoinRequest("protected")} className="nes-btn" style={{width: 'fitContent', height: 'fitContent'}} >Join Group</button>
 							</>
 						)
@@ -323,8 +325,6 @@ const TopLeft = () => {
 			console.error('Error -> ', error);
 		});
 	}, []);
-
-	console.log("leaderboardMap -> ", leaderboards);
 
 	return (
 	<div className="loginBox on-going-matches">
@@ -499,7 +499,6 @@ const BottomRight= () => {
     useEffect(() => {
         axios.get(`http://localhost:3000/users/history` , {withCredentials: true})
 		.then((response) => {
-			console.log("Response Histroy -> ", response.data);
 			setMatchHistory(response.data);
 		})
 		.catch((error) => {
@@ -608,7 +607,6 @@ export default function Home() {
     useEffect(() => {
         axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
 		.then((response) => {
-			console.log("USER STATES -> ", response.data);
 			setStates(response.data);
 		})
 		.catch((error) => {
@@ -616,7 +614,6 @@ export default function Home() {
 		})
     },[])
 
-	console.log("states ============================> -> ", states);
 
 	return (
 		<div style={{ height: '100vh'}}>

@@ -119,7 +119,6 @@ const HomeComponents = () => {
 				<Stars/>
 				<NavBar/>
 				<Home/>
-	
 			</socketContext.Provider>
 		</>
 	);
