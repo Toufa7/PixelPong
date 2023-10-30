@@ -1,15 +1,16 @@
 // create groupchat
 // upload a image to a groupchat
 // update a groupchat
+// delete a user from a groupchat
 // ban a user from a groupchat
 // mute a user from a groupchat
+// add an admin to a groupchat
+// remove an admin to a groupchat
+// delete a groupchat
+// exit a groupchat
 // add a user to a groupchat public
 // add a user to a groupchat protected
-// accept a request to join a groupchat
-// refuse a request to join a groupchat
-// add an admin to a groupchat
-// delete a groupchat
-// delete a user from a groupchat
-// exit a groupchat
-
-
+// send request while ur banned
+// accept a admin request to join a groupchat
+// refuse a admin request to join a groupchat
+// add a user to a groupchat private

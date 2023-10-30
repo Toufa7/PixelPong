@@ -144,7 +144,14 @@ const ListingUsersAdmins = ({group}) => {
 	
 	const kickingMember = (memberId : string, groupId : string) => {
 		axios.delete(`http://localhost:3000/groupchat/${groupId}/${memberId}/user`, { withCredentials: true })
-		.then(() => {
+		.then((res) => {
+			if (res.data.message == "User Kicked") {
+				toast.success(res.data.message);
+			}
+			else
+			{
+				toast.error(res.data.message);
+			}
 		})
 		.catch((error) => {
 			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
@@ -153,7 +160,14 @@ const ListingUsersAdmins = ({group}) => {
 
 	const baningMember = (memberId : string, groupId : string) => {
 		axios.patch(`http://localhost:3000/groupchat/${groupId}/${memberId}/ban`, {}, { withCredentials: true })
-		.then(() => {
+		.then((res) => {
+			if (res.data.message == "User banned") {
+				toast.success(res.data.message);
+			}
+			else
+			{
+				toast.error(res.data.message);
+			}
 		})
 		.catch(Error)
 	}
@@ -165,7 +179,14 @@ const ListingUsersAdmins = ({group}) => {
 			duration == 0 ? timeer = (5 * 60000) : timeer = (15 * 60000);
 			console.log('Duration -> Time ', duration, timeer);
 			axios.post(`http://localhost:3000/groupchat/${groupId}/${memberId}/mute`,{ time: timeer },{ withCredentials: true })
-			.then(() => {
+			.then((res) => {
+				if (res.data.message == "User muted") {
+					toast.success(res.data.message);
+				}
+				else
+				{
+					toast.error(res.data.message);
+				}
 			})
 			.catch(Error)
 		}
@@ -179,14 +200,29 @@ const ListingUsersAdmins = ({group}) => {
 			console.log("Role is -> ", role);
 			if (role == "member") {
 				axios.delete(`http://localhost:3000/groupchat/${groupId}/${memberId}/admin`,{ withCredentials: true })
-				.then(() => {
+				.then((res) => {
+					if (res.data.message == "User deleted from admins") {
+						toast.success(res.data.message);
+					}
+					else
+					{
+						toast.error(res.data.message);
+					}
 				})
 				.catch(Error)
 			}
 			else
 			{
 				axios.patch(`http://localhost:3000/groupchat/${groupId}/${memberId}/admin`,{}, { withCredentials: true })
-				.then(() => {
+				.then((res) => {
+					console.log("Res -> ", res.data);
+					if (res.data.message == "User added in admins") {
+						toast.success(res.data.message);
+					}
+					else
+					{
+						toast.error(res.data.message);
+					}
 				})
 				.catch(Error)
 			}
@@ -387,7 +423,7 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 												setIsCreated(prev => !prev)
 												toast.success("Delete Success", {style: {textAlign: "center", width: '300px'}, position: "top-right"});
 											})
-											.catch((error) => {
+											.catch(() => {
 												toast.error("Delete Failed", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 											})}}>
 										</img>Delete Group</a>

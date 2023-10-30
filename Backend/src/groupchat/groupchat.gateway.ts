@@ -304,8 +304,9 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
         groupchatId: id,
         createdAt: new Date(),
       });
+      throw new HttpException('Request send', HttpStatus.OK);
     } catch (err) {
-      throw new HttpException(err.message, err.status);
+      return;
     }
   }
 }

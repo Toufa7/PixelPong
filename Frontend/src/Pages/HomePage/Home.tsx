@@ -137,19 +137,24 @@ const TopContainer = () => {
 	const handleJoinRequest = (privacy : string) => {
 		if (privacy == "public") {
 			axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userpublic`, {}, { withCredentials: true })
-			.then(() => {
-				toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
-				document.getElementById('joinGroup')?.close();
+			.then((res) => {
+				if (res.data.message == "User added") {
+					toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+					document.getElementById('joinGroup')?.close();
+				}
+				else {
+					toast.error(res.data.message);
+				}
 			})
 			.catch((error) => {
 				toast.error(error.response.data.message);
-				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}
 		else if (privacy == "private")
 		{
 			axios.post(`http://localhost:3000/groupchat/${theOne.id}/request`, {}, { withCredentials: true })
-			.then(() => {
+			.then((res) => {
+				console.log("Request Private --> ", res.data);
 				toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
 				document.getElementById('joinGroup')?.close();
 			})
@@ -162,16 +167,18 @@ const TopContainer = () => {
 			console.log("Password Entered Is => ", password);
 			axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userprotected`, {pass :password} , { withCredentials: true })
 			.then((res) => {
-				if (res.data == "no")
-					toast.error("Invalid Password", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
-				else {
-					document.getElementById('joinGroup')?.close();
+				if (res.data.message == "User added")
+				{
 					toast.success("Joined Successfully", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"});
+					document.getElementById('joinGroup')?.close();
+				}
+				else
+				{
+					toast.error(`${res.data.message}`, {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'black'}, position: "top-right"});
 				}
 			})
 			.catch((error) => {
 				toast.error(error.response.data.message)
-				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}
 		

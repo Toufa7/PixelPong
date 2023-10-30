@@ -131,8 +131,14 @@ const ChatUser = (props : any) => {
                                                         <button className='GrpuserControlButtons'>
                                                             <img src={exit} onClick={() => {
                                                                 axios.delete(`http://localhost:3000/groupchat/${props.pcurrentUserId}/exit`, { withCredentials: true })
-                                                                .then(() => {
-                                                                    toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+                                                                .then((res) => {
+                                                                    if (res.data.message == "Groupchat deleted"){
+                                                                        toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        toast.error(`Already Leaved ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+                                                                    }
                                                                 })
                                                                 .catch((error) => {
                                                                     toast.error(error.response.data.message);

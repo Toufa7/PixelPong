@@ -477,7 +477,6 @@ export class GroupchatService {
                 });
                 if (data)
                     throw new HttpException('User banned', HttpStatus.OK);
-            
             }
             else {
                 throw new HttpException('You are not the admin of this groupchat', HttpStatus.OK);
@@ -765,7 +764,7 @@ export class GroupchatService {
                     },
                 });
                 if (data)
-                    throw new HttpException('User deleted', HttpStatus.ACCEPTED);
+                    throw new HttpException('User Kicked', HttpStatus.ACCEPTED);
             }
         }
         catch (error) {
@@ -830,7 +829,7 @@ export class GroupchatService {
 
         try { //get sueperadmin of the groupchat
             const superadmin = await this.findSuperUser(id);
-            if ((superadmin.id == iduserconnected || iduserconnected == iduser) && iduserconnected != superadmin.id) {
+            if ((superadmin.id == iduserconnected || iduserconnected == iduser) && iduser != superadmin.id) {
                 const data = await this.prisma.groupchat.update({
                     where: {
                         id: id,

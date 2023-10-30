@@ -162,17 +162,24 @@ const ErrorPageConfig = () => {
 
 const Routing = () => {
 	const [userData, setUserInfo] = useState();
-	const [unlogged, setUnlogged] = useState(false);
+	const [unlogged, setUnlogged] = useState<boolean>(false);
     useEffect(() => {
         const fetchData = () => {
-            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
-            .then((response) => {
-                setUserInfo(response.data)
-            })
-            .catch(() => {
-				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-				setUnlogged(true);
-        	})
+			try {
+
+				axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+				.then((response) => {
+					setUserInfo(response.data)
+				})
+				.catch(() => {
+					// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+					setUnlogged(true);
+				})
+			}
+			catch (error) {
+				console.log("Error", error);
+			}
+
     	} 
 		fetchData();
 	}, [])

@@ -6,7 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 const GroupRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating: React.Dispatch<React.SetStateAction<boolean>> }) => {
 	
-	console.log("myData -> ",myData);
+	// console.log("myData -> ",myData);
 	const acceptFriend = async () => {
 		try {
 			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
@@ -15,9 +15,7 @@ const GroupRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating
 			});
 	  		} 
 			catch (error) {
-				console.log("Error Caught ", error);
 	  		}
-			toast.remove();
 	};
   
 	const refuseFriend = async () => {
@@ -26,14 +24,13 @@ const GroupRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating
 			.then(() => {
 				setUpdating(prev => !prev)
 			})
-			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			.catch(() => {
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 			}
 			catch (error) {
-				console.log("Error Caught ", error);
+				// console.log("Error Caught ", error);
 			}
-			toast.remove();
 		};
 	// <img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px'}} alt="avatar" />
 
