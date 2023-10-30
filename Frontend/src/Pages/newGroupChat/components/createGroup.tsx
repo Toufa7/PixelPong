@@ -34,32 +34,25 @@ const CreatingGroup = (setIsCreated) => {
 			password: (choice == 2) ? password : undefined
 		};
 
-		// toast.promise(
-		try {	
-			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
-			.then((response) => {
-				toast(response.data.message);
-				if (!response.data.message) {
-					axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
-					.then(() => {
-						toast.success("Group Created");
-						setIsCreated(prev => !prev);
-					})
-					.catch((error) => {
-						toast.error(error.response.data.message);
-						// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-					});
-				}
-			})
-			.catch((error) => {
-				toast.error(error.response.data.message);
-				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			})
-		}
-		catch(error)
-		{
-			console.log("Error -");
-		}
+		// toast.promise(	
+		axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
+		.then((response) => {
+			if (!response.data.message) {
+				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
+				.then(() => {
+					toast.success("Group Created");
+					setIsCreated(prev => !prev);
+				})
+				.catch((error) => {
+					toast.error(error.response.data.message);
+				});
+			}
+			else
+				toast.error(response.data.message);
+		})
+		.catch((error) => {
+			toast.error(error.response.data.message);
+		})
 			// {
 			// 	loading: "Sending data...",
 			// 	success: "Success Settings!",

@@ -43,15 +43,9 @@ const ChatUser = (props : any) => {
             .then((response) => {
                 setgroupRoom(response.data);
             })
-			.catch((error) => {
-                toast.error(error.response.data.message);
-
-				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			});
+			.catch(Error)
         }
-    }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
-
-    // const [showing, setShowing] = useState(false);
+    }, [props.pcurrentUserId]);
     
     //Identifying local user
     useEffect(() => {
@@ -71,14 +65,10 @@ const ChatUser = (props : any) => {
 	})
 
     const [isCreated, setIsCreated] = useState<boolean>(false)
-    
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
-            .then((response) => {
-                setUsers(response.data);
-            })
 			.catch((error) => {
                 toast.error(error.response.data.message);
 				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
@@ -93,10 +83,7 @@ const ChatUser = (props : any) => {
             .then((response) => {
                 setAdmins(response.data);
             })
-			.catch((error) => {
-                toast.error(error.response.data.message);
-				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			});
+			.catch(Error)
         }
     }, [props.pcurrentUserId]);
 
