@@ -94,6 +94,7 @@ const ChatUser = (props:any) => {
                         <div className="chatUser">
                             {
                                 //Conditional rendring to display the profile image or not based on the presence of remoteUser.profileImage
+                                //Changing a tag to div
                                 remoteUser.profileImage ?   (<Link to={`/profil/${remoteUser.username}`}>
                                                                 <div style={{color: 'black', textDecoration: 'none'}}>
                                                                     <img style={{border: '3px solid'}} src={`http://localhost:3000/auth/avatar/${remoteUser.id}`} alt="user-photo"/>

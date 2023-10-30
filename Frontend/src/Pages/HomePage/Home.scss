@@ -36,7 +36,7 @@ body {
 }
 
 .headerBox {
-    margin-top: 20px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     padding-bottom: 20px;
@@ -188,7 +188,7 @@ body {
         background-color: #3B7469;
     }    
     .latest-matches2 {
-        overflow-y: scroll;
+        overflow-y: auto;
         scroll-behavior: smooth;
     }
     .achievements2 {
@@ -205,7 +205,6 @@ body {
             }
         }
     }
-
     .latest-matches {
         background-color: #151315;
         color: white;
@@ -224,7 +223,7 @@ body {
     border-radius: 5px;
 }
 .on-going-matches2 {
-    overflow-y: scroll;
+    overflow-y: auto;
     scroll-behavior: smooth;
     .match1 {
         border: 1px solid black;

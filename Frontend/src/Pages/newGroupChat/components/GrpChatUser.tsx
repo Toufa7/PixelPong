@@ -1,4 +1,4 @@
-import { useState, useEffect, Children } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import MessageInput from './GrpmessageInput'
 import exit from '../assets/exit.svg'
@@ -68,7 +68,7 @@ const ChatUser = (props : any) => {
 	})
 
     const [isCreated, setIsCreated] = useState<boolean>(false)
-
+    
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {
@@ -120,8 +120,8 @@ const ChatUser = (props : any) => {
                         <div className="GrpchatUser">
                             {
                                 //Conditional rendring to display the profile image or not based on the presence of groupRoom.profileImage
-                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="user-photo"/>
-                                                        :   <img src={info} alt="user-photo" />
+                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="Group-photo"/>
+                                                        :   <img src={info} alt="Group-photo" />
                             }
                             <div className="GrpchatUserName">
                                 <span>
@@ -169,27 +169,23 @@ const ChatUser = (props : any) => {
             <dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="manageGroup">
                 <button onClick={() => {document.getElementById('manageGroup')?.close()}} >X</button>
                 <form method="dialog">
-                <menu className="dialog-menu">
-
-                    
-                    <div>
-                        <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
-                        <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
-                        {
-                            data.label ?
-                            (
-                                data.createOrmanage ?
-                                (<ManageGroup/>)
-                                :
-                                (<CreateGroup setIsCreated={setIsCreated} />)
-                                )
-                                :
+                    <menu className="dialog-menu">
+                        <div>
+                            <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
+                            <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
+                            {
+                                data.label ?
                                 (
-                                    <></>
+                                    data.createOrmanage ?
+                                    (<ManageGroup/>)
+                                        :
+                                    (<CreateGroup setIsCreated={setIsCreated} />)
                                 )
+                                    :
+                                (<></>)
                             }
-                    </div>
-                </menu>
+                        </div>
+                    </menu>
                 </form>
             </dialog>
         </section>
@@ -259,7 +255,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
             props.groupInfo.id   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="user-photo" />
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="Group-photo" />
         }
     </div>
     )
