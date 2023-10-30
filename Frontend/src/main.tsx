@@ -23,6 +23,7 @@ import GroupPage from './Pages/newGroupChat/GrpChatPage';
 import Dogo from "./Pages/dogo.gif";
 import randomLogo from './Pages/addons/assets/logo.svg'
 import handshake from '../src/Pages/HomePage/assets/handshake.png';
+import toast from 'react-hot-toast';
 
 const BackgroudGame = () => {
 	const animationStyle = `
@@ -119,7 +120,6 @@ const HomeComponents = () => {
 				<Stars/>
 				<NavBar/>
 				<Home/>
-	
 			</socketContext.Provider>
 		</>
 	);
@@ -172,7 +172,8 @@ const Routing = () => {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch(() => {
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				setUnlogged(true);
         	})
     	}
@@ -192,9 +193,9 @@ const Routing = () => {
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
 			{userData != undefined && !userData.twofa && (
 				<>
+					<Route path="/" 				element={<HomeComponents/>}/>
 					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 			element={<HomeComponents/>}/>
-					<Route path="/" 				element={<HomeComponents/>}/>
 					<Route path="/profil/:userId"	element={<OtherUser/>}/>
 					{!userData.ingame ?
 						(<Route path="/game" 		element={<GameComponents/>}/>)
@@ -205,10 +206,11 @@ const Routing = () => {
 					<Route path="/groups" 			element={<GroupPage/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
 					<Route path="/error" 			element={<ErrorPageConfig/>}/>
-					<Route path="*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
+					<Route path="*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
+					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}

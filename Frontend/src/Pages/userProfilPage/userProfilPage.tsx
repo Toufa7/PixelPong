@@ -65,7 +65,6 @@ const Profil = () => {
                 const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
                 try {
                     await axios.get(avatarURL, { withCredentials: true });
-                    console.log("Respoen ===> ", response.data);
                     setUserData(() => ({
                         avatar: avatarURL,
                         username: response.data.username,
@@ -87,7 +86,7 @@ const Profil = () => {
                 }
         }
         fetchData();
-    }, []);
+    }, [location]);
 
     const [isFriend, setIsFriend] = useState<boolean>(false);
     useEffect(() => {
@@ -95,7 +94,9 @@ const Profil = () => {
         .then((response) => {
             setIsFriend(response.data)
         })
-        .catch(() => {})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }, [userData])
 
 
@@ -105,7 +106,9 @@ const Profil = () => {
         .then((response) => {
             setisBlocked(response.data)
         })
-        .catch(() => {})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }, [userData])
 
     const [pending, setPending] = useState<boolean>(true);
@@ -116,15 +119,17 @@ const Profil = () => {
 		.then((response) => {
             setStates(response.data);
 		})
-		.catch((error) => {
-            console.log("Error stats -> ", error);
-		})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[userData])
     
     const BlockUser = () => {
         axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
         .then(() => {})
-        .catch(() => {})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
     const UnBlockUser = () => {
         // useEffect(() => {
@@ -140,7 +145,9 @@ const Profil = () => {
         setPending(false);
         axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
         .then(() => {})
-        .catch(() => {})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
     const UnfriendUser = () => {
         setIsFriend(false);
@@ -148,12 +155,9 @@ const Profil = () => {
         .then(() => {
         })
         .catch((error) => {
-            console.log("Error While Removing Friends -> ",error );
-        })
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
-
-    console.log("userData ==> ", userData);
-
     return (
         <div className="profilRectangle">
           <div className="avatar">
@@ -210,7 +214,7 @@ const Profil = () => {
                                     ) 
                                     :
                                     (
-                                        <a className="nes-btn is-error" href="#">Pending</a>
+                                        <a className="nes-btn" href="#">Pending</a>
                                     )
 
                                 )
@@ -232,16 +236,24 @@ const GroupsAndFriends = () => {
     
     const [thisId, setId] = useState();
     const info = useLocation();
-    axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
-    .then((res) => {
-        setId(res.data.id);
-    })
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
+        .then((res) => {
+            setId(res.data.id);
+        })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
+    }, [info])
 
     useEffect(() => {
         axios.get(`http://localhost:3000/users/friends/${thisId}`, {withCredentials: true})
         .then((response) => {
             setFriendData(response.data);
         })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[thisId])
 
     useEffect(() => {
@@ -249,16 +261,16 @@ const GroupsAndFriends = () => {
         .then((response) => {
             setGroupsData(response.data);
         })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[thisId])
-
-
-
-      return (
-          <div className="gAndFBox">
+        return (
+            <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
             <div className="gAndFTabs">
-              <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
-              <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
+                <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
+                <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
             </div>
             <div className="gAndFContent">
                 <div className="listParent">
@@ -285,7 +297,6 @@ const GroupsAndFriends = () => {
                 </div>
             </div>
             </div>
-
     );
 }
 
@@ -295,7 +306,9 @@ const Achivements = () => {
     useEffect(() => {
       axios.get(`http://localhost:3000/users${info.pathname}`, { withCredentials: true })
         .then((res) => {setId(res.data.id);})
-        .catch(() => {});
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }, [info.pathname]);
 
     const [achivements, setAchievements] = useState([]);
@@ -425,26 +438,31 @@ function OtherProfilPage() {
     .then((res) => {
         setId(res.data.id);
     })
+    .catch((error) => {
+        console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+    });
 
     useEffect(() => {
         axios.get(`http://localhost:3000/users/stats/${thisId}` , {withCredentials: true})
 		.then((response) => {
 			setStates(response.data);
 		})
-		.catch((error) => {
-			console.log("Error -> ", error);
-		})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[thisId])
 
 
     const [user, setUser] = useState<string>("");
-    axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
-    .then((res) => {
-        setUser(res.data.username);
-    })
-    .catch((erro) => {
-        console.error("Erro -> ", erro);
-    })
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
+        .then((res) => {
+            setUser(res.data.username);
+        })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
+    },[])
 
     if (userExist == "NotFound") {
         return (<ErrorPage title={"User Not Found"} errorType={'Oops! The user you\'re looking \nfor couldn\'t be found'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />)
@@ -464,13 +482,9 @@ function OtherProfilPage() {
                     <GroupsAndFriends/>
                     {
                         states.length == 0 ?
-                        (
-                            <States winRate={0} wins={0} loses={0} matchplayed={0}/>
-                        )
-                        :
-                        (
-                            <States winRate={(states.wins / states.numberOfMatches) * 100} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>
-                        )
+                        (<States winRate={0} wins={0} loses={0} matchplayed={0}/>)
+                            :
+                        (<States winRate={(states.wins / states.numberOfMatches) * 100} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>)
                     }
                 </div>
                 <div className="downContainer">
