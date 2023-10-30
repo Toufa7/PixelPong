@@ -169,14 +169,18 @@ const Routing = () => {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+            .catch(() => {
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				setUnlogged(true);
         	})
     	} 
 		fetchData();
 	}, [])
 
+	const logged = userData != undefined && !userData?.twofa;
+	const logged2fa = userData != undefined && userData?.twofa && userData?.authenticated;
+	// console.log("logged -> ", logged)
+	// console.log("logged2fa -> ", logged2fa)
 	return (
 		<BrowserRouter>
 		<Suspense fallback={
@@ -186,17 +190,17 @@ const Routing = () => {
 				</div>
 			</>
 		}>
-			<Routes suppressNoMatchWarning={true}> 
+			<Routes> 
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
-			{(userData != undefined && !userData.twofa) && (
+			{logged && (
 				<>
 					<Route path="/" 				element={<HomeComponents/>}/>
-					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 			element={<HomeComponents/>}/>
+					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
 					<Route path="/profil/:userId"	element={<OtherUser/>}/>
 					{!userData.ingame ?
 						(<Route path="/game" 		element={<GameComponents/>}/>)
-							:
+						:
 						(<Route path="/*" 			element={<AlreadyInGame/>}/>)}
 					<Route path="/chat" 			element={<ChatPage/>}/>
 					<Route path="/notifications" 	element={<NotificationComponents/>}/>
@@ -205,9 +209,7 @@ const Routing = () => {
 					<Route path="/error" 			element={<ErrorPageConfig/>}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
-					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
 					<Route path="*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
-					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}

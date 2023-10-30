@@ -11,7 +11,6 @@ import Anime, { anime } from 'react-anime';
 import notification from './assets/notification.mp3';
 import medal from './assets/medaille.svg';
 import savage from './assets/savage.svg';
-import flag from './assets/endpoint.svg';
 import key from './assets/key.svg'
 import bomb from './assets/bomblogo.svg';
 import joystick from './assets/joystic.svg';
@@ -150,7 +149,7 @@ const TopContainer = () => {
 		else if (privacy == "private")
 		{
 			axios.post(`http://localhost:3000/groupchat/${theOne.id}/request`, {}, { withCredentials: true })
-			.then((res) => {
+			.then(() => {
 				toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
 				document.getElementById('joinGroup')?.close();
 			})

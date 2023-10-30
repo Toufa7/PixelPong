@@ -9,9 +9,22 @@ import { Link } from "react-router-dom";
 
 /******************* Includes  *******************/
 
+
+const Toasts = () => {
+    return (
+        <Toaster
+            reverseOrder={false}
+            position='top-right'
+            toastOptions={{style: {borderRadius: '8px',background: '#FFF',color: '#000'},
+            duration: 2000,
+        }}/>
+    );
+}
+
+
 const RetrieveCheckSendData =  () => {
-    const avatar        = document.querySelector('[name="avatarUpload"]')?.files[0];
-    const nicknameInput = document.querySelector('[name="nickname"]')?.value;
+    const avatar        = document.querySelector('[name="avatarUpload"]')?.files[0] as HTMLElement;
+    const nicknameInput = document.querySelector('[name="nickname"]')?.value as HTMLElement;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
     if (avatar) {
         const data = new FormData();
@@ -93,8 +106,7 @@ export default function LoginSettings() {
 
     return (
         <div style={{height: '100vh'}}>
-            
-            <Toaster/>
+        <Toasts/>
           <div className="container">
             <div className="settingsBox">
                 <div className="header">Settings</div>

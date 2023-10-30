@@ -5,6 +5,8 @@ import {socket, socketgp} from '../../Pages/socket-client'
 import toast, { Toaster } from "react-hot-toast";
 
 const GroupRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating: React.Dispatch<React.SetStateAction<boolean>> }) => {
+	
+	console.log("myData -> ",myData);
 	const acceptFriend = async () => {
 		try {
 			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
@@ -38,11 +40,11 @@ const GroupRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating
 	return (
 		<div style={{ padding: '5px' }}>
 			<div className="nes-container with-title">
-				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to 	</p>
+				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to {myData.namegp}</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 					<div>
 						<img src={`http://localhost:3000/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-						{/* <img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px', position: "absolute", left: '85px', bottom: '25px'}} alt="avatar" /> */}
+						<img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px', position: "absolute", left: '85px', bottom: '25px'}} alt="avatar" />
 						<span style={{ marginLeft: '20px' }}>{myData.from}</span>
 					</div>
 				<div>
@@ -185,10 +187,10 @@ function Notifications() {
 				<>
 				{
 					flag == "group" ?
-						(<GroupRequest myData={groupRequests}/>)
+						(<GroupRequest myData={groupRequests} setUpdating={setUpdating}/>)
 					:
 					flag == "friend"?
- 						(<FriendRequest myData={friendRequests} />)
+ 						(<FriendRequest myData={friendRequests} setUpdating={setUpdating} />)
 					:
 					(
 						<>

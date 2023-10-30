@@ -27,7 +27,6 @@ function TwoFa() {
         })
         .catch((error) => {
             toast.error(error.response.data.error);
-            // console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
         });
     }, []);
 

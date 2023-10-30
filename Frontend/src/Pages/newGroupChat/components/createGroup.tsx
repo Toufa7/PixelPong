@@ -2,6 +2,17 @@ import axios from "axios";
 import { useState } from "react"
 import toast, { Toaster } from "react-hot-toast";
 
+const Toasts = () => {
+    return (
+        <Toaster
+            reverseOrder={false}
+            position='top-right'
+            toastOptions={{style: {borderRadius: '8px',background: '#FFF',color: '#000'},
+            duration: 2000,
+        }}/>
+    );
+}
+
 const CreatingGroup = (setIsCreated) => {
 	const groupName : string	= document.getElementById('name_field')?.value;
 	const choice : number		= document.getElementById("default_privacy")?.value;
@@ -24,23 +35,31 @@ const CreatingGroup = (setIsCreated) => {
 		};
 
 		// toast.promise(
+		try {	
 			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
 			.then((response) => {
-				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
-				.then(() => {
-					toast.success("Group Created");
-					setIsCreated(prev => !prev);
-				})
-				.catch((error) => {
-					toast.error(error.response.data.message);
-
-					// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-				});
+				toast(response.data.message);
+				if (!response.data.message) {
+					axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
+					.then(() => {
+						toast.success("Group Created");
+						setIsCreated(prev => !prev);
+					})
+					.catch((error) => {
+						toast.error(error.response.data.message);
+						// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+					});
+				}
 			})
 			.catch((error) => {
 				toast.error(error.response.data.message);
 				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			})
+		}
+		catch(error)
+		{
+			console.log("Error -");
+		}
 			// {
 			// 	loading: "Sending data...",
 			// 	success: "Success Settings!",
@@ -76,7 +95,7 @@ const CreateGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 	const [update , setUpdate] = useState("");
 	return (
 		<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff" ,borderRadius: "10px"}}>
-			<Toaster/>
+			<Toasts/>
 			<div className="groupSettings" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
 				<div className="nes-field" style={{margin: '10px', width: '300px'}} >
 					<input style={{background: '#E9E9ED'}} onChange={(e) => setUpdate(e.target.value)}	type="text" id="name_field" placeholder='Group Name' maxLength={18} className="nes-input"/>

@@ -14,6 +14,18 @@ import erase from '../assets/delete.svg';
     image : string;
 */
 
+const Toasts = () => {
+    return (
+        <Toaster
+            reverseOrder={false}
+            position='top-right'
+            toastOptions={{style: {borderRadius: '8px',background: '#FFF',color: '#000'},
+            duration: 2000,
+        }}/>
+    );
+}
+
+
 const UpdateGroup = (id : string, setIsCreated: React.Dispatch<React.SetStateAction<boolean>>) => {
 	const choice	: number	= document.getElementById("default_select")?.value;
 	const groupName : string	= document.getElementById('name_field')?.value;
@@ -54,7 +66,7 @@ const UpdateGroup = (id : string, setIsCreated: React.Dispatch<React.SetStateAct
 						.then(() => {})
 					}
 					setIsCreated(prev => !prev)
-					toast.success("Group Updated");
+					// toast.success("Group Updated");
 
 				})
 				.catch((error) => {
@@ -321,6 +333,7 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 
 	return (
 	<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff",borderRadius: "10px"}}>
+		<Toasts/>
 		{
 			amIAdmin ? 
 			(
