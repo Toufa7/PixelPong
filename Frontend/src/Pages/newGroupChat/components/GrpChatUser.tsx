@@ -44,13 +44,9 @@ const ChatUser = (props : any) => {
                 console.log("Just dance --->", response.data)
                 setgroupRoom(response.data);
             })
-			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			});
+			.catch(Error)
         }
-    }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
-
-    // const [showing, setShowing] = useState(false);
+    }, [props.pcurrentUserId]);
     
     //Identifying local user
     useEffect(() => {
@@ -78,9 +74,7 @@ const ChatUser = (props : any) => {
             .then((response) => {
                 setUsers(response.data);
             })
-			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			});
+			.catch(Error)
         }
     }, [props.pcurrentUserId]);
     
@@ -92,9 +86,7 @@ const ChatUser = (props : any) => {
                 console.log("Admins -> ", response.data)
                 setAdmins(response.data);
             })
-			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			});
+			.catch(Error)
         }
     }, [props.pcurrentUserId]);
 
@@ -148,8 +140,6 @@ const ChatUser = (props : any) => {
                                                                     toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
                                                                 })
                                                                 .catch((error) => {
-                                                                    console.error(error);
-                                                                    console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
                                                                     toast.error(`Leaving ${groupRoom.namegb} Failed`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
                                                                 });
                                                             }

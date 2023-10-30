@@ -5,6 +5,7 @@ import play from '../assets/images/playgame.svg'
 import info from '../assets/info.svg'
 import kirby from '../assets/kirby-hit-the-screen.gif'
 import { Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 interface localUserClass
 {
@@ -33,7 +34,6 @@ const ChatUser = (props:any) => {
                 setLocalUser(res.data);
             })
             .catch(Error)
-                console.log("Error happened when feching local user data");
     }, [])
     
     //Fetching remote user info
@@ -46,7 +46,6 @@ const ChatUser = (props:any) => {
                     setRemoteUser(res.data)
                 })
                 .catch(Error)
-                    console.log("Error happened on block check");
         }
     }, [props.pcurrentUserId]);
 
@@ -61,7 +60,6 @@ const ChatUser = (props:any) => {
                     setIsBlocked(res.data);
                 })
                 .catch(Error)
-                    console.log('Error happened on block check 2');
         }
     },[remoteUser.id]);
 
@@ -76,7 +74,6 @@ const ChatUser = (props:any) => {
                     setLocalUserBlocksRemote(res.data);
                 })
                 .catch(Error)
-                    console.log('Error happened when checking for the error');
         }
     },[remoteUser.id]);
 
@@ -84,7 +81,6 @@ const ChatUser = (props:any) => {
         axios
             .get(`http://localhost:3000/chat/${remoteUser.id}/requestjoingame`, { withCredentials: true })
             .catch(Error)
-                console.log("Error happened when requesting to join the game", Error);
     }
 
     return (

@@ -45,14 +45,9 @@ const GroupsList = () => {
 				.then((response) => {
 					console.log("Success Image Groups -> ", response.data);
 				})
-				.catch((error) => {
-					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-				})
+				.catch((Error))
             })
-			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			});
-			;
+			.catch(Error)
     }, []);
 
 

@@ -50,11 +50,11 @@ const GrpchatNavBar = () => {
                             .choice {
                                 display: none !important;
                             }
-                            .chatDmDiv .groupSettings
+                            .chatsContainerGroup .chatDmDiv .groupSettings
                             {
                                 display: none !important;
                             }
-                            .chatDmDiv .chatDmDiv
+                            .chatsContainerGroup .chatDmDiv .chatDmDiv
                             {
                                 display: none !important;
                             }

@@ -3,6 +3,7 @@ import axios from 'axios';
 import './chatSearch.scss';
 import DmChatUser from './dmChatUser'
 import search from '../assets/search.svg'
+import toast from 'react-hot-toast';
 
 interface localUserClass
 {
@@ -29,7 +30,6 @@ const chatSearch = (props: any) => {
                 setFriendsIds(res.data)
             })
             .catch(Error)
-                console.log("Error happened when feching local user friends (chatSearch Componenet)")
     }, [])
 
     const removeElement = () => {
