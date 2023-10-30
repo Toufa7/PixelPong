@@ -192,7 +192,7 @@ const Routing = () => {
 		}>
 			<Routes suppressNoMatchWarning={true}> 
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
-			{(userData != undefined && !userData.twofa) || (userData != undefined && userData.twofa && userData?.authenticated) && (
+			{(userData != undefined && !userData.twofa) && (
 				<>
 					<Route path="/" 				element={<HomeComponents/>}/>
 					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
