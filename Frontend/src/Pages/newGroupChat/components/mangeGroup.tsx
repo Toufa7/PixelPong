@@ -41,11 +41,10 @@ const UpdateGroup = (id : string, setIsCreated: React.Dispatch<React.SetStateAct
 		groupData.grouptype = groupType;
 	  
 		if (choice == 2) {groupData.password = password;}
-		console.log(" --===Update ====--> ", groupData);
 
 		if (id)
 		{
-			toast.promise(
+			// toast.promise(
 				axios.patch(`http://localhost:3000/groupchat/${id}`, groupData, { withCredentials: true })
 				.then(() => {
 					if (groupAvatar) {
@@ -55,17 +54,20 @@ const UpdateGroup = (id : string, setIsCreated: React.Dispatch<React.SetStateAct
 						.then(() => {})
 					}
 					setIsCreated(prev => !prev)
+					toast.success("Group Updated");
+
 				})
 				.catch((error) => {
-					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-				}),
-				{
-					loading: "Sending data...",
-					success: "Success Settings!",
-					error: "An error occurred",
-				},
-				{ duration: 5000, position: 'top-right' }
-			);
+					toast.error(error.response.data.message);
+					// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				})
+				// {
+				// 	loading: "Sending data...",
+				// 	success: "Success Settings!",
+				// 	error: "An error occurred",
+				// },
+				// { duration: 5000, position: 'top-right' }
+			// );
 		}
 	}
 	else if (password && password.length < 8) {

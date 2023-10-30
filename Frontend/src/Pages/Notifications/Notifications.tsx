@@ -57,7 +57,7 @@ const GroupRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating
 
 
 
-const FriendRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating: ç }) => {
+const FriendRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating: React.Dispatch<React.SetStateAction<boolean>> }) => {
 	let object = {};
 	if (myData) {
 		object = {
@@ -74,16 +74,20 @@ const FriendRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdatin
 			.catch((error) => {
 				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
-	  	} 
+	  	}
 		catch (error) {
 			console.log("Error Caught ", error);
 	  	}
 	};
   
 	const refuseFriend = async () => {
+		console.log("first")
 		try {
+		console.log("2first")
+			console.log("object -> ", object);
 			await axios.patch("http://localhost:3000/users/refuseFriendRequest", object, { withCredentials: true })
 			.then(() => {
+				console.log("Siccess")
 				setUpdating(prev => !prev)
 			})
 			.catch((error) => {
@@ -106,7 +110,7 @@ const FriendRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdatin
 				</div>
 				<div>
 					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={acceptFriend}>Accept</button>
-					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={() => {refuseFriend}}>Deny</button>
+					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={refuseFriend}>Deny</button>
 				</div>
 			  	</div>
 			</div>

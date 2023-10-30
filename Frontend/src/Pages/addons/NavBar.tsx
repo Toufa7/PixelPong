@@ -10,6 +10,7 @@ import notificationLogo from './assets/notificationLogo.svg'
 import logoutLogo from './assets/logoutLogo.svg'
 import groups from './assets/groups.svg'
 import randomLogo from './assets/logo.svg'
+import toast from "react-hot-toast";
 /******************************************/  
 
 const NavBarBody = () => {
@@ -60,8 +61,9 @@ const NavBarFooter = () => {
             .then((res:any) =>  {
                 setUserId(res.data.id);
             })
-			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			.catch(() => {
+				toast.error("Cannot Fetch User Data");
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
     }, [])
 

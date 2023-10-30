@@ -26,16 +26,13 @@ import handshake from '../src/Pages/HomePage/assets/handshake.png';
 import toast from 'react-hot-toast';
 
 const BackgroudGame = () => {
-	const animationStyle = `
-		@keyframes rotate {
-			50% { transform: rotate(360deg); }
-		}`;
+
   return (
-    <div style={{height: '100vh', background: '#333C54',display: 'flex', justifyContent: 'flex-start',alignItems: 'flex-start'}}>
-      	<a href="/home" title="Home">
+    <div>
+      	{/* <a href="/home" title="Home">
   		<style>{animationStyle}</style>
         	<img src={randomLogo} title={"Back To Home"} style={{ margin: '20px',width: '50px',height: '50px',animation: 'rotate 10s infinite'}}/>
-      	</a>
+      	</a> */}
 		{/* <a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" onClick={() => {document.getElementById('howtoplay').showModal();}} >How To Play</a>
 		<section>
 			<dialog className = 'example' style={{height: '700px', width: '700px', background: 'white' , borderRadius:"20px"}} id="howtoplay">
@@ -170,7 +167,6 @@ const Routing = () => {
         const fetchData = () => {
             axios.get("http://localhost:3000/users/profil", { withCredentials: true })
             .then((response) => {
-				console.log("-=>> ", response.data)
                 setUserInfo(response.data)
             })
             .catch((error) => {
@@ -192,7 +188,7 @@ const Routing = () => {
 		}>
 			<Routes suppressNoMatchWarning={true}> 
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
-			{(userData != undefined && !userData.twofa) || (userData != undefined && userData.twofa && userData?.authenticated) && (
+			{(userData != undefined && !userData.twofa) && (
 				<>
 					<Route path="/" 				element={<HomeComponents/>}/>
 					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>

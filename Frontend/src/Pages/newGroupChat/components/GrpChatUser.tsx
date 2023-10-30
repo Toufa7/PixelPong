@@ -41,11 +41,12 @@ const ChatUser = (props : any) => {
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
             .then((response) => {
-                console.log("Just dance --->", response.data)
                 setgroupRoom(response.data);
             })
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                toast.error(error.response.data.message);
+
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
         }
     }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
@@ -79,7 +80,8 @@ const ChatUser = (props : any) => {
                 setUsers(response.data);
             })
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                toast.error(error.response.data.message);
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
         }
     }, [props.pcurrentUserId]);
@@ -89,24 +91,22 @@ const ChatUser = (props : any) => {
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/admins`, { withCredentials: true })
             .then((response) => {
-                console.log("Admins -> ", response.data)
                 setAdmins(response.data);
             })
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                toast.error(error.response.data.message);
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
         }
     }, [props.pcurrentUserId]);
 
 
     const openDialogUsers = () => {
-        console.log("Clicked On Info")
         const dialog = document.getElementById('manageGroup');
 		dialog?.showModal();
     }
 
     const manageGroup = () => {
-        console.log("Clicked On Info")
         const dialog = document.getElementById('dialogMembers');
 		dialog?.showModal();
     }
@@ -148,9 +148,7 @@ const ChatUser = (props : any) => {
                                                                     toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
                                                                 })
                                                                 .catch((error) => {
-                                                                    console.error(error);
-                                                                    console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-                                                                    toast.error(`Leaving ${groupRoom.namegb} Failed`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
+                                                                    toast.error(error.response.data.message);
                                                                 });
                                                             }
                                                             }   width={50} height={50} title='Leave Group' ></img>

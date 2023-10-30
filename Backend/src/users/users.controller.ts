@@ -229,7 +229,7 @@ async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
   try {
 	console.log("bodyyyyyyyyyyyyyyyy", body);
 	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.to);
-	return await this.usersService.refuseFriendRequest(friendrequest);
+	return await this.usersService.refuseFriendRequest(friendrequest.id);
   } catch (error) {
 	console.error(error); // Log the error for debugging
   }

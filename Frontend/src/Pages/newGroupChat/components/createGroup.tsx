@@ -23,31 +23,35 @@ const CreatingGroup = (setIsCreated) => {
 			password: (choice == 2) ? password : undefined
 		};
 
-		toast.promise(
+		// toast.promise(
 			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
 			.then((response) => {
 				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
 				.then(() => {
+					toast.success("Group Created");
 					setIsCreated(prev => !prev);
 				})
 				.catch((error) => {
-					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+					toast.error(error.response.data.message);
+
+					// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				});
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			}),
-			{
-				loading: "Sending data...",
-				success: "Success Settings!",
-				error: "An error occurred",
-			}
-			,{ duration: 5000, position: 'top-right' });
+				toast.error(error.response.data.message);
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			})
+			// {
+			// 	loading: "Sending data...",
+			// 	success: "Success Settings!",
+			// 	error: "An error occurred",
+			// }
+			// ,{ duration: 5000, position: 'top-right' });
 
 	}
-	else if (choice == 2 && (password && password.length < 8) || !password) {
-		toast.error("Password Too Short	", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
-	}
+	// else if (choice == 2 && (password && password.length < 8) || !password) {
+	// 	toast.error("Password Too Short	", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
+	// }
 	else if (!regEx.test(groupName)) {
 		if (!groupName)
 			toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});

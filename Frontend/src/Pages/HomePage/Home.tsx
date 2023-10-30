@@ -32,7 +32,8 @@ const GetUserData = () => {
                 setUserInfo(response.data)
             })
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message)
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
     }
     fetchData();
@@ -77,7 +78,6 @@ const TopContainer = () => {
 			const groups = response.data;
 			const foundGroup = groups.find(group => group.namegb === query);
 			if (foundGroup) {
-				console.log("Group Found -> ", foundGroup);
 				setPrivacy(foundGroup.grouptype)
 				setTheOne(foundGroup);
 				setFriendGroup("group");
@@ -94,7 +94,8 @@ const TopContainer = () => {
 		  }
 		}
 		catch (error) {
-		  console.log("Error searching in groups:", error);
+			toast.error("Error in group searching");
+		//   console.log("Error searching in groups:", error);
 		}
 	};
 	const searchInFriends = async (query : string) => {
@@ -103,7 +104,6 @@ const TopContainer = () => {
 			const friends = response.data;
 			const foundFriend = friends.find(friend => friend.username === query);
 			if (foundFriend) {
-				console.log("Friend Found -> ", foundFriend);
 				setTheOne(foundFriend);
 				setFriendGroup("friend");
 				setIsFound(true);
@@ -115,17 +115,16 @@ const TopContainer = () => {
 			}
 		}
 		catch (error) {
-			console.log("Error searching in friends:", error);
+			toast.error("Error in friend searching");
+			
+			// console.log("Error searching in friends:", error);
 		}
 	};
 
 	  const handleSubmit = (e) => {
 			e.preventDefault();
 			const searchQuery = firstRef.current.value;
-			console.log("Searching for --> ", searchQuery);
-			console.log("Looking in Groups");
 			searchInGroups(searchQuery);
-			console.log("Looking in Friends");
 			searchInFriends(searchQuery);
 	  };
 
@@ -144,7 +143,8 @@ const TopContainer = () => {
 				document.getElementById('joinGroup')?.close();
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message);
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}
 		else if (privacy == "private")
@@ -155,7 +155,7 @@ const TopContainer = () => {
 				document.getElementById('joinGroup')?.close();
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message)
 			});
 		}
 		else if (privacy == "protected") {
@@ -171,7 +171,8 @@ const TopContainer = () => {
 				}
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message)
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}
 		
@@ -321,11 +322,13 @@ const TopLeft = () => {
 				setLeaderboards(new Map(sortedEntries));
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message)
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		})
 		.catch((error) => {
-			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			toast.error(error.response.data.message)
+			// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 		});
 	}, []);
 
@@ -444,7 +447,8 @@ const BottomLeft = () => {
 			setAchivements(response.data.achievementType);
 		})
 		.catch((error) => {
-			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			toast.error(error.response.data.message)
+			// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 		});
     },[])
 
