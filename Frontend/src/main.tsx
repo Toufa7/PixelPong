@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate, useLocation} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, useLocation, Router} from "react-router-dom";
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import axios from 'axios';
@@ -170,13 +170,14 @@ const Routing = () => {
         const fetchData = () => {
             axios.get("http://localhost:3000/users/profil", { withCredentials: true })
             .then((response) => {
+				console.log("-=>> ", response.data)
                 setUserInfo(response.data)
             })
             .catch((error) => {
 				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				setUnlogged(true);
         	})
-    	}
+    	} 
 		fetchData();
 	}, [])
 
@@ -189,9 +190,9 @@ const Routing = () => {
 				</div>
 			</>
 		}>
-		<Routes>
+			<Routes suppressNoMatchWarning={true}> 
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
-			{userData != undefined && !userData.twofa && (
+			{(userData != undefined && !userData.twofa) && (
 				<>
 					<Route path="/" 				element={<HomeComponents/>}/>
 					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
@@ -217,8 +218,9 @@ const Routing = () => {
 			{userData != undefined && userData.twofa && (
 				<>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
-					<Route path="/*" 				element={<Navigate to="/two-factor-authentication" replace/>}/>
+					<Route path="/*" 							element={<Navigate to="/two-factor-authentication" replace/>}/>
 				</>
+				
 			)}
 			{/* User is not logged in */}
 			{unlogged == true && (

@@ -4,12 +4,12 @@ import axios from "axios";
 import {socket, socketgp} from '../../Pages/socket-client'
 import toast, { Toaster } from "react-hot-toast";
 
-const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
+const GroupRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating: React.Dispatch<React.SetStateAction<boolean>> }) => {
 	const acceptFriend = async () => {
 		try {
 			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
-			.then((rese) => {
-				console.log("Notification Acceptted ", rese);
+			.then(() => {
+				setUpdating(prev => !prev)
 			});
 	  		} 
 			catch (error) {
@@ -21,8 +21,8 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	const refuseFriend = async () => {
 		try {
 			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
-			.then((rese) => {
-				console.log("Notification Refuse ", rese);
+			.then(() => {
+				setUpdating(prev => !prev)
 			})
 			.catch((error) => {
 				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
@@ -57,10 +57,7 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 
 
 
-const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
-	const [friendStatus, setFriendStatus] = useState(false);
-	
-	console.log("FriendRequest Data ", myData);
+const FriendRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating: ç }) => {
 	let object = {};
 	if (myData) {
 		object = {
@@ -68,14 +65,11 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 			to: myData.to,
 		}
 	}
-	
 	const acceptFriend = async () => {
-		console.log("Accepted Sent Object -> ", object);
 		try {
 			await axios.patch("http://localhost:3000/users/acceptFriendRequest", object, { withCredentials: true })
-			.then((rese) => {
-				console.log("Notification Acceptted ", rese);
-				setFriendStatus(friendStatus);
+			.then(() => {
+				setUpdating(prev => !prev)
 			})
 			.catch((error) => {
 				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
@@ -84,31 +78,25 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 		catch (error) {
 			console.log("Error Caught ", error);
 	  	}
-		toast.remove();
 	};
   
 	const refuseFriend = async () => {
 		try {
 			await axios.patch("http://localhost:3000/users/refuseFriendRequest", object, { withCredentials: true })
-			.then((rese) => {
-				console.log("Accepted Sent Object -> ", object);
-				console.log("Notification Refuse ", rese);
-				setFriendStatus(friendStatus);
+			.then(() => {
+				setUpdating(prev => !prev)
 			})
 			.catch((error) => {
 				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
-			toast.dismiss();toast.remove()
 		}
 		catch (error) {
 			console.log("Error Caught ", error);
 		}
-		toast.remove();
 	};
   
 	return (
 		<div style={{ padding: '5px' }}>
-			<Toaster/>
 			<div className="nes-container with-title">
 				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Invitation Request</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -118,7 +106,7 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 				</div>
 				<div>
 					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={acceptFriend}>Accept</button>
-					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={() => {refuseFriend; toast.dismiss();toast.remove(); console.log("I Clicked On Refuse")}}>Deny</button>
+					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={() => {refuseFriend}}>Deny</button>
 				</div>
 			  	</div>
 			</div>
@@ -130,6 +118,7 @@ function Notifications() {
 	const [flag, setFlag] = useState<string>("");
 	const [friendRequests, setFriendRequests] = useState([]);
 	const [groupRequests, setGroupRequests] = useState([]);
+	const [updating, setUpdating] = useState<boolean>(false);
   
 	useEffect(() => {
 	  const fetchFriendRequests = () => {
@@ -156,7 +145,7 @@ function Notifications() {
   
 	  fetchFriendRequests();
 	  fetchGroupRequests();
-	}, []);
+	}, [updating]);
   
 
 
@@ -201,12 +190,12 @@ function Notifications() {
 						<>
 							{
 								Object.keys(friendRequests).map((idx : any) => (
-									<FriendRequest key={idx} myData={friendRequests[idx]}/>
+									<FriendRequest key={idx} myData={friendRequests[idx]} setUpdating={setUpdating}/>
 								))
 							}
 							{
 								Object.keys(groupRequests).map((idx : any) => (
-									<GroupRequest key={idx} myData={groupRequests[idx]}/>
+									<GroupRequest key={idx} myData={groupRequests[idx]} setUpdating={setUpdating}/>
 								))
 							}
 						</>

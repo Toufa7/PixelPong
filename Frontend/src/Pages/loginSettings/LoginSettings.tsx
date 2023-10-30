@@ -29,19 +29,15 @@ const RetrieveCheckSendData =  () => {
         ,{ duration: 5000, position: 'top-right' });           
     }
     if (usernameCheck.test(nicknameInput)) {
-        toast.promise(
             axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true })
             .then(() => {
+                toast.success("Updated :)");
+
             })
             .catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			}),
-            {
-                loading: "Sending data...",
-                success: "Username Changed!",
-                error: "An error occurred",
-            }
-            ,{ duration: 5000, position: 'top-right' });           
+                toast.error(error.response.data.message);
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			})      
     }
     else if (!nicknameInput){
         toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});

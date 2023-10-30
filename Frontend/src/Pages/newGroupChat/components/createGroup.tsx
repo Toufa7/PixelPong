@@ -23,7 +23,6 @@ const CreatingGroup = (setIsCreated) => {
 			password: (choice == 2) ? password : undefined
 		};
 
-		console.log("Sending Data as -> ", groupData);
 		toast.promise(
 			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
 			.then((response) => {

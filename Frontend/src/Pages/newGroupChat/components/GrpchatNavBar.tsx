@@ -50,17 +50,18 @@ const GrpchatNavBar = () => {
                             .choice {
                                 display: none !important;
                             }
-                            .choice .groupSettings
+                            .chatDmDiv .groupSettings
                             {
                                 display: none !important;
                             }
-                            .choice .chatDmDiv
+                            .chatDmDiv .chatDmDiv
                             {
                                 display: none !important;
                             }
                             .nes-dialog
                             {
                                 overflow-x: hidden;
+                                overflow-y: auto;
                             }
                         }
                         `}

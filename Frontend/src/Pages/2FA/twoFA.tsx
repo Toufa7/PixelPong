@@ -50,15 +50,20 @@ function TwoFa() {
         const data = {otp : a}
         axios.post("http://localhost:3000/auth/2fa/validate", data, { withCredentials: true })
         .then((response) => {
+            console.log("Respones -> ", response.data);
             if (response.status != 400)
             {
                 toast.success("Success");
+                window.location.href = "/home";
                 navigate("/home");
             }
             else
                 toast.error("Invalid Code");
-        })
+            }
+        )
         .catch((error) => {
+            toast.error("Invalid Code");
+
             console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
         });
     }

@@ -148,7 +148,9 @@ const ChatUser = (props : any) => {
                                                                     toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
                                                                 })
                                                                 .catch((error) => {
+                                                                    console.error(error);
                                                                     console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                                                                    toast.error(`Leaving ${groupRoom.namegb} Failed`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
                                                                 });
                                                             }
                                                             }   width={50} height={50} title='Leave Group' ></img>
