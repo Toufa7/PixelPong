@@ -97,8 +97,7 @@ const messageInput = (props: any) => {
                     groupUsers.set(res.data[i].id, res.data[i]);
                 }
             })
-            .catch(Error)
-            console.log('%cAn error happened in : Conversation: messageInput(): 106', 'color: red')
+            .catch((Error))
     }, [props.groupInfo.id])
     
     //Getting the old conversation
@@ -109,7 +108,6 @@ const messageInput = (props: any) => {
                 fillMap(res.data);
             })
             .catch(Error)
-                console.log('%cAn error happened in : Conversation: messageInput(): 119', 'color: red')
     }, [props.groupInfo.id])
     
     const fillMap = (axiosResponse: any[]) => {

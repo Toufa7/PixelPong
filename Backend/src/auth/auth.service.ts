@@ -49,7 +49,6 @@ export class AuthService {
     const { id, emails, name, _json, username, photos } = profile;
     const photo = type === 1 ? photos[0].value : _json.image.link;
     const name_ = type === 1 ? name?.givenName : username;
-    console.log(emails[0])
     let user = await this.usersService.findOneByEmail(emails[0]?.value);
     if (!user) {
       user = await this.prisma.user.create({
@@ -88,7 +87,6 @@ export class AuthService {
   }
   
   async change2FAStatus(id: string): Promise<void> {
-    console.log("im here");
     try {
       await this.prisma.user.update({
         where: {

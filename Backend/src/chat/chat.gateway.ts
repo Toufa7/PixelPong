@@ -9,7 +9,6 @@ import { Dmschat, User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { use } from 'passport';
 import { emit } from 'process';
-// import { } from 'socket.io-client';
 
 
 
@@ -24,7 +23,7 @@ let map = new Map<any, any>();
   namespace: 'chat',
 })
 
-// @UseGuards(JwtGuard)
+@UseGuards(JwtGuard)
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(private readonly prisma: PrismaService, private readonly Jwt: JwtService) { }
   @WebSocketServer() server: Server;
@@ -153,23 +152,31 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   //////////////////////request to join game //////////////////////////
   async requestjoingame(namesender: string, idsender: string, idrecever: string) {
     try {
-      const idUs = await map.get(idrecever);
-      const token = this.generate_Random_id(10);
-
-      await this.prisma.user.update({
+      //get token of user
+      const tokenofuser = await this.prisma.user.findUnique({
         where: { id: idsender },
-        data: {
-          tokenjoingame: token,
+        select: {
+          tokenjoingame: true,
         },
       });
-      return this.server.to(idUs).emit('requestjoingame', {
-        from: namesender,
-        token: token,
-        idsender: idsender
-      });
+      if (tokenofuser.tokenjoingame == null) {
+        const idUs = await map.get(idrecever);
+        const token = this.generate_Random_id(10);
+        await this.prisma.user.update({
+          where: { id: idsender },
+          data: {
+            tokenjoingame: token,
+          },
+        });
+        return this.server.to(idUs).emit('requestjoingame', {
+          from: namesender,
+          token: token,
+          idsender: idsender
+        });
+      }
     }
     catch (err) {
-      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+      return;
     }
 
   }
@@ -188,7 +195,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       });
     }
     catch (err) {
-      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+      return;
     }
   }
 
@@ -213,7 +220,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       });
     }
     catch (err) {
-      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+      return;
     }
   }
 

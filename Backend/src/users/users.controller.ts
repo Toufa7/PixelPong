@@ -45,7 +45,7 @@ export class UsersController {
 	return users;
   }
   catch(error){
-	console.log(error.message)
+	throw new HttpException('User not found', HttpStatus.NOT_FOUND);
   }
   }
 
@@ -55,13 +55,12 @@ export class UsersController {
 	{
 	const user = await this.usersService.findOne(req.user.id);
 	if (!user) {
-	  console.log("im herererererer 3678")
 	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 	}
 	return user;
   }
   catch(error){
-	console.log(error.message);
+	throw new HttpException('User not found', HttpStatus.NOT_FOUND);
   }
   }
 
@@ -70,7 +69,6 @@ async removeFriend(
   @Body() body: FriendrequestDto,
   @Req() req
 ): Promise<void> {
-console.log("boooodyyyyy : ", body);
   try {
 	await this.usersService.removefriend(req.user.id, body.to);
   } catch (error) {
@@ -106,7 +104,6 @@ async blockFriend(
   @Body() body: FriendrequestDto
 ): Promise<void> {
   try {
-	console.log("body", body);
 	await this.usersService.blockfriend(req.user.id, body.to);
   } catch (error) {
 	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
@@ -186,7 +183,6 @@ async getallNotifications(@Req() req: any){
 
 @Post('sendFriendRequest') 
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
-  console.log("body", body.to)
   try {
 	const already = await this.usersService.findFriendRequestIdBySenderReceiver(req.user.id, body.to);
 	if(already)
@@ -212,7 +208,6 @@ async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
 async acceptFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
   try {
 	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.to);
-	console.log('Bodyyyy', body);
 	const find = await this.usersService.acceptFriendRequest(friendrequest.id, body.userId, body.to);
 	return find;
   } catch (error) {
@@ -223,12 +218,9 @@ async acceptFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
 @Patch('refuseFriendRequest')
 async refuseFriendRequest(@Req() req,	@Body() body: FriendrequestDto): Promise<any> {
   try {
-	  const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.to);
-	  console.log('Bodyyyyyyyy failed ', body);
-	 const find = await this.usersService.refuseFriendRequest(friendrequest);
-	 return find;
+	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.to);
+	return await this.usersService.refuseFriendRequest(friendrequest.id);
   } catch (error) {
-	console.log(error.message);
 	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }

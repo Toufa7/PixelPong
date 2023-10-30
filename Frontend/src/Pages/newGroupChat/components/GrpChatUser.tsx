@@ -1,4 +1,4 @@
-import { useState, useEffect, Children } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import MessageInput from './GrpmessageInput'
 import exit from '../assets/exit.svg'
@@ -6,7 +6,6 @@ import info from '../assets/info.svg'
 import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
 import toast from 'react-hot-toast'
-import dudley from '../assets/Dudley.gif'
 import manage from '../assets/manage.svg'
 import ManageGroup from './mangeGroup'
 import CreateGroup from './createGroup'
@@ -19,10 +18,20 @@ interface localUserClass
     username: string,
 }
 
+interface grpInfoClass
+{
+    id: string,
+    namegb: string,
+    idsuperadmin: string,
+    grouptype: string,
+    password: string,
+    image: string,
+}
+
 const ChatUser = (props : any) => {
     
     //Fetching current user (Receiver) data each time the prop gets new value
-    const [groupRoom, setgroupRoom] = useState({});
+    const [groupRoom, setgroupRoom] = useState<grpInfoClass>({id: '', namegb: '', idsuperadmin: '', grouptype: '', image: '', password: ''});
     const [localUser, setLocalUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
 
 
@@ -34,13 +43,9 @@ const ChatUser = (props : any) => {
             .then((response) => {
                 setgroupRoom(response.data);
             })
-			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			});
+			.catch(Error)
         }
-    }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
-
-    // const [showing, setShowing] = useState(false);
+    }, [props.pcurrentUserId]);
     
     //Identifying local user
     useEffect(() => {
@@ -50,7 +55,6 @@ const ChatUser = (props : any) => {
                 setLocalUser(res.data);
             })
             .catch(Error)
-                console.log("Error happened when feching local user data");
     }, [])
 
     const [users, setUsers] = useState([]);
@@ -61,16 +65,13 @@ const ChatUser = (props : any) => {
 	})
 
     const [isCreated, setIsCreated] = useState<boolean>(false)
-    
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {
             axios.get(`http://localhost:3000/api/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
-            .then((response) => {
-                setUsers(response.data);
-            })
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                toast.error(error.response.data.message);
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
         }
     }, [props.pcurrentUserId]);
@@ -80,24 +81,19 @@ const ChatUser = (props : any) => {
         {
             axios.get(`http://localhost:3000/api/groupchat/${props.pcurrentUserId}/admins`, { withCredentials: true })
             .then((response) => {
-                console.log("Admins -> ", response.data)
                 setAdmins(response.data);
             })
-			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			});
+			.catch(Error)
         }
     }, [props.pcurrentUserId]);
 
 
     const openDialogUsers = () => {
-        console.log("Clicked On Info")
         const dialog = document.getElementById('manageGroup');
 		dialog?.showModal();
     }
 
     const manageGroup = () => {
-        console.log("Clicked On Info")
         const dialog = document.getElementById('dialogMembers');
 		dialog?.showModal();
     }
@@ -139,7 +135,7 @@ const ChatUser = (props : any) => {
                                                                     toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
                                                                 })
                                                                 .catch((error) => {
-                                                                    console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                                                                    toast.error(error.response.data.message);
                                                                 });
                                                             }
                                                             }   width={50} height={50} title='Leave Group' ></img>
@@ -156,25 +152,23 @@ const ChatUser = (props : any) => {
             <dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="manageGroup">
                 <button onClick={() => {document.getElementById('manageGroup')?.close()}} >X</button>
                 <form method="dialog">
-                <menu className="dialog-menu">
-
-                    
-                    <div>
-                        <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
-                        <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
-                        {
-                            data.label ?
-                            (
-                                data.createOrmanage ?
-                                (<ManageGroup/>)
+                    <menu className="dialog-menu">
+                        <div>
+                            <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
+                            <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
+                            {
+                                data.label ?
+                                (
+                                    data.createOrmanage ?
+                                    (<ManageGroup setIsCreated={setIsCreated}/>)
+                                        :
+                                    (<CreateGroup setIsCreated={setIsCreated} />)
+                                )
                                     :
-                                (<CreateGroup setIsCreated={setIsCreated} />)
-                            )
-                                :
-                            (<></>)
-                        }
-                    </div>
-                </menu>
+                                (<></>)
+                            }
+                        </div>
+                    </menu>
                 </form>
             </dialog>
         </section>
@@ -244,7 +238,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
             props.groupInfo.id   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dudley} width={500} height={500} alt="Group-photo" />
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="Group-photo" />
         }
     </div>
     )

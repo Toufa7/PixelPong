@@ -11,7 +11,6 @@ import Anime, { anime } from 'react-anime';
 import notification from './assets/notification.mp3';
 import medal from './assets/medaille.svg';
 import savage from './assets/savage.svg';
-import flag from './assets/endpoint.svg';
 import key from './assets/key.svg'
 import bomb from './assets/bomblogo.svg';
 import joystick from './assets/joystic.svg';
@@ -32,7 +31,8 @@ const GetUserData = () => {
                 setUserInfo(response.data)
             })
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message)
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
     }
     fetchData();
@@ -77,7 +77,6 @@ const TopContainer = () => {
 			const groups = response.data;
 			const foundGroup = groups.find(group => group.namegb === query);
 			if (foundGroup) {
-				console.log("Group Found -> ", foundGroup);
 				setPrivacy(foundGroup.grouptype)
 				setTheOne(foundGroup);
 				setFriendGroup("group");
@@ -94,7 +93,8 @@ const TopContainer = () => {
 		  }
 		}
 		catch (error) {
-		  console.log("Error searching in groups:", error);
+			toast.error("Error in group searching");
+		//   console.log("Error searching in groups:", error);
 		}
 	};
 	const searchInFriends = async (query : string) => {
@@ -103,7 +103,6 @@ const TopContainer = () => {
 			const friends = response.data;
 			const foundFriend = friends.find(friend => friend.username === query);
 			if (foundFriend) {
-				console.log("Friend Found -> ", foundFriend);
 				setTheOne(foundFriend);
 				setFriendGroup("friend");
 				setIsFound(true);
@@ -115,17 +114,16 @@ const TopContainer = () => {
 			}
 		}
 		catch (error) {
-			console.log("Error searching in friends:", error);
+			toast.error("Error in friend searching");
+			
+			// console.log("Error searching in friends:", error);
 		}
 	};
 
 	  const handleSubmit = (e) => {
 			e.preventDefault();
 			const searchQuery = firstRef.current.value;
-			console.log("Searching for --> ", searchQuery);
-			console.log("Looking in Groups");
 			searchInGroups(searchQuery);
-			console.log("Looking in Friends");
 			searchInFriends(searchQuery);
 	  };
 
@@ -144,18 +142,19 @@ const TopContainer = () => {
 				document.getElementById('joinGroup')?.close();
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message);
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}
 		else if (privacy == "private")
 		{
 			axios.post(`http://localhost:3000/api/groupchat/${theOne.id}/request`, {}, { withCredentials: true })
-			.then((res) => {
+			.then(() => {
 				toast.success("Request Sent", {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
 				document.getElementById('joinGroup')?.close();
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message)
 			});
 		}
 		else if (privacy == "protected") {
@@ -171,7 +170,8 @@ const TopContainer = () => {
 				}
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message)
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}
 		
@@ -267,11 +267,9 @@ const TopContainer = () => {
                     }} >X</button>
 						<h1>Pixel Pong</h1>
 						<div style = {{backgroundColor : "#e0a43d"}} class="nes-container is-dark with-title">
-						Pixel Pong was originally founded in September 2023, it was the idea of Omar Toufah and was encouraged later by other members of our team who were Ayoub Bensguia, Mohamed Amellal,
-						Ibrahim Nada, and Mohamed Khalil Naqqad.
-						Our design was heavily inspired by Pixel art which is a form of digital art, our website is structured on the idea of foolishness that paid tribute to this
-						kind of art as it is based on pixels and playing with colors to create a childish yet very artsy design,
-						everything in this web site that you will experience and hope you'll enjoy was made from scratch using frameworks that facilitates the use of pixel art style in CSS and Html.
+						Pixel Pong was originally founded on September 2023, it is a very enthusiastic idea that made it to life by our team were Ayoub Bensguia, Mohamed Amella, Ibrahim Nada, Mohamed Khalil Naqqad, and Omar Toufah.
+						Our design was heavily by Pixel art which is a form of digital art, our website is structured on the idea of foolishness that paid tribute the this kind of art as it is based on pixels and playing with colors to
+						create a childish yet very artsy design, everything in this web site that you will experience and hope you'll enjoy was made from scratch using frameworks that facilitates the use of pixel art style in CSS and Html.
 						Hadouken!!!
 						</div>
 						<h2 style={{marginTop : '50px'}}>How To Play</h2>
@@ -323,11 +321,13 @@ const TopLeft = () => {
 				setLeaderboards(new Map(sortedEntries));
 			})
 			.catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				toast.error(error.response.data.message)
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		})
 		.catch((error) => {
-			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			toast.error(error.response.data.message)
+			// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 		});
 	}, []);
 
@@ -446,7 +446,8 @@ const BottomLeft = () => {
 			setAchivements(response.data.achievementType);
 		})
 		.catch((error) => {
-			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			toast.error(error.response.data.message)
+			// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 		});
     },[])
 

@@ -1,7 +1,7 @@
 import '../chatPage.scss'
 import { useRef, useEffect, useContext, useState } from 'react'
 import { chatSocketContext } from './socketContext'
-import { useMap, useScript } from "@uidotdev/usehooks";
+import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg'
 import axios from 'axios';
 import MessageComponent from './messageComponenet'
@@ -86,7 +86,6 @@ const messageInput = (props: any) => {
                 setIsBlocked(res.data);
             })
             .catch(Error)
-                console.log('Error happened when checking for the error');
     },[props.Receiver]);
 
     //Check if local user blocked me
@@ -97,7 +96,6 @@ const messageInput = (props: any) => {
                 setLocalUserBlocksRemote(res.data);
             })
             .catch(Error)
-                console.log('Error happened when checking for the error');
     },[props.Receiver]);
 
     //Our chat socket
@@ -116,7 +114,6 @@ const messageInput = (props: any) => {
                     fillMap(res.data);
                 })
                 .catch(Error)
-                    console.log('%cAn error happened in : Conversation: messageInput(): 72', 'color: red')
         }
     }, [props.Receiver.id])
     

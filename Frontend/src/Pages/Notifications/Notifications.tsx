@@ -4,12 +4,14 @@ import axios from "axios";
 import {socket, socketgp} from '../../Pages/socket-client'
 import toast, { Toaster } from "react-hot-toast";
 
-const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
+const GroupRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating: React.Dispatch<React.SetStateAction<boolean>> }) => {
+	
+	console.log("myData -> ",myData);
 	const acceptFriend = async () => {
 		try {
 			await axios.patch(`http://localhost:3000/api/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
-			.then((rese) => {
-				console.log("Notification Acceptted ", rese);
+			.then(() => {
+				setUpdating(prev => !prev)
 			});
 	  		} 
 			catch (error) {
@@ -21,8 +23,8 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	const refuseFriend = async () => {
 		try {
 			await axios.patch(`http://localhost:3000/api/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
-			.then((rese) => {
-				console.log("Notification Refuse ", rese);
+			.then(() => {
+				setUpdating(prev => !prev)
 			})
 			.catch((error) => {
 				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
@@ -38,11 +40,11 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	return (
 		<div style={{ padding: '5px' }}>
 			<div className="nes-container with-title">
-				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to 	</p>
+				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to {myData.namegp}</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 					<div>
 						<img src={`http://localhost:3000/api/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-						{/* <img src={`http://localhost:3000/api/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px', position: "absolute", left: '85px', bottom: '25px'}} alt="avatar" /> */}
+						<img src={`http://localhost:3000/api/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px', position: "absolute", left: '85px', bottom: '25px'}} alt="avatar" />
 						<span style={{ marginLeft: '20px' }}>{myData.from}</span>
 					</div>
 				<div>
@@ -57,10 +59,7 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 
 
 
-const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
-	const [friendStatus, setFriendStatus] = useState(false);
-	
-	console.log("FriendRequest Data ", myData);
+const FriendRequest = ({ myData, setUpdating }: {myData: myDataTypes, setUpdating: React.Dispatch<React.SetStateAction<boolean>> }) => {
 	let object = {};
 	if (myData) {
 		object = {
@@ -68,51 +67,42 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 			to: myData.to,
 		}
 	}
-	
-	console.log("Object Sent -> ", object);
 	const acceptFriend = async () => {
-		console.log("Accepted Sent Object -> ", object);
 		try {
 			await axios.patch("http://localhost:3000/api/users/acceptFriendRequest", object, { withCredentials: true })
-			.then((rese) => {
-				console.log("Notification Acceptted ", rese);
-				setFriendStatus(friendStatus);
+			.then(() => {
+				setUpdating(prev => !prev)
 			})
 			.catch((error) => {
 				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
-	  	} 
+	  	}
 		catch (error) {
 			console.log("Error Caught ", error);
 	  	}
-		toast.remove();
 	};
   
 	const refuseFriend = async () => {
-	console.log("Object o Sent -> ", object);
-
-
+		console.log("first")
 		try {
-			await axios.patch("http://localhost:3000/api/users/refuseFriendRequest", object, { withCredentials: true })
-			.then((rese) => {
-				console.log("Accepted Sent Object -> ", object);
-				console.log("Notification Refuse ", rese);
-				setFriendStatus(friendStatus);
+		console.log("2first")
+			console.log("object -> ", object);
+			await axios.patch("http://localhost:3000/users/api/refuseFriendRequest", object, { withCredentials: true })
+			.then(() => {
+				console.log("Siccess")
+				setUpdating(prev => !prev)
 			})
 			.catch((error) => {
 				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
-			toast.dismiss();toast.remove()
 		}
 		catch (error) {
 			console.log("Error Caught ", error);
 		}
-		toast.remove();
 	};
   
 	return (
 		<div style={{ padding: '5px' }}>
-			<Toaster/>
 			<div className="nes-container with-title">
 				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Invitation Request</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -122,7 +112,7 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 				</div>
 				<div>
 					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={acceptFriend}>Accept</button>
-					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={() => {refuseFriend; toast.dismiss();toast.remove(); console.log("I Clicked On Refuse")}}>Deny</button>
+					<button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error" onClick={refuseFriend}>Deny</button>
 				</div>
 			  	</div>
 			</div>
@@ -134,6 +124,7 @@ function Notifications() {
 	const [flag, setFlag] = useState<string>("");
 	const [friendRequests, setFriendRequests] = useState([]);
 	const [groupRequests, setGroupRequests] = useState([]);
+	const [updating, setUpdating] = useState<boolean>(false);
   
 	useEffect(() => {
 	  const fetchFriendRequests = () => {
@@ -160,7 +151,7 @@ function Notifications() {
   
 	  fetchFriendRequests();
 	  fetchGroupRequests();
-	}, []);
+	}, [updating]);
   
 
 
@@ -196,21 +187,21 @@ function Notifications() {
 				<>
 				{
 					flag == "group" ?
-						(<GroupRequest myData={groupRequests}/>)
+						(<GroupRequest myData={groupRequests} setUpdating={setUpdating}/>)
 					:
 					flag == "friend"?
- 						(<FriendRequest myData={friendRequests} />)
+ 						(<FriendRequest myData={friendRequests} setUpdating={setUpdating} />)
 					:
 					(
 						<>
 							{
 								Object.keys(friendRequests).map((idx : any) => (
-									<FriendRequest key={idx} myData={friendRequests[idx]}/>
+									<FriendRequest key={idx} myData={friendRequests[idx]} setUpdating={setUpdating}/>
 								))
 							}
 							{
 								Object.keys(groupRequests).map((idx : any) => (
-									<GroupRequest key={idx} myData={groupRequests[idx]}/>
+									<GroupRequest key={idx} myData={groupRequests[idx]} setUpdating={setUpdating}/>
 								))
 							}
 						</>

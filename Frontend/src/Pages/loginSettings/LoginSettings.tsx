@@ -9,9 +9,22 @@ import { Link } from "react-router-dom";
 
 /******************* Includes  *******************/
 
+
+const Toasts = () => {
+    return (
+        <Toaster
+            reverseOrder={false}
+            position='top-right'
+            toastOptions={{style: {borderRadius: '8px',background: '#FFF',color: '#000'},
+            duration: 2000,
+        }}/>
+    );
+}
+
+
 const RetrieveCheckSendData =  () => {
-    const avatar        = document.querySelector('[name="avatarUpload"]')?.files[0];
-    const nicknameInput = document.querySelector('[name="nickname"]')?.value;
+    const avatar        = document.querySelector('[name="avatarUpload"]')?.files[0] as HTMLElement;
+    const nicknameInput = document.querySelector('[name="nickname"]')?.value as HTMLElement;
     const usernameCheck = /^[A-Za-z0-9_]{5,15}$/;
     if (avatar) {
         const data = new FormData();
@@ -29,19 +42,15 @@ const RetrieveCheckSendData =  () => {
         ,{ duration: 5000, position: 'top-right' });           
     }
     if (usernameCheck.test(nicknameInput)) {
-        toast.promise(
-            axios.post('http://localhost:3000/api/auth/updateprofil', { username: nicknameInput }, { withCredentials: true })
+            axios.post('http://localhost:3000/auth/api/updateprofil', { username: nicknameInput }, { withCredentials: true })
             .then(() => {
+                toast.success("Updated :)");
+
             })
             .catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
-			}),
-            {
-                loading: "Sending data...",
-                success: "Username Changed!",
-                error: "An error occurred",
-            }
-            ,{ duration: 5000, position: 'top-right' });           
+                toast.error(error.response.data.message);
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			})      
     }
     else if (!nicknameInput){
         toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
@@ -97,8 +106,7 @@ export default function LoginSettings() {
 
     return (
         <div style={{height: '100vh'}}>
-            
-            <Toaster/>
+        <Toasts/>
           <div className="container">
             <div className="settingsBox">
                 <div className="header">Settings</div>

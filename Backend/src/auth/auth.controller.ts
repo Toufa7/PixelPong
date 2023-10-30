@@ -61,13 +61,11 @@ export class AuthController {
       else{
         if(user.twofa)
         {
-          console.log("im here");
           return res.redirect(`${process.env.FRONT_URL}/two-factor-authentication`);
         }
         return res.redirect(`${process.env.FRONT_URL}/home`);
       }
     } catch (err) {    
-      console.log(err);
       res.status(HttpStatus.BAD_REQUEST).json({ error: 'Something went wrong' });
     }
   }
@@ -173,7 +171,6 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
     const user = await this.usersService.findOne(req.user.id);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
-      console.log("isValid",body.otp);
       await this.usersService.isauthenticated(req.user.id, true);
       return res
         .status(200)
@@ -192,7 +189,6 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
       const user = await this.usersService.findOne(id);
       //console.log("id",id);
       const path = join('./uploads/', user.profileImage);
-      console.log("path"+path);
       await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
       const extension = user.profileImage.split('.')[1];
@@ -225,7 +221,6 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
   @UseGuards(JwtGuard)
   async logout(@Req() req, @Res() res) {
     const status = UserStatus.OFFLINE;
-    console.log("stattttttuuuus : ",status)
     await this.usersService.updatestatus(req.user, status);
     res.clearCookie('jwt');
     return res.status(200).json({ message: 'User logged out' });

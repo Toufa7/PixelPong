@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate, useLocation} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, useLocation, Router} from "react-router-dom";
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import axios from 'axios';
@@ -26,16 +26,13 @@ import handshake from '../src/Pages/HomePage/assets/handshake.png';
 import toast from 'react-hot-toast';
 
 const BackgroudGame = () => {
-	const animationStyle = `
-		@keyframes rotate {
-			50% { transform: rotate(360deg); }
-		}`;
+
   return (
-    <div style={{height: '100vh', background: '#333C54',display: 'flex', justifyContent: 'flex-start',alignItems: 'flex-start'}}>
-      	<a href="/home" title="Home">
+    <div>
+      	{/* <a href="/home" title="Home">
   		<style>{animationStyle}</style>
         	<img src={randomLogo} title={"Back To Home"} style={{ margin: '20px',width: '50px',height: '50px',animation: 'rotate 10s infinite'}}/>
-      	</a>
+      	</a> */}
 		{/* <a style={{width:'fitContent', marginTop: '30px'}} className="nes-btn" onClick={() => {document.getElementById('howtoplay').showModal();}} >How To Play</a>
 		<section>
 			<dialog className = 'example' style={{height: '700px', width: '700px', background: 'white' , borderRadius:"20px"}} id="howtoplay">
@@ -172,14 +169,18 @@ const Routing = () => {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch((error) => {
-				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+            .catch(() => {
+				// console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				setUnlogged(true);
         	})
-    	}
+    	} 
 		fetchData();
 	}, [])
 
+	const logged = userData != undefined && !userData?.twofa;
+	const logged2fa = userData != undefined && userData?.twofa && userData?.authenticated;
+	// console.log("logged -> ", logged)
+	// console.log("logged2fa -> ", logged2fa)
 	return (
 		<BrowserRouter>
 		<Suspense fallback={
@@ -189,17 +190,17 @@ const Routing = () => {
 				</div>
 			</>
 		}>
-		<Routes>
+			<Routes> 
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
-			{userData != undefined && !userData.twofa && (
+			{logged && (
 				<>
 					<Route path="/" 				element={<HomeComponents/>}/>
-					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 			element={<HomeComponents/>}/>
+					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
 					<Route path="/profil/:userId"	element={<OtherUser/>}/>
 					{!userData.ingame ?
 						(<Route path="/game" 		element={<GameComponents/>}/>)
-							:
+						:
 						(<Route path="/*" 			element={<AlreadyInGame/>}/>)}
 					<Route path="/chat" 			element={<ChatPage/>}/>
 					<Route path="/notifications" 	element={<NotificationComponents/>}/>
@@ -208,17 +209,16 @@ const Routing = () => {
 					<Route path="/error" 			element={<ErrorPageConfig/>}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
-					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
 					<Route path="*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
-					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}
 			{userData != undefined && userData.twofa && (
 				<>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
-					<Route path="/*" 				element={<Navigate to="/two-factor-authentication" replace/>}/>
+					<Route path="/*" 							element={<Navigate to="/two-factor-authentication" replace/>}/>
 				</>
+				
 			)}
 			{/* User is not logged in */}
 			{unlogged == true && (

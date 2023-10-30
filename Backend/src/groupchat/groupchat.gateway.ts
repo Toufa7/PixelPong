@@ -40,7 +40,9 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
       if (user)
         mapclient.delete(user.id);
     }
-    catch (err) { }
+    catch (err) {
+      return ;
+     }
   }
 
   ////////////////////////////////// -----connected-- ////////////////////////////////
@@ -56,6 +58,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
       }
     }
     catch (err) {
+      return ;
     }
   }
 
@@ -100,6 +103,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
       }
     }
     catch (err) {
+      return ;
     }
   }
 
@@ -197,7 +201,9 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
       }
     }
-    catch (err) { }
+    catch (err) { 
+      return; 
+    }
   }
 
   ////////////////////////////////// -----leave room-- ////////////////////////////////
@@ -218,6 +224,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
       }
     }
     catch (err) {
+      return ;
     }
   }
 
@@ -225,7 +232,6 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
   ////////////////////////////////// -----request to join groupchat-- ////////////////////////////////
   async sendrequest(id: string, idsender: string) {
     try {
-      console.log("map  :: ", mapclient);
       //check if user in groupchat
       const inroom = await this.prisma.groupchat.findMany({
         where: {
@@ -236,7 +242,6 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
         },
       });
       if (inroom.length != 0) {
-        console.log("user in groupchat");
         return;
       }
       //get userban of a groupchat
@@ -249,8 +254,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
       //check if user is ban
       if (userban.usersblock.some((user) => user.id == idsender)) {
-        console.log("user is ban");
-        return ("user is ban");
+        throw new HttpException('user is ban', HttpStatus.OK);
       }
       const datagp = await this.prisma.groupchat.findUnique({
         where: { id: id },
@@ -273,8 +277,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
         },
       });
       if (notification.length != 0) {
-        console.log("notification already exist");
-        return ("notification already exist");
+        throw new HttpException('notification already exist', HttpStatus.OK);
       }
       //get user 
       const user = await this.prisma.user.findUnique({
@@ -302,7 +305,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
         createdAt: new Date(),
       });
     } catch (err) {
-      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+      throw new HttpException(err.message, err.status);
     }
   }
 }

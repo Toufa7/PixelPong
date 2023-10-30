@@ -79,7 +79,6 @@ export class UsersService {
     }
   }
   async blockfriend(userId: string, blockedId: string): Promise<void> {
-    console.log("blockfriend", blockedId, "  ", userId);
     try {
       await this.prisma.$transaction([
         this.prisma.user.update({
@@ -265,8 +264,6 @@ export class UsersService {
     }
   }
   async sendFriendRequest(senderId: string, data: any) {
-    console.log(senderId  +"  ...    "+ data)
-    console.log(data);
     try{
 
       return await this.prisma.notification.create({
@@ -287,8 +284,6 @@ export class UsersService {
   
   async acceptFriendRequest(id: number, senderId: string, recieverId: string) {
     try{
-
-      console.log(id +" "+ senderId+" "+ recieverId)
       await this.prisma.$transaction([
         this.prisma.notification.updateMany({
           where: { id: id },
@@ -324,7 +319,6 @@ export class UsersService {
           },
         })
       ]);
-      console.log("its delete : : : : :: : : : : : ",id);
     }
     catch(error){
       throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
