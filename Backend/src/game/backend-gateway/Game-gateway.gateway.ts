@@ -97,7 +97,7 @@ handleConnection(Player: Socket) {
       console.log("************",t?.['id'],"************"); 
       if (session && jwt) {
         try{
-          const user = await this.jwt.verifyAsync(jwt,{secret:'THISISMYJWTSECRET'});
+          const user = await this.jwt.verifyAsync(jwt,{secret:`${process.env.JWT_SECRET}`});
           // console.log('=================================> ',user);
           return user;
         }catch(err){

@@ -30,7 +30,7 @@ const ChatUser = (props : any) => {
     useEffect(() => {
         if (props.pcurrentUserId != '')
         {
-            axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
+            axios.get(`http://localhost:3000/api/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
             .then((response) => {
                 setgroupRoom(response.data);
                 console.log("rese -> ", response.data);
@@ -46,7 +46,7 @@ const ChatUser = (props : any) => {
     //Identifying local user
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/users/profil`, { withCredentials: true })
+            .get(`http://localhost:3000/api/users/profil`, { withCredentials: true })
             .then((res:any) =>  {
                 setLocalUser(res.data);
             })
@@ -66,7 +66,7 @@ const ChatUser = (props : any) => {
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {
-            axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
+            axios.get(`http://localhost:3000/api/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
             .then((response) => {
                 console.log("Admins -> ", response.data)
 
@@ -81,7 +81,7 @@ const ChatUser = (props : any) => {
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {
-            axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/admins`, { withCredentials: true })
+            axios.get(`http://localhost:3000/api/groupchat/${props.pcurrentUserId}/admins`, { withCredentials: true })
             .then((response) => {
                 console.log("Admins -> ", response.data)
                 setAdmins(response.data);
@@ -114,7 +114,7 @@ const ChatUser = (props : any) => {
                         <div className="GrpchatUser">
                             {
                                 //Conditional rendring to display the profile image or not based on the presence of groupRoom.profileImage
-                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="Group-photo"/>
+                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/api/groupchat/getimage/${groupRoom.id}`} alt="Group-photo"/>
                                                         :   <img src={info} alt="Group-photo" />
                             }
                             <div className="GrpchatUserName">
@@ -139,7 +139,7 @@ const ChatUser = (props : any) => {
                                                         </button> 
                                                         <button className='GrpuserControlButtons'>
                                                             <img src={exit} onClick={() => {
-                                                                axios.delete(`http://localhost:3000/groupchat/${props.pcurrentUserId}/exit`, { withCredentials: true })
+                                                                axios.delete(`http://localhost:3000/api/groupchat/${props.pcurrentUserId}/exit`, { withCredentials: true })
                                                                 .then((reseponse) => {
                                                                     console.log("Response Exiting Group -> ", reseponse);
                                                                     toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
@@ -205,7 +205,7 @@ const ChatUser = (props : any) => {
                             return (
                                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} key={idx}>
                                 <div>
-                                    <img src={`http://localhost:3000/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
+                                    <img src={`http://localhost:3000/api/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
                                 </div>
                                 <span style={{ marginLeft: '10px', marginRight: 'auto' }}>{admins[idx].username}</span>
 
@@ -225,7 +225,7 @@ const ChatUser = (props : any) => {
                             Object.keys(users).map((idx) => {
                                 return (
                                     <div style={{ display: 'flex', alignItems: 'center' ,overflow: "auto" }} key={idx}>
-                                        <img src={`http://localhost:3000/auth/avatar/${users[idx].id}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
+                                        <img src={`http://localhost:3000/api/auth/avatar/${users[idx].id}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
                                         <span style={{ marginLeft: '10px', marginRight: 'auto' }}>{users[idx].username}</span>
                                     </div>
                                 )

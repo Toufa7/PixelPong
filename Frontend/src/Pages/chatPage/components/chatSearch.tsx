@@ -25,7 +25,7 @@ const chatSearch = (props: any) => {
     
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/users/Friends/`, { withCredentials: true })
+            .get(`http://localhost:3000/api/users/Friends/`, { withCredentials: true })
             .then((res:any) =>  {
                 setFriendsIds(res.data)
             })
@@ -81,7 +81,7 @@ const chatSearch = (props: any) => {
                     </div>
                     <div className="SearchUserChat">
                         {Found && <div onClick={removeElement}>
-                            <DmChatUser userName={friendFound.username} pic={`http://localhost:3000/auth/avatar/${friendFound.id}`} id={friendFound.id} userId={updateSharedString} />
+                            <DmChatUser userName={friendFound.username} pic={`http://localhost:3000/api/auth/avatar/${friendFound.id}`} id={friendFound.id} userId={updateSharedString} />
                             </div>}
                         {notFound && <div onClick={removeElement}>
                             <DmChatUser userName={"Not Found"} pic={search} id='' userId={updateSharedString}/>

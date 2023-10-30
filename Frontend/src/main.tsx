@@ -168,7 +168,7 @@ const Routing = () => {
 	const [unlogged, setUnlogged] = useState(false);
     useEffect(() => {
         const fetchData = () => {
-            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+            axios.get("http://localhost:3000/api/users/profil", { withCredentials: true })
             .then((response) => {
                 setUserInfo(response.data)
             })

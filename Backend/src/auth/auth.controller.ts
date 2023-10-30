@@ -99,21 +99,30 @@ export class AuthController {
   @Get('2fa/set2fa')
   @UseGuards(JwtGuard)
   async setTwoFA(@Req() req) : Promise<string> {
-    const secret = authenticator.generateSecret();
-    const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
-    const qr = await qrcode.toDataURL(otpauth);
-    await this.authService.set2Fasecret(req.user.id, secret, otpauth);
-    await this.usersService.isauthenticated(req.user.id, false);
-    return qr;
+    try{
+      const secret = authenticator.generateSecret();
+      const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
+      const qr = await qrcode.toDataURL(otpauth);
+      await this.authService.set2Fasecret(req.user.id, secret, otpauth);
+      await this.usersService.isauthenticated(req.user.id, false);
+      return qr;
+    }
+    catch{
+      throw new HttpException('2FA Problem', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Get('2fa/get2FAstatus')
   @UseGuards(JwtGuard)
   async gettwofastatus(@Req() req: any): Promise<boolean>{ 
+    try{
       const user = await this.usersService.findOne(req.user.id);
       if(!user)
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        throw new HttpException('2FA Problem', HttpStatus.NOT_FOUND);
       return user?.twofa;
+    }catch{
+      throw new HttpException('2FA Problem', HttpStatus.NOT_FOUND);
+    }
 
   }
   @Put('2fa/enable')
@@ -123,7 +132,7 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
     await this.authService.change2FAStatus(req.user.id);
     return { status: true };
   } catch (error) {
-    console.error(error);
+    throw new HttpException('2FA Problem', HttpStatus.NOT_FOUND);
   }
 }
   @Put('2fa/disable')
@@ -189,7 +198,7 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
       res.setHeader('Content-Type', 'image/' + extension);
       return file.pipe(res);
     } catch (err) {
-      const path = '../Frontend/public/profile-default.png'
+      const path = './uploads/profile-default.png'
       await fsPromises.access(path, fsPromises.constants.F_OK);
       const file = createReadStream(path);
       const extension = 'png';

@@ -67,7 +67,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
       const t = decode(jwt);
       if (session && jwt) {
         try {
-          const user = await this.Jwt.verifyAsync(jwt, { secret: 'THISISMYJWTSECRET' });
+          const user = await this.Jwt.verifyAsync(jwt, { secret: `${process.env.JWT_SECRET}` });
           return user;
         } catch (err) {
           return null;

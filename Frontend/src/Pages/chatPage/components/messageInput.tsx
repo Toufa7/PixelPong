@@ -81,7 +81,7 @@ const messageInput = (props: any) => {
     //Check if remote user blocked me
     useEffect(() => {
         axios
-            .post(`http://localhost:3000/users/checkblockme`, { to: props.Receiver.id } , { withCredentials: true })
+            .post(`http://localhost:3000/api/users/checkblockme`, { to: props.Receiver.id } , { withCredentials: true })
             .then((res:any) => {
                 setIsBlocked(res.data);
             })
@@ -92,7 +92,7 @@ const messageInput = (props: any) => {
     //Check if local user blocked me
     useEffect(() => {
         axios
-            .post(`http://localhost:3000/users/checkblock`, { to: props.Receiver.id } , { withCredentials: true })
+            .post(`http://localhost:3000/api/users/checkblock`, { to: props.Receiver.id } , { withCredentials: true })
             .then((res:any) => {
                 setLocalUserBlocksRemote(res.data);
             })
@@ -111,7 +111,7 @@ const messageInput = (props: any) => {
         if (props.Receiver.id != undefined)
         {
             axios
-                .get(`http://localhost:3000/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
+                .get(`http://localhost:3000/api/chat/getOldMessages/${props.Receiver.id}`, { withCredentials: true })
                 .then((res) => {
                     fillMap(res.data);
                 })
@@ -138,14 +138,14 @@ const messageInput = (props: any) => {
             {
                 molLmessageId = axiosResponse[i].senderId;
                 molLmessage = props.Sender.username;
-                molMsgPic = `http://localhost:3000/auth/avatar/${props.Sender.id}`;
+                molMsgPic = `http://localhost:3000/api/auth/avatar/${props.Sender.id}`;
                 molMsgSide = 0;
             }
             else
             {
                 molLmessageId = axiosResponse[i].receiverId;
                 molLmessage = props.Receiver.username;
-                molMsgPic = `http://localhost:3000/auth/avatar/${props.Receiver.id}`;
+                molMsgPic = `http://localhost:3000/api/auth/avatar/${props.Receiver.id}`;
                 molMsgSide = 1;
             }
 
@@ -173,20 +173,20 @@ const messageInput = (props: any) => {
                 <div className="nes-container with-title">
                     <p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Game Request</p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <img src={`http://localhost:3000/auth/avatar/${payload.idsender}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+                    <img src={`http://localhost:3000/api/auth/avatar/${payload.idsender}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
                     <span style={{ marginLeft: '10px', marginRight: 'auto' }}>{payload.from}</span>	
                         <div>
                             <Link to={'/game'}>
                                 <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-success" onClick={() => {
                                     axios
-                                        .patch(`http://localhost:3000/chat/${payload.idsender}/acceptrequestjoingame`, {token: payload.token}, { withCredentials: true });
+                                        .patch(`http://localhost:3000/api/chat/${payload.idsender}/acceptrequestjoingame`, {token: payload.token}, { withCredentials: true });
                                     toast.remove();
                                 }}>Accept</button>
                             </Link>
                             <button style={{ marginLeft: '20px', height: '40px', width: '100px', fontSize: 'small' }} className="nes-btn is-error"
                             onClick={() => {
                                 axios
-                                    .patch(`http://localhost:3000/chat/${payload.idsender}/refuserequestjoingame`, {}, { withCredentials: true });
+                                    .patch(`http://localhost:3000/api/chat/${payload.idsender}/refuserequestjoingame`, {}, { withCredentials: true });
                                 toast.remove();
                             }}>Deny</button>
                         </div>
@@ -237,7 +237,7 @@ const messageInput = (props: any) => {
             id: newMessage.id,
             senderid: newMessage.idsender,
             username: newMessage.username,
-            pic: `http://localhost:3000/auth/avatar/${newMessage.idsender}`,
+            pic: `http://localhost:3000/api/auth/avatar/${newMessage.idsender}`,
             side: 1,
             message: newMessage.message,
             timestamp: `${currentTime.getHours()}:${currentTime.format("mm")}`,
@@ -275,7 +275,7 @@ const messageInput = (props: any) => {
                 id: props.Receiver.id,
                 senderid: props.Sender.id,
                 username: props.Sender.username,
-                pic: `http://localhost:3000/auth/avatar/${props.Sender.id}`,
+                pic: `http://localhost:3000/api/auth/avatar/${props.Sender.id}`,
                 side: 0,
                 message: inputMessage,
                 timestamp: `${currentTime.getHours()}:${currentTime.format("mm")}`,

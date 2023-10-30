@@ -36,9 +36,9 @@ const CreatingGroup = (setIsCreated) => {
 		};
 		console.log(" --== Create =====--> ", groupData);
 		toast.promise(
-			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
+			axios.post("http://localhost:3000/api/groupchat", groupData, { withCredentials: true })
 			.then((response) => {
-				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
+				axios.post(`http://localhost:3000/api/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
 				.then((response) => {
 					setIsCreated(prev => !prev);
 					console.log("Creating Group Response -> ", response);

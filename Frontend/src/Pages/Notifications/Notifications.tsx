@@ -7,7 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	const acceptFriend = async () => {
 		try {
-			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
+			await axios.patch(`http://localhost:3000/api/groupchat/${myData.groupchatId}/${myData.senderId}/accept`, {}, { withCredentials: true })
 			.then((rese) => {
 				console.log("Notification Acceptted ", rese);
 			});
@@ -20,7 +20,7 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
   
 	const refuseFriend = async () => {
 		try {
-			await axios.patch(`http://localhost:3000/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
+			await axios.patch(`http://localhost:3000/api/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
 			.then((rese) => {
 				console.log("Notification Refuse ", rese);
 			});
@@ -30,7 +30,7 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 			}
 			toast.remove();
 		};
-	// <img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px'}} alt="avatar" />
+	// <img src={`http://localhost:3000/api/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px'}} alt="avatar" />
 
 	return (
 		<div style={{ padding: '5px' }}>
@@ -38,8 +38,8 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to {myData.namegp}</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 					<div>
-						<img src={`http://localhost:3000/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
-						{/* <img src={`http://localhost:3000/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px', position: "absolute", left: '85px', bottom: '25px'}} alt="avatar" /> */}
+						<img src={`http://localhost:3000/api/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+						{/* <img src={`http://localhost:3000/api/groupchat/getimage/${myData.groupchatId}`} style={{ borderRadius: '50%', width: '40px', height: '40px', position: "absolute", left: '85px', bottom: '25px'}} alt="avatar" /> */}
 						<span style={{ marginLeft: '20px' }}>{myData.from}</span>
 					</div>
 				<div>
@@ -69,7 +69,7 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 	const acceptFriend = async () => {
 		console.log("Accepted Sent Object -> ", object);
 		try {
-		await axios.patch("http://localhost:3000/users/acceptFriendRequest", object, { withCredentials: true })
+		await axios.patch("http://localhost:3000/api/users/acceptFriendRequest", object, { withCredentials: true })
 		.then((rese) => {
 			console.log("Notification Acceptted ", rese);
 			setFriendStatus(friendStatus);
@@ -83,7 +83,7 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
   
 	const refuseFriend = async () => {
 		try {
-			await axios.patch("http://localhost:3000/users/refuseFriendRequest", object, { withCredentials: true })
+			await axios.patch("http://localhost:3000/api/users/refuseFriendRequest", object, { withCredentials: true })
 			.then((rese) => {
 				console.log("Accepted Sent Object -> ", object);
 				console.log("Notification Refuse ", rese);
@@ -104,7 +104,7 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Invitation Request</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 				<div>
-					<img src={`http://localhost:3000/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+					<img src={`http://localhost:3000/api/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
 					<span style={{ marginLeft: '20px' }}>{myData.from}</span>
 				</div>
 				<div>
@@ -125,7 +125,7 @@ function Notifications() {
 	useEffect(() => {
 	  const fetchFriendRequests = () => {
 		axios
-		  .get('http://localhost:3000/users/notifications', { withCredentials: true })
+		  .get('http://localhost:3000/api/users/notifications', { withCredentials: true })
 		  .then((response) => {
 			setFriendRequests(response.data);
 		  })
@@ -136,7 +136,7 @@ function Notifications() {
   
 	  const fetchGroupRequests = () => {
 		axios
-		  .get('http://localhost:3000/groupchat/requestjoingroup', { withCredentials: true })
+		  .get('http://localhost:3000/api/groupchat/requestjoingroup', { withCredentials: true })
 		  .then((response) => {
 			setGroupRequests(response.data);
 		  })

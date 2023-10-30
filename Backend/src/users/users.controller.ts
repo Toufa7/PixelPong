@@ -74,7 +74,7 @@ console.log("boooodyyyyy : ", body);
   try {
 	await this.usersService.removefriend(req.user.id, body.to);
   } catch (error) {
-	console.error(error.message); // Log the error for debuggingƒ
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -86,7 +86,7 @@ async deleteOne(@Req() req: any): Promise<void> {
 	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 	}
   } catch (error) {
-	console.error(error.message);
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -96,7 +96,7 @@ async updateOne(@Req() req, @Body() body: UserDto): Promise<User | null> {
 	const { username } = body;
 	return await this.usersService.UpdateforOne(req.user.id, username);
   } catch (error) {
-	console.error(error.messagƒe); // Log the error for debugging
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -109,7 +109,7 @@ async blockFriend(
 	console.log("body", body);
 	await this.usersService.blockfriend(req.user.id, body.to);
   } catch (error) {
-	console.error(error.message); // Log the error for debuggin
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -117,7 +117,6 @@ async blockFriend(
 @Get('profil/:username')
 async findOneByUsername(@Param('username') username: string, @Req() req){
   try {
-	//console.log("i am here ? !")
 	const user = await this.usersService.findByName(username);
 	if (!user) {
 	  throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -126,7 +125,7 @@ async findOneByUsername(@Param('username') username: string, @Req() req){
 
 	return user;
   } catch (error) {
-	console.error(error.message); // Log the error for debugging
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -141,8 +140,7 @@ async findOneByid(@Param('id') id: string){
 	}
 	return user;
   } catch (error) {
-	console.error(error.message); // Log the error for debugging
-	// throw new HttpException('Failed to fetch user', HttpStatus.INTERNAL_SERVER_ERROR);
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -154,7 +152,7 @@ async unblockFriend(
   try {
 	await this.usersService.unblockfriend(req.user.id, body.to);
   } catch (error) {
-	console.error(error); // Log the error for debugging
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -163,7 +161,7 @@ async getFriends(@Req() req) {
   try {
 	return await this.usersService.getFriends(req.user.id);
   } catch (error) {
-	console.error(error); // Log the error for debugging
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -172,7 +170,7 @@ async getFriendsOfOther(@Param('id') id: string) {
   try {
 	return await this.usersService.getFriends(id);
   } catch (error) {
-	console.error(error); // Log the error for debugging
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -180,10 +178,9 @@ async getFriendsOfOther(@Param('id') id: string) {
 async getallNotifications(@Req() req: any){
   try {
 	const not = await this.usersService.getallNotifications(req.user.id);
-	console.log("not i s : ",not);
 	return not;	
   } catch (error) {
-	console.error(error); // Log the error for debugging
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -217,7 +214,7 @@ async acceptFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
 	const find = await this.usersService.acceptFriendRequest(friendrequest.id, body.userId, body.to);
 	return find;
   } catch (error) {
-	console.error(error); // Log the error for debugging
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -227,84 +224,153 @@ async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
 	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
 	return await this.usersService.refuseFriendRequest(friendrequest);
   } catch (error) {
-	console.error(error); // Log the error for debugging
+	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
 
 @Get('blocklist')
 async getBlocklist(@Req() req)
 {
-	return await this.usersService.getBlocklist(req.user.id);
+	try{
+		return await this.usersService.getBlocklist(req.user.id);
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	}
 }
 @Get('blockme')
 async getwhoBlockme(@Req() req)
 {
+	try{
 	return await this.usersService.getwhoBlockme(req.user.id);
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 
 @Get('history')
 async getHistory(@Req() req)
 {
-	return await this.history.getMatchHistory(req.user?.id);
+	try{
+
+		return await this.history.getMatchHistory(req.user?.id);
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 
 @Get('achievements')
 async getAchievement(@Req() req)
 {
-	return await this.achievement.getAchievement(req.user?.id)
+	try{
+		return await this.achievement.getAchievement(req.user?.id)
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 @Get('stats')
 async getStats(@Req() req)
 {
-	return await this.history.getStats(req.user?.id);
+	try
+	{
+		return await this.history.getStats(req.user?.id);
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 
 @Get('history/:id')
 async getotherHistory(@Req() req,@Param() id: string)
 {
-	return await this.history.getMatchHistory(id);
+	try{
+
+		return await this.history.getMatchHistory(id);
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 
 @Get('achievements/:id')
 async getotherAchievement(@Req() req,@Param() id: any)
 {
-	return await this.achievement.getAchievement(id.id)
+	try{
+
+		return await this.achievement.getAchievement(id.id)
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 @Get('stats/:id')
 async getotherStats(@Req() req,@Param() param: any)
 {
-	console.log("param", param)
-	return await this.history.getStats(param.id);
+	try{
+
+		return await this.history.getStats(param.id);
+	}
+	catch(e)
+	{
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 
 
 @Post('checkfriend')
 async checkfriend(@Req() req, @Body() body: FriendrequestDto){
-	const friends = await this.usersService.getFriends(req.user.id);
-	const find = friends.find((item) => item.id === body.to);
-	if(find)
-		return true;
-	return false;
+	try{
+		const friends = await this.usersService.getFriends(req.user.id);
+		const find = friends.find((item) => item.id === body.to);
+		if(find)
+			return true;
+		return false;
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 // check if user in blocklist
 @Post('checkblock')//chk if you blocked smone
 async checkblock(@Req() req, @Body() body: FriendrequestDto){
-    const blocked = await this.usersService.getblocked(req.user.id);
-    const find = blocked.blocked.find((item) => item.id === body.to);
-    if(find)
-        return true;
-    return false;
+	try{
+
+		const blocked = await this.usersService.getblocked(req.user.id);
+		const find = blocked.blocked.find((item) => item.id === body.to);
+		if(find)
+			return true;
+		return false;
+	}
+	catch(error){
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	
+	}
 }
 
 @Post('checkblockme')//chk if smone blocked you
 async checkblockme(@Req() req, @Body() body: FriendrequestDto){
-    const blocked = await this.usersService.getwhoBlockme(req.user.id);
-    const find = blocked.find((item) => item.id === body.to);
-    if(find)
-        return true;
-    return false;
+	try{
+
+		const blocked = await this.usersService.getwhoBlockme(req.user.id);
+		const find = blocked.find((item) => item.id === body.to);
+		if(find)
+			return true;
+		return false;
+	}
+	catch(error)
+	{
+		throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	}
 }
-//get('local/users/blockme',with)
-//get('local/users/blocklist',with)
-//true/false post('loclhost/users/checkblock')
 }

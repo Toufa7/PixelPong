@@ -41,7 +41,7 @@ const Profil = () => {
     const [userStates, setUserStates] = useState<string>("");
     useEffect(() => {
         const fetchData = () => {
-            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+            axios.get("http://localhost:3000/api/users/profil", { withCredentials: true })
             .then((response) => {
                 setUserInfo(response.data)
             })
@@ -54,7 +54,7 @@ const Profil = () => {
 
     const [level, setLevel] = useState<string>("");
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/stats` , {withCredentials: true})
 		.then((response) => { 
             console.log("Level )()()()()))( -> ", response.data)
 			setLevel(response.data.level);
@@ -70,7 +70,7 @@ const Profil = () => {
         <div className="profilRectangle">
           <div className="avatar">
             <div className="left">
-              <img src={`http://localhost:3000/auth/avatar/${userInfo.id}`} style={{width: '100px',height: '100px',marginRight: '10px',marginLeft: '10px',borderRadius: '50px'}} className="playerAvatar"/>
+              <img src={`http://localhost:3000/api/auth/avatar/${userInfo.id}`} style={{width: '100px',height: '100px',marginRight: '10px',marginLeft: '10px',borderRadius: '50px'}} className="playerAvatar"/>
             <div>
               <span className="playerName" style={{marginBottom: '10px'}}>{userInfo.username}</span>
               <div>
@@ -91,7 +91,7 @@ const Profil = () => {
 const GroupsAndFriends = () => {
     const [friends, setFriends] = useState<string[]>([]);
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/Friends`, {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/Friends`, {withCredentials: true})
             .then((response) => {
                 setFriends(response.data);
             });
@@ -99,7 +99,7 @@ const GroupsAndFriends = () => {
 
     const [groups, setGroups] = useState<string[]>([]);
     useEffect(() => {
-        axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
+        axios.get(`http://localhost:3000/api/groupchat`, {withCredentials: true})
             .then((response) => {
                 console.log("Resp groupchat -> ", response.data);
                 setGroups(response.data);
@@ -108,7 +108,7 @@ const GroupsAndFriends = () => {
 
     const removeFriend = (removeId: string) => {
         const remote = removeId;
-        const endpoint = `http://localhost:3000/users/remove/`;
+        const endpoint = `http://localhost:3000/api/users/remove/`;
         axios.patch(endpoint, {to: remote}, {withCredentials: true})
             .then((response) => {
                 console.log("Removing Response", response);
@@ -129,7 +129,7 @@ const GroupsAndFriends = () => {
                     {label ? (
                         groups.map((friend) => (
                             <div className='list' key={friend.id}>
-                                <img className="avatar" src={`http://localhost:3000/groupchat/getimage/${friend.id}`} alt="avatar" />
+                                <img className="avatar" src={`http://localhost:3000/api/groupchat/getimage/${friend.id}`} alt="avatar" />
                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
                                     <span className='name'>{friend.namegb}</span>
                                 </div>
@@ -138,7 +138,7 @@ const GroupsAndFriends = () => {
                     ) : (
                         friends.map((friend : string) => (
                             <div className='list' key={friend.id}>
-                                <img className="avatar" src={`http://localhost:3000/auth/avatar/${friend.id}`} alt="avatar" />
+                                <img className="avatar" src={`http://localhost:3000/api/auth/avatar/${friend.id}`} alt="avatar" />
                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
                                     <span className='name'>{friend.username}</span>
                                     <button style={{marginLeft: '10px'}} onClick={() => removeFriend(friend.id)}>Unfriend</button>
@@ -175,7 +175,7 @@ const GroupsAndFriends = () => {
 const Achivements = () => {
 	const [achivements, setAchivements] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/achievements` , {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/achievements` , {withCredentials: true})
 		.then((response) => {
             console.log("Achievemtn +++> ", response.data.achievementType)
 			setAchivements(response.data.achievementType);
@@ -268,7 +268,7 @@ const Achivements = () => {
 function ProfilPage() {
 	const [states, setStates] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/stats` , {withCredentials: true})
 		.then((response) => {
 			console.log("Response States -> ", response.data);
 			setStates(response.data);

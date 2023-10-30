@@ -29,7 +29,7 @@ const ChatUser = (props:any) => {
     //Fetching local user info
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/users/profil`, { withCredentials: true })
+            .get(`http://localhost:3000/api/users/profil`, { withCredentials: true })
             .then((res:any) =>  {
                 setLocalUser(res.data);
             })
@@ -42,7 +42,7 @@ const ChatUser = (props:any) => {
         if (props.pcurrentUserId != '')
         {
             axios
-                .get(`http://localhost:3000/users/profile/${props.pcurrentUserId}`, { withCredentials: true })
+                .get(`http://localhost:3000/api/users/profile/${props.pcurrentUserId}`, { withCredentials: true })
                 .then((res:any) =>  {
                     setRemoteUser(res.data)
                 })
@@ -56,7 +56,7 @@ const ChatUser = (props:any) => {
         if (remoteUser.id != '')
         {
             axios
-                .post(`http://localhost:3000/users/checkblockme`, { to: remoteUser.id } , { withCredentials: true })
+                .post(`http://localhost:3000/api/users/checkblockme`, { to: remoteUser.id } , { withCredentials: true })
                 .then((res:any) => {
                     console.log('Check if remote user blocked me ->', res.data)
                     setIsBlocked(res.data);
@@ -71,7 +71,7 @@ const ChatUser = (props:any) => {
         if (remoteUser.id != '')
         {
             axios
-                .post(`http://localhost:3000/users/checkblock`, { to: remoteUser.id } , { withCredentials: true })
+                .post(`http://localhost:3000/api/users/checkblock`, { to: remoteUser.id } , { withCredentials: true })
                 .then((res:any) => {
                     console.log('Check if local user blocked me ->', res.data)
                     setLocalUserBlocksRemote(res.data);
@@ -83,7 +83,7 @@ const ChatUser = (props:any) => {
 
     const onClickHandler = () => {
         axios
-            .get(`http://localhost:3000/chat/${remoteUser.id}/requestjoingame`, { withCredentials: true })
+            .get(`http://localhost:3000/api/chat/${remoteUser.id}/requestjoingame`, { withCredentials: true })
             .catch(Error)
                 console.log("Error happened when requesting to join the game", Error);
     }
@@ -98,7 +98,7 @@ const ChatUser = (props:any) => {
                                 //Changing a tag to div
                                 remoteUser.profileImage ?   (<Link to={`/profil/${remoteUser.username}`}>
                                                                 <div style={{color: 'black', textDecoration: 'none'}}>
-                                                                    <img style={{border: '3px solid'}} src={`http://localhost:3000/auth/avatar/${remoteUser.id}`} alt="user-photo"/>
+                                                                    <img style={{border: '3px solid'}} src={`http://localhost:3000/api/auth/avatar/${remoteUser.id}`} alt="user-photo"/>
                                                                 </div>
                                                             </Link>)
                                                         :   (<img src={info} alt="user-photo" />)

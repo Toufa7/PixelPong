@@ -80,7 +80,7 @@ const Dms = (props:any) => {
     let GroupsMap = useMap();
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
+        axios.get(`http://localhost:3000/api/groupchat`, {withCredentials: true})
         .then((response:any) => {
             console.log(response.data)
             GroupsMap.clear()
@@ -116,7 +116,7 @@ const Dms = (props:any) => {
                         <DmChatUser
                             key={index}
                             userName={group.namegb}
-                            pic={`http://localhost:3000/groupchat/getimage/${group.id}`}
+                            pic={`http://localhost:3000/api/groupchat/getimage/${group.id}`}
                             userId={updateSharedString}
                             id={group.id}
                             privacy={group.grouptype}

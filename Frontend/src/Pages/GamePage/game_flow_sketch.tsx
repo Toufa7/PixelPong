@@ -159,7 +159,7 @@ export const Game_instance = () =>{
   // const [isConnected , setConnected] = useState<boolean>(false);
   // const [Infos, SetInfo] = useState<any>({});
 
-  // socket = io("ws://localhost:3000/game" , {withCredentials: true , transports: ["websocket"] });
+  // socket = io("ws://localhost:3000/api/game" , {withCredentials: true , transports: ["websocket"] });
 
   const socketRef = useRef<Socket | null >(null);
 
@@ -612,7 +612,7 @@ p5_ob.draw = () =>{
 
 
   // try{
-      //   axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
+      //   axios.get(`http://localhost:3000/api/users/${token.id}`,{ withCredentials: true })
       //       .then(Resp => SetInfo(Resp.data))
       //       .catch(error => console.error(error));
       //   }catch(error){
@@ -620,7 +620,7 @@ p5_ob.draw = () =>{
       //   }
         
       // try{
-      //   axios.patch(`http://localhost:3000/users/statingame`,{ingame : true},{ withCredentials: true })
+      //   axios.patch(`http://localhost:3000/api/users/statingame`,{ingame : true},{ withCredentials: true })
       //   .then(Resp => console.log("Patched"))
       //   .catch(error => console.error(error));
       // }catch(error){
@@ -630,7 +630,7 @@ p5_ob.draw = () =>{
 
       // const GetUserInfo = async (token : any) =>{
 //   try{
-//     const Resp = await axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true });
+//     const Resp = await axios.get(`http://localhost:3000/api/users/${token.id}`,{ withCredentials: true });
 //     console.log(Resp);
 //   }catch (error){
 //     console.error(error);
@@ -645,12 +645,12 @@ p5_ob.draw = () =>{
 
       // console.log(Infos);
     // console.log("token Game--->" + JSON.stringify(token));
-    // axios.get(`http://localhost:3000/users/${token.id}`,{ withCredentials: true })
+    // axios.get(`http://localhost:3000/api/users/${token.id}`,{ withCredentials: true })
     // .then(response => console.log(response));
 
 
               // try{
-          //   axios.patch(`http://localhost:3000/users/statingame`,{ingame : false},{ withCredentials: true })
+          //   axios.patch(`http://localhost:3000/api/users/statingame`,{ingame : false},{ withCredentials: true })
           //   .then(Resp => console.log("Patched"))
           //   .catch(error => console.error(error));
           // }catch(error){
