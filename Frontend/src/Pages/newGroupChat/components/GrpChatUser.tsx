@@ -1,4 +1,4 @@
-import { useState, useEffect, Children } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import MessageInput from './GrpmessageInput'
 import exit from '../assets/exit.svg'
@@ -6,7 +6,6 @@ import info from '../assets/info.svg'
 import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
 import toast from 'react-hot-toast'
-import dudley from '../assets/Dudley.gif'
 import manage from '../assets/manage.svg'
 import ManageGroup from './mangeGroup'
 import CreateGroup from './createGroup'
@@ -19,10 +18,20 @@ interface localUserClass
     username: string,
 }
 
+interface grpInfoClass
+{
+    id: string,
+    namegb: string,
+    idsuperadmin: string,
+    grouptype: string,
+    password: string,
+    image: string,
+}
+
 const ChatUser = (props : any) => {
     
     //Fetching current user (Receiver) data each time the prop gets new value
-    const [groupRoom, setgroupRoom] = useState({});
+    const [groupRoom, setgroupRoom] = useState<grpInfoClass>({id: '', namegb: '', idsuperadmin: '', grouptype: '', image: '', password: ''});
     const [localUser, setLocalUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
 
 
@@ -32,6 +41,7 @@ const ChatUser = (props : any) => {
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
             .then((response) => {
+                console.log("Just dance --->", response.data)
                 setgroupRoom(response.data);
             })
 			.catch((error) => {
@@ -50,7 +60,6 @@ const ChatUser = (props : any) => {
                 setLocalUser(res.data);
             })
             .catch(Error)
-                console.log("Error happened when feching local user data");
     }, [])
 
     const [users, setUsers] = useState([]);
@@ -156,25 +165,23 @@ const ChatUser = (props : any) => {
             <dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="manageGroup">
                 <button onClick={() => {document.getElementById('manageGroup')?.close()}} >X</button>
                 <form method="dialog">
-                <menu className="dialog-menu">
-
-                    
-                    <div>
-                        <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
-                        <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
-                        {
-                            data.label ?
-                            (
-                                data.createOrmanage ?
-                                (<ManageGroup setIsCreated={setIsCreated}/>)
+                    <menu className="dialog-menu">
+                        <div>
+                            <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
+                            <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
+                            {
+                                data.label ?
+                                (
+                                    data.createOrmanage ?
+                                    (<ManageGroup setIsCreated={setIsCreated}/>)
+                                        :
+                                    (<CreateGroup setIsCreated={setIsCreated} />)
+                                )
                                     :
-                                (<CreateGroup setIsCreated={setIsCreated} />)
-                            )
-                                :
-                            (<></>)
-                        }
-                    </div>
-                </menu>
+                                (<></>)
+                            }
+                        </div>
+                    </menu>
                 </form>
             </dialog>
         </section>
@@ -244,7 +251,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
             props.groupInfo.id   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dudley} width={500} height={500} alt="Group-photo" />
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="Group-photo" />
         }
     </div>
     )

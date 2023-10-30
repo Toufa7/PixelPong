@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, NotContains } from "class-validator";
+import { IsNotEmpty, IsString, NotContains, notContains } from "class-validator";
 
 
 export class CreateGroupchatDto {

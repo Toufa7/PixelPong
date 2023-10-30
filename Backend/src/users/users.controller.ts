@@ -191,6 +191,9 @@ async getallNotifications(@Req() req: any){
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
   console.log("body", body.to)
   try { 
+	const already = await this.usersService.findFriendRequestIdBySenderReceiver(req.user.id, body.to);
+	if(already)
+		throw new HttpException('Failed to send friend request', HttpStatus.BAD_REQUEST);
 	const user = await this.usersService.findOne(req.user.id);
 	const data : FriendrequestDto =  {
 	  userId: req.user.id,
