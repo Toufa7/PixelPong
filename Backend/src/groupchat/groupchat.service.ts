@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Res } from '@nestjs/common';
 import { PrismaService } from 'src/auth/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -13,25 +13,6 @@ export class GroupchatService {
         private readonly prisma: PrismaService,
         private jwtService: JwtService,
     ) { }
-
-    //test
-    test(id: string): any {
-        try {
-            const data = this.prisma.user.findUnique({
-                where: {
-                    id: id,
-                },
-            });
-            if (data)
-                return data;
-            else
-                throw new ExceptionsHandler();
-        } catch (error) {
-            console.log("catch error in test groupchat service");
-            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
-            // console.log(error.message);
-        }
-    }
 
     //get number user of a groupchat
     async numberuser(id: string): Promise<number> {
@@ -365,13 +346,13 @@ export class GroupchatService {
 
     //create a groupchat
     async create(createGroupchatDto: any, iduser: string) : Promise<Groupchat> {
-        try {
+        try{
             const namegp = await this.prisma.groupchat.findUnique({
                 where: {
                     namegb: createGroupchatDto.namegb,
                 },
             });
-
+    
             if (namegp == null) {
                 if (createGroupchatDto.password) {
                     const saltOrRounds = 10;
@@ -395,8 +376,10 @@ export class GroupchatService {
             else {
                 throw new HttpException('name of Groupchat already exist', HttpStatus.BAD_REQUEST);
             }
-        } catch (error) {
-            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
+        }
+        catch(error)
+        {
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -453,7 +436,9 @@ export class GroupchatService {
                     },
                 });
                 if (data)
-                    throw new HttpException('Groupchat updated', HttpStatus.CREATED);
+                {
+                    throw new HttpException('Groupchat updated', HttpStatus.OK);
+                }
                 else
                     throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
@@ -735,7 +720,7 @@ export class GroupchatService {
 
     //delete a user from a groupchat
     async removeuser(id: string, iduser: string, iduserconnected: string) : Promise<void> {
-        try {  //get all admins of the groupchat
+         //get all admins of the groupchat
             const admins = await this.findAllAdmins(id);
 
             //check if the userconnected  is an admin of the groupchat
@@ -768,10 +753,6 @@ export class GroupchatService {
                 else
                     throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
-        }
-        catch (error) {
-            return null;
-        }
     }
 
     //exit a groupchat

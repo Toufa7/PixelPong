@@ -35,22 +35,19 @@ const CreatingGroup = (setIsCreated) => {
 			password: (choice == 2) ? password : undefined
 		};
 		console.log(" --== Create =====--> ", groupData);
-		toast.promise(
 			axios.post("http://localhost:3000/groupchat", groupData, { withCredentials: true })
 			.then((response) => {
-				axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
-				.then((response) => {
-					setIsCreated(true);
-					console.log("Creating Group Response -> ", response);
-				})
-				console.log("Creating Group Response -> ", response);
-			}),
-			{
-				loading: "Sending data...",
-				success: "Success Settings!",
-				error: "An error occurred",
-			}
-			,{ duration: 5000, position: 'top-right' });
+				console.log("Creating Group Response -> ", response.data);
+				// axios.post(`http://localhost:3000/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
+				// .then((response) => {
+				// 	setIsCreated(true);
+				// 	console.log("Creating Group Response -> ", response);
+				// })
+				// console.log("Creating Group Response -> ", response);
+			})
+			.catch((error) => {
+				console.log("----> ", error.response.data);
+			})
 
 	}
 	else if (choice == 2 && password.length < 8) {
