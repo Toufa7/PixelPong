@@ -60,9 +60,9 @@ const Profil = () => {
     const location = useLocation();    
     useEffect(() => {
         async function fetchData() {
-            const endpoint = `http://localhost:3000/users${location.pathname}`;
+            const endpoint = `http://localhost:3000/api/users${location.pathname}`;
             const response = await axios.get(endpoint, {withCredentials: true});
-                const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
+                const avatarURL = `http://localhost:3000/api/auth/avatar/${response.data.id}`;
                 try {
                     await axios.get(avatarURL, { withCredentials: true });
                     setUserData(() => ({
@@ -90,7 +90,7 @@ const Profil = () => {
 
     const [isFriend, setIsFriend] = useState<boolean>(false);
     useEffect(() => {
-        axios.post("http://localhost:3000/users/checkfriend", {to: userData.userId}, { withCredentials: true })
+        axios.post("http://localhost:3000/api/users/checkfriend", {to: userData.userId}, { withCredentials: true })
         .then((response) => {
             setIsFriend(response.data)
         })
@@ -102,7 +102,7 @@ const Profil = () => {
 
     const [isBlocked, setisBlocked] = useState<boolean>(false);
     useEffect(() => {
-        axios.post("http://localhost:3000/users/checkblock", {to: userData.userId}, { withCredentials: true })
+        axios.post("http://localhost:3000/api/users/checkblock", {to: userData.userId}, { withCredentials: true })
         .then((response) => {
             setisBlocked(response.data)
         })
@@ -115,7 +115,7 @@ const Profil = () => {
     const [states, setStates] = useState([]);
     
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/stats/${userData.userId}` , {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/stats/${userData.userId}` , {withCredentials: true})
 		.then((response) => {
             setStates(response.data);
 		})
@@ -125,7 +125,7 @@ const Profil = () => {
     },[userData])
     
     const BlockUser = () => {
-        axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
+        axios.patch("http://localhost:3000/api/users/blocked", {to: userData.userId}, { withCredentials: true })
         .then(() => {})
         .catch((error) => {
             console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
@@ -133,7 +133,7 @@ const Profil = () => {
     }
     const UnBlockUser = () => {
         // useEffect(() => {
-            axios.patch(`http://localhost:3000/users/unblocked/`, {to: userData.userId}, {withCredentials: true})
+            axios.patch(`http://localhost:3000/api/users/unblocked/`, {to: userData.userId}, {withCredentials: true})
             .then(() => {
             })
             .catch((error) => {
@@ -143,7 +143,7 @@ const Profil = () => {
     }
     const AddFriend = () => {
         setPending(false);
-        axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
+        axios.post("http://localhost:3000/api/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
         .then(() => {})
         .catch((error) => {
             console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
@@ -151,7 +151,7 @@ const Profil = () => {
     }
     const UnfriendUser = () => {
         setIsFriend(false);
-        axios.patch(`http://localhost:3000/users/remove/`, {to: userData.userId}, {withCredentials: true})
+        axios.patch(`http://localhost:3000/api/users/remove/`, {to: userData.userId}, {withCredentials: true})
         .then(() => {
         })
         .catch((error) => {
@@ -162,7 +162,7 @@ const Profil = () => {
         <div className="profilRectangle">
           <div className="avatar">
             <div className="left">
-                <img src={`http://localhost:3000/auth/avatar/${userData.userId}`} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
+                <img src={`http://localhost:3000/api/auth/avatar/${userData.userId}`} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                 {
                     userData.status == "ONLINE" ?
                     (
@@ -237,7 +237,7 @@ const GroupsAndFriends = () => {
     const [thisId, setId] = useState();
     const info = useLocation();
     useEffect(() => {
-        axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users${info.pathname}`, {withCredentials: true})
         .then((res) => {
             setId(res.data.id);
         })
@@ -247,7 +247,7 @@ const GroupsAndFriends = () => {
     }, [info])
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/friends/${thisId}`, {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/friends/${thisId}`, {withCredentials: true})
         .then((response) => {
             setFriendData(response.data);
         })
@@ -257,7 +257,7 @@ const GroupsAndFriends = () => {
     },[thisId])
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/groupchat/${thisId}/allgpuser`, {withCredentials: true})
+        axios.get(`http://localhost:3000/api/groupchat/${thisId}/allgpuser`, {withCredentials: true})
         .then((response) => {
             setGroupsData(response.data);
         })
@@ -277,7 +277,7 @@ const GroupsAndFriends = () => {
                 {label ? (
                     groupData.map((group : string) => (
                         <div className='list' key={group.id}>
-                            <img className="avatar" src={`http://localhost:3000/groupchat/getimage/${group.id}`} alt="avatar" />
+                            <img className="avatar" src={`http://localhost:3000/api/groupchat/getimage/${group.id}`} alt="avatar" />
                             <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
                                 <span className='name'>{group.namegb}</span>
                             </div>
@@ -286,7 +286,7 @@ const GroupsAndFriends = () => {
                     ) : (
                         friendData.map((friend : string) => (
                             <div className='list' key={friend.id}>
-                                <img className="avatar" src={`http://localhost:3000/auth/avatar/${friend.id}`} alt="avatar" />
+                                <img className="avatar" src={`http://localhost:3000/api/auth/avatar/${friend.id}`} alt="avatar" />
                                 <div style={{display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center', marginLeft: '10px'}}>
                                     <span className='name'>{friend.username}</span>
                                 </div>
@@ -304,7 +304,7 @@ const Achivements = () => {
     const [thisId, setId] = useState();
     const info = useLocation();
     useEffect(() => {
-      axios.get(`http://localhost:3000/users${info.pathname}`, { withCredentials: true })
+      axios.get(`http://localhost:3000/api/users${info.pathname}`, { withCredentials: true })
         .then((res) => {setId(res.data.id);})
         .catch((error) => {
             console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
@@ -315,7 +315,7 @@ const Achivements = () => {
     useEffect(() => {
       const getAchievement = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/users/achievements/${thisId}`, { withCredentials: true });
+            const response = await axios.get(`http://localhost:3000/api/users/achievements/${thisId}`, { withCredentials: true });
             setAchievements(response.data.achievementType);
         }
         catch (error) {
@@ -414,7 +414,7 @@ function OtherProfilPage() {
     useEffect(() => {
 	const searchInFriends = async () => {
 		try {
-			const response = await axios.get("http://localhost:3000/users/all", {withCredentials: true});
+			const response = await axios.get("http://localhost:3000/api/users/all", {withCredentials: true});
 			const friends = response.data;
 			const foundFriend = friends.find(friend => friend.username == location.pathname.replace("/profil/",""));
 			if (foundFriend) {
@@ -434,7 +434,7 @@ function OtherProfilPage() {
 	const [states, setStates] = useState([]);
     const [thisId, setId] = useState();
     const info = useLocation();
-    axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
+    axios.get(`http://localhost:3000/api/users${info.pathname}`, {withCredentials: true})
     .then((res) => {
         setId(res.data.id);
     })
@@ -443,7 +443,7 @@ function OtherProfilPage() {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/stats/${thisId}` , {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/stats/${thisId}` , {withCredentials: true})
 		.then((response) => {
 			setStates(response.data);
 		})
@@ -455,7 +455,7 @@ function OtherProfilPage() {
 
     const [user, setUser] = useState<string>("");
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
+        axios.get(`http://localhost:3000/api/users/profil`, { withCredentials: true })
         .then((res) => {
             setUser(res.data.username);
         })

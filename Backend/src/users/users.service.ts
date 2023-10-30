@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,  HttpException,   HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../auth/prisma.service';
 import { Status, Type, User, UserStatus } from '@prisma/client';
 
@@ -6,56 +6,79 @@ import { Status, Type, User, UserStatus } from '@prisma/client';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
   async findAll() {
-    const users = await this.prisma.user.findMany();
-    return users;
+    try{
+
+      const users = await this.prisma.user.findMany();
+      return users;
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    return user;
+    try{
+
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      return user;
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   async DeleteOne(id: string) {
-    const user = await this.prisma.user.delete({
-      where: {
-        id: id,
-      },
-    });
-    return user;
+    try{
+
+      const user = await this.prisma.user.delete({
+        where: {
+          id: id,
+        },
+      });
+      return user;
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
 
   // async addfriend(userId: string, friendId: string): Promise<void> {
   // }
   async removefriend(userId: string, friendId: string): Promise<void> {
-    await this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        friends: {
-          disconnect: {
-            id: friendId,
+    try{
+
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          friends: {
+            disconnect: {
+              id: friendId,
+            },
           },
         },
-      },
-    }),
-    await this.prisma.user.update({
-      where: {
-        id: friendId,
-      },
-      data: {
-        friends: {
-          disconnect: {
-            id: userId,
+      }),
+      await this.prisma.user.update({
+        where: {
+          id: friendId,
+        },
+        data: {
+          friends: {
+            disconnect: {
+              id: userId,
+            },
           },
         },
-      },
-    });
+      });
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   async blockfriend(userId: string, blockedId: string): Promise<void> {
-    console.log("blockfriend", blockedId, "  ", userId);
     try {
       await this.prisma.$transaction([
         this.prisma.user.update({
@@ -96,92 +119,111 @@ export class UsersService {
         }),
       ]);
     } catch (error) {
-      // Handle the error here, e.g., log the error or provide user feedback.
-      console.error("Error blocking friend:", error);
-      throw new Error("Failed to block friend");
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
     }
   }
   
   async UpdateforOne(id: string, username: string) {
-    const user = await this.prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: {
-        username,
-      },
-    });
-    return user;
+    try{
+      
+      const user = await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          username,
+        },
+      });
+      return user;
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   async findOneByEmail(email: string): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
-    return user;
+    try{
+
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
+      return user;
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   async findByName(username: string) {
     // //console.log(username);
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: username,
-      },
-      select: {
-        id: true,
-        username: true,
-        profileImage: true,
-        achievements: true,
-        // stats: true,
-        status: true,
-      },
-    });
-    return user;
+    try{
+
+      const user = await this.prisma.user.findUnique({
+        where: {
+          username: username,
+        },
+        select: {
+          id: true,
+          username: true,
+          profileImage: true,
+          achievements: true,
+          // stats: true,
+          status: true,
+        },
+      });
+      return user;
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findById(id: string) {
     // //console.log(username);
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-      select: {
-        id: true,
-        username: true,
-        profileImage: true,
-        achievements: true,
-        status: true,
-      },
-    });
-    return user;
-  }
+    try{
 
-  async search(query: string) {
-    const users = await this.prisma.user.findMany({
-      where: {
-        username: {
-          contains: query,
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: id,
         },
-      },
-    });
-    return users;
+        select: {
+          id: true,
+          username: true,
+          profileImage: true,
+          achievements: true,
+          status: true,
+        },
+      });
+      return user;
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   async unblockfriend(userId: string, unblockedId: string): Promise<void> {
-    await this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        friends: {
-          connect: {
-            id: unblockedId,
+    try{
+
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          friends: {
+            connect: {
+              id: unblockedId,
+            },
           },
         },
-      },
-    });
+      });
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   getFriends(id: string) {
-    return this.prisma.user
+    try{
+
+      return this.prisma.user
       .findUnique({
         where: {
           id: id,
@@ -198,172 +240,236 @@ export class UsersService {
           status: true,
         },
       });
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   async updatestatus(user, status) {
     // console.log("123 :: : :: ",status)
-    await this.prisma.user.updateMany({
-      where: {
-        id: user.id,
-      },
-      data: {
-        firstlogin: false,
-        status: status,
-      },
-    });
+    try{
+
+      await this.prisma.user.updateMany({
+        where: {
+          id: user.id,
+        },
+        data: {
+          firstlogin: false,
+          status: status,
+        },
+      });
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   async sendFriendRequest(senderId: string, data: any) {
-    console.log(senderId  +"  ...    "+ data)
-    console.log(data);
-    return await this.prisma.notification.create({
-      data: {
-        user: { connect: { id: senderId } },
-        receiver: { connect: { id: data.to } },
-        status: Status.PENDING,
-        name: data.type,
-        message: data.message,
-        from:data.from,
-      },
-    });
+    try{
+
+      return await this.prisma.notification.create({
+        data: {
+          user: { connect: { id: senderId } },
+          receiver: { connect: { id: data.to } },
+          status: Status.PENDING,
+          name: data.type,
+          message: data.message,
+          from:data.from,
+        },
+      });
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   
   async acceptFriendRequest(id: number, senderId: string, recieverId: string) {
-    console.log(id +" "+ senderId+" "+ recieverId)
-    await this.prisma.$transaction([
-      this.prisma.notification.updateMany({
-        where: { id: id },
-        data: { status: Status.ACCEPTED },
-      }),
-      this.prisma.user.update({
-        where: {
-          id: senderId,
-        },
-        data: {
-          friends: {
-            connect: {
-              id: recieverId,
-            },
-          },
-        },
-      }),
-      this.prisma.user.update({
-        where: {
-          id: recieverId,
-        },
-      data: {
-        friends: {
-          connect: {
+    try{
+      await this.prisma.$transaction([
+        this.prisma.notification.updateMany({
+          where: { id: id },
+          data: { status: Status.ACCEPTED },
+        }),
+        this.prisma.user.update({
+          where: {
             id: senderId,
           },
-        },
-      },
-    }),
-    this.prisma.notification.delete({
-      where:{
-        id:id,
-      },
-    })
-  ]);
-  console.log("its delete : : : : :: : : : : : ",id);
+          data: {
+            friends: {
+              connect: {
+                id: recieverId,
+              },
+            },
+          },
+        }),
+        this.prisma.user.update({
+          where: {
+            id: recieverId,
+          },
+          data: {
+            friends: {
+              connect: {
+                id: senderId,
+              },
+            },
+          },
+        }),
+        this.prisma.notification.delete({
+          where:{
+            id:id,
+          },
+        })
+      ]);
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
   }
   
 
   async getallNotifications(id: string){
-    const notifications = await this.prisma.notification.findMany({
-      where:{
-        to: id,
-      },
-    });
-    return notifications;   
+    try{
+
+      const notifications = await this.prisma.notification.findMany({
+        where:{
+          to: id,
+        },
+      });
+      return notifications;   
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
 
   }
 
 async refuseFriendRequest(id: number) {
-  console.log("ok thi is id",id);
-  await this.prisma.$transaction([
-  this.prisma.notification.update({
-    where: { id: id },
-    data: { status: Status.DECLINED },
-  }),
- this.prisma.notification.delete({
-    where:{
-      id: id,
-    },
-  })
-])
+  try{
+
+    await this.prisma.$transaction([
+      this.prisma.notification.update({
+        where: { id: id },
+        data: { status: Status.DECLINED },
+      }),
+      this.prisma.notification.delete({
+        where:{
+          id: id,
+        },
+      })
+    ])
+  }catch(error){
+    throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+  }
 }
 
 
 async findFriendRequestIdBySenderReceiver(senderId: string, receiverId: string): Promise<any> {
-  console.log("seeeender ", senderId, " rec   ", receiverId);
-  const friendrequest = await this.prisma.notification.findFirst({
-    where: {
-      userId :senderId  ,
-      to: receiverId,
-    },
-    select: {
-      id: true,
-    },
-  });
+  try{
 
-  return friendrequest;
+    const friendrequest = await this.prisma.notification.findFirst({
+      where: {
+        userId :senderId  ,
+        to: receiverId,
+      },
+      select: {
+        id: true,
+      },
+    });
+    
+    return friendrequest;
+  }
+  catch(error){
+    throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+  }
 }
 
 async ChangeStateInGame(id: string, ingame: boolean)  //Chaning The State of Player in Game
 {
-  await this.prisma.user.update({
-    where: {
-      id,
-    },
-    data:{
-      ingame: ingame,
-    }
-  })
+  try{
+
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data:{
+        ingame: ingame,
+      }
+    })
+  }
+  catch(error){
+    throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+  }
 }
 
 async isauthenticated(id: string, isauth: boolean)
 {
-  await this.prisma.user.update({
+  try{
+
+    await this.prisma.user.update({
     where:{id : id},
-    data:{authenticated: isauth}
-  })
+      data:{authenticated: isauth}
+    })
+  }
+  catch(error){
+    throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+  }
 }
 
 async getBlocklist(id: string){
-  const data =  await this.prisma.user.findUnique({
-      where:{
-            id: id,
-        },
-        select:
-        {
-          blocked: true,
-        }
+  try{
 
-  });
-  return  data?.blocked;
+    const data =  await this.prisma.user.findUnique({
+      where:{
+        id: id,
+      },
+      select:
+      {
+        blocked: true,
+      }
+      
+    });
+    return  data?.blocked;
+  }
+  catch(error){
+    throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+  }
 }
 async getwhoBlockme(id: string){
-  const data =  await this.prisma.user.findUnique({
-      where:{
-            id: id,
-        },
-        select:
-        {
-          blockedby: true,
-        }
+  try{
 
-  });
-  return  data?.blockedby;
+    const data =  await this.prisma.user.findUnique({
+      where:{
+        id: id,
+      },
+      select:
+      {
+        blockedby: true,
+      }
+      
+    });
+    return  data?.blockedby;
+  }
+  catch(error){
+    throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+  
+  }
 }
 async getblocked(id: string)
 {
-  const blocked = await this.prisma.user.findUnique({
-    where:{
-      id: id,
-    },
-    select:{
-      blocked: true,
-    }
-  })
-  return blocked;
+  try{
+
+    const blocked = await this.prisma.user.findUnique({
+      where:{
+        id: id,
+      },
+      select:{
+        blocked: true,
+      }
+    })
+    return blocked;
+  }
+  catch(error){
+    throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+  
+  }
 }
 }

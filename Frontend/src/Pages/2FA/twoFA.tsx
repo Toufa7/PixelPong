@@ -21,7 +21,7 @@ function TwoFa() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:3000/auth/2fa/set2fa", { withCredentials: true })
+        axios.get("http://localhost:3000/api/auth/2fa/set2fa", { withCredentials: true })
         .then((response) => {
             updateQr(response.data);
         })
@@ -37,7 +37,7 @@ function TwoFa() {
             a += arr[index].value;
         }
         const data = {otp : a}
-        axios.post("http://localhost:3000/auth/2fa/validate", data, { withCredentials: true })
+        axios.post("http://localhost:3000/api/auth/2fa/validate", data, { withCredentials: true })
         .then((response) => {
             console.log("Respones -> ", response.data);
             if (response.status != 400)

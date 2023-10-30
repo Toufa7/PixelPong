@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,   HttpException,  HttpStatus } from '@nestjs/common';
 import { Type } from '@prisma/client';
 import { PrismaService } from 'src/auth/prisma.service';
 
@@ -6,40 +6,54 @@ import { PrismaService } from 'src/auth/prisma.service';
 export class achievementService {
   constructor(private prisma: PrismaService) {}
   async createAchievement(userId: string, type: Type){
-    let achievement = await this.prisma.achievements.findFirst({
-      where: {
-        userId: userId,
-      },
-    })
-    if(!achievement)
-  {
-    achievement = await this.prisma.achievements.create({
-      data: {
-        user: {
-          connect: {
-            id: userId,
-          },
+    try{
+
+      let achievement = await this.prisma.achievements.findFirst({
+        where: {
+          userId: userId,
         },
-        achievementType: [type],
-      },
-    });
-    return achievement;
-  }
+      })
+      if(!achievement)
+      {
+        achievement = await this.prisma.achievements.create({
+          data: {
+            user: {
+              connect: {
+                id: userId,
+              },
+            },
+            achievementType: [type],
+          },
+        });
+        return achievement;
+      }
+    }
+    catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+      
+    }
   }
 
   async getAchievement(id: string)
   {
+    try{
     const achievemnet = await this.prisma.achievements.findFirst({
       where: {
           userId: id,
       },
   });
   return achievemnet;
+}
+catch(error){
+  throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+}
   }
   async updateAchievement(userId: string, type: Type){
-    const find = await this.prisma.stats.findFirst({
+    try{
+
+      const find = await this.prisma.stats.findFirst({
         where: {
-            userId: userId,
+          userId: userId,
         }
       });
       let acheievement : Type  = type;
@@ -80,6 +94,8 @@ export class achievementService {
       })
     }
 
-}}
-//chekc with khalil how we will do this
-  
+    }catch(error){
+      throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+    }
+  }
+}

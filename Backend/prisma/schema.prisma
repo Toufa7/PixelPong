@@ -16,9 +16,7 @@ datasource db {
     id        String      @id @default(uuid()) @unique
     username  String?   @unique
     email     String?   @unique
-    token     String?   @unique
     twofasecret String? @unique
-    twofatoken String?
     profileImage String?
     ingame      Boolean? @default(false)
     twofa       Boolean? @default(false)
@@ -158,8 +156,6 @@ enum  Status {
 enum  UserStatus {
   ONLINE
   OFFLINE
-  AWAY
-  BUSY
 }
 
 model Achievements{

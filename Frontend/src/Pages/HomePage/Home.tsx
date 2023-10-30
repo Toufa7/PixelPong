@@ -26,7 +26,7 @@ const GetUserData = () => {
     const [userInfo, setUserInfo] = useState(true);
     useEffect(() => {
         const fetchData = () => {
-            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+            axios.get("http://localhost:3000/api/users/profil", { withCredentials: true })
             .then((response) => {
                 setUserInfo(response.data)
             })
@@ -73,7 +73,7 @@ const TopContainer = () => {
 
 	const searchInGroups = async (query : string) => {
 		try {
-			const response = await axios.get("http://localhost:3000/groupchat/notmember", {withCredentials: true});
+			const response = await axios.get("http://localhost:3000/api/groupchat/notmember", {withCredentials: true});
 			const groups = response.data;
 			const foundGroup = groups.find(group => group.namegb === query);
 			if (foundGroup) {
@@ -81,8 +81,8 @@ const TopContainer = () => {
 				setTheOne(foundGroup);
 				setFriendGroup("group");
 				setUsers([]);
-				const usersResponse = await axios.get(`http://localhost:3000/groupchat/${foundGroup.id}/numberuser`,{ withCredentials: true });
-				setAvatar(`http://localhost:3000/groupchat/getimage/${foundGroup.id}`);
+				const usersResponse = await axios.get(`http://localhost:3000/api/groupchat/${foundGroup.id}/numberuser`,{ withCredentials: true });
+				setAvatar(`http://localhost:3000/api/groupchat/getimage/${foundGroup.id}`);
 				setUsers(usersResponse.data);
 				setIsFound(true);
 				setVisibility(false);
@@ -99,7 +99,7 @@ const TopContainer = () => {
 	};
 	const searchInFriends = async (query : string) => {
 		try {
-			const response = await axios.get("http://localhost:3000/users/all", {withCredentials: true});
+			const response = await axios.get("http://localhost:3000/api/users/all", {withCredentials: true});
 			const friends = response.data;
 			const foundFriend = friends.find(friend => friend.username === query);
 			if (foundFriend) {
@@ -165,7 +165,7 @@ const TopContainer = () => {
 		else if (privacy == "protected") {
 			const password = document.getElementById("password_join")?.value;
 			console.log("Password Entered Is => ", password);
-			axios.patch(`http://localhost:3000/groupchat/${theOne.id}/userprotected`, {pass :password} , { withCredentials: true })
+			axios.patch(`http://localhost:3000/api/groupchat/${theOne.id}/userprotected`, {pass :password} , { withCredentials: true })
 			.then((res) => {
 				if (res.data.message == "User added")
 				{
@@ -199,7 +199,7 @@ const TopContainer = () => {
 						(<Link to={`/profil/${theOne.username}`}>
 							<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', textDecoration: 'none'}}>
 								<div>
-									<img src={`http://localhost:3000/auth/avatar/${theOne.id}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
+									<img src={`http://localhost:3000/api/auth/avatar/${theOne.id}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
 									<span style={{ marginLeft: '20px', color: "black"}}>{theOne.username}</span>
 								</div>
 							</div>		
@@ -305,11 +305,11 @@ const TopLeft = () => {
 	
 	const [leaderboards, setLeaderboards] = useState<Map<number, States>>(new Map());
 	useEffect(() => {
-		axios.get('http://localhost:3000/users/all', { withCredentials: true })
+		axios.get('http://localhost:3000/api/users/all', { withCredentials: true })
 		.then((response) => {
 			const leaderboardMap = new Map<number, States>();
 			const fetchStatsPromises = response.data.map((user : any) =>
-				axios.get(`http://localhost:3000/users/stats/${user.id}`, { withCredentials: true })
+				axios.get(`http://localhost:3000/api/users/stats/${user.id}`, { withCredentials: true })
 			);
 			Promise.all(fetchStatsPromises)
 			.then((responses) => {
@@ -448,7 +448,7 @@ const TopRight = (props : {winRate: number, wins: number, loses: number}) => {
 const BottomLeft = () => {
 	const [achivements, setAchivements] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/achievements` , {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/achievements` , {withCredentials: true})
 		.then((response) => {
 			setAchivements(response.data.achievementType);
 		})
@@ -510,7 +510,7 @@ const MatchResult = (props: {player1 : string,  player1Avatar : string, player2A
 const BottomRight= () => {
 	const [matchHistory, setMatchHistory] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/history` , {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/history` , {withCredentials: true})
 		.then((response) => {
 			setMatchHistory(response.data);
 		})
@@ -537,9 +537,9 @@ const BottomRight= () => {
 					) : (
 						Object.keys(matchHistory).map((idx) => (
 							matchHistory[idx].message == "WIN" ?
-							(<MatchResult key={idx} player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={win}/>)
+							(<MatchResult key={idx} player1={userData.username} player1Avatar={`http://localhost:3000/api/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/api/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={win}/>)
 								:
-							(<MatchResult key={idx} player1={userData.username} player1Avatar={`http://localhost:3000/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={lose}/>)
+							(<MatchResult key={idx} player1={userData.username} player1Avatar={`http://localhost:3000/api/auth/avatar/${userData.id}`} player2={matchHistory[idx].other} player2Avatar={`http://localhost:3000/api/auth/avatar/${matchHistory[idx].otherid}`} rslt={matchHistory[idx].message} color={lose}/>)
 						))
 					)
 				}
@@ -558,7 +558,7 @@ function Notification () {
 	
 	const AcceptFriend = async () =>  {
 		try {
-			await axios.patch("http://localhost:3000/users/acceptFriendRequest", data, {withCredentials : true})
+			await axios.patch("http://localhost:3000/api/users/acceptFriendRequest", data, {withCredentials : true})
 			.then((rese) => {
 				console.log("Notifcation Accept ", rese);
 				setFriendStatus(friendStatus)
@@ -574,7 +574,7 @@ function Notification () {
 	}
 	const RefuseFriend = async () => {
 		try {
-			await axios.patch("http://localhost:3000/users/refuseFriendRequest", data, {withCredentials : true})
+			await axios.patch("http://localhost:3000/api/users/refuseFriendRequest", data, {withCredentials : true})
 			.then((rese) => {
 				console.log("Notifcation Refuse ", rese);
 				setFriendStatus(friendStatus)
@@ -595,7 +595,7 @@ function Notification () {
 			<div className="nes-container with-title">
 				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }}  className="title">Invitation Request</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-				<img src={`http://localhost:3000/auth/avatar/${data.userId}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
+				<img src={`http://localhost:3000/api/auth/avatar/${data.userId}`} style={{ borderRadius: '30px', width: '50px', height: '50px' }} alt="avatar"/>
 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{data.from}</span>	
 				{isFriend ?
 						(
@@ -624,7 +624,7 @@ export default function Home() {
 	Notification();	
 	const [states, setStates] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
+        axios.get(`http://localhost:3000/api/users/stats` , {withCredentials: true})
 		.then((response) => {
 			setStates(response.data);
 		})

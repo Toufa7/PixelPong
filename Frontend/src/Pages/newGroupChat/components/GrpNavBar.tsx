@@ -36,11 +36,11 @@ const GroupsList = () => {
 	const [avatarGroup, setGroupAvatar] = useState();
     const [groupsList, setGroupsList] = useState<string[]>([]);
     useEffect(() => {   
-        axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
+        axios.get(`http://localhost:3000/api/groupchat`, {withCredentials: true})
             .then((response) => {
 				console.log("Groups List " ,response.data);
 				setGroupsList(response.data);
-				const endpoint = `http://localhost:3000/groupchat/getimage/${group.id}`;
+				const endpoint = `http://localhost:3000/api/groupchat/getimage/${group.id}`;
 				axios.get(endpoint, {withCredentials: true})
 				.then((response) => {
 					console.log("Success Image Groups -> ", response.data);
@@ -59,7 +59,7 @@ const GroupsList = () => {
 		{
 			groupsList.map((group : any) => (
 				<div  className="userChatGroup" style={{display: 'flex',alignItems: 'center',padding: '10px',gap: '15px',cursor: 'pointer',borderBottom: '2px solid'}} key={name}>
-				<img src={`http://localhost:3000/groupchat/getimage/${group.id}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
+				<img src={`http://localhost:3000/api/groupchat/getimage/${group.id}`} style={{ borderRadius: '20px', width: '40px', height: '40px' }} alt="avatar" />
 				<span style={{ marginLeft: '10px', marginRight: 'auto' }}>{group.namegb}</span>
 				{
 					group.grouptype == "PUBLIC" ? (

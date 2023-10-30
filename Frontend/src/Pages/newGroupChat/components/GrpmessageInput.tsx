@@ -91,7 +91,7 @@ const messageInput = (props: any) => {
     useEffect(() => {
         
         axios
-            .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/users`, { withCredentials: true })
+            .get(`http://localhost:3000/api/groupchat/${props.groupInfo.id}/users`, { withCredentials: true })
             .then((res: any) => {
                 for (let i: number = 0; i < res.data.length; i++) {
                     groupUsers.set(res.data[i].id, res.data[i]);
@@ -103,7 +103,7 @@ const messageInput = (props: any) => {
     //Getting the old conversation
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/groupchat/${props.groupInfo.id}/messages`, { withCredentials: true })
+            .get(`http://localhost:3000/api/groupchat/${props.groupInfo.id}/messages`, { withCredentials: true })
             .then((res:any) => {
                 fillMap(res.data);
             })
@@ -124,14 +124,14 @@ const messageInput = (props: any) => {
             {
                 molLmessageId = element.senderId;
                 molLmessage = props.Sender.username;
-                molMsgPic = `http://localhost:3000/auth/avatar/${props.Sender.id}`;
+                molMsgPic = `http://localhost:3000/api/auth/avatar/${props.Sender.id}`;
                 molMsgSide = 0;
             }
             else
             {
                 molLmessageId = element.receiverId;
                 molLmessage = props.groupInfo.username;
-                molMsgPic = `http://localhost:3000/auth/avatar/${element.senderid}`;
+                molMsgPic = `http://localhost:3000/api/auth/avatar/${element.senderid}`;
                 molMsgSide = 1;
             }
             
@@ -177,7 +177,7 @@ const messageInput = (props: any) => {
             id: newMessage.roomid,
             senderid: newMessage.idsender,
             username: newMessage.username,
-            pic: `http://localhost:3000/auth/avatar/${newMessage.idsender}`,
+            pic: `http://localhost:3000/api/auth/avatar/${newMessage.idsender}`,
             side: messageSide,
             message: newMessage.message,
             timestamp: `${messageTimeStamp.getHours()}:${messageTimeStamp.format("mm")}`,

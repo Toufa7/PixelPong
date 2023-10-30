@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: database
+    environment:
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
+    ports:
+      - "5432:5432"
+    networks:
+      - thisnetwork
+  frontend:
+    build: ./Frontend
+    container_name: client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+      - postgres
+    networks:
+      - thisnetwork
+  backend:
+    build: ./Backend
+    container_name: server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - thisnetwork
+networks:
+  thisnetwork:
+    driver: bridge

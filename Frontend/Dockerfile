@@ -4,8 +4,10 @@ WORKDIR /app/pixelpong
 
 COPY package.json .
 
-RUN npm install 
+RUN npm install --force
+
+EXPOSE 5173
 
 COPY . .
 
-RUN npm run build 
+CMD ["npm", "run", "dev" ,"--", "--host"]

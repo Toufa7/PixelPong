@@ -1,16 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export const API_BASE_URL = 'http://localhost:9000';
-
-// import { API_BASE_URL } from './config.js';
-// await fetch(`${API_BASE_URL}/users`);
-
-
+// https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [react()],
-	// server: {
-	// 	host: "pixelpong",
-	// 	port: 9090,
-	// }
-})
+  plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      },
+    },
+  },
+});

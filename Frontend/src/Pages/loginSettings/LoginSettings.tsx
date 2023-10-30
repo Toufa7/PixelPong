@@ -30,7 +30,7 @@ const RetrieveCheckSendData =  () => {
         const data = new FormData();
         data.append('file', avatar);
         toast.promise(
-            axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
+            axios.post('http://localhost:3000/api/auth/uploads', data, { withCredentials: true })
             .then(() => {
             })
             .catch(() => {}),
@@ -42,7 +42,7 @@ const RetrieveCheckSendData =  () => {
         ,{ duration: 5000, position: 'top-right' });           
     }
     if (usernameCheck.test(nicknameInput)) {
-            axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true })
+            axios.post('http://localhost:3000/auth/api/updateprofil', { username: nicknameInput }, { withCredentials: true })
             .then(() => {
                 toast.success("Updated :)");
 
@@ -68,7 +68,7 @@ export default function LoginSettings() {
     const [isChecked, set2FAStatus] = useState(false);
     const handle2FAChange = () => {
         set2FAStatus(!isChecked);
-        const endpoint = isChecked ? "http://localhost:3000/auth/2fa/disable" : "http://localhost:3000/auth/2fa/enable";
+        const endpoint = isChecked ? "http://localhost:3000/api/auth/2fa/disable" : "http://localhost:3000/api/auth/2fa/enable";
         const status = isChecked ? 1 : 0;
         axios.put(endpoint, status, { withCredentials: true }) 
         .then (() => {})
@@ -93,7 +93,7 @@ export default function LoginSettings() {
     const [userInfo, setUserInfo] = useState("");
     useEffect(() => {
         const fetchData = () => {
-            axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+            axios.get("http://localhost:3000/api/users/profil", { withCredentials: true })
             .then((response) => {
                 setUserInfo(response.data)
             })
@@ -152,7 +152,7 @@ export default function LoginSettings() {
                                 <p>Do you want to go with the default settings?</p>
                                 <Anime translateY={['-100%', '0%']} duration={3000}>
                                     <div>
-                                        <img style={{width: '100px', height: '100px', borderRadius: '50%', margin: '10px'}} src={`http://localhost:3000/auth/avatar/default-image`}></img>
+                                        <img style={{width: '100px', height: '100px', borderRadius: '50%', margin: '10px'}} src={`http://localhost:3000/api/auth/avatar/default-image`}></img>
                                         <a style={{fontWeight: "bold"}}>{userInfo.username}</a>
                                     </div>
                                 </Anime>

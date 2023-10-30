@@ -59,14 +59,14 @@ const UpdateGroup = (id : string, setIsCreated: React.Dispatch<React.SetStateAct
 		if (id)
 		{
 			// toast.promise(
-				axios.patch(`http://localhost:3000/groupchat/${id}`, groupData, { withCredentials: true })
+				axios.patch(`http://localhost:3000/api/groupchat/${id}`, groupData, { withCredentials: true })
 				.then((res) => {
 					if (res.data.message == "Groupchat updated") {
 						toast.success("Groupchat updated");
 						if (groupAvatar) {
 							const data = new FormData();
 							data.append('file', groupAvatar);
-							axios.post(`http://localhost:3000/groupchat/${id}/uploadimage`, data, { withCredentials: true })
+							axios.post(`http://localhost:3000/api/groupchat/${id}/uploadimage`, data, { withCredentials: true })
 							.then((res) => {
 
 								if (res.data.message == "Image upload ")
@@ -125,7 +125,7 @@ const ListingUsersAdmins = ({group}) => {
 	const [selectedMember , setSelectedMember] = useState("ID-XXXX");
 	if (group) {
 		useEffect(() => {
-			axios.get(`http://localhost:3000/groupchat/${group.id}/users`, { withCredentials: true })
+			axios.get(`http://localhost:3000/api/groupchat/${group.id}/users`, { withCredentials: true })
 			.then((response) => {
 				setUsers(response.data);
 			})
@@ -133,7 +133,7 @@ const ListingUsersAdmins = ({group}) => {
 		}, [group]); 
 		
 		useEffect(() => {
-			axios.get(`http://localhost:3000/groupchat/${group.id}/admins`, { withCredentials: true })
+			axios.get(`http://localhost:3000/api/groupchat/${group.id}/admins`, { withCredentials: true })
 			.then((response) => {
 				setAdmins(response.data);
 			})
@@ -231,7 +231,7 @@ const ListingUsersAdmins = ({group}) => {
 
 
 	const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false);
-	axios.get(`http://localhost:3000/groupchat/${group.id}/checksuperuser`,{ withCredentials: true })
+	axios.get(`http://localhost:3000/api/groupchat/${group.id}/checksuperuser`,{ withCredentials: true })
 	.then((respo) => {
 		setSuperAdmin(respo.data);
 	})
@@ -262,7 +262,7 @@ const ListingUsersAdmins = ({group}) => {
 							<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} key={idx}>
 								<div>
 									<a>
-										<img src={`http://localhost:3000/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
+										<img src={`http://localhost:3000/api/auth/avatar/${admins[idx].id}`} style={{ borderRadius: '30px', width: '50px', height: '50px', marginTop: '10px' }} alt="avatar" />
 									</a>
 								</div>
 								<span style={{ marginLeft: '10px', marginRight: 'auto'}}>{admins[idx].username}</span>
@@ -280,7 +280,7 @@ const ListingUsersAdmins = ({group}) => {
 						return (
 							<div onClick={() => {setSelectedMember(users[idx].id); setOptions(true)}} style={{ display: 'flex', alignItems: 'center' ,overflow: "auto",justifyContent: "space-between", gap: '5px', marginTop: '5px'}} key={idx}>
 								<a>
-									<img src={`http://localhost:3000/auth/avatar/${users[idx].id}`} style={{ borderRadius: '20px', width: '40px', height: '40px', marginTop: '10px'}} alt="avatar" />
+									<img src={`http://localhost:3000/api/auth/avatar/${users[idx].id}`} style={{ borderRadius: '20px', width: '40px', height: '40px', marginTop: '10px'}} alt="avatar" />
 									<span style={{marginLeft: '10px'}}>{users[idx].username}</span>
 								</a>
 								{
@@ -336,7 +336,7 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
     useEffect(() => {
 		const CheckAdmin = async () => {
 			try {
-				const response = await axios.get(`http://localhost:3000/groupchat/lifihomanaadmin`, {withCredentials: true});
+				const response = await axios.get(`http://localhost:3000/api/groupchat/lifihomanaadmin`, {withCredentials: true});
 				setGroupsList(response.data);
 				if (response.data.length != 0)
 					setamIAdmin(true);
@@ -358,7 +358,7 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 	const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false);
 	useEffect(() => {
 		if (!flag) return; 
-		axios.get(`http://localhost:3000/groupchat/${selecting.id}/checksuperuser`,{ withCredentials: true })
+		axios.get(`http://localhost:3000/api/groupchat/${selecting.id}/checksuperuser`,{ withCredentials: true })
 		.then((respo) => {
 			setSuperAdmin(respo.data);
 		})
@@ -378,7 +378,7 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 							groupsList.map((group, idx) => {
 								return (
 									<a key={idx}>
-										<img onClick={() => {setSelecting(group);setFlag(true)}} src={`http://localhost:3000/groupchat/getimage/${group.id}`} title={group.namegb} style={{borderRadius: '50%', width: '55px', height: '55px', margin: '10px' }} className="GroupAvataraa" alt="avatar"  />
+										<img onClick={() => {setSelecting(group);setFlag(true)}} src={`http://localhost:3000/api/groupchat/getimage/${group.id}`} title={group.namegb} style={{borderRadius: '50%', width: '55px', height: '55px', margin: '10px' }} className="GroupAvataraa" alt="avatar"  />
 									</a>
 								)})
 						}
@@ -416,7 +416,7 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 									<ListingUsersAdmins group={selecting} />
 									<a style={{color: '#333C54', margin: '10px'} }>
 										<img src={erase} style={{width: '40px', height: '40px', marginRight: '10px'}}  onClick={() => {
-											axios.delete(`http://localhost:3000/groupchat/${selecting.id}`, {withCredentials: true})
+											axios.delete(`http://localhost:3000/api/groupchat/${selecting.id}`, {withCredentials: true})
 											.then(() => {
 												setUpdatingGroups(prev => !prev);
 												setFlag(false);

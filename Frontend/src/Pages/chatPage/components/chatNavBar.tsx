@@ -68,11 +68,11 @@ const Dms = (props:any) => {
             let tmpObj:chatUser;
 
             axios
-                .get(`http://localhost:3000/users/Friends/`, { withCredentials: true })
+                .get(`http://localhost:3000/api/users/Friends/`, { withCredentials: true })
                 .then((res:any) =>  {
                     for (let i: number = 0; i < res.data.length; i++)
                     {
-                        tmpObj = {userName: res.data[i].username, pic: `http://localhost:3000/auth/avatar/${res.data[i].id}`, id: res.data[i].id}
+                        tmpObj = {userName: res.data[i].username, pic: `http://localhost:3000/api/auth/avatar/${res.data[i].id}`, id: res.data[i].id}
                         friendsMap.set(res.data[i].id, tmpObj);
                     }
                 })
@@ -88,9 +88,9 @@ const Dms = (props:any) => {
         for (let i: number = 0; i < conversations.length; i++)
         {
             axios
-                .get(`http://localhost:3000/users/profile/${conversations[i]}`, { withCredentials: true })
+                .get(`http://localhost:3000/users/api/profile/${conversations[i]}`, { withCredentials: true })
                 .then((res) => {
-                    tmpObj = { userName: res.data.username, pic: `http://localhost:3000/auth/avatar/${conversations[i]}`, id: conversations[i] }
+                    tmpObj = { userName: res.data.username, pic: `http://localhost:3000/api/auth/avatar/${conversations[i]}`, id: conversations[i] }
                     map.set(conversations[i], tmpObj);
                 })
                 .catch(Error)

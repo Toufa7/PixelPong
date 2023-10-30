@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,   HttpStatus , HttpException} from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { User, UserStatus } from '@prisma/client';
@@ -12,7 +12,6 @@ interface Payload {
   username: string;
   email: string;
   image?: string;
-  token: string;
 }
 @Injectable()
 export class AuthService {
@@ -26,7 +25,6 @@ export class AuthService {
       id: user?.id,
       username: user?.username,
       email: user?.email,
-      token: user?.token,
       image : user?.profileImage,
     };
     return payload;
@@ -50,15 +48,13 @@ export class AuthService {
   ): Promise<User> {
     const { id, emails, name, _json, username, photos } = profile;
     const photo = type === 1 ? photos[0].value : _json.image.link;
-    const name_ = type === 1 ? name.givenName : username;
-    console.log(emails[0])
+    const name_ = type === 1 ? name?.givenName : username;
     let user = await this.usersService.findOneByEmail(emails[0]?.value);
     if (!user) {
       user = await this.prisma.user.create({
         data: {
           email: emails[0].value,
           username: name_,
-          token: accessToken,
           profileImage: photo,
           status: UserStatus.ONLINE,
         },
@@ -86,12 +82,11 @@ export class AuthService {
       });
       return user;
     } catch (error) {
-      return null; 
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
   
   async change2FAStatus(id: string): Promise<void> {
-    console.log("im here");
     try {
       await this.prisma.user.update({
         where: {
@@ -102,7 +97,7 @@ export class AuthService {
         },
       });
     } catch (error) {
-      console.error(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -115,15 +110,14 @@ export class AuthService {
         data: {
           twofa: false,
           twofasecret: null,
-          twofatoken: null,
         },
       });
     } catch (error) {
-      console.error(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
   
-  async set2Fasecret(id: string, secret: string, token: string): Promise<void> {
+  async set2Fasecret(id: string, secret: string): Promise<void> {
     try {
       await this.prisma.user.update({
         where: {
@@ -131,7 +125,6 @@ export class AuthService {
         },
         data: {
           twofasecret: secret,
-          twofatoken: token,
         },
       });
     } catch (error) {
@@ -151,7 +144,7 @@ export class AuthService {
         },
       });
     } catch (error) {
-      console.error(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

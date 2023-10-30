@@ -17,13 +17,13 @@ const Buttons = () => {
     return (
         <>
             <div className="a">
-                <a className="nes-btn google" href="http://localhost:3000/auth/google/">Google</a>
+                <a className="nes-btn google" href="http://localhost:3000/api/auth/google/">Google</a>
             </div>
                 <div className="text-OR">
                     <AnimatedText type="chars">-- OR --</AnimatedText>
                 </div>
             <div className="b">
-                <a className="nes-btn intra" href="http://localhost:3000/auth/42/">Intra 42</a>
+                <a className="nes-btn intra" href="http://localhost:3000/api/auth/42/">Intra 42</a>
             </div>
         </>
     );

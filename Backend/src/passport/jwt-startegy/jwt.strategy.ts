@@ -1,4 +1,5 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
+import {HttpStatus, HttpException} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { configDotenv } from 'dotenv';
 // import { TokenBlacklistService } from '../../auth/token-blacklist.service';
@@ -21,18 +22,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
   async validate(payload: any) {
     try {
-      // if(this.banedtoken.verifybanedtoken(payload.token))
-      //     throw new Error("token is baned");
-      // //console.log('what is going on  : ', payload);
       return {
         id: payload.id,
         username: payload.username,
         email: payload.email,
         image: payload.profileImage,
-        token: payload.token,
       };
     } catch (e) {
-      //console.log(e);
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
   }
 }

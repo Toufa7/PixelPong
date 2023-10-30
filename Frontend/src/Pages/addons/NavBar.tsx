@@ -57,7 +57,7 @@ const NavBarHeader = () => {
 const NavBarFooter = () => {
 	const [userId, setUserId] = useState();
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
+        axios.get(`http://localhost:3000/api/users/profil`, { withCredentials: true })
             .then((res:any) =>  {
                 setUserId(res.data.id);
             })
@@ -73,13 +73,13 @@ const NavBarFooter = () => {
 		<div className="nav-footer">
 		<div className="nav-item">
 			<Link to="/profil" title="Profil">
-				<img src={`http://localhost:3000/auth/avatar/${userId}`} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
+				<img src={`http://localhost:3000/api/auth/avatar/${userId}`} style={{ height: '50px', width: '50px', borderRadius: '50%' }} alt="Profile"/>
 			</Link>
 		</div>
 		<div className="nav-item">
 			<Link to="/welcome" title="Logout">
 				<img onClick={() => {
-						axios.post("http://localhost:3000/auth/logout",{}, {withCredentials: true})
+						axios.post("http://localhost:3000/api/auth/logout",{}, {withCredentials: true})
 						.then((res) => {
 							console.log("Response Logout -> ", res.data);
 							window.location.href = '/welcome';

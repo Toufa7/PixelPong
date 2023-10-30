@@ -42,22 +42,14 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleConnection(client: Socket) {
     const user = await this.getUser(client);
-    //console.log('client connected -->' + client.id, '  ', jwt);
     this.server.emit('checkout', { msg: 'hello' });
     if (user) {
-      // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', user['id']);
-      // console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrr : ', client.id);
 
       if(this.connectedUsers.has(user.id ))
         this.connectedUsers.get(user.id).push(client.id);
       else
         this.connectedUsers.set(user.id, [client.id]);
-        
-      const status = UserStatus.ONLINE;
-      // //console.log(
-      //   'ooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkk',
-      // );
-      this.userservice.updatestatus(user, status);
+      this.userservice.updatestatus(user, UserStatus.ONLINE);
     }
   }
 
@@ -66,13 +58,11 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     if(user)
     {
-      console.log('A client disconnected');
       const index = this.connectedUsers.get(user.id).indexOf(client.id);
       if(index != -1)
       this.connectedUsers.get(user.id).splice(index, 1);
     if (this.connectedUsers.get(user.id).length === 0) {
         this.connectedUsers.delete(user.id)
-        console.log("i dont know ! ===============================> ",this.connectedUsers.get(user['id']))
         this.userservice.updatestatus(user,UserStatus.OFFLINE);
       }
     }
@@ -94,11 +84,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     try {
       // await this.gatewayservice.createnotification(data);
       const sockets = this.connectedUsers.get(clientId);
-      console.log("wtffff",sockets)
-      console.log("wtffff",clientId)
-
       if (sockets) {
-        console.log('sending');
         this.server.to(sockets).emit('notification', data);
       }
     } catch (error) {
@@ -112,7 +98,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const t = decode(jwt);
       if (session && jwt) {
         try{
-          const user = await this.Jwt.verifyAsync(jwt,{secret:'THISISMYJWTSECRET'});
+          const user = await this.Jwt.verifyAsync(jwt,{secret:`${process.env.JWT_SECRET}`});
           return user;
         }catch(err){
           return null; 
