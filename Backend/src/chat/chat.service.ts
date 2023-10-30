@@ -37,7 +37,7 @@ export class ChatService {
 
     }
     catch (err) {
-      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+      return [];
     }
   }
 
