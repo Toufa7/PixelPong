@@ -1,3 +1,4 @@
+import { Grouptype } from "@prisma/client";
 import { IsNotEmpty, IsString, NotContains, notContains } from "class-validator";
 
 
@@ -9,7 +10,7 @@ export class CreateGroupchatDto {
 
     @IsNotEmpty()
     @IsString()
-    grouptype: string;
+    grouptype: Grouptype;
 
     password? : string;
 }

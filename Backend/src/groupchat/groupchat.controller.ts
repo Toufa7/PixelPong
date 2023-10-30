@@ -142,7 +142,7 @@ export class GroupchatController {
 
     //get Requestjoingroup of a groupchat
     @Get("requestjoingroup")
-    findRequestjoingroup(@Req() req : any ) : Promise<Requestjoingroup[]> {
+    findRequestjoingroup(@Req() req) : Promise<Requestjoingroup[]> {
         return this.GroupchatService.findRequestjoingroup(req.user.id);
     }
 
@@ -150,7 +150,7 @@ export class GroupchatController {
 
     //crear a groupchat
     @Post()
-    create(@Body() createGroupchatDto: CreateGroupchatDto , @Req() req ): any {
+    create(@Body() createGroupchatDto: CreateGroupchatDto , @Req() req ): Promise<Groupchat>  {
         return this.GroupchatService.create(createGroupchatDto, req.user.id);
     }
 
@@ -168,39 +168,39 @@ export class GroupchatController {
           }),
         }),
       )
-    uploadimage(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Req() req): any {
-        const data =  this.GroupchatService.uploadimage(file.filename ,id, req.user.id);
+    uploadimage(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Req() req): Promise<void> {
+        return this.GroupchatService.uploadimage(file.filename ,id, req.user.id);
     }
     
     //update a groupchat
     @Patch(":id")
-    update(@Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req): any { 
+    update(@Param('id') id: string, @Body() updateGroupchatDto: updateGroupchatDto , @Req() req): Promise<void> { 
         return this.GroupchatService.update(id, updateGroupchatDto, req.user.id);
     }
 
     // ban a user from a groupchat
     @Patch(":id/:iduser/ban")
-    ban(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req): any {
+    ban(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req): Promise<void> {
         return this.GroupchatService.banuser(id, iduser, req.user.id);
     }
 
    
     // mute a user from a groupchats
     @Post(":id/:iduser/mute")
-    mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req, @Body() data ): any {
+    mute(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req, @Body() data ): Promise<void>{
         return this.GroupchatService.muteuser(id, iduser, req.user.id, data.time);
     }
 
 
     //add a user to a groupchat public
     @Patch(':id/userpublic')
-    adduser(@Param('id') id: string , @Req() req ) {
+    adduser(@Param('id') id: string , @Req() req ) : Promise<void> {
         return this.GroupchatService.adduser(id, req.user.id);
     }
 
     //add a user to a groupchat protected
     @Patch(":id/userprotected")
-    adduserprotected(@Param('id') id: string,  @Req() req , @Body() data : {pass : string} ) {
+    adduserprotected(@Param('id') id: string,  @Req() req , @Body() data : {pass : string} ): Promise<void> {
         return this.GroupchatService.adduserprotected(id ,data.pass, req.user.id);
     }
 
@@ -212,12 +212,12 @@ export class GroupchatController {
     }
     //accept a request to join a groupchat
     @Patch(":id/:iduser/accept")
-    acceptrequest(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req) {
+    acceptrequest(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req): Promise<void> {
         return this.GroupchatService.acceptrequest(id, iduser, req.user.id);
     }
     //refuse a request to join a groupchat
     @Patch(":id/:iduser/refuse")
-    refuserequest(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req){
+    refuserequest(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req): Promise<void>{
         return this.GroupchatService.refuserequest(id, iduser, req.user.id);
     }
     //////////////////////////////////////-------------------////////////////////////////////////
@@ -226,29 +226,29 @@ export class GroupchatController {
 
     //add an admin to a groupchat
     @Patch(":id/:iduser/admin")
-    addadmin(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req) {
+    addadmin(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req): Promise<void> {
         return this.GroupchatService.addadmin(id, iduser, req.user.id);
     }
 
     //delete a groupchat
     @Delete(":id")
-    remove(@Param('id') id: string, @Req() req ){
+    remove(@Param('id') id: string, @Req() req ): Promise<void>{
         return this.GroupchatService.remove(id, req.user.id);
     }
 
     //delete a user from a groupchat
     @Delete(":id/:iduser/user")
-    removeuser(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req){
+    removeuser(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req): Promise<void>{
         return this.GroupchatService.removeuser(id, iduser, req.user.id);
     }
     //exit a groupchat
     @Delete(":id/exit")
-    exit(@Param('id') id: string, @Req() req ) {
+    exit(@Param('id') id: string, @Req() req ) : Promise<void> {
         return this.GroupchatService.exit(id, req.user.id);
     }
     //delete an admin from a groupchat
     @Delete(":id/:iduser/admin")
-    removeadmin(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req ){
+    removeadmin(@Param('id') id: string, @Param('iduser') iduser : string, @Req() req ) : Promise<void>{
         return this.GroupchatService.removeadmin(id, iduser, req.user.id);
     }
 }

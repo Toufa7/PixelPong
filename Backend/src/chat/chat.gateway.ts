@@ -153,20 +153,28 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   //////////////////////request to join game //////////////////////////
   async requestjoingame(namesender: string, idsender: string, idrecever: string) {
     try {
-      const idUs = await map.get(idrecever);
-      const token = this.generate_Random_id(10);
-
-      await this.prisma.user.update({
+      //get token of user
+      const tokenofuser = await this.prisma.user.findUnique({
         where: { id: idsender },
-        data: {
-          tokenjoingame: token,
+        select: {
+          tokenjoingame: true,
         },
       });
-      return this.server.to(idUs).emit('requestjoingame', {
-        from: namesender,
-        token: token,
-        idsender: idsender
-      });
+      if (tokenofuser.tokenjoingame == null) {
+        const idUs = await map.get(idrecever);
+        const token = this.generate_Random_id(10);
+        await this.prisma.user.update({
+          where: { id: idsender },
+          data: {
+            tokenjoingame: token,
+          },
+        });
+        return this.server.to(idUs).emit('requestjoingame', {
+          from: namesender,
+          token: token,
+          idsender: idsender
+        });
+      }
     }
     catch (err) {
       throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST);
