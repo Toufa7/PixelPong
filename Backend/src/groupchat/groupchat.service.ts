@@ -365,7 +365,6 @@ export class GroupchatService {
 
     //create a groupchat
     async create(createGroupchatDto: any, iduser: string) : Promise<Groupchat> {
-        try {
             const namegp = await this.prisma.groupchat.findUnique({
                 where: {
                     namegb: createGroupchatDto.namegb,
@@ -395,9 +394,6 @@ export class GroupchatService {
             else {
                 throw new HttpException('name of Groupchat already exist', HttpStatus.BAD_REQUEST);
             }
-        } catch (error) {
-            throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
-        }
     }
 
     //upload a image to a groupchat

@@ -82,7 +82,6 @@ const Dms = (props:any) => {
     useEffect(() => {
         axios.get(`http://localhost:3000/api/groupchat`, {withCredentials: true})
         .then((response:any) => {
-            console.log(response.data)
             GroupsMap.clear()
             for (let index = 0; index < response.data.length; index++) {
                 GroupsMap.set(response.data[index].id, response.data[index])
@@ -100,8 +99,6 @@ const Dms = (props:any) => {
     {
         props.cu(newString);
     };
-
-    console.log("Array Size -> ", GroupsMap);
 
     return (
         <div className="GrpchatDmDiv">

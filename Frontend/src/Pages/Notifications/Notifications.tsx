@@ -23,6 +23,9 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 			await axios.patch(`http://localhost:3000/api/groupchat/${myData.groupchatId}/${myData.senderId}/refuse`, {}, { withCredentials: true })
 			.then((rese) => {
 				console.log("Notification Refuse ", rese);
+			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 			}
 			catch (error) {
@@ -35,7 +38,7 @@ const GroupRequest = ({ myData }: {myData: myDataTypes }) => {
 	return (
 		<div style={{ padding: '5px' }}>
 			<div className="nes-container with-title">
-				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to {myData.namegp}</p>
+				<p style={{ background: '#ffc7b2', transform: 'translateY(-5px)', border: '2px solid black' }} className="title">Group Request to 	</p>
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 					<div>
 						<img src={`http://localhost:3000/api/auth/avatar/${myData.userId}`} style={{ borderRadius: '50%', width: '80px', height: '80px' }} alt="avatar" />
@@ -66,14 +69,18 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 		}
 	}
 	
+	console.log("Object Sent -> ", object);
 	const acceptFriend = async () => {
 		console.log("Accepted Sent Object -> ", object);
 		try {
-		await axios.patch("http://localhost:3000/api/users/acceptFriendRequest", object, { withCredentials: true })
-		.then((rese) => {
-			console.log("Notification Acceptted ", rese);
-			setFriendStatus(friendStatus);
-		});
+			await axios.patch("http://localhost:3000/api/users/acceptFriendRequest", object, { withCredentials: true })
+			.then((rese) => {
+				console.log("Notification Acceptted ", rese);
+				setFriendStatus(friendStatus);
+			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
 	  	} 
 		catch (error) {
 			console.log("Error Caught ", error);
@@ -82,12 +89,18 @@ const FriendRequest = ({ myData }: {myData: myDataTypes }) => {
 	};
   
 	const refuseFriend = async () => {
+	console.log("Object o Sent -> ", object);
+
+
 		try {
 			await axios.patch("http://localhost:3000/api/users/refuseFriendRequest", object, { withCredentials: true })
 			.then((rese) => {
 				console.log("Accepted Sent Object -> ", object);
 				console.log("Notification Refuse ", rese);
 				setFriendStatus(friendStatus);
+			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 			toast.dismiss();toast.remove()
 		}
@@ -165,9 +178,6 @@ function Notifications() {
 			socketgp.off();
 		};
 	}, []);
-  
-	
-	console.log("groupRequests.length -> ", groupRequests.length);
   
 	return (
 		<div className="notification">

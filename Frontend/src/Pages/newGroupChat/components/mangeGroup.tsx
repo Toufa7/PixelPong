@@ -55,6 +55,9 @@ const UpdateGroup = (id : string, setIsCreated: React.Dispatch<React.SetStateAct
 						.then(() => {})
 					}
 					setIsCreated(prev => !prev)
+				})
+				.catch((error) => {
+					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				}),
 				{
 					loading: "Sending data...",
@@ -90,29 +93,26 @@ const ListingUsersAdmins = ({group}) => {
 	const [users, setUsers] = useState([]);
 	const [admins, setAdmins] = useState([]);
 	const [options, setOptions] = useState<boolean>(false);
-	console.log("Group IIDDDD -> ", group.id);
 
 	const [selectedMember , setSelectedMember] = useState("ID-XXXX");
 	if (group) {
 		useEffect(() => {
 			axios.get(`http://localhost:3000/api/groupchat/${group.id}/users`, { withCredentials: true })
 			.then((response) => {
-				console.log("Users Response -> ", response.data);
 				setUsers(response.data);
 			})
-			.catch(() => {
-				console.log("Error fetching users:");
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}, [group]); 
 		
 		useEffect(() => {
 			axios.get(`http://localhost:3000/api/groupchat/${group.id}/admins`, { withCredentials: true })
 			.then((response) => {
-				console.log("Admins Response -> ", response.data);
 				setAdmins(response.data);
 			})
-			.catch(() => {
-				console.log("Error fetching admins:");
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}, [group]);
 	}
@@ -120,22 +120,20 @@ const ListingUsersAdmins = ({group}) => {
 	
 	const kickingMember = (memberId : string, groupId : string) => {
 		axios.delete(`http://localhost:3000/api/groupchat/${groupId}/${memberId}/user`, { withCredentials: true })
-		.then((reseponse) => {
-			console.log("KICKING USER -> ", reseponse.data);
+		.then(() => {
 		})
-		.catch((err) => {
-			console.error("KICKING Error -> ", err);
-		})
+		.catch((error) => {
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
 	}
 
 	const baningMember = (memberId : string, groupId : string) => {
 		axios.patch(`http://localhost:3000/api/groupchat/${groupId}/${memberId}/ban`, {}, { withCredentials: true })
-		.then((reseponse) => {
-			console.log("BANING USER -> ", reseponse);
+		.then(() => {
 		})
-		.catch((err) => {
-			console.error("BANING Error -> ", err);
-		})
+		.catch((error) => {
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
 	}
 
 	function handleMuteSelect(event , memberId : string, groupId : string ) {
@@ -145,11 +143,10 @@ const ListingUsersAdmins = ({group}) => {
 			duration == 0 ? timeer = (5 * 60000) : timeer = (15 * 60000);
 			console.log('Duration -> Time ', duration, timeer);
 			axios.post(`http://localhost:3000/api/groupchat/${groupId}/${memberId}/mute`,{ time: timeer },{ withCredentials: true })
-			.then((response) => {
-				console.log('MUTING USER -> ', response.data);
+			.then(() => {
 			})
 			.catch((error) => {
-				console.error('MUTING Error -> ', error);
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			});
 		}
 	}
@@ -162,21 +159,19 @@ const ListingUsersAdmins = ({group}) => {
 			console.log("Role is -> ", role);
 			if (role == "member") {
 				axios.delete(`http://localhost:3000/api/groupchat/${groupId}/${memberId}/admin`,{ withCredentials: true })
-				.then((response) => {
-					console.log('Setting Admin USER -> ', response.data);
+				.then(() => {
 				})
 				.catch((error) => {
-					console.error('Settting Admin Error -> ', error);
+					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				});
 			}
 			else
 			{
 				axios.patch(`http://localhost:3000/api/groupchat/${groupId}/${memberId}/admin`,{}, { withCredentials: true })
-				.then((response) => {
-					console.log('Setting Admin USER -> ', response.data);
+				.then(() => {
 				})
 				.catch((error) => {
-					console.error('Settting Admin Error -> ', error);
+					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				});
 			}
 		}
@@ -186,16 +181,11 @@ const ListingUsersAdmins = ({group}) => {
 	const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false);
 	axios.get(`http://localhost:3000/api/groupchat/${group.id}/checksuperuser`,{ withCredentials: true })
 	.then((respo) => {
-		console.log("Success SuperUser -> ", respo.data);
 		setSuperAdmin(respo.data);
 	})
-	.catch((erro) => {
-		console.log("Error in SueprAdmin ", erro);
-	})
-
-	console.log(" ==> ", isSuperAdmin);
-
-
+	.catch((error) => {
+		console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+	});
 
 	const openMembersDialog = () => {
 		const dialog = document.getElementById('dialog_members');
@@ -320,9 +310,11 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 		if (!flag) return; 
 		axios.get(`http://localhost:3000/api/groupchat/${selecting.id}/checksuperuser`,{ withCredentials: true })
 		.then((respo) => {
-			console.log("first")
 			setSuperAdmin(respo.data);
 		})
+		.catch((error) => {
+			console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+		});
 	}, [flag])
 
 	return (
@@ -375,7 +367,6 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 									<ListingUsersAdmins group={selecting} />
 									<a style={{color: '#333C54', margin: '10px'} }>
 										<img src={erase} style={{width: '40px', height: '40px', marginRight: '10px'}}  onClick={() => {
-											console.log("selecting.id ====> ", selecting.id);
 											axios.delete(`http://localhost:3000/api/groupchat/${selecting.id}`, {withCredentials: true})
 											.then(() => {
 												setUpdatingGroups(prev => !prev);
@@ -383,7 +374,8 @@ const ManageGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 												setIsCreated(prev => !prev)
 												toast.success("Delete Success", {style: {textAlign: "center", width: '300px'}, position: "top-right"});
 											})
-											.catch(() => {
+											.catch((error) => {
+												console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 												toast.error("Delete Failed", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 											})}}>
 										</img>Delete Group</a>

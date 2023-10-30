@@ -2,17 +2,6 @@ import axios from "axios";
 import { useState } from "react"
 import toast, { Toaster } from "react-hot-toast";
 
-/*
-	TODO: Receiving the ID of the Selected Group to be updated
-    namegb : string;
-    usersgb : string;
-    admins : string;
-    grouptype: string;
-    password? : string;
-    image : string;
-*/
-
-
 const CreatingGroup = (setIsCreated) => {
 	const groupName : string	= document.getElementById('name_field')?.value;
 	const choice : number		= document.getElementById("default_privacy")?.value;
@@ -23,9 +12,7 @@ const CreatingGroup = (setIsCreated) => {
 	if (regEx.test(groupName) && groupAvatar && choice) {
 		const data = new FormData();
 		data.append('file', groupAvatar);
-		console.log("Created Avatar -> ", groupAvatar);
 
-		console.log("Avatar -> ", data);
 		let groupType = "PUBLIC";
 		if (choice == 1) {groupType = "PRIVATE";}
 		else if (choice == 2) {groupType = "PROTECTED";}
@@ -34,16 +21,21 @@ const CreatingGroup = (setIsCreated) => {
 			grouptype: groupType,
 			password: (choice == 2) ? password : undefined
 		};
-		console.log(" --== Create =====--> ", groupData);
+
+		console.log("Sending Data as -> ", groupData);
 		toast.promise(
 			axios.post("http://localhost:3000/api/groupchat", groupData, { withCredentials: true })
 			.then((response) => {
 				axios.post(`http://localhost:3000/api/groupchat/${response.data.id}/uploadimage`, data, { withCredentials: true })
-				.then((response) => {
+				.then(() => {
 					setIsCreated(prev => !prev);
-					console.log("Creating Group Response -> ", response);
 				})
-				console.log("Creating Group Response -> ", response);
+				.catch((error) => {
+					console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+				});
+			})
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 			}),
 			{
 				loading: "Sending data...",
@@ -56,7 +48,6 @@ const CreatingGroup = (setIsCreated) => {
 	else if (choice == 2 && (password && password.length < 8)) {
 		toast.error("Password Too Short	", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 	}
-
 	else if (!regEx.test(groupName)) {
 		if (!groupName)
 			toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
@@ -79,8 +70,6 @@ const CreateGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 	const [groupName , setGroupName] = useState("");
 	const [isProtected , setProtected] = useState<boolean>(false);
 	const [update , setUpdate] = useState("");
-	console.log("Typing -> ", update);
-	console.log(" update ", update);
 	return (
 		<div className="chatDmDiv" style={{border: "1px solid", background: "#e5f0ff" ,borderRadius: "10px"}}>
 			<Toaster/>
@@ -98,7 +87,7 @@ const CreateGroup = ({setIsCreated} : {setIsCreated: React.Dispatch<React.SetSta
 				</div>
 				{isProtected && (
 					<div style={{margin: '10px'}} className="nes-field">
-						<input  style={{background: '#E9E9ED',width: '300px'}} type="password" id="password_field" placeholder="P@55w0rd" maxLength={18} required className="nes-input" />
+						<input required style={{background: '#E9E9ED',width: '300px'}} type="password" id="password_field" placeholder="P@55w0rd" minLength={8} className="nes-input" />
 					</div>
 				)}
 				<label style={{marginTop: '10px'}}>Group Avatar</label>

@@ -103,7 +103,7 @@ export class AuthController {
       const secret = authenticator.generateSecret();
       const otpauth = authenticator.keyuri(req.user.id, '2FA', secret);
       const qr = await qrcode.toDataURL(otpauth);
-      await this.authService.set2Fasecret(req.user.id, secret, otpauth);
+      await this.authService.set2Fasecret(req.user.id, secret);
       await this.usersService.isauthenticated(req.user.id, false);
       return qr;
     }
@@ -164,7 +164,7 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
       await this.authService.updateimage(file.filename, req.user.id);
       return { image: file };
     } catch (error) {
-      console.error(error);
+      throw new HttpException('Image not uploaded', HttpStatus.NOT_FOUND);
     }
   }
   @Post('2fa/validate')
@@ -173,6 +173,7 @@ async enable2FAStatus(@Req() req): Promise<{ status: boolean }> {
     const user = await this.usersService.findOne(req.user.id);
     const isValid = authenticator.check(body.otp, user.twofasecret);
     if (isValid) {
+      console.log("isValid",body.otp);
       await this.usersService.isauthenticated(req.user.id, true);
       return res
         .status(200)

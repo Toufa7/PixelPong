@@ -36,7 +36,9 @@ function TwoFa() {
         .then((response) => {
             updateQr(response.data);
         })
-        .catch(() => {});
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }, []);
 
     const iClick = () =>  {
@@ -56,9 +58,9 @@ function TwoFa() {
             else
                 toast.error("Invalid Code");
         })
-        .catch(() => {
-            toast.error("Invalid Code");
-        })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
     
     return (

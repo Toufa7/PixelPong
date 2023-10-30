@@ -187,7 +187,10 @@ async getallNotifications(@Req() req: any){
 @Post('sendFriendRequest') 
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
   console.log("body", body.to)
-  try { 
+  try {
+	const already = await this.usersService.findFriendRequestIdBySenderReceiver(req.user.id, body.to);
+	if(already)
+		throw new HttpException('Failed to send friend request', HttpStatus.BAD_REQUEST);
 	const user = await this.usersService.findOne(req.user.id);
 	const data : FriendrequestDto =  {
 	  userId: req.user.id,
@@ -200,9 +203,8 @@ async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
 	await this.socket.hanldleSendNotification(body.to, req.user.id,data);
 	const notification = await this.usersService.sendFriendRequest(req.user.id, data);
 	return notification;
-  } catch (error) {
-	console.error(error); // Log the error for debugging			
-	throw new HttpException('Failed to send friend request', HttpStatus.INTERNAL_SERVER_ERROR);
+  } catch (error) {		
+	throw new HttpException('Failed to send friend request', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -214,16 +216,19 @@ async acceptFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
 	const find = await this.usersService.acceptFriendRequest(friendrequest.id, body.userId, body.to);
 	return find;
   } catch (error) {
-	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
+	throw new HttpException('Failed to add friend', HttpStatus.BAD_REQUEST);
   }
 }
 
-@Patch('refuseFriendRequest/')
-async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
+@Patch('refuseFriendRequest')
+async refuseFriendRequest(@Req() req,	@Body() body: FriendrequestDto): Promise<any> {
   try {
-	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
-	return await this.usersService.refuseFriendRequest(friendrequest);
+	  const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.to);
+	  console.log('Bodyyyyyyyy failed ', body);
+	 const find = await this.usersService.refuseFriendRequest(friendrequest);
+	 return find;
   } catch (error) {
+	console.log(error.message);
 	throw new HttpException('Failed to remove friend', HttpStatus.BAD_REQUEST);
   }
 }
