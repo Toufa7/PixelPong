@@ -9,6 +9,7 @@ import key from './assets/key.svg';
 import bomb from './assets/bomblogo.svg';
 import joystick from './assets/joystic.svg';
 import handshake from './assets/handshake.png';
+import { useNavigate } from 'react-router-dom';
 
 const States = (props : {winRate: number, wins: number, loses: number, matchplayed: number}) => {
     return (
@@ -45,9 +46,9 @@ const Profil = () => {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch((error) => {
-            console.log("Error -> ", error);
-        })
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }
     fetchData();
     }, []);
@@ -56,13 +57,12 @@ const Profil = () => {
     useEffect(() => {
         axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
 		.then((response) => { 
-            console.log("Level )()()()()))( -> ", response.data)
 			setLevel(response.data.level);
             setUserStates(response.data);
 		})
-		.catch((error) => {
-			console.log("Error -> ", error);
-		})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[])
 
 
@@ -94,16 +94,21 @@ const GroupsAndFriends = () => {
         axios.get(`http://localhost:3000/users/Friends`, {withCredentials: true})
             .then((response) => {
                 setFriends(response.data);
-            });
+            })
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }, []);
 
     const [groups, setGroups] = useState<string[]>([]);
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
             .then((response) => {
-                console.log("Resp groupchat -> ", response.data);
                 setGroups(response.data);
-            });
+            })
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }, []);
 
     const removeFriend = (removeId: string) => {
@@ -113,7 +118,10 @@ const GroupsAndFriends = () => {
             .then((response) => {
                 console.log("Removing Response", response);
                 setFriends(prevFriendData => prevFriendData.filter(friend => friend.id !== removeId));
-            });
+            })
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }
 
     const [label, setlabel] = useState(true);
@@ -173,19 +181,20 @@ const GroupsAndFriends = () => {
 // "WIN10"
 
 const Achivements = () => {
+    const navigate = useNavigate();
 	const [achivements, setAchivements] = useState([]);
     useEffect(() => {
         axios.get(`http://localhost:3000/users/achievements` , {withCredentials: true})
 		.then((response) => {
-            console.log("Achievemtn +++> ", response.data.achievementType)
 			setAchivements(response.data.achievementType);
 		})
 		.catch((error) => {
-			console.log("Error Achievements -> ", error);
+            navigate("/error", {state: {
+                title: error.response.status, type: error.response.statusText, msg: error.response.statusText
+            }})
 		})
     },[])
 
-    console.log("Include WIN10  ==>",achivements.includes("WIN10"))
     return (    
             <div className="fullAchivementsBox">
                 <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
@@ -257,10 +266,6 @@ const Achivements = () => {
                                 </div>
                             )
                         }
-
-
-
-
                     </div>
                 </div>
                 </div>
@@ -274,12 +279,11 @@ function ProfilPage() {
     useEffect(() => {
         axios.get(`http://localhost:3000/users/stats` , {withCredentials: true})
 		.then((response) => {
-			console.log("Response States -> ", response.data);
 			setStates(response.data);
 		})
-		.catch((error) => {
-			console.log("Error States -> ", error);
-		})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[])
 
 
@@ -302,7 +306,6 @@ function ProfilPage() {
                     <States winRate={((states.wins / states.numberOfMatches) * 100).toFixed(2)} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>
                 )
             }
-
         </div>
         <div className="downContainer">
             <Achivements/>

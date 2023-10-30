@@ -358,6 +358,9 @@ export class GroupchatService {
                     const saltOrRounds = 10;
                     createGroupchatDto.password = await bcrypt.hash(createGroupchatDto.password, saltOrRounds);
                 }
+                else if (createGroupchatDto.grouptype == 'PROTECTED') {
+                    throw new HttpException('Password is required', HttpStatus.BAD_REQUEST);
+                }
                 const data = await this.prisma.groupchat.create({
                     data: {
                         namegb: createGroupchatDto.namegb,
@@ -409,7 +412,7 @@ export class GroupchatService {
     }
 
     //update a groupchat
-    async update(id: string, updateGroupchatDto: any, iduserconnected: string): Promise<void> {
+    async update(id: string, updateGroupchatDto: any, iduserconnected: string): Promise<string> {
         try {
             if (updateGroupchatDto.password) {
                 const saltOrRounds = 10;
@@ -618,7 +621,7 @@ export class GroupchatService {
         });
         if (superadmin.id == iduserconnected) {
             await this.prisma.requestjoingroup
-            const data = await this.prisma.groupchat.update({
+            const data = await this.prisma.groupchat.update({ 
                 where: {
                     id: id,
                 },

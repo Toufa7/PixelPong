@@ -191,6 +191,9 @@ async getallNotifications(@Req() req: any){
 async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
   console.log("body", body.to)
   try { 
+	const already = await this.usersService.findFriendRequestIdBySenderReceiver(req.user.id, body.to);
+	if(already)
+		throw new HttpException('Failed to send friend request', HttpStatus.BAD_REQUEST);
 	const user = await this.usersService.findOne(req.user.id);
 	const data : FriendrequestDto =  {
 	  userId: req.user.id,
@@ -266,9 +269,9 @@ async getotherHistory(@Req() req,@Param() id: string)
 }
 
 @Get('achievements/:id')
-async getotherAchievement(@Req() req,@Param() id: string)
+async getotherAchievement(@Req() req,@Param() id: any)
 {
-	return await this.achievement.getAchievement(id)
+	return await this.achievement.getAchievement(id.id)
 }
 @Get('stats/:id')
 async getotherStats(@Req() req,@Param() param: any)

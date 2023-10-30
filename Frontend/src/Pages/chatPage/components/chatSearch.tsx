@@ -17,7 +17,6 @@ const chatSearch = (props: any) => {
 
     const [Found, FoundState] = useState(false);
     const [notFound, notFoundState] = useState(false);
-    const [visible, setVisible] = useState(true);
     const [friendsIds, setFriendsIds] = useState<any[]>();
     const [friendFound, setFriendFound] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
 
@@ -34,7 +33,6 @@ const chatSearch = (props: any) => {
     }, [])
 
     const removeElement = () => {
-        setVisible((prev) => !prev);
         FoundState(false);
         notFoundState(false);
     };
@@ -44,7 +42,6 @@ const chatSearch = (props: any) => {
         e.preventDefault();
         const searchValue = (document.querySelector('.searchBar') as HTMLInputElement).value;
 
-        //https://stackoverflow.com/questions/12462318/find-a-value-in-an-array-of-objects-in-javascript
         if (friendsIds?.find(obj => obj.username === searchValue) != undefined) 
         {
             FoundState(true);
@@ -66,7 +63,10 @@ const chatSearch = (props: any) => {
     //Sending found user to parent conponenet <chatNavBar> (using this callback function)
     const updateSharedString = (newString: string) =>
     {
-        props.userFound(newString);
+        if (newString != '')
+        {
+            props.userFound(newString);
+        }
     };
 
     return  (
@@ -78,11 +78,11 @@ const chatSearch = (props: any) => {
                         </form>
                     </div>
                     <div className="SearchUserChat">
-                        {Found &&   <div onClick={removeElement}>
+                        {Found && <div onClick={removeElement}>
                             <DmChatUser userName={friendFound.username} pic={`http://localhost:3000/auth/avatar/${friendFound.id}`} id={friendFound.id} userId={updateSharedString} />
                             </div>}
                         {notFound && <div onClick={removeElement}>
-                            <DmChatUser userName={"Not Found"} pic={search}/>
+                            <DmChatUser userName={"Not Found"} pic={search} id='' userId={updateSharedString}/>
                         </div>}
                     </div>
                 </div>

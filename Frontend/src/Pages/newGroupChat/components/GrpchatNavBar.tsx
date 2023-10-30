@@ -7,11 +7,7 @@ import DmChatUser from './GrpdmChatUser'
 import ChatSearch from './GrpchatSearch'
 import CreateGroup from './createGroup'
 import ManageGroup from './mangeGroup'
-interface chatUser {
-    userName: string;
-    pic: string;
-    id: string;
-}
+import { useNavigate } from 'react-router-dom';
 
 const GrpchatNavBar = () => {
     const [currentUserId, setCurrentUserId] = useState('');
@@ -37,7 +33,7 @@ const GrpchatNavBar = () => {
 			                </div> {data.label ?
                                 (
                                     data.createOrmanage ?
-                                    (<ManageGroup/>)
+                                    (<ManageGroup setIsCreated={setIsCreated}/>)
                                     :
                                     (<CreateGroup setIsCreated={setIsCreated} />)
                                 )
@@ -45,7 +41,7 @@ const GrpchatNavBar = () => {
 				                ""
 			                    }
 		                    </div>
-                            <Dms cu={getCurentUserDms} isCreated={isCreated}/>
+                            <Dms cu={getCurentUserDms} isCreated={isCreated} setIsCreated={setIsCreated}/>
 	                    </div>
                     <div className="GrpchatLowerRibbon"></div>
                     <style>
@@ -54,9 +50,17 @@ const GrpchatNavBar = () => {
                             .choice {
                                 display: none !important;
                             }
-                            .groupSettings
+                            .choice .groupSettings
                             {
                                 display: none !important;
+                            }
+                            .choice .chatDmDiv
+                            {
+                                display: none !important;
+                            }
+                            .nes-dialog
+                            {
+                                overflow-x: hidden;
                             }
                         }
                         `}
@@ -71,14 +75,21 @@ const Dms = (props:any) => {
     
     //Groups map
     let GroupsMap = useMap();
-
+    const navigate = useNavigate();
     useEffect(() => {
         axios.get(`http://localhost:3000/groupchat`, {withCredentials: true})
-            .then((response:any) => {
-                for (let index = 0; index < response.data.length; index++) {
-                    GroupsMap.set(response.data[index].id, response.data[index])
-                }
-            });
+        .then((response:any) => {
+            GroupsMap.clear()
+            for (let index = 0; index < response.data.length; index++) {
+                GroupsMap.set(response.data[index].id, response.data[index])
+            }
+        })
+        .catch((error) => {
+            navigate("/error", {state: {
+                title: error.response.status, type: error.response.statusText, msg: error.response.statusText
+            }})
+        })
+
     }, [props.isCreated]);
 
     const updateSharedString = (newString: string) =>
@@ -91,15 +102,20 @@ const Dms = (props:any) => {
         <p>GROUPS</p>
         <div className="GrpuserDms">
             {
-                Array.from(GroupsMap.values()).map((group, index) => (
-                    <DmChatUser
-                        key={index}
-                        userName={group.namegb}
-                        pic={`http://localhost:3000/groupchat/getimage/${group.id}`}
-                        userId={updateSharedString}
-                        id={group.id}
-                        privacy={group.grouptype}
-                    />
+                GroupsMap.size == 0 ?
+                (<></>)
+                :
+                (
+                    Array.from(GroupsMap.values()).map((group, index) => (
+                        <DmChatUser
+                            key={index}
+                            userName={group.namegb}
+                            pic={`http://localhost:3000/groupchat/getimage/${group.id}`}
+                            userId={updateSharedString}
+                            id={group.id}
+                            privacy={group.grouptype}
+                        />
+                )
                 ))
             }
         </div>

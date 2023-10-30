@@ -7,6 +7,11 @@ import { useLocation, useParams } from 'react-router-dom';
 const ErrorPage = lazy(() => import('../errorPage/errorPage'))
 import Stars from '../addons/Stars';
 import NavBar from '../addons/NavBar';
+import medal from './assets/medaille.svg';
+import key from './assets/key.svg';
+import bomb from './assets/bomblogo.svg';
+import joystick from './assets/joystic.svg';
+import handshake from './assets/handshake.png';
 
 const States = (props : {winRate: number, wins: number, loses: number, matchplayed: number}) => {
     return (
@@ -41,14 +46,16 @@ const Profil = () => {
         username: string,
         check: boolean,
         userId: string,
-        status: string
+        status: string,
+        inGame: string,
     }
     const [userData, setUserData] = useState<dataTypes>({
         avatar : '',
         username: '',
         check: true,
         userId: '',
-        status: ''
+        status: '',
+        inGame: '',
     });
     const location = useLocation();    
     useEffect(() => {
@@ -58,13 +65,13 @@ const Profil = () => {
                 const avatarURL = `http://localhost:3000/auth/avatar/${response.data.id}`;
                 try {
                     await axios.get(avatarURL, { withCredentials: true });
-                    console.log("Respoen ===> ", response.data);
                     setUserData(() => ({
                         avatar: avatarURL,
                         username: response.data.username,
                         check: false,
                         userId : response.data.id,
-                        status: response.data.status
+                        status: response.data.status,
+                        inGame: response.data.ingame,
                     }));
                 }
                 catch (avatarError) {
@@ -73,12 +80,13 @@ const Profil = () => {
                         username: response.data.username,
                         check: false,
                         userId : response.data.id,
-                        status: response.data.status
+                        status: response.data.status,
+                        inGame: response.data.ingame,
                     }));
                 }
         }
         fetchData();
-    }, []);
+    }, [location]);
 
     const [isFriend, setIsFriend] = useState<boolean>(false);
     useEffect(() => {
@@ -86,7 +94,9 @@ const Profil = () => {
         .then((response) => {
             setIsFriend(response.data)
         })
-        .catch(() => {})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }, [userData])
 
 
@@ -96,14 +106,11 @@ const Profil = () => {
         .then((response) => {
             setisBlocked(response.data)
         })
-        .catch(() => {})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }, [userData])
 
-
-    
-    
-    
-    
     const [pending, setPending] = useState<boolean>(true);
     const [states, setStates] = useState([]);
     
@@ -112,15 +119,17 @@ const Profil = () => {
 		.then((response) => {
             setStates(response.data);
 		})
-		.catch((error) => {
-            console.log("Error stats -> ", error);
-		})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[userData])
     
     const BlockUser = () => {
         axios.patch("http://localhost:3000/users/blocked", {to: userData.userId}, { withCredentials: true })
         .then(() => {})
-        .catch(() => {})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
     const UnBlockUser = () => {
         // useEffect(() => {
@@ -136,7 +145,9 @@ const Profil = () => {
         setPending(false);
         axios.post("http://localhost:3000/users/sendFriendRequest", {to: userData.userId}, { withCredentials: true })
         .then(() => {})
-        .catch(() => {})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
     const UnfriendUser = () => {
         setIsFriend(false);
@@ -144,10 +155,9 @@ const Profil = () => {
         .then(() => {
         })
         .catch((error) => {
-            console.log("Error While Removing Friends -> ",error );
-        })
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
-
     return (
         <div className="profilRectangle">
           <div className="avatar">
@@ -155,8 +165,17 @@ const Profil = () => {
                 <img src={`http://localhost:3000/auth/avatar/${userData.userId}`} style={{width: '100px', height: '100px', marginRight: '10px', marginLeft: '10px', borderRadius: '50px'}} className="playerAvatar"/>
                 {
                     userData.status == "ONLINE" ?
-                    (<><div style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px', background: '#63C163'}}></div></>)
-                        :
+                    (
+                        <>
+                        {
+                            userData.inGame ? 
+                            (<div title='In Game' style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px', background: '#63C163'}}/>)
+                            :
+                            (<div title='Not In Game' style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px', background: '#63C163'}}/>)
+                        }
+                        </>
+                    )
+                    :
                     userData.status != "ONLINE" ?
                     (<><div style={{borderRadius: '50%', width: '20px', height: '20px', margin: '10px' ,background: '#F2202B'}}></div></>)
                         :
@@ -186,11 +205,18 @@ const Profil = () => {
                                 (<a className="nes-btn is-error" href="#" onClick={() => UnBlockUser()}>Unblock</a>)
                                 :
                                 (
-                                    // pending ? 
+                                    pending ?
+                                    (
                                         <>
                                             <a className="nes-btn" href="#" onClick={() => AddFriend()}>Add Friend</a>
                                             <a className="nes-btn is-error" href="#" onClick={() => BlockUser()}>Block</a>
                                         </>
+                                    ) 
+                                    :
+                                    (
+                                        <a className="nes-btn" href="#">Pending</a>
+                                    )
+
                                 )
                         )
 
@@ -204,22 +230,30 @@ const Profil = () => {
 
 
 const GroupsAndFriends = () => {
-    const info = useLocation();
-    const [thisId, setId] = useState();
     const [friendData, setFriendData] = useState<string[]>([]);
     const [groupData, setGroupsData] = useState<string[]>([]);
     const [label, setlabel] = useState<boolean>(true);
     
-    axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
-    .then((res) => {
-        setId(res.data.id);
-    })
+    const [thisId, setId] = useState();
+    const info = useLocation();
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users${info.pathname}`, {withCredentials: true})
+        .then((res) => {
+            setId(res.data.id);
+        })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
+    }, [info])
 
     useEffect(() => {
         axios.get(`http://localhost:3000/users/friends/${thisId}`, {withCredentials: true})
         .then((response) => {
             setFriendData(response.data);
         })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[thisId])
 
     useEffect(() => {
@@ -227,16 +261,16 @@ const GroupsAndFriends = () => {
         .then((response) => {
             setGroupsData(response.data);
         })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[thisId])
-
-
-
-      return (
-          <div className="gAndFBox">
+        return (
+            <div className="gAndFBox">
             <div className="gAndFHeader">Groups & Friends</div>
             <div className="gAndFTabs">
-              <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
-              <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
+                <button className='A' onClick={() => {setlabel(true)}}>Groups</button>
+                <button className='B' onClick={() => {setlabel(false)}}>Friends</button>
             </div>
             <div className="gAndFContent">
                 <div className="listParent">
@@ -263,47 +297,113 @@ const GroupsAndFriends = () => {
                 </div>
             </div>
             </div>
-
     );
 }
 
 const Achivements = () => {
-    const achivements: Map<string, string> = new Map();
-    achivements.set("", "Win a match against different players");
-    achivements.set("", "Unlock a feature in the game");
-    achivements.set("", "Win 5 games with confidence and flair");
-    achivements.set("", "Claim the top spot on the leaderboard");
-    achivements.set("", "Never conceding a damage in a full match");
-    achivements.set("", "Win a match without losing a single point");
-    achivements.set("", "Score 10 consecutive points with powerful smashes");
-    achivements.set("", "Mer7ba");
-    achivements.set("", "Reach a ranking of top 10 players");
-    achivements.set("", "Block 50 opponent shots with a perfect defensive block");
-    achivements.set("", "Hit the ball with exceptional spin 50 times");
-    achivements.set("", "Chat with a friend");
-    achivements.set("", "Win a match without committing any fouls");
-    achivements.set("", "Unlock all hidden paddle designs");
-    achivements.set("", "Perform a tricky serve that your opponent fails to return");
+    const [thisId, setId] = useState();
+    const info = useLocation();
+    useEffect(() => {
+      axios.get(`http://localhost:3000/users${info.pathname}`, { withCredentials: true })
+        .then((res) => {setId(res.data.id);})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
+    }, [info.pathname]);
+
+    const [achivements, setAchievements] = useState([]);
+    useEffect(() => {
+      const getAchievement = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/users/achievements/${thisId}`, { withCredentials: true });
+            setAchievements(response.data.achievementType);
+        }
+        catch (error) {
+            console.error("Error fetching achievements:", error);
+        }
+      };
+      
+      if (thisId) {
+        getAchievement();
+      }
+    }, [thisId]);
 
     return (    
-            <div className="fullAchivementsBox">
-                <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
-                <div className="contentAchivementsBox">
-                    <div className="icons">
-                        <div>
-                        {
-                            Array.from(achivements).map(([icon, achivText], idx) => (
-                            <div key={idx}>
-                                <img src={icon}   />
-                                <span>{achivText}</span>
+        <div className="fullAchivementsBox">
+            <div style={{textAlign: 'center', fontSize: 'x-large'}} className="headAchivementsBox">Achivements</div>
+            <div className="contentAchivementsBox">
+                <div className="icons">
+                    <div>
+                    {
+                        achivements.includes("WELCOME") ? (
+                            <div>
+                                <img style={{opacity: 1}} src={handshake}   />
+                                <span style={{opacity: 1}}>{"Awarded to users upon joining the platform for the first time"}</span>
                             </div>
-                            ))
-                        }
-                    </div>
+                        ) : (
+                            <div >
+                                <img style={{opacity: 0.2}} src={handshake}   />
+                                <span style={{opacity: 0.2}}>{"Awarded to users upon joining the platform for the first time"}</span>
+                            </div>
+                        )
+                    }
+                    {
+                        achivements.includes("FIRSTWIN") ? (
+                            <div>
+                                <img style={{opacity: 1}} src={medal}   />
+                                <span style={{opacity: 1}}>{"Awarded to users upon achieving their first victory or milestone"}</span>
+                            </div>
+                        ) : (
+                            <div >
+                                <img style={{opacity: 0.2}} src={medal}   />
+                                <span style={{opacity: 0.2}}>{"Awarded to users upon achieving their first victory or milestone"}</span>
+                            </div>
+                        )
+                    }
+                    {
+                        achivements.includes("FIRSTLOSE") ? (
+                            <div>
+                                <img style={{opacity: 1}} src={bomb}   />
+                                <span style={{opacity: 1}}>{"Awarded to users upon experiencing their first defeat"}</span>
+                            </div>
+                        ) : (
+                            <div >
+                                <img style={{opacity: 0.2}} src={bomb}   />
+                                <span style={{opacity: 0.2}}>{"Awarded to users upon experiencing their first defeat"}</span>
+                            </div>
+                        )
+                    }
+                    {
+                        achivements.includes("WIN5") ? (
+                            <div>
+                                <img style={{opacity: 1}} src={key}   />
+                                <span style={{opacity: 1}}>{"Awarded to users upon reaching 5 victories"}</span>
+                            </div>
+                        ) : (
+                            <div >
+                                <img style={{opacity: 0.2}} src={key}   />
+                                <span style={{opacity: 0.2}}>{"Awarded to users upon reaching 5 victories"}</span>
+                            </div>
+                        )
+                    }
+                    {
+                        achivements.includes("WIN10") ? (
+                            <div>
+                                <img style={{opacity: 1}} src={joystick}   />
+                                <span style={{opacity: 1}}>{"Awarded to users upon reaching 10 victories"}</span>
+                            </div>
+                        ) : (
+                            <div >
+                                <img style={{opacity: 0.2}} src={joystick}   />
+                                <span style={{opacity: 0.2}}>{"Awarded to users upon reaching 10 victories"}</span>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
             </div>
-    );
+        </div>
+);
 }   
 
 
@@ -338,26 +438,31 @@ function OtherProfilPage() {
     .then((res) => {
         setId(res.data.id);
     })
+    .catch((error) => {
+        console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+    });
 
     useEffect(() => {
         axios.get(`http://localhost:3000/users/stats/${thisId}` , {withCredentials: true})
 		.then((response) => {
 			setStates(response.data);
 		})
-		.catch((error) => {
-			console.log("Error -> ", error);
-		})
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     },[thisId])
 
 
     const [user, setUser] = useState<string>("");
-    axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
-    .then((res) => {
-        setUser(res.data.username);
-    })
-    .catch((erro) => {
-        console.error("Erro -> ", erro);
-    })
+    useEffect(() => {
+        axios.get(`http://localhost:3000/users/profil`, { withCredentials: true })
+        .then((res) => {
+            setUser(res.data.username);
+        })
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
+    },[])
 
     if (userExist == "NotFound") {
         return (<ErrorPage title={"User Not Found"} errorType={'Oops! The user you\'re looking \nfor couldn\'t be found'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />)
@@ -376,7 +481,10 @@ function OtherProfilPage() {
                 <div className="downContainer">
                     <GroupsAndFriends/>
                     {
-                        <States winRate={(states.wins / states.numberOfMatches) * 100} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>
+                        states.length == 0 ?
+                        (<States winRate={0} wins={0} loses={0} matchplayed={0}/>)
+                            :
+                        (<States winRate={(states.wins / states.numberOfMatches) * 100} wins={states.wins} loses={states.loses} matchplayed={states.numberOfMatches}/>)
                     }
                 </div>
                 <div className="downContainer">

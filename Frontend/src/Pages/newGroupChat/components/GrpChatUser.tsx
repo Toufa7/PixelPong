@@ -1,4 +1,4 @@
-import { useState, useEffect, Children } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import MessageInput from './GrpmessageInput'
 import exit from '../assets/exit.svg'
@@ -6,7 +6,6 @@ import info from '../assets/info.svg'
 import dogo from '../assets/dogo.gif'
 import crown from '../assets/crown.svg'
 import toast from 'react-hot-toast'
-import dudley from '../assets/Dudley.gif'
 import manage from '../assets/manage.svg'
 import ManageGroup from './mangeGroup'
 import CreateGroup from './createGroup'
@@ -19,10 +18,20 @@ interface localUserClass
     username: string,
 }
 
+interface grpInfoClass
+{
+    id: string,
+    namegb: string,
+    idsuperadmin: string,
+    grouptype: string,
+    password: string,
+    image: string,
+}
+
 const ChatUser = (props : any) => {
     
     //Fetching current user (Receiver) data each time the prop gets new value
-    const [groupRoom, setgroupRoom] = useState({});
+    const [groupRoom, setgroupRoom] = useState<grpInfoClass>({id: '', namegb: '', idsuperadmin: '', grouptype: '', image: '', password: ''});
     const [localUser, setLocalUser] = useState<localUserClass>({ id: '', email: '', profileImage: '', status: '', username: '' });
 
 
@@ -32,17 +41,18 @@ const ChatUser = (props : any) => {
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/groupinfo`, { withCredentials: true })
             .then((response) => {
+                console.log("Just dance --->", response.data)
                 setgroupRoom(response.data);
-                console.log("rese -> ", response.data);
             })
-            .catch((erro) => {
-                console.log("erro -> ", erro);
-            })
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
         }
     }, [props.pcurrentUserId]); //props.pcurrentUserId could be null or undefined
 
     // const [showing, setShowing] = useState(false);
     
+    //Identifying local user
     useEffect(() => {
         axios
             .get(`http://localhost:3000/users/profil`, { withCredentials: true })
@@ -50,7 +60,6 @@ const ChatUser = (props : any) => {
                 setLocalUser(res.data);
             })
             .catch(Error)
-                console.log("Error happened when feching local user data");
     }, [])
 
     const [users, setUsers] = useState([]);
@@ -61,19 +70,17 @@ const ChatUser = (props : any) => {
 	})
 
     const [isCreated, setIsCreated] = useState<boolean>(false)
-
+    
     useEffect(() => {
         if (props.pcurrentUserId != '') 
         {
             axios.get(`http://localhost:3000/groupchat/${props.pcurrentUserId}/users`, { withCredentials: true })
             .then((response) => {
-                console.log("Admins -> ", response.data)
-
                 setUsers(response.data);
             })
-            .catch((error) => {
-                console.log("Error fetching users:", error);
-            });
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
         }
     }, [props.pcurrentUserId]);
     
@@ -85,14 +92,12 @@ const ChatUser = (props : any) => {
                 console.log("Admins -> ", response.data)
                 setAdmins(response.data);
             })
-            .catch((error) => {
-                console.log("Error fetching admins:", error);
-            });
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
         }
     }, [props.pcurrentUserId]);
 
-
-    console.log("props.pcurrentUserId +> ", props.pcurrentUserId); 
 
     const openDialogUsers = () => {
         console.log("Clicked On Info")
@@ -106,8 +111,6 @@ const ChatUser = (props : any) => {
 		dialog?.showModal();
     }
 
-    
-
     return (
         <div className='GrpusrProfileConversation'>
                 <div className="GrpchatUserDiv">
@@ -115,8 +118,8 @@ const ChatUser = (props : any) => {
                         <div className="GrpchatUser">
                             {
                                 //Conditional rendring to display the profile image or not based on the presence of groupRoom.profileImage
-                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="user-photo"/>
-                                                        :   <img src={info} alt="user-photo" />
+                                groupRoom.image ?   <img style={{border: '3px solid'}} src={`http://localhost:3000/groupchat/getimage/${groupRoom.id}`} alt="Group-photo"/>
+                                                        :   <img src={info} alt="Group-photo" />
                             }
                             <div className="GrpchatUserName">
                                 <span>
@@ -141,14 +144,12 @@ const ChatUser = (props : any) => {
                                                         <button className='GrpuserControlButtons'>
                                                             <img src={exit} onClick={() => {
                                                                 axios.delete(`http://localhost:3000/groupchat/${props.pcurrentUserId}/exit`, { withCredentials: true })
-                                                                .then((reseponse) => {
-                                                                    console.log("Response Exiting Group -> ", reseponse);
+                                                                .then(() => {
                                                                     toast.success(`Leaving ${groupRoom.namegb}`, {style: {textAlign: "center", width: '300px', color: 'black'}, position: "top-right"  , duration: 5000});
-
                                                                 })
                                                                 .catch((error) => {
-                                                                    console.log("Reseponse Exiting Group -> ", error)
-                                                                })
+                                                                    console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+                                                                });
                                                             }
                                                             }   width={50} height={50} title='Leave Group' ></img>
                                                         </button>
@@ -164,27 +165,23 @@ const ChatUser = (props : any) => {
             <dialog style={{height: "600px", width: "800px", background: "#e4f0ff"}} className="nes-dialog" id="manageGroup">
                 <button onClick={() => {document.getElementById('manageGroup')?.close()}} >X</button>
                 <form method="dialog">
-                <menu className="dialog-menu">
-
-                    
-                    <div>
-                        <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
-                        <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
-                        {
-                            data.label ?
-                            (
-                                data.createOrmanage ?
-                                (<ManageGroup/>)
-                                :
-                                (<CreateGroup setIsCreated={setIsCreated} />)
-                                )
-                                :
+                    <menu className="dialog-menu">
+                        <div>
+                            <button className={data.createOrmanage ? 'selected' : ''} onClick={() => setLabel({label: true, createOrmanage: true})}>Group Settings</button>
+                            <button className={!data.createOrmanage ? 'selected' : ''}  onClick={() => setLabel({label: true, createOrmanage: false})}>Create Group</button>
+                            {
+                                data.label ?
                                 (
-                                    <></>
+                                    data.createOrmanage ?
+                                    (<ManageGroup setIsCreated={setIsCreated}/>)
+                                        :
+                                    (<CreateGroup setIsCreated={setIsCreated} />)
                                 )
+                                    :
+                                (<></>)
                             }
-                    </div>
-                </menu>
+                        </div>
+                    </menu>
                 </form>
             </dialog>
         </section>
@@ -254,7 +251,7 @@ const MessagingBody = (props: any) => {
         {/* Passing Parent props to the child (localUser and remoteUser) */}
         {
             props.groupInfo.id   ? (<MessageInput Sender={props.localUser} groupInfo={props.groupInfo}/>)
-                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dudley} width={500} height={500} alt="user-photo" />
+                                            : <img style={{alignSelf: 'center', justifySelf: 'center', position: 'relative', bottom: '-20%'}} src={dogo} width={500} height={500} alt="Group-photo" />
         }
     </div>
     )

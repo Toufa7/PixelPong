@@ -18,9 +18,9 @@ const RetrieveCheckSendData =  () => {
         data.append('file', avatar);
         toast.promise(
             axios.post('http://localhost:3000/auth/uploads', data, { withCredentials: true })
-            .then((responseNickname) => {
-                console.log(responseNickname);
-            }),
+            .then(() => {
+            })
+            .catch(() => {}),
             {
                 loading: "Sending data...",
                 success: "Avatar Uploaded!", 
@@ -31,15 +31,17 @@ const RetrieveCheckSendData =  () => {
     if (usernameCheck.test(nicknameInput)) {
         toast.promise(
             axios.post('http://localhost:3000/auth/updateprofil', { username: nicknameInput }, { withCredentials: true })
-            .then((responseNickname) => {
-                console.log(responseNickname);
-             }),
-             {
+            .then(() => {
+            })
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			}),
+            {
                 loading: "Sending data...",
                 success: "Username Changed!",
                 error: "An error occurred",
-             }
-             ,{ duration: 5000, position: 'top-right' });           
+            }
+            ,{ duration: 5000, position: 'top-right' });           
     }
     else if (!nicknameInput){
         toast("Please Provide Name", {icon: 'ℹ️' ,style: {textAlign: "center", width: '300px' ,background: '#91CCEC', color: 'white'}, position: "top-right"});
@@ -61,7 +63,9 @@ export default function LoginSettings() {
         const status = isChecked ? 1 : 0;
         axios.put(endpoint, status, { withCredentials: true }) 
         .then (() => {})
-        .catch(() => {});
+        .catch((error) => {
+            console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+        });
     }
 	const [update , setUpdate] = useState("");
     const [imagePreview, setImagePreview] = useState('');
@@ -84,16 +88,16 @@ export default function LoginSettings() {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch((error) => {
-            console.log("Error -> ", error);
-        })
+			.catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
+			});
     }
     fetchData();
     }, []);
 
-    console.log("userInfo -> ", userInfo);
     return (
         <div style={{height: '100vh'}}>
+            
             <Toaster/>
           <div className="container">
             <div className="settingsBox">
@@ -133,7 +137,6 @@ export default function LoginSettings() {
                             </button>
                         </div>
                     </div>
-                    {/* A dialog show up for the 1st time and ask the user if he want to go with the default username & avatar */}
                     <section>
                         <dialog style={{background: '#DDFFFF', width: '600px'}} className="nes-dialog is-rounded" id="warning">
                             <form method="dialog">
@@ -148,7 +151,7 @@ export default function LoginSettings() {
                                 <div>
                                     <button style={{margin: '10px'}} className="nes-btn">Cancel</button>
                                     <Link to="/home">
-                                    <a style={{margin: '10px', color: 'black'}} className="nes-btn is-primary">Confirm</a>
+                                    <span style={{margin: '10px', color: 'black'}} className="nes-btn is-primary">Confirm</span>
                                     </Link>
                                 </div>
                             </form>
@@ -160,4 +163,5 @@ export default function LoginSettings() {
         </div>
         </div>
     );
-    }
+}
+{/* A dialog show up for the 1st time and ask the user if he want to go with the default username & avatar */}

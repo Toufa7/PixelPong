@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, useLocation} from "react-router-dom";
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import axios from 'axios';
@@ -23,6 +23,7 @@ import GroupPage from './Pages/newGroupChat/GrpChatPage';
 import Dogo from "./Pages/dogo.gif";
 import randomLogo from './Pages/addons/assets/logo.svg'
 import handshake from '../src/Pages/HomePage/assets/handshake.png';
+import toast from 'react-hot-toast';
 
 const BackgroudGame = () => {
 	const animationStyle = `
@@ -119,7 +120,6 @@ const HomeComponents = () => {
 				<Stars/>
 				<NavBar/>
 				<Home/>
-	
 			</socketContext.Provider>
 		</>
 	);
@@ -154,6 +154,14 @@ const AlreadyInGame = () => {
 	);
 }
 
+const ErrorPageConfig = () => {
+	const {state} = useLocation()
+	const {title, type ,msg} = state;
+	return (
+		<Error title={title} errorType={type} msg={msg} />
+	)
+}
+
 
 const Routing = () => {
 	const [userData, setUserInfo] = useState();
@@ -164,7 +172,8 @@ const Routing = () => {
             .then((response) => {
                 setUserInfo(response.data)
             })
-            .catch(() => {
+            .catch((error) => {
+				console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
 				setUnlogged(true);
         	})
     	}
@@ -184,9 +193,9 @@ const Routing = () => {
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
 			{userData != undefined && !userData.twofa && (
 				<>
+					<Route path="/" 				element={<HomeComponents/>}/>
 					<Route path="/settings" 		element={<LoginSettingsComponents/>}/>
 					<Route path="/home" 			element={<HomeComponents/>}/>
-					<Route path="/" 				element={<HomeComponents/>}/>
 					<Route path="/profil/:userId"	element={<OtherUser/>}/>
 					{!userData.ingame ?
 						(<Route path="/game" 		element={<GameComponents/>}/>)
@@ -196,10 +205,12 @@ const Routing = () => {
 					<Route path="/notifications" 	element={<NotificationComponents/>}/>
 					<Route path="/groups" 			element={<GroupPage/>}/>
 					<Route path="/profil" 			element={<ProfilComponents/>}/>
-					<Route path="*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
+					<Route path="/error" 			element={<ErrorPageConfig/>}/>
 					<Route path="/login" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/welcome" 			element={<Navigate to="/" replace/>}/>
 					<Route path="/two-factor-authentication"	element={<TwoFAComponents/>}/>
+					<Route path="*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
+					<Route path="/*" 				element={<Error title={"Page Not Found"} errorType={'it\'s looking like you may have taken a wrong turn. Don\'t worry ... it happens to the most of us'} msg={"Feel free to explore other features of our website or consider signing up if you haven't already"} />}/>
 				</>
 			)}
 			{/* User Logged and 2FA Enabled */}
@@ -215,7 +226,7 @@ const Routing = () => {
 					<Route path="/"			element={<WelcomePage/>}/>
 					<Route path="/welcome"	element={<WelcomePage/>}/>
 					<Route path="/login"	element={<LoginPage/>}/>
-					<Route path="*"		element={<Navigate to="/login" replace/>}/>
+					<Route path="*"			element={<Navigate to="/login" replace/>}/>
 				</>
 			)}
 			</Routes>

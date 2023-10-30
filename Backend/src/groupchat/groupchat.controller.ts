@@ -19,8 +19,16 @@ export class GroupchatController {
     constructor(private readonly GroupchatService : GroupchatService, private readonly  GroupchatGateway : GroupchatGateway) {}
     //get number user of a groupchat
     @Get(":id/numberuser")
-    numberuser(@Param('id') id :string): Promise<number> {
-        return this.GroupchatService.numberuser(id);
+    async numberuser(@Param('id') id :string, @Res() res){
+        try 
+        {
+            res.status(200).json(await this.GroupchatService.numberuser(id));
+        }
+        catch(err)
+        {
+            res.status(404).json({error : "error"});
+        }
+
     }
 
 
