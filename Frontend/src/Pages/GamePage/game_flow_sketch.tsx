@@ -32,7 +32,6 @@ import ball from "./assets/yellow_ball.png";
 import red_ball from "./assets/red_bl.png";
 import blue_ball from "./assets/blue_ball.png";
 import { socket } from '../socket-client';
-import song from "./assets/01. Green Hill Zone.mp3";
 
 // import axios from 'axios';
 // import { Cookies } from 'react-cookie';
