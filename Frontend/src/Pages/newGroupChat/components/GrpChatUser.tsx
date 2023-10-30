@@ -166,7 +166,7 @@ const ChatUser = (props : any) => {
                             data.label ?
                             (
                                 data.createOrmanage ?
-                                (<ManageGroup/>)
+                                (<ManageGroup setIsCreated={setIsCreated}/>)
                                     :
                                 (<CreateGroup setIsCreated={setIsCreated} />)
                             )

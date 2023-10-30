@@ -213,7 +213,7 @@ async sendFriendRequest(@Req() req: any, @Body() body: FriendrequestDto) {
 async acceptFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
   try {
 	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.to);
-	console.log('Bodyyyy', body);
+	console.log('Bodyyyy', body, friendrequest);
 	const find = await this.usersService.acceptFriendRequest(friendrequest.id, body.userId, body.to);
 	return find;
   } catch (error) {
@@ -224,7 +224,8 @@ async acceptFriendRequest(@Req() req, @Body() body: FriendrequestDto) {
 @Patch('refuseFriendRequest/')
 async refuseFriendRequest(@Body() body: FriendrequestDto): Promise<void> {
   try {
-	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.from);
+	console.log("bodyyyyyyyyyyyyyyyy", body);
+	const friendrequest = await this.usersService.findFriendRequestIdBySenderReceiver(body.userId, body.to);
 	return await this.usersService.refuseFriendRequest(friendrequest);
   } catch (error) {
 	console.error(error); // Log the error for debugging

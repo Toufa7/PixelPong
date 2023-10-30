@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import 'nes.css/css/nes.min.css';
 /******************* Packages  *******************/
-import {BrowserRouter, Routes, Route, Navigate, useLocation} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, useLocation, Router} from "react-router-dom";
 import { socket, socketContext } from './Pages/socket-client';
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import axios from 'axios';
@@ -189,7 +189,7 @@ const Routing = () => {
 				</div>
 			</>
 		}>
-		<Routes>
+			<Routes suppressNoMatchWarning={true}> 
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
 			{userData != undefined && !userData.twofa && (
 				<>

@@ -278,12 +278,13 @@ export class UsersService {
   }
 
 async refuseFriendRequest(id: number) {
+  console.log("ok thi is id",id);
   await this.prisma.$transaction([
   this.prisma.notification.update({
     where: { id: id },
     data: { status: Status.DECLINED },
   }),
-  this.prisma.notification.delete({
+ this.prisma.notification.delete({
     where:{
       id: id,
     },
