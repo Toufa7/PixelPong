@@ -1,7 +1,7 @@
 import '../chatPage.scss'
 import { useRef, useEffect, useContext, useState } from 'react'
 import { chatSocketContext } from './socketContext'
-import { useMap, useScript } from "@uidotdev/usehooks";
+import { useMap } from "@uidotdev/usehooks";
 import Send from '../../../assets/images/send.svg'
 import axios from 'axios';
 import MessageComponent from './messageComponenet'

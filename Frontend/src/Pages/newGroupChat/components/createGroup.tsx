@@ -8,6 +8,7 @@ const CreatingGroup = (setIsCreated) => {
 	const password : string		= document.getElementById("password_field")?.value;
 	const groupAvatar : string	= document.querySelector('[name="avatarUpload1"]')?.files[0];
 	
+
 	const regEx = /^[A-Za-z0-9_ ]{5,15}$/;
 	if (regEx.test(groupName) && groupAvatar && choice) {
 		const data = new FormData();
@@ -45,7 +46,7 @@ const CreatingGroup = (setIsCreated) => {
 			,{ duration: 5000, position: 'top-right' });
 
 	}
-	else if (choice == 2 && (password && password.length < 8)) {
+	else if (choice == 2 && (password && password.length < 8) || !password) {
 		toast.error("Password Too Short	", {style: {textAlign: "center", width: '300px' ,background: '#B00020', color: 'white'}, position: "top-right"});
 	}
 	else if (!regEx.test(groupName)) {
