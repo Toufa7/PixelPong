@@ -100,6 +100,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
       }
     }
     catch (err) {
+      return ;
     }
   }
 
@@ -197,7 +198,9 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
       }
     }
-    catch (err) { }
+    catch (err) { 
+      return; 
+    }
   }
 
   ////////////////////////////////// -----leave room-- ////////////////////////////////
@@ -218,6 +221,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
       }
     }
     catch (err) {
+      return ;
     }
   }
 
@@ -302,7 +306,7 @@ export class GroupchatGateway implements OnGatewayInit, OnGatewayConnection, OnG
         createdAt: new Date(),
       });
     } catch (err) {
-      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+      throw new HttpException(err.message, err.status);
     }
   }
 }
