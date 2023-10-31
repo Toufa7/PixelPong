@@ -434,13 +434,15 @@ function OtherProfilPage() {
 	const [states, setStates] = useState([]);
     const [thisId, setId] = useState();
     const info = useLocation();
-    axios.get(`http://localhost:3000/api/users${info.pathname}`, {withCredentials: true})
+     useEffect(() => {
+	axios.get(`http://localhost:3000/api/users${info.pathname}`, {withCredentials: true})
     .then((res) => {
         setId(res.data.id);
     })
     .catch((error) => {
         console.log(`MyError -> ${error.response.data.message}, ${error.response.data.error}, ${error.response.data.statusCode}`);
     });
+     }), [info])
 
     useEffect(() => {
         axios.get(`http://localhost:3000/api/users/stats/${thisId}` , {withCredentials: true})
