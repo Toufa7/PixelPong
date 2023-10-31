@@ -167,7 +167,7 @@ const Routing = () => {
         const fetchData = () => {
 			try {
 
-				axios.get("http://localhost:3000/users/profil", { withCredentials: true })
+				axios.get("http://localhost:3000/api/users/profil", { withCredentials: true })
 				.then((response) => {
 					setUserInfo(response.data)
 				})
@@ -199,7 +199,7 @@ const Routing = () => {
 		}>
 			<Routes> 
 			{/* User Logged and 2FA Disabled || User Logged and 2FA Enabled and Valid Code */}
-			{logged && (
+			{(logged || logged2fa) && (
 				<>
 					<Route path="/" 				element={<HomeComponents/>}/>
 					<Route path="/home" 			element={<HomeComponents/>}/>
