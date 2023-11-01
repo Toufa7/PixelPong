@@ -1,3 +1,44 @@
+## PixelPong
+
+The project is a web application developed as part of a school project. It utilizes React for the front end and Nest for the backend.
+
+## Technologies Used
+
+* Frontend: React
+* Backend: Nest
+
+## Installation
+
+## Walkthrough
+
+### Authentication
+
+Our web application supports authentication through Google and 42 OAuth, providing users with a secure and convenient login experience:
+
+<img src="Readme/5.jpg">
+
+### Group Management
+
+
+
+- We allow anyone to create a group and setting this :
+
+
+<img src="Readme/creategroup.jpg">
+
+- Within each group a hierarchical structure is established like this:
+<img src="Readme/ermissions.jpg">
+
+- Groups can be searchable and accessed based on their privacy settings(public, password-protected, and private):
+
+<img src="Readme/groupacces.jpg">
+
+
+## Contributors
+
+
+
+
 # To create a new React project:
 
     npm create vite@latest
