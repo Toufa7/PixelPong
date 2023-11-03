@@ -33,6 +33,11 @@ Our web application supports authentication through Google and 42 OAuth, providi
 
 <img src="Readme/groupacces.jpg">
 
+### Game Management
+
+<img src = "PixelPong - Managing Players in Game.jpg">
+
+<hr/>
 
 ## Contributors
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
