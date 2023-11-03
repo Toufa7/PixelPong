@@ -36,19 +36,19 @@ Our web application supports authentication through Google and 42 OAuth, providi
 
 ## Contributors
 # [Omar Toufah](https://github.com/Toufa7)
-<img src ="Readme/omar.jpeg" width = 120>
+<img src ="Readme/omar.jpeg" width = 120 height = 120>
 
 # [Mohamed Amellal](https://github.com/Mohamed-Amellal)
-<img src ="Readme/mamella.jpeg">
+<img src ="Readme/mamella.jpeg" width = 120 height = 120>
 
 # [Ayoub Bensguia](https://github.com/abensgui)
-<img src ="Readme/ayoub.jpeg">
+<img src ="Readme/ayoub.jpeg" width = 120 height = 120>
 
 # [Ibrahim nada](https://github.com/ibranad)
-<img src ="Readme/ibrahim.jpeg">
+<img src ="Readme/ibrahim.jpeg" width = 120 height = 120>
 
 # [Mohamed Khalil Naqqad](https://github.com/dridslash)
-<img src ="Readme/khalil.jpeg">
+<img src ="Readme/khalil.jpeg" width = 120 height = 120>
 
 
 
