@@ -36,7 +36,7 @@ Our web application supports authentication through Google and 42 OAuth, providi
 
 ## Contributors
 # [Omar Toufah](https://github.com/Toufa7)
-<img style = {{width:20px}} src ="Readme/omar.jpeg">
+<img style = {{width:120px}} src ="Readme/omar.jpeg">
 
 # [Mohamed Amellal](https://github.com/Mohamed-Amellal)
 <img src ="Readme/mamella.jpeg">
