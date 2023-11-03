@@ -44,15 +44,15 @@ Our web application supports authentication through Google and 42 OAuth, providi
 [Mohamed Khalil Naqqad](https://github.com/dridslash)&nbsp;&nbsp;&nbsp;
 
 <p align="center">
-<img src ="Readme/omar.jpeg" width = 120 height = 120>
+&nbsp;<img src ="Readme/omar.jpeg" width = 120 height = 120>&nbsp;&nbsp;
     
-<img src ="Readme/mamella.jpeg" width = 120 height = 120>
+<img src ="Readme/mamella.jpeg" width = 120 height = 120>&nbsp;&nbsp;
 
-<img src ="Readme/ayoub.jpeg" width = 120 height = 120>
+<img src ="Readme/ayoub.jpeg" width = 120 height = 120>&nbsp;&nbsp;
 
-<img src ="Readme/ibrahim.jpeg" width = 120 height = 120>
+<img src ="Readme/ibrahim.jpeg" width = 120 height = 120>&nbsp;&nbsp;
 
-<img src ="Readme/khalil.jpeg" width = 120 height = 120>
+<img src ="Readme/khalil.jpeg" width = 120 height = 120>&nbsp;&nbsp;
 </p>
 
 
