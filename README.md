@@ -35,7 +35,7 @@ Our web application supports authentication through Google and 42 OAuth, providi
 
 ### Game Management
 
-<img src = "PixelPong - Managing Players in Game.jpg">
+<img src = "PixelPong-Managing Players in Game.jpg">
 
 <hr/>
 
