@@ -35,7 +35,8 @@ Our web application supports authentication through Google and 42 OAuth, providi
 
 
 ## Contributors
-
+#Omar Toufah
+<img src ="Readme/omar.jpeg">
 
 
 
