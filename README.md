@@ -1,5 +1,7 @@
 ## PixelPong
 
+<img src = "Readme/historypng.png">
+
 The project is a web application developed as part of a school project. It utilizes React for the front end and Nest for the backend.
 
 ## Technologies Used
