@@ -36,7 +36,6 @@ Our web application supports authentication through Google and 42 OAuth, providi
 
 ## Contributors
 
-&nbsp;&nbsp;&nbsp;
 [Omar Toufah](https://github.com/Toufa7)&nbsp;&nbsp;&nbsp;
 [Mohamed Amellal](https://github.com/Mohamed-Amellal)&nbsp;&nbsp;&nbsp;
 [Ayoub Bensguia](https://github.com/abensgui)&nbsp;&nbsp;&nbsp;
