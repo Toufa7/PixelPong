@@ -43,7 +43,7 @@ Our web application supports authentication through Google and 42 OAuth, providi
 [Ibrahim nada](https://github.com/ibranad)&nbsp;&nbsp;&nbsp;
 [Mohamed Khalil Naqqad](https://github.com/dridslash)&nbsp;&nbsp;&nbsp;
 
-<p align="center">
+<div align="center">
 <a src = "https://github.com/Toufa7">Omar Toufah </a>
 <img src ="Readme/omar.jpeg" width = 120 height = 120>
     
@@ -54,7 +54,7 @@ Our web application supports authentication through Google and 42 OAuth, providi
 <img src ="Readme/ibrahim.jpeg" width = 120 height = 120>
 
 <img src ="Readme/khalil.jpeg" width = 120 height = 120>
-</p>
+</div>
 
 
 
