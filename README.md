@@ -36,7 +36,11 @@ Our web application supports authentication through Google and 42 OAuth, providi
 
 ## Contributors
 
-[Omar Toufah](https://github.com/Toufa7)   [Mohamed Amellal](https://github.com/Mohamed-Amellal)  [Ayoub Bensguia](https://github.com/abensgui)  [Ibrahim nada](https://github.com/ibranad)  [Mohamed Khalil Naqqad](https://github.com/dridslash)
+[Omar Toufah](https://github.com/Toufa7)&ensp
+[Mohamed Amellal](https://github.com/Mohamed-Amellal)&ensp
+[Ayoub Bensguia](https://github.com/abensgui)&ensp
+[Ibrahim nada](https://github.com/ibranad)&ensp
+[Mohamed Khalil Naqqad](https://github.com/dridslash)&ensp
 
 <p align="center">
 <img src ="Readme/omar.jpeg" width = 120 height = 120>
