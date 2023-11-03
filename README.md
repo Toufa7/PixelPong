@@ -38,6 +38,18 @@ Our web application supports authentication through Google and 42 OAuth, providi
 # [Omar Toufah](https://github.com/Toufa7)
 <img src ="Readme/omar.jpeg">
 
+# [Mohamed Amellal](https://github.com/Mohamed-Amellal)
+<img src ="Readme/mamella.jpeg">
+
+# [Ayoub Bensguia](https://github.com/abensgui)
+<img src ="Readme/ayoub.jpeg">
+
+# [Ibrahim nada](https://github.com/ibranad)
+<img src ="Readme/ibrahim.jpeg">
+
+# [Mohamed Khalil Naqqad](https://github.com/dridslash)
+<img src ="Readme/khalil.jpeg">
+
 
 
 # To create a new React project:
