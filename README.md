@@ -37,6 +37,8 @@ Our web application supports authentication through Google and 42 OAuth, providi
 
 ### Game Management
 
+- Players are Managed by so called Rooms each Player who gets joined into a Game will be added to Room by that he will be waiting for another Player to join in to Play and also we secure that no more than 2 Players will join.
+
 <img src = "Readme/PixelPong - Managing Players in Game.jpg">
 
 <hr/>
