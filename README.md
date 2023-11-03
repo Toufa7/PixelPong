@@ -44,8 +44,7 @@ Our web application supports authentication through Google and 42 OAuth, providi
 [Mohamed Khalil Naqqad](https://github.com/dridslash)&nbsp;&nbsp;&nbsp;
 
 <div align="center">
-<a src = "https://github.com/Toufa7">Omar Toufah </a>
-<img src ="Readme/omar.jpeg" width = 120 height = 120>
+<img src ="Readme/omar.jpeg" width = 120 height = 120 maring = 0>
     
 <img src ="Readme/mamella.jpeg" width = 120 height = 120>
 
