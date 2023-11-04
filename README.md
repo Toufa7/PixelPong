@@ -46,10 +46,10 @@ Our web application supports authentication through Google and 42 OAuth, providi
 ## Contributors
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 [Omar Toufah](https://www.linkedin.com/in/toufa7/)&nbsp;&nbsp;&nbsp;
-[Mohamed Amellal](https://github.com/Mohamed-Amellal)&nbsp;&nbsp;&nbsp;
-[Ayoub Bensguia](https://github.com/abensgui)&nbsp;&nbsp;&nbsp;
-[Ibrahim nada](https://github.com/ibranad)&nbsp;&nbsp;&nbsp;
-[Mohamed Khalil Naqqad](https://github.com/dridslash)&nbsp;&nbsp;&nbsp;
+[Mohamed Amellal](https://www.linkedin.com/in/mohamed-amellal-754ba0256/)&nbsp;&nbsp;&nbsp;
+[Ayoub Bensguia](https://www.linkedin.com/in/ayoub-bensguia-83599520b/)&nbsp;&nbsp;&nbsp;
+[Ibrahim nada](https://www.linkedin.com/in/ibrahim-nada-6a6334214/)&nbsp;&nbsp;&nbsp;
+[Mohamed Khalil Naqqad](https://www.linkedin.com/in/khalil-naqqad/)&nbsp;&nbsp;&nbsp;
 
 <div align="center">
 <img src ="Readme/omar.jpeg" width = 120 height = 120 maring = 0>
