@@ -33,22 +33,12 @@ import red_ball from "./assets/red_bl.png";
 import blue_ball from "./assets/blue_ball.png";
 import { socket } from '../socket-client';
 
-// import axios from 'axios';
-// import { Cookies } from 'react-cookie';
-// import { socket } from './socket_setup/client-connect';
-// import { id_player } from './components/render_game_sketch_components';
-
-//y------------------------------------------
-//h-   -------------------------------------
 
 
 
 let canvas : p5Types.Renderer;
-// export let screen_width = 1050;
-// export let screen_height = 500;
 let id_player : any;
 export let socket_gm : Socket;
-// let canvasDiv : any;
 export let width : any;
 export let height : any;
 
@@ -102,7 +92,6 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any,
         Frontroom.Player2.Ball = new Ball(Backroom.GameBall?.x,Backroom.GameBall?.y,
             Backroom.GameBall?.diameter,p5_ob,Backroom.GameBall?.ball_speed_x,Backroom.GameBall?.ball_speed_y);
       }
-      // Screen_display = "on_going";
     }
     else{
       Frontroom.client_count = Backroom.client_count;
@@ -154,12 +143,6 @@ function SettingUpBackWithFront(socket : Socket , Frontroom : any , p5_ob : any,
 export const Game_instance = () =>{
 
 
-  // const [newsocket, setScoket] = useState<Socket>();
-  // const [isConnected , setConnected] = useState<boolean>(false);
-  // const [Infos, SetInfo] = useState<any>({});
-
-  // socket = io("ws://localhost:3000/api/game" , {withCredentials: true , transports: ["websocket"] });
-
   const socketRef = useRef<Socket | null >(null);
 
   useEffect(()=>{
@@ -203,12 +186,6 @@ const sketch : Sketch = (p5_ob : P5CanvasInstance) => {
 
     let button : any;
 
-
-
-    // console.log(token.username);
-    // let user_image : p5Types.Image;
-    
-    // console.log(Infos);
     
     //o- Getting Room Full of Players 1 and 2 and setting up the frontend Player
 
@@ -253,7 +230,6 @@ p5_ob.preload =  () =>{
             ball_asset = p5_ob.loadImage(red_ball);
           }
 
-          // user_image = p5_ob.loadImage(Get_user_image);
 
 }
         //r------------------
@@ -263,8 +239,6 @@ p5_ob.preload =  () =>{
           console.log("You won by Forfait --->" + socket_gm?.id);
           socket_gm?.disconnect();
           Screen_display = Result.Result;
-          // p5_ob.background("#000000");
-          // p5_ob.image(ovp,170,0,750,550);
         });
 
         socket_gm?.on("MatchEnded",(Result)=>{
@@ -276,26 +250,20 @@ p5_ob.preload =  () =>{
         });
   
 p5_ob.setup = () => {
-        // socket_gm?.on("IminGame",(Player_Info) => {
-        //     inGame = Player_Info?.inGame;
-        //     user_id = Player_Info?.user_id;
-        // });
+
         scaled_width = ((80 / 100) * window.innerWidth);
         scaled_height = ((50 / 100) * scaled_width);
         p5_ob.frameRate(120);
         p5_ob.setAttributes("willReadFrequently",true);
-        // canvasDiv = document.getElementById('child');
-        // width = document.getElementById('child')?.offsetWidth;
-        // height = document.getElementById('child')?.offsetHeight;
+
 
           console.log(window.innerWidth);
           console.log(window.innerHeight);
-          // console.log("Player Database Id -->" + JSON.stringify(Infos.id) +"\n" 
-          // + "Player Database username -->" + JSON.stringify(Infos.username));
+
         
         canvas = p5_ob.createCanvas(scaled_width,scaled_height);
 
-        // canvas = p5_ob.createCanvas(screen_width,screen_height);
+
         const canvas_x = (window.innerWidth - p5_ob.width) / 2;
         const canvas_y = (window.innerHeight - p5_ob.height) / 2;
         canvas.position(canvas_x,canvas_y);
@@ -339,8 +307,7 @@ p5_ob.setup = () => {
                     Frontroom.Player2.Health_points = Backroom.Health_points_P2;
                     }
     
-                    // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
-                    // Frontroom.Player2.username = Backroom.Player2.username;
+
                 }
     
                 else if (Backroom.who == "P2"){
@@ -349,10 +316,7 @@ p5_ob.setup = () => {
                   Frontroom.Player2.Paddle.paddle_width = (2 / 100) * scaled_width;
                   Frontroom.Player2.Paddle.paddle_height = (20 / 100) * scaled_height;
                   Frontroom.Player2.Health_points = Backroom.Health_points_P2;
-                  // Frontroom.Player1.Health_points = Backroom.Player1?.Health_points;
-                  // Frontroom.Player1.username = Backroom.Player1.username;
-    
-                  // P2_scaled_y = Backroom.P2_y_scaled;
+
                 
                 if (Frontroom.Player1){
                 Frontroom.Player1.Paddle.pos.x = Backroom.P1_x_scaled;
@@ -362,8 +326,6 @@ p5_ob.setup = () => {
                 Frontroom.Player1.Health_points = Backroom.Health_points_P1;
                 }
                 
-                // Frontroom.Player2.Health_points = Backroom.Player2?.Health_points;
-                // Frontroom.Player2.username = Backroom.Player2.username;
             }
             });
             //r-------------------------------------------
@@ -404,15 +366,12 @@ p5_ob.draw = () =>{
         else{
         if (Screen_display === "on_going"){
 
-          // for(const id in Frontroom){
 
           if (!Frontroom.Player1 || !Frontroom.Player2){
             if (id_player == Frontroom.Player1?.id || id_player == Frontroom.Player2?.id){
               p5_ob.background(MatchmakingPage);
               Update_screen = false;
-              // p5_ob.image(MatchmakingPage,170,0,750,550);
               p5_ob.fill("#e0e3ba");
-            // p5_ob.text("MatchMaking ...",p5_ob.width / 2 -  25 ,p5_ob.height/2);
             }
           }
           else {
@@ -470,7 +429,6 @@ p5_ob.draw = () =>{
           Update_screen = false;
           console.log("Game  Over someone forfaited");
           p5_ob.background(ovp);
-          // p5_ob.image(ovp,250,0,600,550);
       }
   }
 }
