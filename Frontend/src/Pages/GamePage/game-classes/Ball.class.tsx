@@ -16,14 +16,9 @@ import { Paddle } from './paddle.class';
         public diameter : number;
         public ball_speed_x : number;
         public ball_speed_y : number;
-        // public shot : boolean;
-        // public super_punch : boolean;
         public rt : boolean;
         public collision_front : boolean;
     
-        // public collision_happend : boolean;
-        // public lose_win_for_reset_player_one : boolean;
-        // public lose_win_for_reset_player_two : boolean;
         
         public ball_ob;
         public  r : number;
@@ -42,12 +37,7 @@ import { Paddle } from './paddle.class';
             this.r = 0;
             this.collision_front = false;
             this.pos = this.ball_ob.createVector(cr_x,cr_y);
-            // this.collision_happend = false;
-            // this.shot = false;
-            // this.super_punch = true;
             this.rt = false;
-            // this.lose_win_for_reset_player_one = false;
-            // this.lose_win_for_reset_player_two = false;
         }
 
         public draw_the_ball(color : string){
@@ -87,23 +77,6 @@ import { Paddle } from './paddle.class';
                 this.pos.x = this.pos.x - 8;
                 this.ball_speed_y = -this.ball_speed_y;
             }
-
-            // if (this.get_points().right > screen_width){
-            //     this.pos.y = this.pos.y - 8;
-            //     this.ball_speed_x = -this.ball_speed_x;
-            //   }
-            //   if (this.get_points().left < 0){
-            //     this.pos.y = this.pos.y - 8;
-            //     this.ball_speed_x = -this.ball_speed_x;
-            //   }
-    
-            // if (this.get_points().left < -12){
-            //     this.lose_win_for_reset_player_one = true;
-            // }
-    
-            // if (this.get_points().right > screen_width){
-            //     this.lose_win_for_reset_player_two = true;
-            // }
     
             return (this.rt);
         }
@@ -186,52 +159,9 @@ import { Paddle } from './paddle.class';
             return (this.check_collision_core(radius,pos,pos_ai,ph,ph_ai,pw,pw_ai));
         }
     
-        // public get_side_to_punch(paddle : Paddle) : string{
-        //     if (paddle.pos.x < screen_width / 2 
-        //     && (this.pos.x <= screen_width / 2 && this.pos.x >= paddle.pos.x)){
-        //       console.log("left side");
-        //         return ("left side");
-        //     }
-        //     return("nothing");
-        // }
-    
         public update_pos(Player_id :string ,P1 : any , P2 : any,width : number, height : number, Ball1_diameter : number , Ball2_diameter : number,Player1_paddle : Paddle , Player2_paddle : Paddle){
-        //   let full_power : number = 500
-        //     let reset_punch = this.check_collision(paddle,ai_paddle);
-        //       if (this.ball_ob.keyIsPressed){
-        //         console.log("SPACE");
-        //         if (this.super_punch && this.get_side_to_punch(paddle) === "left side" 
-        //               && this.ball_ob.keyCode === 32 && paddle.palyer_system.sp_power_points == full_power){
-    
-        //           this.ball_speed_x = this.ball_speed_x + 40;
-        //           this.ball_speed_y = this.ball_speed_x + 40;
-        //           paddle.palyer_system.sp_power_points = 0;
-        //           this.super_punch = false;
-        //           console.log("SUPER PUNCH !!!");
-        //         }
-        //       }
-    
-            //   if (reset_punch && this.super_punch === false){
-            //     console.log("super punch deplited!!");
-    
-            //     //y- Reseting speed of ball
-                
-            //       this.ball_speed_x = 10;
-            //       let rdn = this.ball_ob.random(0,2);
-            //       this.ball_speed_y = Math.floor(rdn) ? -10 : 10;
-            //       reset_punch = false;
-            //   }
-            // console.log("in");
-            // console.log(this.ball_speed_x);
-            // console.log(this.ball_speed_y);
-            // this.check_collision(paddle1,paddle2);
-            // if (this.collision_front){console.log("collided with player");}
-            // socket.emit("Ball_movement",{did_collide_player : this.collision_front, pos_x : this.pos.x , pos_y : this.pos.y , ball_speed_x : this.ball_speed_x , ball_speed_y : this.ball_speed_y});
-            // this.pos.x = this.pos.x + this.ball_speed_x;
-            // this.pos.y = this.pos.y + this.ball_speed_y;
             if (Player_id != P2.id){
                 console.log("Im Player 1 emitting no Player 2");
-                // socket_gm?.emit("Ball_movement",{Scaled_width : width , Scaled_height : height, Ball_P1_diameter : Ball1_diameter , Ball_P2_diameter : Ball2_diameter});
 
                 socket_gm?.emit("Ball_movement",{Scaled_width : width , Scaled_height : height, Ball_P1_diameter : Ball1_diameter , Ball_P2_diameter : Ball2_diameter,
                     P1_paddle_x : Player1_paddle.pos.x , P1_paddle_y : Player1_paddle.pos.y , P1_paddle_width : Player1_paddle.paddle_width , P1_paddle_height : Player1_paddle.paddle_height,
@@ -240,29 +170,5 @@ import { Paddle } from './paddle.class';
 
             this.draw_the_ball("#e9ed09");
         }
-
-        // public shoot_ball(canvas : any , paddle : Paddle, Ai_pd : Paddle){
-        //     if (!this.shot){
-    
-        //       //p- ellipse parameters
-    
-        //         // this.pos.x = paddle.pos.x + paddle.paddle_width + 10;
-        //         // this.pos.y = paddle.pos.y + paddle.pacheckddle_height / 2;
-    
-        //         //p- sprite parameters
-    
-        //         this.pos.x = paddle.pos.x + paddle.paddle_width;
-        //         this.pos.y = (paddle.pos.y + paddle.paddle_height / 2) - 10;
-        //     }
-        //     else
-        //       this.update_pos(paddle,Ai_pd);
-            
-        //     canvas.mousePressed((event : any) =>{
-        //         // console.log("mouse pressed");
-        //         this.pos.x = this.pos.x + 8;
-        //         this.shot = true;
-        //       })
-        //       this.draw_the_ball('#F7F6FF');
-        // }
     
     }
