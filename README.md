@@ -1,6 +1,12 @@
 ## PixelPong
 
-<img src = "Readme/historypng.png">
+<img src="https://github.com/Toufa7/PixelPong/blob/a2f225c3b419f956ce7f2628932429ddefeb5d58/Readme/UI/0.svg"/>
+
+
+
+
+
+<img src = "Readme/historypng.png" width="720">
 
 The project is a web application developed as part of a school project. It utilizes React for the front end and Nest for the backend.
 
